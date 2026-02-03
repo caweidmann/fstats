@@ -32,6 +32,15 @@ const Component = ({ onClose }: MenuDrawerProps) => {
         <MenuDrawerNavButton route={ROUTES.HOME} isActive={pathname === ROUTES.HOME}>
           {t('NAVIGATION.HOME')}
         </MenuDrawerNavButton>
+        <MenuDrawerNavButton route={ROUTES.DATA} isActive={pathname === ROUTES.DATA}>
+          {t('NAVIGATION.DATA')}
+        </MenuDrawerNavButton>
+        <MenuDrawerNavButton route={ROUTES.STATS} isActive={pathname === ROUTES.STATS}>
+          {t('NAVIGATION.STATS')}
+        </MenuDrawerNavButton>
+        <MenuDrawerNavButton route={ROUTES.SETTINGS} isActive={pathname === ROUTES.SETTINGS}>
+          {t('NAVIGATION.SETTINGS')}
+        </MenuDrawerNavButton>
       </Box>
     </List>
   )

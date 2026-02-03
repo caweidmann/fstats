@@ -7,7 +7,11 @@
       "Bash(kill:*)",
       "Bash(node -e:*)",
       "Bash(pnpm tsc:*)",
-      "Bash(pnpm add:*)"
+      "Bash(pnpm add:*)",
+      "Bash(pnpm remove:*)",
+      "Bash(npx tsc:*)",
+      "Bash(grep:*)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }

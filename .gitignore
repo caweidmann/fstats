@@ -47,5 +47,6 @@ public/worker-*.js
 public/worker-*.js.map
 public/serwist-*.js
 public/serwist-*.js.map
+public/swe-worker-*.js
 
 /data
