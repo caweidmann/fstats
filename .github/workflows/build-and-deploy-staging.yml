@@ -1,0 +1,138 @@
+name: build-and-deploy-staging
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+on:
+  push:
+    branches:
+      - develop
+  # workflow_run:
+  #   workflows: ['build-and-deploy-production']
+  #   types:
+  #     - completed
+jobs:
+  build-and-test:
+    if: github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    name: Build & test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
+      - name: Setup environment
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.10.0'
+          cache: 'pnpm'
+
+      - name: Bump version for build
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          pnpm version patch --no-git-tag-version
+
+      - name: Cache workspace
+        uses: actions/cache@v5
+        id: workspace-cache-v1
+        with:
+          path: |
+            .vercel
+            .next
+          key: workspace-cache-v1-${{ github.sha }}
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Vercel - Pull environment information
+        run: pnpm exec vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Vercel - Build project artifacts
+        run: pnpm exec vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+  deploy-staging:
+    name: Deploy staging
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
+      - name: Setup environment
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.10.0'
+          cache: 'pnpm'
+
+      - name: Bump version for build
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          pnpm version patch --no-git-tag-version
+
+      - name: Cache workspace
+        uses: actions/cache@v5
+        id: workspace-cache-v1
+        with:
+          path: |
+            .vercel
+            .next
+          key: workspace-cache-v1-${{ github.sha }}
+
+      - name: Sanity check caches
+        if: steps.workspace-cache-v1.outputs.cache-hit != 'true'
+        run: exit 1
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Vercel - Deploy project artifacts
+        run: pnpm exec vercel deploy --prebuilt --archive=tgz --token=${{ secrets.VERCEL_TOKEN }}
+
+  bump-patch-version:
+    if: github.ref == 'refs/heads/develop'
+    name: Bump patch version
+    needs: deploy-staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
+      - name: Setup environment
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.10.0'
+          cache: 'pnpm'
+
+      - name: Bump version
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git pull
+          pnpm version patch -m "Bump version number to v%s [skip ci]"
+          git push origin develop
+          git push --tags origin develop

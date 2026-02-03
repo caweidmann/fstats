@@ -1,0 +1,536 @@
+{
+  "MISC": {
+    "PROFILE_ALT_TEXT": "Bild von Cornelius Weidmann",
+    "ALL_RIGHTS_RESERVED": "Alle Rechte vorbehalten."
+  },
+  "NAVIGATION": {
+    "HOME": "Home",
+    "ABOUT": "Über",
+    "EXPERIENCE": "Erfahrung",
+    "SKILLS": "Kenntnisse",
+    "PROJECTS": "Projekte",
+    "CONTACT": "Kontakt",
+    "RESUME": "Lebenslauf",
+    "RESUME_PDF": "Lebenslauf PDF",
+    "IMPRESSUM": "Impressum"
+  },
+  "DATA_DISPLAY": {
+    "MENU": "Menü",
+    "LAST_UPDATED": "Zuletzt aktualisiert",
+    "STATUS_LIVE": "Live",
+    "STATUS_INACTIVE": "Inaktiv",
+    "STATUS_DEPRECATED": "Veraltet",
+    "STATUS_MAINTENANCE_MODE": "Wartungsmodus",
+    "RESUME": "Lebenslauf",
+    "FRONTEND": "Frontend",
+    "BACKEND": "Backend",
+    "DATA_CLOUD": "Data & Cloud",
+    "DEVOPS_TESTING": "DevOps & Testing",
+    "LANGUAGES_FRAMEWORKS": "Sprachen & Frameworks",
+    "PLATFORMS_TOOLING": "Plattformen & Tools",
+    "TECHNICAL_SKILLS": "Technische Kenntnisse",
+    "PRIMARY_TECH_STACK": "Primärer Tech-Stack",
+    "EXPERIENCE": "Berufserfahrung",
+    "KEY_EXPERIENCE": "Ausgewählte Berufserfahrung",
+    "ADDITIONAL_EXPERIENCE": "Weitere Berufserfahrung",
+    "EDUCATION": "Ausbildung",
+    "LANGUAGES": "Sprachen",
+    "FRAMEWORKS_LIBRARIES": "Frameworks & Bibliotheken",
+    "DATABASES": "Datenbanken",
+    "CLOUD_DEVOPS": "Cloud & DevOps",
+    "TESTING": "Testing",
+    "MOBILE": "Mobile",
+    "METHODOLOGIES": "Methodologien",
+    "TIMELINE": "Zeitleiste",
+    "PROFESSIONAL_IMPACT": "Berufliche Erfolge",
+    "PROFILE_PICTURE": "Profilbild",
+    "PROFILE_BANNER": "Profilbanner",
+    "EMAIL": "E-Mail",
+    "CONTACT": "Kontakt",
+    "ADDRESS": "Adresse",
+    "PROFESSIONAL_EXPERIENCE": "Berufserfahrung",
+    "VOLUNTARY_WORK": "Ehrenamtliche Tätigkeiten",
+    "COMMUNITY_INVOLVEMENT": "Gemeinschaftliches Engagement",
+    "PERSONAL_DEVELOPMENT": "Persönliche Weiterentwicklung",
+    "NAME": "Name",
+    "WEBSITE": "Website",
+    "YEAR": "Jahr",
+    "STATUS": "Status",
+    "FEATURED_PROJECTS": "Ausgewählte Projekte"
+  },
+  "GRAMMAR": {
+    "PRESENT": "Heute",
+    "SINCE": "seit",
+    "MORE": "weitere",
+    "SHOW_LESS": "Weniger anzeigen",
+    "AND": "und"
+  },
+  "RESUME": {
+    "FULL_NAME": "Cornelius Weidmann",
+    "JOB_TITLE": "Senior Front-End / Full-Stack Entwickler",
+    "TECH_TITLE": "TypeScript, React, Node.js und Go",
+    "SUMMARY": "Berufliches Profil",
+    "// ABOUT": "Softwareentwickler mit über {{yearsExperience}} Jahren Erfahrung in der Konzeption und Umsetzung skalierbarer, plattformübergreifender Webanwendungen. Spezialisiert auf sauberen, wartbaren Code über den gesamten Stack hinweg, mit einem starken Fokus auf Performance, Benutzerfreundlichkeit und Skalierbarkeit. Motiviert, in Teams mitzuwirken, die technische Exzellenz und die gemeinsame Entwicklung erstklassiger Produkte schätzen.",
+    "ABOUT_": "Full-Stack-Entwickler mit umfangreicher Erfahrung in der Leitung großer Modernisierungsprojekte, Entwicklung skalierbarer TypeScript/React-Anwendungen und technischer Umsetzung. Versiert im Entwurf komplexer Systeme, Mentoring von Teams und Umsetzung von Anforderungen in hochwertige Software.",
+    "ABOUT": "Full-Stack-Entwickler mit über {{yearsExperience}} Jahren Erfahrung in der Leitung umfassender Modernisierungsprojekte und der Entwicklung von Produktionsanwendungen mit TypeScript/React. Expertise im Entwurf komplexer Systemarchitekturen, Betreuung von Entwicklungsteams und Erzielung messbarer Geschäftsergebnisse durch technische Exzellenz. Spezialisiert auf Legacy-Modernisierung, technische Führung und skalierbare Frontend-Architekturen."
+  },
+  "PROJECTS": {
+    "INVOICE_ASSISTANT": {
+      "NAME": "Invoice Assistant",
+      "TITLE": "Rechnungsstellung-App",
+      "DESCRIPTION": "Eine Rechnungsstellungs-App für Freiberufler und Auftragnehmer mit globalen Kunden. Versende Rechnungen als PDF oder lasse sie online anzeigen."
+    },
+    "DEV_DICT": {
+      "NAME": "dev-dict",
+      "TITLE": "Open Source Library",
+      "DESCRIPTION": "Ein Entwickler-Wörterbuch für Begriffe und Konzepte der Softwarebranche."
+    },
+    "AITEAMCHAT": {
+      "NAME": "AI Team Chat",
+      "TITLE": "AI Chat App",
+      "DESCRIPTION": "Unterhalte dich mit verschiedenen KI-Personas, darunter Projektmanager, Entwickler und strategische Denker."
+    },
+    "EEAAS": {
+      "NAME": "Easter Eggs as a Service",
+      "TITLE": "Open Source Library",
+      "DESCRIPTION": "Eine Library, um Easter Eggs in Apps und Websites einzubinden."
+    },
+    "KYCO": {
+      "NAME": "kyco",
+      "TITLE": "Technischer Blog",
+      "DESCRIPTION": "Hobby-Website und technischer Blog."
+    },
+    "TIMESTATS": {
+      "NAME": "Timestats",
+      "TITLE": "Zeiterfassungs-App",
+      "DESCRIPTION": "Eine textbasierte Zeiterfassungs-App für Einzelpersonen."
+    },
+    "QCAN": {
+      "NAME": "Qcan",
+      "TITLE": "Bitcoin-Wallet",
+      "DESCRIPTION": "Ein Bitcoin-Wallet für Android und iOS."
+    },
+    "STAMI_FINANZEN": {
+      "NAME": "Finanzberichte-App",
+      "TITLE": "Finanzberichte-App",
+      "DESCRIPTION": "Eine App zum Anzeigen von Gewinn- und Verlustrechnungen, Bilanzen und Budgets. Integriert sich direkt mit Daten aus QuickBooks."
+    },
+    "STAMI_APP": {
+      "NAME": "Event-Management-App",
+      "TITLE": "Event-Management-App",
+      "DESCRIPTION": "Eine App zur Planung und Verwaltung von Veranstaltungen, Teilnehmern, zum Senden von Benachrichtigungen, Erstellen von Wochenplänen, Erstellen und Anzeigen von Monatsberichten und mehr. 100+ wöchentliche aktive Nutzer."
+    },
+    "LS_CHROME": {
+      "NAME": "Local-Storage Chrome-Erweiterung",
+      "TITLE": "Local-Storage Chrome-Erweiterung",
+      "DESCRIPTION": "Eine Chrome-Dev-Tools-Erweiterung zum Anzeigen und Verwalten von Local-Storage-Daten direkt auf der Webseite anstelle der Dev-Tools."
+    },
+    "PERSONAL_WEBSITE": {
+      "NAME": "caweidmann.dev",
+      "TITLE": "Portfolio-Website",
+      "DESCRIPTION": "Die Website, die du dir gerade ansiehst. Hier halte ich eine aktuelle Version meiner Projekte und meines Lebenslaufs bereit."
+    }
+  },
+  "PAGE_HOME": {
+    "HERO_TEXT": "Ich helfe Teams, <1>zuverlässige, <2/>skalierbare</1> Frontend-Systeme zu entwickeln.",
+    "// HERO_TEXT": "Ich helfe Teams <1>hochwertigen, <2/>erprobten</1> Code zu liefern.",
+    "HERO_SUBTEXT": "Über 15 Jahre Erfahrung in der Leitung von React & TypeScript Projekten — mit Fokus <2/>auf Qualität, Wartbarkeit und Mehrwert.",
+    "OPEN_FOR_REMOTE": "Offen für Remote-Möglichkeiten",
+    "CTA": "Kontakt aufnehmen",
+    "CTA2": "Lebenslauf ansehen",
+    "VALUE_TITLE": "Was ich Teams bringe",
+    "VALUE_1_TITLE": "Technische Exzellenz",
+    "VALUE_1_DESCRIPTION": "Tiefgehende Expertise in TypeScript, React und Node.js mit Fokus auf sauberen, skalierbaren Code.",
+    "VALUE_2_TITLE": "Schnelle Umsetzung",
+    "VALUE_2_DESCRIPTION": "Funktionen zügig bereitstellen, ohne Kompromisse bei Qualität, Sicherheit oder Performance einzugehen.",
+    "VALUE_3_TITLE": "Teamführung",
+    "VALUE_3_DESCRIPTION": "Frontend-Teams leiten, Entwickler coachen und eine kollaborative Engineering-Kultur fördern.",
+    "VALUE_4_TITLE": "Problemlösung",
+    "VALUE_4_DESCRIPTION": "Komplexe Herausforderungen meistern, von Legacy-Modernisierung bis zu Greenfield-Projekten, und eine kontinuierliche Bereitstellung gewährleisten.",
+    "VIEW_MORE_PROJECTS": "Weitere Projekte ansehen"
+  },
+  "PAGE_ABOUT": {
+    "P1": "Hallo!",
+    "P2": "Ich bin Cornelius, ein Full-Stack Softwareentwickler mit über {{yearsExperience}} Jahren Erfahrung in der Entwicklung skalierbarer, plattformübergreifender Webanwendungen. Ich spezialisiere mich auf <1>TypeScript</1>, <1>React</1>, <1>Node.js</1> und <1>Go</1> und habe eine Leidenschaft dafür, Komplexität zu reduzieren, wiederkehrende Aufgaben zu automatisieren und ansprechende Benutzeroberflächen zu entwickeln.",
+    "P3": "Meine Laufbahn als Entwickler begann <1/> (noch vor border-radius!) in Kapstadt, Südafrika. Seitdem habe ich in verschiedenen Rollen gearbeitet, unter anderem als Full-Stack Developer, Team Lead, Scrum Master und Frontend Tech Lead. Meine Erfahrung umfasst unterschiedliche Branchen, insbesondere Logistik, Gesundheitswesen und E-Commerce.",
+    "P4": "Seit <1/> arbeite ich remote als selbstständiger Auftragnehmer.",
+    "KYCO_LINK": "PS: Ich spreche fließend Englisch, Deutsch und Afrikaans und blogge gelegentlich auf <1/>.",
+    "CONTACT": "Wenn du dich vernetzen möchtest, kannst du mich gerne <1>kontaktieren</1>.",
+    "TIMELINE_START": "Mit dem Programmieren begonnen",
+    "TIMELINE_AGENCY": "Für ein E-Commerce-Startup und eine Webentwicklungsagentur gearbeitet",
+    "TIMELINE_CONSULTANT_1": "Als selbstständiger Auftragnehmer für Kunden in Südafrika gearbeitet",
+    "TIMELINE_GERMANY": "Nach Deutschland gezogen",
+    "TIMELINE_CONSULTANT_2": "Als selbstständiger Auftragnehmer für Kunden in Europa, Großbritannien und Südafrika tätig",
+    "GUIDING_PRINCIPLES": "Meine Leitprinzipien",
+    "PRINCIPLE_1": "Zuerst soll es funktionieren, dann verbessern.",
+    "PRINCIPLE_2": "Hinterlasse Code immer sauberer, als du ihn vorgefunden hast.",
+    "PRINCIPLE_3": "Nichts ist so permanent wie eine temporäre Lösung."
+  },
+  "PAGE_CONTACT": {
+    "GET_IN_TOUCH": "Ich bin derzeit für freiberufliche Projekte, Teilzeit- und Vollzeitstellen verfügbar. Melde dich gerne.",
+    "PROFILE_LOCATION_Q": "Ort",
+    "PROFILE_LOCATION_A": "Deutschland",
+    "PROFILE_DRINK_Q": "Was trinke ich",
+    "PROFILE_DRINK_A": "Hausgemachter Apfel-Cider",
+    "PROFILE_DATE_TAKEN_Q": "Aufnahmedatum",
+    "PROFILE_DATE_TAKEN_A": "Dezember 2020",
+    "PROFILE_BANNER_LOCATION_Q": "Ort",
+    "PROFILE_BANNER_LOCATION_A": "Elands Bay, Südafrika",
+    "PROFILE_BANNER_DATE_TAKEN_Q": "Aufnahmedatum",
+    "PROFILE_BANNER_DATE_TAKEN_A": "Oktober 2021"
+  },
+  "PAGE_PROJECTS": {
+    "BLURB": "Hier findest du eine Auswahl von Projekten, die ich gebaut habe und an denen ich von Zeit zu Zeit arbeite:",
+    "VIEW_MORE": "Weitere Projekte findest du auf <1/>."
+  },
+  "PAGE_EXPERIENCE": {
+    "RESUME_LINK": "Suchst du mein Lebenslauf als PDF? <1>Lebenslauf PDF ansehen</1>"
+  },
+  "PAGE_RESUME": {
+    "TITLE": "$t(DATA_DISPLAY.RESUME)",
+    "VIEW_MORE_AT": "Umfassende Erfahrung & Projekte"
+  },
+  "PAGE_SKILLS": {
+    "TITLE": "$t(NAVIGATION.SKILLS)",
+    "BLURB": "Ich bin Full-Stack-Entwickler mit Schwerpunkt auf Frontend und Spezialisierung im PWA-Ökosystem, hauptsächlich mit TypeScript, React und Node.js."
+  },
+  "PAGE_404": {
+    "TITLE": "Die URL in der Adressleiste existiert nicht!",
+    "BLURB": "Der gesuchte Inhalt wurde möglicherweise verschoben und ist möglicherweise unter einer anderen URL verfügbar. Alternativ können Sie die URL auf Tippfehler überprüfen.",
+    "BACK_TO_HOMEPAGE": "Zurück zur Startseite"
+  },
+  "COMPONENTS": {
+    "THEME_SWITCHER": {
+      "THEME": "Design",
+      "CHOOSE_THEME": "Design ändern",
+      "THEME_LIGHT": "Hell",
+      "THEME_DARK": "Dunkel",
+      "THEME_SYSTEM": "System"
+    },
+    "LANGUAGE_SWITCHER": {
+      "LANGUAGE": "Sprache",
+      "CHANGE_LANGUAGE": "Sprache ändern",
+      "LOCALE_EN_LANGUAGE_EN": "English",
+      "LOCALE_EN_LANGUAGE_DE": "Englisch",
+      "LOCALE_DE_LANGUAGE_EN": "German",
+      "LOCALE_DE_LANGUAGE_DE": "Deutsch"
+    }
+  },
+  "SKILL_CATEGORIES": {
+    "LANGUAGE": "Sprache",
+    "FRONTEND_FRAMEWORK": "Frontend-Framework",
+    "UI_LIBRARY": "UI-Bibliothek",
+    "STATE_MANAGEMENT": "State Management",
+    "WEB_TECHNOLOGY": "Web-Technologie",
+    "BACKEND_FRAMEWORK": "Backend-Framework",
+    "TEMPLATE_ENGINE": "Template-Engine",
+    "RUNTIME": "Laufzeitumgebung",
+    "DATABASE_SQL": "SQL-Datenbank",
+    "DATABASE_NOSQL": "NoSQL-Datenbank",
+    "SEARCH_ENGINE": "Suchmaschine",
+    "CLOUD_PROVIDER": "Cloud-Anbieter",
+    "CI_CD": "CI/CD",
+    "CONTAINER": "Container",
+    "INFRASTRUCTURE": "Infrastruktur",
+    "VERSION_CONTROL": "Versionsverwaltung",
+    "TESTING_FRAMEWORK": "Testing-Framework",
+    "QUALITY_TOOL": "Qualitätswerkzeug",
+    "MONITORING": "Monitoring",
+    "BUNDLER": "Bundler",
+    "TASK_RUNNER": "Task Runner",
+    "MONOREPO_TOOL": "Monorepo-Tool",
+    "CMS": "CMS",
+    "PAYMENT": "Zahlung",
+    "EMAIL_SERVICE": "E-Mail-Dienst",
+    "ANALYTICS": "Analytik",
+    "API_INTEGRATION": "API-Integration",
+    "WEB3": "Web3",
+    "AI_ML": "KI/ML",
+    "SECURITY": "Sicherheit",
+    "DESIGN_TOOL": "Design-Tool",
+    "PROJECT_MANAGEMENT": "Projektmanagement",
+    "DEVELOPMENT_TOOL": "Entwicklungswerkzeug"
+  },
+  "SKILLS": {
+    "LEGACY_MIGRATION": "Legacy Migration",
+    "ENCRYPTION": "Verschlüsselung",
+    "E2E": "E2E-Tests"
+  },
+  "EDUCATION": {
+    "DID_NOT_COMPLETE": "nicht abgeschlossen (frag mich gerne, warum)",
+    "SELF_TAUGHT": {
+      "TITLE": "Autodidaktischer Softwareentwickler",
+      "DESCRIPTION": "Meine Entwicklerreise begann 2010 in Kapstadt, Südafrika, in einem kleinen Startup. Dort habe ich zum ersten Mal HTML, CSS, JavaScript und PHP kennengelernt. Die erste Website, an der ich gearbeitet habe, basierte noch auf HTML-Tabellen - und ich musste sie auf semantisches HTML5 und CSS3 umstellen!<br/><br/>Danach ging es für mich in eine Agentur, wo ich einen großartigen Mentor hatte, der mir Datenmodellierung und wichtige Konzepte der Webentwicklung beigebracht hat. Und der Rest, wie man so schön sagt, ist Geschichte."
+    },
+    "UNISA_COMPUTER_SCIENCE": {
+      "TITLE": "Informatik und Angewandte Mathematik *",
+      "DEGREE": "B.Sc. Informatik und Angewandte Mathematik",
+      "DESCRIPTION": "Schwerpunkt: Lineare Algebra, Analysis, Diskrete Mathematik, Mathematische Modellierung, Programmierung, Theoretische Informatik und Wissenschaftsphilosophie",
+      "COURSES_COMPLETED": "Abgeschlossene Module: Angewandte Lineare Algebra, Programmierung I, Informatik - Grundlegende Konzepte, Lineare Algebra I, Analysis I, Programmierung II, Mathematische Modellierung, Theoretische Informatik I, Einführung in die Diskrete Mathematik, Wissenschaftsphilosophie"
+    },
+    "UNISA_MATHS": {
+      "TITLE": "Mathematik (Nichtabschlussführendes Studium)",
+      "DESCRIPTION": "Schwerpunkt: Lineare Algebra, Analysis in höheren Dimensionen und Differentialgleichungen",
+      "COURSES_COMPLETED": "Abgeschlossene Module: Lineare Algebra II, Analysis in höheren Dimensionen, Differentialgleichungen II"
+    },
+    "UCT_ENGINEERING": {
+      "TITLE": "Maschinenbau *",
+      "DEGREE": "B.Eng. Elektromechanik",
+      "DESCRIPTION": "Schwerpunkt: Mathematik, Physik, Statik, Chemie, Maschinenbau, Technisches Zeichnen, Thermodynamik, Elektrotechnik, Volkswirtschaftslehre und Soziologie",
+      "COURSES_COMPLETED": "Abgeschlossene Module: Mathematik I, Physik, Statik, Chemie, Maschinenbau I, Technisches Zeichnen, Thermodynamik, Elektrotechnik I, Volkswirtschaftslehre, Soziologie"
+    },
+    "DSK": {
+      "TITLE": "Klasse 11-12 (Oberstufe, Gymnasium)",
+      "DESCRIPTION": "Alle Fächer mit \"Higher Grade\" (auf höherem Niveau) abgeschlossen. Südafrikanisches \"Matriculation Senior Certificate\" mit Auszeichnung erhalten.<br/><br/>Fächer: Mathematik, Zusatzmathematik, Physik & Chemie, Informatik, Deutsch, Englisch, Afrikaans<br/><br/>Durchschnitt: 78%"
+    },
+    "DSP": {
+      "TITLE": "Klasse 0-10 (Vor-, Grund-, und weiterführende Schule)",
+      "DESCRIPTION": "Klasse 10 Durchschnitt: 72%"
+    }
+  },
+  "TRAINING": {
+    "LEADERSHIP_TRAINING": {
+      "TITLE": "Führungskräftetraining",
+      "DESCRIPTION": "Teilnahme an einem sechsmonatigen Leadership-Coaching-Programm mit Fokus auf Teamdynamik, Beziehungs- und emotionaler Intelligenz, Selbstführung sowie dem Umgang mit Komplexität im Gruppensetting. Das Training legte besonderen Wert auf Zielsetzung, die Entwicklung gesunder Kommunikationsmuster, die Förderung psychologischer Sicherheit und die Etablierung effektiver Teamroutinen. Zentrale Ergebnisse waren verbesserte Konfliktlösungsfähigkeiten, erhöhte Rollenklärung und stärkere Zusammenarbeit in vielfältigen Teamumgebungen."
+    },
+    "WELDING_COURSE": {
+      "TITLE": "Schweißkurs",
+      "DESCRIPTION": "Schweißkurs description"
+    },
+    "LATHE_COURSE": {
+      "TITLE": "Inoffizieller Drehmaschinenkurs",
+      "DESCRIPTION": "Inoffizieller Drehmaschinenkurs description"
+    },
+    "MODERATION_WORKSHOP": {
+      "TITLE": "Praxisseminar: Rhetorik und Moderation",
+      "DESCRIPTION": "Das Seminar vermittelte Fähigkeiten für ein sicheres und überzeugendes Auftreten sowie den effektiven Einsatz von Sprache und Rhetorik zur erfolgreichen Kommunikation mit dem Publikum. Inhalte waren Strategien zur Vorbereitung und Durchführung von Vorträgen, die Förderung von Kreativität sowie praktische Tipps zur Steigerung der Präsentationswirkung."
+    },
+    "LEADERSHIP_SEMINAR": {
+      "TITLE": "Mentoring- und Führungsseminar - Konfliktmanagement",
+      "DESCRIPTION": "Das Seminar konzentrierte sich auf entwicklungspsychologische Grundlagen und Konfliktmanagement im Kontext von Führung und Mentoring. Es legte den Schwerpunkt auf das Verständnis von Verhaltensdynamiken und altersgerechten Bedürfnissen bei der Begleitung von Kindern und Jugendlichen sowie auf Techniken für effektive Kommunikation und Konfliktlösung in Teams."
+    }
+  },
+  "VOLUNTARY_WORK": {
+    "PRESCHOOL": {
+      "TITLE": "Erzieher für Vorschule und Kindergarten",
+      "DESCRIPTION": "Unterstützung bei der wöchentlichen Betreuung und Förderung von Kindern im Alter von 3 bis 6 Jahren in einem deutschen Kindergarten. Mitarbeit bei der Gestaltung eines positiven, spielerischen Lernumfelds sowie Förderung der sozialen Entwicklung durch Gruppenaktivitäten. Zusätzlich Durchführung von Sporteinheiten zur Förderung der motorischen Fähigkeiten, Koordination und des Teamgeists."
+    },
+    "TUTOR": {
+      "TITLE": "Tutor für Mathematik und Physik"
+    },
+    "WEBMASTER": {
+      "TITLE": "Webmaster"
+    },
+    "TREASURER": {
+      "TITLE": "Schatzmeister",
+      "DESCRIPTION": "Verantwortlich für die Finanzplanung und Budgeterstellung einer kleinen Kirchengemeinde. In Zusammenarbeit mit dem Kirchenvorstand wurden Ausgaben genehmigt, Budgets festgelegt und finanzielle Entscheidungen getroffen. Monatliche Berichterstattung an den Kirchenvorstand sowie halbjährliche Präsentationen vor der gesamten Gemeinde. Erstellung von Diagrammen und Statistiken zur transparenten Darstellung der finanziellen Lage und zur Unterstützung fundierter Entscheidungen."
+    },
+    "MODERATOR": {
+      "TITLE": "Moderator"
+    },
+    "CHURCH_TECH_TEAM": {
+      "TITLE": "Technik Team"
+    },
+    "WORSHIP_LEADER": {
+      "TITLE": "Lobpreisleiter",
+      "DESCRIPTION": "Leitung eines kleinen Lobpreisteams mit 4 Musikern und Sängern im Gemeindekontext. Zuständig für die Musikauswahl, Organisation von Proben und musikalische Gestaltung des Gottesdienstes zweimal im Monat. Förderung eines gemeinschaftlichen und geistlich ausgerichteten Umfelds im Team sowie musikalische Unterstützung der Gemeinde."
+    },
+    "YOUTH_LEADER": {
+      "TITLE": "Jugendleiter",
+      "DESCRIPTION": "Organisation wöchentlicher Jugendveranstaltungen mit Fokus auf Gemeinschaft, Persönlichkeitsentwicklung und Glaubensstärkung. Planung und Durchführung von Kindertagen sowie Mitorganisation von Jugendfreizeiten in Zusammenarbeit mit dem Jugendpastor. Gestaltung eines sicheren und einladenden Umfelds für junge Menschen zur persönlichen und spirituellen Entfaltung."
+    },
+    "STUDENT_REPRESENTATIVE": {
+      "TITLE": "Schülervertreter",
+      "DESCRIPTION": "Vertreter der Schülerschaft im Abschlussjahr. Organisation von schulischen Veranstaltungen und Vermittlung zwischen Schülern und Lehrkräften. Hauptverantwortlich für die Öffentlichkeitsarbeit, insbesondere Gestaltung von Plakaten und Werbematerialien für schulweite Aktionen."
+    }
+  },
+  "LEADERSHIP": {
+    "DEVELOPMENT_LEAD": {
+      "TITLE": "Entwicklungsleiter"
+    },
+    "FE_TECH_LEAD": {
+      "TITLE": "Frontend Tech Lead",
+      "SHORT_DESCRIPTION": "Leitete Frontend-Architektur, Tech-Strategie und Team-Entwicklung für ein funktionsübergreifendes Engineering-Team.",
+      "SHORT_DESCRIPTION_CV": "Leitete Frontend-Architektur und Tech-Strategie für ein funktionsübergreifendes Engineering-Team.",
+      "DESCRIPTION": "Verantwortlich für alle technologiebezogenen Entscheidungen im Frontend-Bereich eines funktionsübergreifendes Entwicklungsteams mit rund 20 Entwicklern. Zusammenarbeit mit dem CTO bei Einstellung und Auswahlprozessen (inkl. Interviews), Verfassen technischer Dokumentationen sowie Leitung der architektonischen Ausrichtung. Führung und Mentoring eines Teams von 8 Frontend-Entwicklern mit enger Abstimmung auf Mid-Tier- und Backend-Teams."
+    },
+    "PROBLEM_SOLVER": {
+      "TITLE": "Problemlöser",
+      "SHORT_DESCRIPTION": "Lieferte kreative technische Lösungen für anspruchsvolle Geschäftsanforderungen innerhalb enger Deadlines.",
+      "SHORT_DESCRIPTION_CV": "$t(LEADERSHIP.PROBLEM_SOLVER.SHORT_DESCRIPTION)",
+      "DESCRIPTION": "Setzte innovatives Denken und technisches Fachwissen ein, um komplexe technische Herausforderungen im Kontext anspruchsvoller Geschäftsanforderungen zu lösen. Konzipierte und implementierte robuste, qualitativ hochwertige Lösungen unter engen technischen und zeitlichen Rahmenbedingungen."
+    },
+    "SCRUM_MASTER": {
+      "TITLE": "Scrum Master",
+      "SHORT_DESCRIPTION": "Förderte agile Arbeitsmethoden für ein global verteiltes Team in den USA, UK, Australien und Südafrika.",
+      "SHORT_DESCRIPTION_CV": "$t(LEADERSHIP.SCRUM_MASTER.SHORT_DESCRIPTION)",
+      "DESCRIPTION": "Leitete agile Zeremonien - darunter Daily Stand-ups, Sprint Planning, Retrospektiven und Refinements - für ein verteiltes Entwicklungsteam mit rund 35 Personen über mehrere Zeitzonen hinweg. Enge Zusammenarbeit mit Product Ownern zur Abstimmung der Umsetzung auf Geschäftsziele und zur Förderung eines leistungsstarken Arbeitsumfelds mit minimalem Prozessaufwand."
+    },
+    "MENTOR": {
+      "TITLE": "Mentor",
+      "SHORT_DESCRIPTION": "Übernahm früh in meiner Laufbahn die fachliche Leitung und das Mentoring eines kleinen Entwicklerteams (4 Personen).",
+      "SHORT_DESCRIPTION_CV": "Übernahm früh in meiner Laufbahn die fachliche Leitung und das Mentoring eines kleinen Entwicklerteams.",
+      "DESCRIPTION": "Führte effiziente Entwicklungsabläufe ein und war verantwortlich für Aufgabenverteilung, fachliche Weiterentwicklung im Team sowie Leistungsbeurteilungen. Unterstützte Junior-Entwickler:innen aktiv durch praxisnahes Coaching und regelmäßiges Feedback, um deren fachliches Wachstum und Selbstvertrauen zu stärken."
+    }
+  },
+  "EXPERIENCE": {
+    "HEKK_STUDIO": {
+      "TITLE": "Frontend-Spezialist & Full-Stack Entwickler",
+      "DESCRIPTION": "Als Frontend-Spezialist tätig und verantwortlich für die Entwicklung nutzerorientierter Funktionen einer Buchungsplattform."
+    },
+    "INVOICE_ASSISTANT": {
+      "TITLE": "Gründer",
+      "SHORT_DESCRIPTION": "Gründung und Entwicklung von Invoice Assistant, einer sicheren Rechnungsplattform, die Freiberuflern hilft, ihre Abrechnung zu optimieren und schneller bezahlt zu werden.",
+      "DESCRIPTION": "Konzipierte und entwickelte Invoice Assistant, eine vollständig verschlüsselte Progressive Web App (PWA), die Freiberuflern ermöglicht, Rechnungen zu erstellen, zu versenden und zu verfolgen, um pünktliche Zahlungen sicherzustellen."
+    },
+    "REGAL_DIGITAL": {
+      "TITLE": "Senior Full-Stack Entwickler",
+      "DESCRIPTION": "Entwicklung von SaaS-Produkten und Weblösungen mit einem modernen, plattformübergreifenden Tech-Stack im JavaScript-Ökosystem. Beratung und Unterstützung bei der Technologie- und Strategieausrichtung.",
+      "DESCRIPTION_ITEM_1": "Aufbau von TypeScript- + React-SaaS-Plattformen, mit Fokus auf Domain-Driven Design, Sicherheit und Wartbarkeit",
+      "DESCRIPTION_ITEM_2": "Beratung zu Technologie-Strategie und Architektur, für kontinuierliche Feature-Entwicklung und stabile Systeme",
+      "DESCRIPTION_ITEM_3": "Modernisierung von Kunden-Workflows mit KI, Automatisierung von Prozessen und Effizienzsteigerung",
+      "LOCATION": "Niederlande (Remote)"
+    },
+    "HOLMLAB": {
+      "TITLE": "Full-Stack Consultant Engineer",
+      "DESCRIPTION": "Entwicklung interner Softwarelösungen für ein Pathologielabor mit Schwerpunkt auf Prozessmanagement, Berichtserstellung und Archivierung. Arbeit mit medizinischen Datenstandards wie FHIR und HL7 zur Sicherstellung von Compliance und Interoperabilität im Gesundheitswesen."
+    },
+    "CHEP": {
+      "TITLE": "$t(LEADERSHIP.FE_TECH_LEAD.TITLE) & Senior Consultant",
+      "SHORT_DESCRIPTION": "Trieb die Einführung von TypeScript und die Migration einer Legacy-Codebasis zu React voran. Leitete ein Team von 8 Frontend-Entwicklern in einem funktionsübergreifenden, internationalen Engineering-Team.",
+      "DESCRIPTION": "Zunächst als Frontend-Entwickler und später als Tech Lead tätig. Verantwortlich für die Wartung einer Legacy-Backbone.js-Anwendung sowie für die Leitung der Migration zu React und TypeScript. Enge Zusammenarbeit mit Mid-Tier-, Business-Layer-, SAP- und BW-Teams, um kontinuierlich neue Funktionen bereitzustellen und gleichzeitig zu einer modernen Codebasis zu migrieren.",
+      "DESCRIPTION_ITEM_1": "Leitete die Frontend-Modernisierung der globalen Logistikplattform von CHEP (25 Sprachen, 65 Länder, 55K+ Unternehmenskunden) durch die Migration eines 650K-SLOC Backbone.js-Frontends zu TypeScript + React",
+      "DESCRIPTION_ITEM_2": "Agierte als Frontend Tech Lead, definierte Architektur-Patterns, entwickelte die Migrationsstrategie und implementierte Kernfunktionen als leitender React/TypeScript-Ingenieur des Teams",
+      "DESCRIPTION_ITEM_3": "Etablierte WebdriverIO für E2E-Tests mit einer Abdeckung von 100% der Geschäftsregeln (~9.000 Szenarien)",
+      "DESCRIPTION_ITEM_4": "Steigerte die Unit-Test-Abdeckung von 2% auf ~35% und reduzierte Regressionen",
+      "DESCRIPTION_ITEM_5": "Entwarf und implementierte eine regelbasierte Validierungs-Engine zur Unterstützung von 5.000+ Geschäftsregeln",
+      "LOCATION": "Südafrika / International (Remote)"
+    },
+    "FLAMELINK": {
+      "TITLE": "React & Firebase Entwickler",
+      "DESCRIPTION": "Kernmitglied des Teams bei Flamelink, einem Headless-CMS für Firebase, und beteiligt an dessen Entwicklung und Wachstum.",
+      "DESCRIPTION_ITEM_1": "Neue Funktionen entworfen und implementiert, um die Produktfunktionalität zu verbessern",
+      "DESCRIPTION_ITEM_2": "Wichtige Integrationen gepflegt und optimiert, einschließlich des Gatsby-Source-Plugins",
+      "DESCRIPTION_ITEM_3": "Technischen Support für Kunden bereitgestellt und Probleme innerhalb von 24 Stunden gelöst"
+    },
+    "IO_DIGITAL": {
+      "TITLE": "Lead Full-Stack Webentwickler",
+      "DESCRIPTION": "Kurzzeitig als Lead Full-Stack Web Developer tätig, mit PHP/Laravel und Vue.js an frühen Projektphasen gearbeitet."
+    },
+    "RESPONSIVE": {
+      "TITLE": "Full-Stack Entwickler",
+      "DESCRIPTION": "Entwicklung vielseitiger Full-Stack-Lösungen mit Fokus auf React-Frontends und qualitativ hochwertige Softwarearchitektur.",
+      "DESCRIPTION_ITEM_1": "Erstellung von kundenorientierten und internen Tools",
+      "DESCRIPTION_ITEM_2": "Integration von Frontend-Komponenten mit APIs und Backend-Services",
+      "DESCRIPTION_ITEM_3": "Sicherstellung der Codequalität durch Tests, Dokumentation und Best Practices"
+    },
+    "LIMABEAN": {
+      "TITLE": "Webentwickler und Teamleiter",
+      "DESCRIPTION": "Leitung eines Teams von vier Entwicklern in einer Webagentur, spezialisiert auf E-Commerce-Lösungen.",
+      "DESCRIPTION_ITEM_1": "Entwicklung responsiver, qualitativ hochwertiger Websites mit ExpressionEngine und CakePHP",
+      "DESCRIPTION_ITEM_2": "Konzeption und Umsetzung einer maßgeschneiderten Kursplattform mit Live-Chat für Real Meal Revolution",
+      "DESCRIPTION_ITEM_3": "Entwurf und Entwicklung einer interaktiven digitalen Comics für SupaStrikas",
+      "DESCRIPTION_ITEM_4": "Mentoring von Junior-Entwicklern in HTML5, CSS3 und JavaScript",
+      "DESCRIPTION_ITEM_5": "Erstellung von Pflichtenheften zur Steuerung der Projektumsetzung"
+    },
+    "ONE_OVER_ZERO": {
+      "TITLE": "Assistent Ingenieur",
+      "DESCRIPTION": "Unterstützung bei der Produktentwicklung in enger Zusammenarbeit mit Maschinenbau- und Elektrotechnikingenieuren sowie dem Produktionsleiter.",
+      "DESCRIPTION_ITEM_1": "Montage, Test und Reparatur elektronischer Geräte",
+      "DESCRIPTION_ITEM_2": "Programmierung elektronischer Geräte sowie Fertigung von Kabeln und Komponenten",
+      "DESCRIPTION_ITEM_3": "Löten und Testen elektronischer Bauteile",
+      "DESCRIPTION_ITEM_4": "Durchführung von Außeneinsätzen/Installationen",
+      "DESCRIPTION_ITEM_5": "Marktforschung zur Unterstützung der Projektplanung",
+      "DESCRIPTION_ITEM_6": "Mitarbeit an Web-Backend-Entwicklung und Design"
+    },
+    "ALPLAS": {
+      "TITLE": "Assistenz-Mechatroniktechniker (Praktikum)",
+      "DESCRIPTION": "Unterstützung des Elektrotechnik-Teams bei der Wartung und Instandsetzung von Spritzgussmaschinen, Robotern und Fabriksystemen zur Sicherstellung eines reibungslosen Produktionsablaufs.",
+      "DESCRIPTION_ITEM_1": "Demontage von Maschinen und Ausrichtung von Motoren und Schwungrädern",
+      "DESCRIPTION_ITEM_2": "Behebung kleinerer Maschinenschäden",
+      "DESCRIPTION_ITEM_3": "Unterstützung bei der Reparatur und dem Austausch von Ventilen und Schaltern",
+      "DESCRIPTION_ITEM_4": "Allgemeine Schmierung der Maschinen",
+      "DESCRIPTION_ITEM_5": "Abbau und Aufbau von Förderanlagen",
+      "DESCRIPTION_ITEM_6": "Wartung von Robotern (Spruepicker)",
+      "DESCRIPTION_ITEM_7": "Anbringen von Wasserleitungen und Formen an den Fabrikwänden",
+      "DESCRIPTION_ITEM_8": "Unterstützung beim Austausch defekter Linearformen",
+      "DESCRIPTION_ITEM_9": "Aufbau des Wassersystems und Reinigung der Tanks"
+    },
+    "GMP": {
+      "TITLE": "Persönlicher Assistent (Praktikum)",
+      "DESCRIPTION": "Als Praktikant den leitenden Architekten des Cape Town Stadiums begleitet und Einblicke in Großbauprojekte, interdisziplinäre Zusammenarbeit und Projektmanagement gewonnen, während leichte administrative Aufgaben unterstützt wurden.",
+      "DESCRIPTION_ITEM_1": "Einblicke in Großbauprojekte gewonnen",
+      "DESCRIPTION_ITEM_2": "Vor Ort und im Büro mit dem leitenden Architekten zusammengearbeitet",
+      "DESCRIPTION_ITEM_3": "Die Zusammenarbeit von Bau-, Maschinen- und Elektrotechnikern vor Ort beobachtet",
+      "DESCRIPTION_ITEM_4": "An Sitzungen zu Projektmanagement, Designprozess, Kommunikation, Statik, Fehleranalyse und Krisenmanagement teilgenommen",
+      "DESCRIPTION_ITEM_5": "Leichte administrative Aufgaben übernommen"
+    },
+    "CHW_DESIGN": {
+      "TITLE": "Werkstattassistent (Praktikum)",
+      "DESCRIPTION": "Praktische Erfahrung in der Metallverarbeitung gesammelt, einschließlich Montage, Schweißen, Bohren, Schleifen, Press- und Walzarbeiten sowie Wärmebehandlungsverfahren.",
+      "DESCRIPTION_ITEM_1": "Montage",
+      "DESCRIPTION_ITEM_2": "Schweißen",
+      "DESCRIPTION_ITEM_3": "Bohren",
+      "DESCRIPTION_ITEM_4": "Schleifen",
+      "DESCRIPTION_ITEM_5": "Press- und Walzarbeiten",
+      "DESCRIPTION_ITEM_6": "Anlassen, Härten und Glühen"
+    },
+    "AUDI_CENTRE": {
+      "TITLE": "Vertrieb (Betriebspraktikum)",
+      "DESCRIPTION": "Praktikum bei einem Audi-Autohaus absolviert, um praktische Einblicke in die Abläufe und Prozesse der folgenden Abteilungen zu gewinnen:",
+      "DESCRIPTION_ITEM_1": "Lagerverwaltung",
+      "DESCRIPTION_ITEM_2": "Verkauf von Neufahrzeugen",
+      "DESCRIPTION_ITEM_3": "Verkauf von Gebrauchtfahrzeugen",
+      "DESCRIPTION_ITEM_4": "Teile und Werkstatt"
+    }
+  },
+  "EMPLOYMENT_TYPE": {
+    "PART_TIME_PASSION_PROJECT": "Teilzeit, Herzensprojekt",
+    "PART_TIME_CONTRACT": "Teilzeit, Vertrag",
+    "FULL_TIME_CONTRACT": "Vollzeit, Vertrag",
+    "FULL_TIME_EMPLOYMENT": "Vollzeitbeschäftigung",
+    "PART_TIME_3_DAYS": "Teilzeit, drei Tage in der Woche",
+    "PART_TIME_MONDAYS": "Teilzeit, jeden Montag",
+    "PART_TIME_EMPLOYMENT": "Teilzeitbeschäftigung",
+    "PRACTICAL_TRAINING": "Praxisorientierte Ausbildung",
+    "WORK_PLACEMENT": "Betriebspraktikum",
+    "COACHING_SESSIONS": "Zweiwöchentliche Coaching-Sitzungen"
+  },
+  "COMPANIES": {
+    "SAMSONS": "SAMSONS Schule für Schweißen",
+    "KINDERGARTEN": "Deutscher Kindergarten Bellville",
+    "DSP": "Deutsche Schule Pretoria",
+    "DSK": "Deutsche Internationale Schule Kapstadt",
+    "UCT": "Universität Kapstadt",
+    "UNISA": "Universität von Südafrika"
+  },
+  "LOCATIONS": {
+    "COUNTRIES": {
+      "GERMANY": "Deutschland",
+      "NETHERLANDS": "Niederlande",
+      "UNITED_KINGDOM": "Vereinigtes Königreich",
+      "SOUTH_AFRICA": "Südafrika"
+    },
+    "CITIES": {
+      "KALTENBRUNN": "Kaltenbrunn",
+      "REISKIRCHEN": "Reiskirchen",
+      "BEMBRIDGE": "Bembridge",
+      "CAPE_TOWN": "Kapstadt",
+      "PRETORIA": "Pretoria",
+      "JOHANNESBURG": "Johannesburg"
+    },
+    "REGIONS": {
+      "ISLE_OF_WIGHT": "Insel Wight"
+    }
+  },
+  "LANGUAGES": {
+    "ENGLISH": "Englisch",
+    "GERMAN": "Deutsch",
+    "AFRIKAANS": "Afrikaans",
+    "PROFICIENCY_NATIVE": "Muttersprache",
+    "PROFICIENCY_FLUENT": "Fließend",
+    "PROFICIENCY_NATIVE_DESCRIPTION": "Ich bin in Südafrika aufgewachsen, wo Englisch eine der 12 Amtssprachen ist. Da meine Eltern jedoch gebürtige Deutsche sind, sind sowohl Englisch als auch Deutsch meine Muttersprachen. Da ich jedoch den Großteil meines Lebens in Südafrika verbracht habe, spreche ich lieber Englisch.",
+    "PROFICIENCY_CONVERSATIONAL": "Konversationssicher",
+    "PROFICIENCY_CONVERSATIONAL_DESCRIPTION": "Ähnlich wie Englisch ist auch Afrikaans eine der 12 Amtssprachen Südafrikas. Ich habe Afrikaans in der Schule gelernt und spreche bis heute regelmäßig Afrikaans mit Freunden und Arbeitskollegen."
+  }
+}

@@ -1,0 +1,46 @@
+name: build-branch
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+on:
+  # push:
+  #   branches:
+  #     - '**'
+  #     - '!develop'
+  #     - '!main'
+  pull_request:
+    branches:
+      - 'develop'
+jobs:
+  build-and-test:
+    name: Build & test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
+      - name: Setup environment
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24.10.0'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Vercel - Pull environment information
+        run: ./node_modules/.bin/vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Vercel - Build project artifacts
+        run: ./node_modules/.bin/vercel build --token=${{ secrets.VERCEL_TOKEN }}
+
+      # - name: Vercel - Deploy project artifacts
+      #   run: ./node_modules/.bin/vercel deploy --prebuilt --archive=tgz --token=${{ secrets.VERCEL_TOKEN }}

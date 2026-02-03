@@ -1,0 +1,536 @@
+{
+  "MISC": {
+    "PROFILE_ALT_TEXT": "Picture of Cornelius Weidmann",
+    "ALL_RIGHTS_RESERVED": "All rights reserved."
+  },
+  "NAVIGATION": {
+    "HOME": "Home",
+    "ABOUT": "About",
+    "EXPERIENCE": "Experience",
+    "SKILLS": "Skills",
+    "PROJECTS": "Projects",
+    "CONTACT": "Contact",
+    "RESUME": "Resume",
+    "RESUME_PDF": "Resume PDF",
+    "IMPRESSUM": "Impressum"
+  },
+  "DATA_DISPLAY": {
+    "MENU": "Menu",
+    "LAST_UPDATED": "Last updated",
+    "STATUS_LIVE": "Live",
+    "STATUS_INACTIVE": "Inactive",
+    "STATUS_DEPRECATED": "Deprecated",
+    "STATUS_MAINTENANCE_MODE": "Maintenance Mode",
+    "RESUME": "Resume",
+    "FRONTEND": "Frontend",
+    "BACKEND": "Backend",
+    "DATA_CLOUD": "Data & Cloud",
+    "DEVOPS_TESTING": "DevOps & Testing",
+    "LANGUAGES_FRAMEWORKS": "Languages & Frameworks",
+    "PLATFORMS_TOOLING": "Platforms & Tooling",
+    "TECHNICAL_SKILLS": "Core Technical Expertise",
+    "PRIMARY_TECH_STACK": "Primary Tech Stack",
+    "EXPERIENCE": "Experience",
+    "KEY_EXPERIENCE": "Key Experience",
+    "ADDITIONAL_EXPERIENCE": "Additional Experience",
+    "EDUCATION": "Education",
+    "LANGUAGES": "Languages",
+    "FRAMEWORKS_LIBRARIES": "Frameworks & Libraries",
+    "DATABASES": "Databases",
+    "CLOUD_DEVOPS": "Cloud & DevOps",
+    "TESTING": "Testing",
+    "MOBILE": "Mobile",
+    "METHODOLOGIES": "Methodologies",
+    "TIMELINE": "Timeline",
+    "PROFESSIONAL_IMPACT": "Professional Impact",
+    "PROFILE_PICTURE": "Profile picture",
+    "PROFILE_BANNER": "Profile banner",
+    "EMAIL": "Email",
+    "CONTACT": "Contact",
+    "ADDRESS": "Address",
+    "PROFESSIONAL_EXPERIENCE": "Professional Experience",
+    "VOLUNTARY_WORK": "Voluntary Work",
+    "COMMUNITY_INVOLVEMENT": "Community Involvement",
+    "PERSONAL_DEVELOPMENT": "Personal Development",
+    "NAME": "Name",
+    "WEBSITE": "Website",
+    "YEAR": "Year",
+    "STATUS": "Status",
+    "FEATURED_PROJECTS": "Featured Projects"
+  },
+  "GRAMMAR": {
+    "PRESENT": "Present",
+    "SINCE": "since",
+    "MORE": "more",
+    "SHOW_LESS": "Show less",
+    "AND": "and"
+  },
+  "RESUME": {
+    "FULL_NAME": "Cornelius Weidmann",
+    "JOB_TITLE": "Senior Front-End / Full-Stack Engineer",
+    "TECH_TITLE": "TypeScript, React, Node.js and Go",
+    "SUMMARY": "Professional Summary",
+    "// ABOUT": "Software Engineer with {{yearsExperience}} years experience designing and delivering scalable, cross-platform web applications. Specialises in writing clean, maintainable code across the stack, with a strong emphasis on performance, usability, and scalability. Eager to contribute to teams that value technical excellence and building great products together.",
+    "ABOUT_": "Full-stack engineer with extensive experience leading large-scale modernisation projects, building scalable TypeScript/React applications, and driving cross-team technical delivery. Adept at architecting complex systems, mentoring teams, and translating business requirements into high-quality software.",
+    "ABOUT": "Full-stack engineer with {{yearsExperience}}+ years of experience leading large-scale modernisation projects and building production TypeScript/React applications. Architected complex systems, mentored engineering teams, and delivered measurable business impact through technical excellence. Specialises in legacy system modernisation, technical leadership, and scalable front-end architecture."
+  },
+  "PROJECTS": {
+    "INVOICE_ASSISTANT": {
+      "NAME": "Invoice Assistant",
+      "TITLE": "Invoicing App",
+      "DESCRIPTION": "An invoicing app for freelancers and contractors that have global clients. Send invoices as PDF or view them online."
+    },
+    "DEV_DICT": {
+      "NAME": "dev-dict",
+      "TITLE": "Open Source Library",
+      "DESCRIPTION": "A developer dictionary for software industry related terms and concepts."
+    },
+    "AITEAMCHAT": {
+      "NAME": "AI Team Chat",
+      "TITLE": "AI Chat App",
+      "DESCRIPTION": "Chat with multiple AI personas including Project Managers, Developers, and Strategic Thinkers."
+    },
+    "EEAAS": {
+      "NAME": "Easter Eggs as a Service",
+      "TITLE": "Open Source Library",
+      "DESCRIPTION": "A library to inject easter eggs into apps and websites."
+    },
+    "KYCO": {
+      "NAME": "kyco",
+      "TITLE": "Technical Blog",
+      "DESCRIPTION": "Hobby website and technical blog."
+    },
+    "TIMESTATS": {
+      "NAME": "Timestats",
+      "TITLE": "Time Tracking App",
+      "DESCRIPTION": "A text-based time tracking app for individuals."
+    },
+    "QCAN": {
+      "NAME": "Qcan",
+      "TITLE": "Bitcoin Wallet",
+      "DESCRIPTION": "A bitcoin wallet for Android and iOS."
+    },
+    "STAMI_FINANZEN": {
+      "NAME": "Financial Reporting App",
+      "TITLE": "Financial Reporting App",
+      "DESCRIPTION": "An app to view Profit & Loss, Balance Sheet and Budget. Directly integrates with data generated from QuickBooks."
+    },
+    "STAMI_APP": {
+      "NAME": "Events Management App",
+      "TITLE": "Events Management App",
+      "DESCRIPTION": "An app to plan and manage events, attendees, send notifications, create weekly planners, create & view monthly reports and more. 100+ weekly active users."
+    },
+    "LS_CHROME": {
+      "NAME": "Local Storage Chrome Extension",
+      "TITLE": "Local Storage Chrome Extension",
+      "DESCRIPTION": "A Chrome dev-tools extension to view and manage local storage data directly on the webpage instead of the dev-tools."
+    },
+    "PERSONAL_WEBSITE": {
+      "NAME": "caweidmann.dev",
+      "TITLE": "Portfolio website",
+      "DESCRIPTION": "The website you're currently viewing. A place where I keep an updated version of my projects and resume."
+    }
+  },
+  "PAGE_HOME": {
+    "HERO_TEXT": "I help teams ship <1>reliable, <2/>scalable</1> front-end systems.",
+    "// HERO_TEXT": "I help teams ship <1>high-quality, <2/>battle-tested</1> code.",
+    "HERO_SUBTEXT": "15+ years experience leading React & TypeScript delivery — focused <2/>on quality, maintainability, and impact.",
+    "OPEN_FOR_REMOTE": "Open to remote opportunities",
+    "CTA": "Get in touch",
+    "CTA2": "View resume",
+    "VALUE_TITLE": "What I Bring to Teams",
+    "VALUE_1_TITLE": "Technical Excellence",
+    "VALUE_1_DESCRIPTION": "Deep expertise in TypeScript, React, and Node.js with focus on clean, scalable code.",
+    "VALUE_2_TITLE": "Fast Execution",
+    "VALUE_2_DESCRIPTION": "Ship features quickly without sacrificing quality. Security and performance minded.",
+    "VALUE_3_TITLE": "Team Leadership",
+    "VALUE_3_DESCRIPTION": "Lead front-end teams, mentor developers, and foster collaborative engineering cultures.",
+    "VALUE_4_TITLE": "Problem Solving",
+    "VALUE_4_DESCRIPTION": "Tackle complex challenges from legacy modernisation to greenfield projects ensuring continuous delivery.",
+    "VIEW_MORE_PROJECTS": "View more projects"
+  },
+  "PAGE_ABOUT": {
+    "P1": "Hi there!",
+    "P2": "I'm Cornelius, a Full-Stack Software Engineer with over {{yearsExperience}} years experience building scalable, cross-platform web applications. I specialise in <1>TypeScript</1>, <1>React</1>, <1>Node.js</1> and <1>Go</1>. I have a passion for reducing complexity, automating repetitive tasks and building engaging user interfaces.",
+    "P3": "I started my dev journey back in <1/> (before border-radius!) in Cape Town, South Africa. Since then, I've worked in various roles including as a Full-Stack Developer, Team Lead, Scrum Master and Front-end Tech Lead. My experience spans across different industries, in particular e-commerce, healthcare, logistics and lately finance.",
+    "P4": "Since <1/> I've been working remotely as an independent contractor.",
+    "KYCO_LINK": "PS: I'm fluent in English, German and Afrikaans and occasionally blog at <1/>.",
+    "CONTACT": "If you'd like to connect or chat, feel free to <1>contact me</1>.",
+    "TIMELINE_START": "Started to code",
+    "TIMELINE_AGENCY": "Worked for an e-commerce focused startup and a web development agency",
+    "TIMELINE_CONSULTANT_1": "Worked as independent contractor for clients across South Africa",
+    "TIMELINE_GERMANY": "Moved to Germany",
+    "TIMELINE_CONSULTANT_2": "Working as independent contractor for clients across Europe, UK and South Africa",
+    "GUIDING_PRINCIPLES": "My Guiding Principles",
+    "PRINCIPLE_1": "First make it work, then make it better.",
+    "PRINCIPLE_2": "Always leave code cleaner than you found it.",
+    "PRINCIPLE_3": "Nothing is as permanent as a temporary solution."
+  },
+  "PAGE_CONTACT": {
+    "GET_IN_TOUCH": "I'm currently available for freelance projects, part-time and full-time employment. Feel free to reach out.",
+    "PROFILE_LOCATION_Q": "Location",
+    "PROFILE_LOCATION_A": "Germany",
+    "PROFILE_DRINK_Q": "What am I drinking",
+    "PROFILE_DRINK_A": "Homemade apple cider",
+    "PROFILE_DATE_TAKEN_Q": "Date taken",
+    "PROFILE_DATE_TAKEN_A": "December 2020",
+    "PROFILE_BANNER_LOCATION_Q": "Location",
+    "PROFILE_BANNER_LOCATION_A": "Elands Bay, South Africa",
+    "PROFILE_BANNER_DATE_TAKEN_Q": "Date taken",
+    "PROFILE_BANNER_DATE_TAKEN_A": "October 2021"
+  },
+  "PAGE_PROJECTS": {
+    "BLURB": "Below you'll find a list of some of the things I've built, and which I work on from time to time:",
+    "VIEW_MORE": "More projects available on <1/>."
+  },
+  "PAGE_EXPERIENCE": {
+    "RESUME_LINK": "Looking for a PDF version of my resume? <1>View PDF resume</1>"
+  },
+  "PAGE_RESUME": {
+    "TITLE": "$t(DATA_DISPLAY.RESUME)",
+    "VIEW_MORE_AT": "Full experience & projects"
+  },
+  "PAGE_SKILLS": {
+    "TITLE": "$t(NAVIGATION.SKILLS)",
+    "BLURB": "I'm a Full-Stack developer with focus on the front-end and specialisation in the PWA ecosystem, primarily with TypeScript, React and Node.js."
+  },
+  "PAGE_404": {
+    "TITLE": "The URL in the address bar does not exist!",
+    "BLURB": "The content you are looking for might have moved and is possibly available at a different URL. Alternatively, check the URL for typos.",
+    "BACK_TO_HOMEPAGE": "Back to homepage"
+  },
+  "COMPONENTS": {
+    "THEME_SWITCHER": {
+      "THEME": "Theme",
+      "CHOOSE_THEME": "Choose theme",
+      "THEME_LIGHT": "Light",
+      "THEME_DARK": "Dark",
+      "THEME_SYSTEM": "System"
+    },
+    "LANGUAGE_SWITCHER": {
+      "LANGUAGE": "Language",
+      "CHANGE_LANGUAGE": "Change language",
+      "LOCALE_EN_LANGUAGE_EN": "English",
+      "LOCALE_EN_LANGUAGE_DE": "Englisch",
+      "LOCALE_DE_LANGUAGE_EN": "German",
+      "LOCALE_DE_LANGUAGE_DE": "Deutsch"
+    }
+  },
+  "SKILL_CATEGORIES": {
+    "LANGUAGE": "Language",
+    "FRONTEND_FRAMEWORK": "Frontend Framework",
+    "UI_LIBRARY": "UI Library",
+    "STATE_MANAGEMENT": "State Management",
+    "WEB_TECHNOLOGY": "Web Technology",
+    "BACKEND_FRAMEWORK": "Backend Framework",
+    "TEMPLATE_ENGINE": "Template Engine",
+    "RUNTIME": "Runtime",
+    "DATABASE_SQL": "SQL Database",
+    "DATABASE_NOSQL": "NoSQL Database",
+    "SEARCH_ENGINE": "Search Engine",
+    "CLOUD_PROVIDER": "Cloud Provider",
+    "CI_CD": "CI/CD",
+    "CONTAINER": "Container",
+    "INFRASTRUCTURE": "Infrastructure",
+    "VERSION_CONTROL": "Version Control",
+    "TESTING_FRAMEWORK": "Testing Framework",
+    "QUALITY_TOOL": "Quality Tool",
+    "MONITORING": "Monitoring",
+    "BUNDLER": "Bundler",
+    "TASK_RUNNER": "Task Runner",
+    "MONOREPO_TOOL": "Monorepo Tool",
+    "CMS": "CMS",
+    "PAYMENT": "Payment",
+    "EMAIL_SERVICE": "Email Service",
+    "ANALYTICS": "Analytics",
+    "API_INTEGRATION": "API Integration",
+    "WEB3": "Web3",
+    "AI_ML": "AI/ML",
+    "SECURITY": "Security",
+    "DESIGN_TOOL": "Design Tool",
+    "PROJECT_MANAGEMENT": "Project Management",
+    "DEVELOPMENT_TOOL": "Development Tool"
+  },
+  "SKILLS": {
+    "LEGACY_MIGRATION": "Legacy Migration",
+    "ENCRYPTION": "Encryption",
+    "E2E": "E2E Testing"
+  },
+  "EDUCATION": {
+    "DID_NOT_COMPLETE": "did not complete (feel free to ask me why)",
+    "NOT_COMPLETED": "Not completed.",
+    "SELF_TAUGHT": {
+      "TITLE": "Self-taught Software Engineer",
+      "DESCRIPTION": "I first got into HTML, CSS, JavaScript and PHP at an engineering startup in 2010. Their website was built using HTML tables and I had the pleasure of upgrading the site to semantic HTML5 and CSS3. Talk about modernisation... JavaScript was used only sparingly with inline scripts to add additional functionality here and there.<br/><br/>From there I went on to dev house / web dev agency, where I had excellent mentors who introduced me to data modelling and core web development concepts. Since then I've been on a continuous journey of learning and staying on top of the game, especially in the JavaScript and PWA ecosystem."
+    },
+    "UNISA_COMPUTER_SCIENCE": {
+      "TITLE": "Computer Science and Applied Mathematics *",
+      "DEGREE": "BSc Computer Science and Applied Mathematics",
+      "DESCRIPTION": "Area of focus: Linear Algebra, Calculus, Discrete Mathematics, Mathematical Modelling, Programming, Theoretical Computer Science and Philosophy of Science",
+      "COURSES_COMPLETED": "Courses completed: Applied Linear Algebra, Programming I, CS Fundametal Concepts, Linear Algebra I, Calculus I, Programming II, Mathematical Modelling, Theoretical Computer Science I, Introduction to Discrete Mathematics, Philosophy of Science"
+    },
+    "UNISA_MATHS": {
+      "TITLE": "Non-Degree Purpose Mathematics",
+      "DESCRIPTION": "Area of focus: Linear Algebra, Calculus in Higher Dimensions and Differential Equations,",
+      "COURSES_COMPLETED": "Courses completed: Linear Algebra II, Calculus in Higher Dimensions, Differential Equations II"
+    },
+    "UCT_ENGINEERING": {
+      "TITLE": "Mechanical Engineering *",
+      "DEGREE": "BSc(Eng) Electro-Mechanical",
+      "DESCRIPTION": "Area of focus: Mathematics, Physics, Statics, Chemistry, Mechanical Engineering, Engineering Drawing, Thermodynamics, Electrical Engineering, Economics and Sociology",
+      "COURSES_COMPLETED": "Courses completed: Mathematics I, Physics, Statics, Chemistry, Mechanical Engineering I, Engineering Drawing, Thermodynamics, Electrical Engineering I, Economics, Sociology"
+    },
+    "DSK": {
+      "TITLE": "Grade 11-12 (Matric)",
+      "DESCRIPTION": "All subjects completed on Higher Grade. Obtained the South African Matriculation Senior Certificate with Merit.<br/><br/>Subjects: Mathematics, Additional Mathematics, Physical Science, Computer Studies, German, English, Afrikaans<br/><br/>Average: 78%"
+    },
+    "DSP": {
+      "TITLE": "Grade 0-10 (Pre-, Primary- & High school)",
+      "DESCRIPTION": "Grade 10 Average: 72%"
+    }
+  },
+  "TRAINING": {
+    "LEADERSHIP_TRAINING": {
+      "TITLE": "Leadership Development Training",
+      "DESCRIPTION": "Completed a six-month leadership coaching programme focused on team dynamics, relational and emotional intelligence, self-leadership, and navigating complexity in group settings. The training emphasised goal-setting, the development of healthy communication patterns, the cultivation of psychological safety, and the establishment of effective team habits and routines. Key outcomes included enhanced conflict resolution skills, increased role clarity, and stronger collaboration within diverse team environments."
+    },
+    "WELDING_COURSE": {
+      "TITLE": "Welding course",
+      "DESCRIPTION": "Welding course description"
+    },
+    "LATHE_COURSE": {
+      "TITLE": "Unofficial lathe course",
+      "DESCRIPTION": "Unofficial lathe course description"
+    },
+    "MODERATION_WORKSHOP": {
+      "TITLE": "Public Speaking and Moderation Workshop",
+      "DESCRIPTION": "The workshop focused on developing confident and persuasive communication skills, including effective use of language and rhetoric to engage audiences. Participants learned strategies for preparing and delivering public speaking events, fostering creativity, and applying practical tips to enhance overall presentation effectiveness."
+    },
+    "LEADERSHIP_SEMINAR": {
+      "TITLE": "Mentoring and Leadership Seminar - Conflict Management",
+      "DESCRIPTION": "The seminar focused on developmental psychology and conflict management within leadership and mentoring contexts. It emphasised understanding behavioural dynamics and age-specific needs when mentoring children and adolescents, as well as techniques for effective communication and conflict resolution in team settings."
+    }
+  },
+  "VOLUNTARY_WORK": {
+    "PRESCHOOL": {
+      "TITLE": "Preschool & Kindergarten Teacher",
+      "DESCRIPTION": "Supported weekly educational and care activities for children aged 3 to 6 at a German kindergarten. Assisted lead teachers in creating a positive, play-based learning environment and promoted social development through interactive group activities. Additionally, conducted sport classes to encourage physical development, coordination, and teamwork."
+    },
+    "TUTOR": {
+      "TITLE": "Mathematics and Physics Tutor"
+    },
+    "WEBMASTER": {
+      "TITLE": "Webmaster"
+    },
+    "TREASURER": {
+      "TITLE": "Treasurer",
+      "DESCRIPTION": "Oversaw financial planning and budgeting for a small church. Collaborated with the church council to set budgets, approve spending, and make strategic financial decisions. Responsible for monthly financial reporting to the church council and biannual presentations to the full congregation. Created charts and statistics to visualise financial health and support transparent decision-making."
+    },
+    "MODERATOR": {
+      "TITLE": "Moderator"
+    },
+    "CHURCH_TECH_TEAM": {
+      "TITLE": "Church Tech Team"
+    },
+    "WORSHIP_LEADER": {
+      "TITLE": "Worship Leader",
+      "DESCRIPTION": "Led a small worship team of 4 musicians and vocalists in a church setting. Responsible for selecting music, coordinating rehearsals, and facilitating live worship twice a month. Fostered a collaborative and spiritually focused environment within the team and supported the congregation through music."
+    },
+    "YOUTH_LEADER": {
+      "TITLE": "Youth Leader",
+      "DESCRIPTION": "Organised weekly youth events focused on community, personal growth, and faith development. Planned and facilitated Kids Days and co-organised youth camps in collaboration with the youth pastor. Helped create a safe, engaging space for young people to connect and grow."
+    },
+    "STUDENT_REPRESENTATIVE": {
+      "TITLE": "Student Representative",
+      "DESCRIPTION": "Served as a liaison between students and teachers during my final school year. Helped organise student events and represented student interests in school matters. Took primary responsibility for advertising, including designing posters and promotional materials for school-wide activities."
+    }
+  },
+  "LEADERSHIP": {
+    "DEVELOPMENT_LEAD": {
+      "TITLE": "Development Lead"
+    },
+    "FE_TECH_LEAD": {
+      "TITLE": "Front-end Tech Lead",
+      "SHORT_DESCRIPTION": "Led front-end architecture, tech strategy, and team development for a cross-functional engineering team.",
+      "SHORT_DESCRIPTION_CV": "$t(LEADERSHIP.FE_TECH_LEAD.SHORT_DESCRIPTION)",
+      "DESCRIPTION": "Owned all front-end technology decisions for a cross-functional development team of around 20 engineers. Collaborated with the CTO on hiring (interviewing and selection), authored technical documentation, and drove architectural direction. Led and mentored a team of 8 front-end developers while coordinating closely with mid-tier and backend teams."
+    },
+    "PROBLEM_SOLVER": {
+      "TITLE": "Problem Solver",
+      "SHORT_DESCRIPTION": "Delivered creative engineering solutions to complex business requirements, within tight deadlines.",
+      "SHORT_DESCRIPTION_CV": "$t(LEADERSHIP.PROBLEM_SOLVER.SHORT_DESCRIPTION)",
+      "DESCRIPTION": "Applied innovative thinking and technical expertise to address complex engineering challenges driven by demanding business requirements. Designed and delivered robust, high-quality solutions within tight technical and time constraints."
+    },
+    "SCRUM_MASTER": {
+      "TITLE": "Scrum Master",
+      "SHORT_DESCRIPTION": "Facilitated Agile practices for a globally distributed team across the US, UK, Australia, and South Africa.",
+      "SHORT_DESCRIPTION_CV": "$t(LEADERSHIP.SCRUM_MASTER.SHORT_DESCRIPTION)",
+      "DESCRIPTION": "Led Agile ceremonies — including stand-ups, sprint planning, retrospectives, and refinements — for a distributed development team of around 35 people across multiple time zones. Worked closely with product owners to align delivery with business goals, fostering a high-performing environment with minimal process friction."
+    },
+    "MENTOR": {
+      "TITLE": "Mentor",
+      "SHORT_DESCRIPTION": "Provided day-to-day leadership and mentorship for a small dev team (4 members) early in my career.",
+      "SHORT_DESCRIPTION_CV": "$t(LEADERSHIP.MENTOR.SHORT_DESCRIPTION)",
+      "DESCRIPTION": "Introduced efficient development workflows and was responsible for task distribution, peer development, and performance reviews. Actively mentored junior devs through hands-on coaching and regular feedback to support their growth and confidence."
+    }
+  },
+  "EXPERIENCE": {
+    "HEKK_STUDIO": {
+      "TITLE": "Front-end Specialist & Full-Stack Engineer",
+      "DESCRIPTION": "Worked as Front-end Specialist developing user-facing features for a booking platform."
+    },
+    "INVOICE_ASSISTANT": {
+      "TITLE": "Founder",
+      "DESCRIPTION": "Conceptualised and developed Invoice Assistant, a fully encrypted Progressive Web App (PWA) enabling freelancers to create, send, and track invoices, ensuring timely payments."
+    },
+    "REGAL_DIGITAL": {
+      "TITLE": "Senior Full-Stack Engineer",
+      "DESCRIPTION": "Building SaaS products and web solutions with a modern cross-platform tech stack in the JavaScript ecosystem. Consulting and advising on tech strategy.",
+      "DESCRIPTION_ITEM_1": "Building TypeScript + React SaaS platforms, with a focus on domain-driven design, security and maintainability",
+      "DESCRIPTION_ITEM_2": "Consulting on tech strategy and architecture, driving continuous feature delivery and future-proofing systems",
+      "DESCRIPTION_ITEM_3": "Modernising client workflows with AI-driven solutions, automating processes and improving operational efficiency",
+      "LOCATION": "Netherlands (Remote)"
+    },
+    "HOLMLAB": {
+      "TITLE": "Full-Stack Consultant Engineer",
+      "DESCRIPTION": "Developed internal software solutions for a pathology lab, focusing on process management, report generation, and archiving. Worked with medical data standards such as FHIR and HL7 to ensure compliance and interoperability within healthcare systems."
+    },
+    "CHEP": {
+      "TITLE": "$t(LEADERSHIP.FE_TECH_LEAD.TITLE) & Senior Consultant",
+      "SHORT_DESCRIPTION": "Drove TypeScript adoption and migration of a legacy codebase to React. Led a team of 8 front-end developers in a cross-functional, international engineering team.",
+      "DESCRIPTION": "Initially worked as a Front-end Developer and later as Tech Lead. Responsible for maintaining a legacy Backbone.js application and leading its migration to TypeScript & React. Collaborating closely with mid-tier, business layer, SAP and BW teams to continiously deliver features while migrating to a modern codebase.",
+      "DESCRIPTION_ITEM_1": "Led the front-end modernisation of CHEP's global logistics platform (25 languages, 65 countries, 55K+ enterprise customers), migrating a 650K-SLOC Backbone.js front-end to TypeScript + React",
+      "DESCRIPTION_ITEM_2": "Served as Front-end Tech Lead, defining architecture patterns, driving migration strategy, and implementing core features as the team's lead React/TypeScript engineer",
+      "DESCRIPTION_ITEM_3": "Championed WebdriverIO for E2E testing, covering 100% of business rules (~9,000 scenarios)",
+      "DESCRIPTION_ITEM_4": "Raised unit test coverage from 2% to ~35%, improving stability and reducing regression",
+      "DESCRIPTION_ITEM_5": "Designed and built a rules-based validation engine supporting 5,000+ business rules",
+      "LOCATION": "South Africa / International (Remote)"
+    },
+    "FLAMELINK": {
+      "TITLE": "React & Firebase Engineer",
+      "DESCRIPTION": "Core team member at Flamelink, a headless CMS for Firebase, contributing to its development and growth.",
+      "DESCRIPTION_ITEM_1": "Designed and implemented new features to enhance product functionality",
+      "DESCRIPTION_ITEM_2": "Maintained and optimised key integrations, including the Gatsby source plugin",
+      "DESCRIPTION_ITEM_3": "Provided technical support to customers, resolving issues within 24 hours"
+    },
+    "IO_DIGITAL": {
+      "TITLE": "Lead Full-Stack Web Developer",
+      "DESCRIPTION": "Briefly engaged as Lead Full-Stack Web Developer, working with PHP/Laravel and Vue.js on early-stage projects."
+    },
+    "RESPONSIVE": {
+      "TITLE": "Full-Stack Developer",
+      "DESCRIPTION": "Developed versatile full-stack web applications with a focus on React front-ends and robust, high-quality code.",
+      "DESCRIPTION_ITEM_1": "Developed client-facing and internal tools",
+      "DESCRIPTION_ITEM_2": "Integrated front-end components with APIs and backend services",
+      "DESCRIPTION_ITEM_3": "Ensured code quality via testing, documentation, and best practices"
+    },
+    "LIMABEAN": {
+      "TITLE": "Web Developer and Team Lead",
+      "DESCRIPTION": "Led a team of four developers at a web agency specialising in e-commerce solutions.",
+      "DESCRIPTION_ITEM_1": "Developed responsive, high-quality websites with ExpressionEngine and CakePHP",
+      "DESCRIPTION_ITEM_2": "Engineered a custom course platform with live chat for Real Meal Revolution",
+      "DESCRIPTION_ITEM_3": "Designed and built a custom interactive digital comic for SupaStrikas",
+      "DESCRIPTION_ITEM_4": "Mentored junior developers in HTML5, CSS3 and JavaScript",
+      "DESCRIPTION_ITEM_5": "Authored functional specifications to guide project implementation"
+    },
+    "ONE_OVER_ZERO": {
+      "TITLE": "Assistant Engineer",
+      "DESCRIPTION": "Assisted in product development, working closely with mechanical and electrical engineers and the production manager.",
+      "DESCRIPTION_ITEM_1": "Assembled, tested, and repaired electronic devices",
+      "DESCRIPTION_ITEM_2": "Programmed electronic devices and produced cables/components",
+      "DESCRIPTION_ITEM_3": "Performed soldering and testing of electronic components",
+      "DESCRIPTION_ITEM_4": "Executed off-site installations",
+      "DESCRIPTION_ITEM_5": "Conducted market research to support project planning",
+      "DESCRIPTION_ITEM_6": "Contributed to web backend development and design"
+    },
+    "ALPLAS": {
+      "TITLE": "Assistant Mechanical Technician (Internship)",
+      "DESCRIPTION": "Assisted the electrical engineering team in maintaining and servicing injection-moulding machinery, robots, and factory systems to ensure smooth production operations.",
+      "DESCRIPTION_ITEM_1": "Stripping of machines and alignment of motors and flywheels",
+      "DESCRIPTION_ITEM_2": "Repairing minor faults on machines",
+      "DESCRIPTION_ITEM_3": "Assisting in the repairing and replacing of valves and switches",
+      "DESCRIPTION_ITEM_4": "General lubrication of machines",
+      "DESCRIPTION_ITEM_5": "Stripping down and setting up of conveyors",
+      "DESCRIPTION_ITEM_6": "Servicing of robots (spruepickers)",
+      "DESCRIPTION_ITEM_7": "Attaching of water pipes and moulds to factory walls",
+      "DESCRIPTION_ITEM_8": "Assisting in replacing of broken linear moulds",
+      "DESCRIPTION_ITEM_9": "Setting up of water system and cleaning out tanks"
+    },
+    "GMP": {
+      "TITLE": "Personal Assistant (Internship)",
+      "DESCRIPTION": "Shadowed the lead architect of the Cape Town Stadium and gained insight into large-scale construction projects, interdisciplinary collaboration, and project management, while assisting with light administrative tasks.",
+      "DESCRIPTION_ITEM_1": "Gained insight into large-scale construction projects",
+      "DESCRIPTION_ITEM_2": "Worked on-site and in-office alongside the lead architect",
+      "DESCRIPTION_ITEM_3": "Observed on-site collaboration between structural, mechanical, and electrical engineers",
+      "DESCRIPTION_ITEM_4": "Attended sessions on project management, design process, communication, statics, fault analysis and crisis management",
+      "DESCRIPTION_ITEM_5": "Performed light administrative tasks"
+    },
+    "CHW_DESIGN": {
+      "TITLE": "Workshop Assistant (Internship)",
+      "DESCRIPTION": "Gained hands-on experience in metalworking, including fitting, welding, drilling, grinding, press work, rolling, and heat treatment processes.",
+      "DESCRIPTION_ITEM_1": "Fitting",
+      "DESCRIPTION_ITEM_2": "Welding",
+      "DESCRIPTION_ITEM_3": "Drilling",
+      "DESCRIPTION_ITEM_4": "Grinding",
+      "DESCRIPTION_ITEM_5": "Press work and Rolling",
+      "DESCRIPTION_ITEM_6": "Tempering, Hardening and Annealing"
+    },
+    "AUDI_CENTRE": {
+      "TITLE": "Sales (Work placement)",
+      "DESCRIPTION": "Shadowed at an Audi dealership to gain practical exposure to dealership operations and workflow in the following departments:",
+      "DESCRIPTION_ITEM_1": "Stock control",
+      "DESCRIPTION_ITEM_2": "Sales new vehicles",
+      "DESCRIPTION_ITEM_3": "Sales pre-owned vehicles",
+      "DESCRIPTION_ITEM_4": "Parts and workshop"
+    }
+  },
+  "EMPLOYMENT_TYPE": {
+    "PART_TIME_PASSION_PROJECT": "Part-time, passion project",
+    "PART_TIME_CONTRACT": "Part-time, contract",
+    "FULL_TIME_CONTRACT": "Full-time, contract",
+    "FULL_TIME_EMPLOYMENT": "Full-time, employment",
+    "PART_TIME_3_DAYS": "Part-time, three days a week",
+    "PART_TIME_MONDAYS": "Part-time, every Monday",
+    "PART_TIME_EMPLOYMENT": "Part-time, employment",
+    "PRACTICAL_TRAINING": "Experiential practical training",
+    "WORK_PLACEMENT": "Work placement",
+    "COACHING_SESSIONS": "Bi-weekly coaching sessions"
+  },
+  "COMPANIES": {
+    "SAMSONS": "SAMSONS School of Welding",
+    "KINDERGARTEN": "German Kindergarten Bellville",
+    "DSP": "German School Pretoria",
+    "DSK": "German International School Cape Town",
+    "UCT": "University of Cape Town",
+    "UNISA": "University of South Africa"
+  },
+  "LOCATIONS": {
+    "COUNTRIES": {
+      "GERMANY": "Germany",
+      "NETHERLANDS": "Netherlands",
+      "UNITED_KINGDOM": "United Kingdom",
+      "SOUTH_AFRICA": "South Africa"
+    },
+    "CITIES": {
+      "KALTENBRUNN": "Kaltenbrunn",
+      "REISKIRCHEN": "Reiskirchen",
+      "BEMBRIDGE": "Bembridge",
+      "CAPE_TOWN": "Cape Town",
+      "PRETORIA": "Pretoria",
+      "JOHANNESBURG": "Johannesburg"
+    },
+    "REGIONS": {
+      "ISLE_OF_WIGHT": "Isle of Wight"
+    }
+  },
+  "LANGUAGES": {
+    "ENGLISH": "English",
+    "GERMAN": "German",
+    "AFRIKAANS": "Afrikaans",
+    "PROFICIENCY_NATIVE": "Native",
+    "PROFICIENCY_FLUENT": "Fluent",
+    "PROFICIENCY_NATIVE_DESCRIPTION": "I grew up in South Africa where English is one of the 12 official languages. And because my parents are native Germans, both English and German are native to me. However, because I spent most of my life in South Africa I prefer to speak English.",
+    "PROFICIENCY_CONVERSATIONAL": "Conversational",
+    "PROFICIENCY_CONVERSATIONAL_DESCRIPTION": "Similar to English, Afrikaans is also one of the 12 official languages in South Africa. I learnt Afrikaans at school and to this day still regularly speak Afrikaans with friends and work colleagues."
+  }
+}

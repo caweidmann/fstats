@@ -1,0 +1,12 @@
+::selection {
+  background: #6d778c;
+  color: #fff;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentcolor;
+}
+
+@media print {
+  .hide-print {
+    display: none !important;
+  }
+}

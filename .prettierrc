@@ -1,0 +1,26 @@
+{
+  "printWidth": 120,
+  "semi": false,
+  "arrowParens": "always",
+  "trailingComma": "all",
+  "singleQuote": true,
+  "plugins": [
+    "@ianvs/prettier-plugin-sort-imports"
+  ],
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "@/types",
+    "@/types-enums",
+    "@/common",
+    "@/components",
+    "@/hooks",
+    "@/styles",
+    "@/utils",
+    "@/lib",
+    "",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}

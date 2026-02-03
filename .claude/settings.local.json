@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(xargs:*)",
+      "Bash(pnpm dev)",
+      "Bash(kill:*)",
+      "Bash(node -e:*)",
+      "Bash(pnpm tsc:*)"
+    ]
+  }
+}
