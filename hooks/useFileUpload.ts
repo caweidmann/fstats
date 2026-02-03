@@ -10,6 +10,7 @@ export type UploadingFile = {
   id: string
   file: File
   status: 'uploading' | 'complete' | 'error'
+  uploadedAt: number
   error?: string
   data?: unknown[]
 }
@@ -36,13 +37,14 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
 
         if (allFiles.length > 0) {
           const restoredFiles: UploadingFile[] = allFiles.map((fileData) => {
-            const file = new File([], fileData.name, { type: 'text/csv' })
+            const file = new File([], fileData.name, { type: 'text/csv', lastModified: fileData.lastModified })
             Object.defineProperty(file, 'size', { value: fileData.size })
 
             return {
               id: fileData.id,
               file,
               status: fileData.status,
+              uploadedAt: fileData.uploadedAt,
               data: fileData.data,
               error: fileData.error,
             }
@@ -105,12 +107,14 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
         id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         file,
         status: 'uploading',
+        uploadedAt: Date.now(),
       }))
 
       const rejectedAsUploading: UploadingFile[] = fileRejections.map(({ file, errors }) => ({
         id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         file,
         status: 'error' as const,
+        uploadedAt: Date.now(),
         error: errors.map((e) => e.message).join(', '),
       }))
 
@@ -122,6 +126,7 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
             rejectedFile.id,
             rejectedFile.file.name,
             rejectedFile.file.size,
+            rejectedFile.file.lastModified,
             [],
             'error',
             rejectedFile.error,

@@ -12,17 +12,7 @@ import {
   FolderOutlined,
   IndeterminateCheckBoxOutlined,
 } from '@mui/icons-material'
-import {
-  Box,
-  Button,
-  Checkbox,
-  Chip,
-  Grid,
-  IconButton,
-  Stack,
-  Tooltip,
-  Typography,
-} from '@mui/material'
+import { Box, Button, Checkbox, Chip, Grid, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -36,10 +26,13 @@ import { ui } from './styled'
 
 const formatDate = (date: Date | number) => {
   const d = new Date(date)
-  return d.toLocaleDateString(undefined, {
+  return d.toLocaleString(undefined, {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
   })
 }
 
@@ -347,12 +340,12 @@ const Page = () => {
                                     />
                                   )}
                                 </Stack>
-                                <Stack direction="row" spacing={1.5} alignItems="center">
+                                <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
                                   <Typography variant="caption" color="text.secondary">
                                     {formatFileSize(uploadFile.file.size)}
                                   </Typography>
                                   <Typography variant="caption" color="text.secondary">
-                                    {formatDate(uploadFile.file.lastModified)}
+                                    Uploaded {formatDate(uploadFile.uploadedAt)}
                                   </Typography>
                                   {isError && uploadFile.error && (
                                     <Tooltip title={uploadFile.error}>

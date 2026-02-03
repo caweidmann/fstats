@@ -12,6 +12,7 @@ export interface FileData {
   sessionId: string
   name: string
   size: number
+  lastModified: number
   data: unknown[]
   uploadedAt: number
   status: 'complete' | 'error'
@@ -179,6 +180,7 @@ class StorageService {
     id: string,
     name: string,
     size: number,
+    lastModified: number,
     data: unknown[],
     status: 'complete' | 'error' = 'complete',
     error?: string,
@@ -201,6 +203,7 @@ class StorageService {
       sessionId: this.sessionId,
       name,
       size,
+      lastModified,
       data,
       uploadedAt: Date.now(),
       status,

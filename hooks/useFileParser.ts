@@ -22,7 +22,7 @@ export const useFileParser = (options: UseFileParserOptions) => {
           if (storeInIndexedDB) {
             try {
               await indexedDBService.init()
-              await indexedDBService.storeFile(fileId, file.name, file.size, data, 'complete')
+              await indexedDBService.storeFile(fileId, file.name, file.size, file.lastModified, data, 'complete')
             } catch (error) {
               console.error('Failed to store file in IndexedDB:', error)
             }
