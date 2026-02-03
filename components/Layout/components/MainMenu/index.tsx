@@ -32,7 +32,7 @@ const Component = ({ onMenuClick }: MainMenuProps) => {
 
   return (
     <>
-      <Box sx={{ height: 0, mb: 0 }} ref={ref} className="hide-print" />
+      <Box sx={{ height: 0, mb: 1 }} ref={ref} className="hide-print" />
 
       <Divider sx={sx.divider(isSticky)} className="hide-print" />
 

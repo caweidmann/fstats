@@ -10,8 +10,8 @@ The website is hosted on Vercel. The website makes use of MUI for styling.
 | Environment | URL |
 | --- | --- |
 | Local | http://localhost:3000/ |
-| Vercel - Staging | https://fstats-staging.vercel.app/ |
-| Vercel - Production | https://fstats.vercel.app/ |
+| Vercel - Staging | https://csv-fstats-staging.vercel.app/ |
+| Vercel - Production | https://csv-fstats.vercel.app/ |
 
 
 ## Development

@@ -3,12 +3,10 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next, Trans, useTranslation } from 'react-i18next'
 
 import { UserLocale } from '@/types-enums'
-import de from '@/public/locales/de.json'
 import en from '@/public/locales/en.json'
 
 const resources = {
   [UserLocale.EN]: { translation: en },
-  [UserLocale.DE]: { translation: de },
 } as const
 
 export const initTranslations = () => {
