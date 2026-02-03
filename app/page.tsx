@@ -1,12 +1,20 @@
 'use client'
 
-import { FolderOpenOutlined, UploadFileOutlined } from '@mui/icons-material'
-import { Alert, Box, Button, ButtonGroup, Grid, Typography } from '@mui/material'
+import {
+  CheckCircleOutlined,
+  CloudUploadOutlined,
+  DeleteOutlined,
+  ErrorOutlined,
+  FolderOpenOutlined,
+  InsertDriveFileOutlined,
+  UploadFileOutlined,
+} from '@mui/icons-material'
+import { Alert, Box, Button, ButtonGroup, Grid, IconButton, LinearProgress, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
+import { MISC } from '@/common'
 import { PageWrapper } from '@/components'
-import { useIsDarkMode, useIsMobile } from '@/hooks'
-import { useTranslation } from '@/lib/i18n'
+import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile } from '@/hooks'
 
 import { ui } from './styled'
 
@@ -14,8 +22,14 @@ const Page = () => {
   const isMobile = useIsMobile()
   const isDarkMode = useIsDarkMode()
   const theme = useTheme()
-  const { t } = useTranslation()
   const sx = ui(theme, isMobile, isDarkMode)
+
+  const { getRootProps, getInputProps, isDragActive, uploadingFiles, rejectedFiles, removeFile, clearRejectedFiles } =
+    useFileUpload({
+      maxSize: MISC.MAX_UPLOAD_FILE_SIZE,
+      accept: { 'text/csv': ['.csv'] },
+      multiple: true,
+    })
 
   return (
     <PageWrapper>
@@ -24,10 +38,10 @@ const Page = () => {
           <Typography variant="body2">Select how you want to process your CSVs.</Typography>
 
           <ButtonGroup disableElevation variant="outlined">
-            <Button variant="contained" startIcon={<UploadFileOutlined />} sx={{ borderRadius: 1.5 }}>
+            <Button variant="contained" startIcon={<UploadFileOutlined />} sx={sx.button}>
               File upload
             </Button>
-            <Button startIcon={<FolderOpenOutlined />} sx={{ borderRadius: 1.5 }}>
+            <Button startIcon={<FolderOpenOutlined />} sx={sx.button}>
               Select local folder
             </Button>
           </ButtonGroup>
@@ -41,11 +55,79 @@ const Page = () => {
         </Grid>
 
         <Grid size={12}>
-          <Box sx={sx.dropZone}>
-            <Typography variant="h5">Drop your CSVs here!</Typography>
-            <Typography variant="body2">Up to 20 CSVs, max 5MB each.</Typography>
+          <Box {...getRootProps()} sx={sx.dropZone(isDragActive)}>
+            <input {...getInputProps()} />
+            <CloudUploadOutlined sx={sx.uploadIcon} />
+            <Typography variant="h5">Drop your files here!</Typography>
+            <Typography variant="body2">CSV files only, max 5MB each.</Typography>
           </Box>
         </Grid>
+
+        {rejectedFiles.length > 0 ? (
+          <Grid size={12}>
+            <Alert severity="warning" onClose={clearRejectedFiles}>
+              <Typography variant="body2" fontWeight="bold">
+                Some files were rejected:
+              </Typography>
+              {rejectedFiles.map(({ file, errors }) => (
+                <Typography key={file.name} variant="body2">
+                  • {file.name}: {errors.map((e) => e.message).join(', ')}
+                </Typography>
+              ))}
+            </Alert>
+          </Grid>
+        ) : null}
+
+        {uploadingFiles.length > 0 ? (
+          <Grid size={12}>
+            <Stack spacing={1.5}>
+              {uploadingFiles.map((uploadFile) => (
+                <Box key={uploadFile.id} sx={sx.fileCard(uploadFile.status)}>
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <InsertDriveFileOutlined sx={sx.fileIcon} />
+                    <Box sx={sx.fileContentBox}>
+                      <Stack direction="row" justifyContent="space-between" alignItems="center">
+                        <Typography variant="body2" fontWeight="medium" sx={sx.fileName}>
+                          {uploadFile.file.name}
+                        </Typography>
+                        <Stack direction="row" alignItems="center" spacing={1}>
+                          <Typography variant="caption" color="text.secondary">
+                            {formatFileSize(uploadFile.file.size)}
+                          </Typography>
+                          {uploadFile.status === 'complete' && (
+                            <CheckCircleOutlined sx={{ color: 'success.main', fontSize: 20 }} />
+                          )}
+                          {uploadFile.status === 'error' && (
+                            <ErrorOutlined sx={{ color: 'error.main', fontSize: 20 }} />
+                          )}
+                        </Stack>
+                      </Stack>
+                      <Box sx={sx.progressContainer}>
+                        <LinearProgress
+                          variant="determinate"
+                          value={uploadFile.progress}
+                          sx={sx.progressBar(uploadFile.status)}
+                        />
+                      </Box>
+                      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={sx.statusContainer}>
+                        <Typography variant="caption" color="text.secondary">
+                          {uploadFile.status === 'uploading'
+                            ? `${Math.round(uploadFile.progress)}%`
+                            : uploadFile.status === 'complete'
+                              ? 'Complete'
+                              : 'Failed'}
+                        </Typography>
+                      </Stack>
+                    </Box>
+                    <IconButton size="small" onClick={() => removeFile(uploadFile.id)} sx={sx.deleteButton}>
+                      <DeleteOutlined fontSize="small" />
+                    </IconButton>
+                  </Stack>
+                </Box>
+              ))}
+            </Stack>
+          </Grid>
+        ) : null}
       </Grid>
     </PageWrapper>
   )
