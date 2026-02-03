@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { useDropzone, type DropzoneOptions, type FileRejection } from 'react-dropzone'
 
 import { MISC } from '@/common'
+import { useFileParser, type FileParserType } from './useFileParser'
 
 export type UploadingFile = {
   id: string
@@ -9,46 +10,53 @@ export type UploadingFile = {
   progress: number
   status: 'uploading' | 'complete' | 'error'
   error?: string
+  data?: unknown[]
 }
 
 export type UseFileUploadOptions = {
   maxSize?: number
   accept?: DropzoneOptions['accept']
   multiple?: boolean
+  parserType?: FileParserType
   onUploadComplete?: (file: UploadingFile) => void
 }
 
 export const useFileUpload = (options: UseFileUploadOptions = {}) => {
-  const { maxSize = MISC.MAX_UPLOAD_FILE_SIZE, accept, multiple = true, onUploadComplete } = options
+  const {
+    maxSize = MISC.MAX_UPLOAD_FILE_SIZE,
+    accept,
+    multiple = true,
+    parserType = 'csv',
+    onUploadComplete,
+  } = options
 
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([])
 
-  const simulateUpload = useCallback(
-    (fileId: string) => {
-      let progress = 0
-      const interval = setInterval(() => {
-        progress += Math.random() * 15 + 5
-        if (progress >= 100) {
-          progress = 100
-          clearInterval(interval)
-          setUploadingFiles((prev) => {
-            const updated = prev.map((f) =>
-              f.id === fileId ? { ...f, progress: 100, status: 'complete' as const } : f,
-            )
-            const completedFile = updated.find((f) => f.id === fileId)
-            if (completedFile && onUploadComplete) {
-              onUploadComplete(completedFile)
-            }
-            return updated
-          })
-        } else {
-          setUploadingFiles((prev) => prev.map((f) => (f.id === fileId ? { ...f, progress } : f)))
-        }
-      }, 150)
+  const { parseFile } = useFileParser({
+    parserType,
+    onProgress: (fileId, progress) => {
+      setUploadingFiles((prev) => prev.map((f) => (f.id === fileId ? { ...f, progress } : f)))
     },
-    [onUploadComplete],
-  )
+    onComplete: (fileId, data) => {
+      setUploadingFiles((prev) => {
+        const updated = prev.map((f) =>
+          f.id === fileId ? { ...f, progress: 100, status: 'complete' as const, data } : f,
+        )
+        const completedFile = updated.find((f) => f.id === fileId)
+        if (completedFile && onUploadComplete) {
+          onUploadComplete(completedFile)
+        }
+        return updated
+      })
+    },
+    onError: (fileId, error) => {
+      setUploadingFiles((prev) =>
+        prev.map((f) => (f.id === fileId ? { ...f, status: 'error' as const, error: error.message } : f)),
+      )
+    },
+    storeInSessionStorage: true,
+  })
 
   const onDrop = useCallback(
     (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -63,10 +71,9 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
 
       setUploadingFiles((prev) => [...prev, ...newFiles])
 
-      // Start simulated upload for each file
-      newFiles.forEach((f) => simulateUpload(f.id))
+      newFiles.forEach((f) => parseFile(f.id, f.file))
     },
-    [simulateUpload],
+    [parseFile],
   )
 
   const removeFile = useCallback((fileId: string) => {
@@ -90,14 +97,11 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
   })
 
   return {
-    // Dropzone props
     getRootProps: dropzone.getRootProps,
     getInputProps: dropzone.getInputProps,
     isDragActive: dropzone.isDragActive,
-    // File state
     uploadingFiles,
     rejectedFiles,
-    // Actions
     removeFile,
     clearRejectedFiles,
     clearAllFiles,

@@ -68,8 +68,7 @@ const Component = ({ onMenuClick }: MainMenuProps) => {
           </Box>
         </Box>
       </Container>
-
-      <Divider sx={sx.divider} />
+      <Divider sx={{ position: 'sticky', top: LAYOUT.NAV_HEIGHT + 1 }} />
     </>
   )
 }

@@ -10,4 +10,5 @@ export const MISC = {
 export const LAYOUT = {
   CONTAINER_MAX_WIDTH: 'lg',
   NAV_Z_INDEX: 20,
+  NAV_HEIGHT: 50,
 } as const

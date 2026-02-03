@@ -9,7 +9,18 @@ import {
   InsertDriveFileOutlined,
   UploadFileOutlined,
 } from '@mui/icons-material'
-import { Alert, Box, Button, ButtonGroup, Grid, IconButton, LinearProgress, Stack, Typography } from '@mui/material'
+import {
+  Alert,
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  Grid,
+  IconButton,
+  LinearProgress,
+  Stack,
+  Typography,
+} from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import { MISC } from '@/common'
@@ -34,6 +45,20 @@ const Page = () => {
   return (
     <PageWrapper>
       <Grid container spacing={2}>
+        <Grid size={12}>Currently supported banks</Grid>
+        <Grid size={3}>
+          <Card>FNB</Card>
+        </Grid>
+        <Grid size={3}>
+          <Card>Capitec</Card>
+        </Grid>
+        <Grid size={3}>
+          <Card>Comdirect</Card>
+        </Grid>
+        <Grid size={3}>
+          <Card>ING</Card>
+        </Grid>
+
         <Grid size={12}>
           <Typography variant="body2">Select how you want to process your CSVs.</Typography>
 
@@ -87,7 +112,7 @@ const Page = () => {
                     <InsertDriveFileOutlined sx={sx.fileIcon} />
                     <Box sx={sx.fileContentBox}>
                       <Stack direction="row" justifyContent="space-between" alignItems="center">
-                        <Typography variant="body2" fontWeight="medium" sx={sx.fileName}>
+                        <Typography fontWeight="medium" sx={sx.fileName}>
                           {uploadFile.file.name}
                         </Typography>
                         <Stack direction="row" alignItems="center" spacing={1}>

@@ -15,17 +15,13 @@ export const ui = (theme: Theme, isDarkMode: boolean, isMobile: boolean) => {
         background: `rgba(42, 46, 54, ${MISC.GLASS_EFFECT})`,
       },
       backdropFilter: 'blur(10px)',
-      transition: 'box-shadow 0.5s, border-color 0.5s, border-radius 0.5s, width 0.5s, margin 0.5s',
-      boxShadow: 'none',
-      borderRadius: 100,
-      borderTop: `1px solid transparent`,
     },
 
     menuWrapper: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      height: 50,
+      height: LAYOUT.NAV_HEIGHT,
     },
 
     menu: {
@@ -49,9 +45,5 @@ export const ui = (theme: Theme, isDarkMode: boolean, isMobile: boolean) => {
         backgroundColor: theme.vars.palette.action.hover,
       },
     }),
-
-    divider: {
-      transition: 'opacity 0.5s',
-    },
   }
 }
