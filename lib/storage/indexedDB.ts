@@ -10,8 +10,11 @@ import localforage from 'localforage'
 const SESSION_KEY = 'current-session-id'
 const PERSIST_KEY = 'persist-data'
 const PERSIST_SETTING_KEY = 'persist-setting'
+const UPLOAD_MODE_KEY = 'upload-mode'
 const FILES_PREFIX = 'file_'
 const SESSION_PREFIX = 'session_'
+
+export type UploadMode = 'file' | 'folder'
 
 export interface FileData {
   id: string
@@ -331,6 +334,31 @@ class StorageService {
       }
     } catch (error) {
       console.error('Failed to set persist setting:', error)
+      throw error
+    }
+  }
+
+  /**
+   * Get the upload mode setting from IndexedDB
+   */
+  async getUploadMode(): Promise<UploadMode> {
+    try {
+      const mode = await this.store.getItem<UploadMode>(UPLOAD_MODE_KEY)
+      return mode === 'folder' ? 'folder' : 'file'
+    } catch (error) {
+      console.error('Failed to get upload mode:', error)
+      return 'file'
+    }
+  }
+
+  /**
+   * Set the upload mode setting in IndexedDB
+   */
+  async setUploadMode(mode: UploadMode): Promise<void> {
+    try {
+      await this.store.setItem(UPLOAD_MODE_KEY, mode)
+    } catch (error) {
+      console.error('Failed to set upload mode:', error)
       throw error
     }
   }

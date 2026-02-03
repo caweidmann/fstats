@@ -2,39 +2,45 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 
-import { indexedDBService } from '@/lib/storage/indexedDB'
+import { indexedDBService, type UploadMode } from '@/lib/storage/indexedDB'
 
-interface PersistContextType {
+interface SettingsContextType {
   persistEnabled: boolean
   setPersistEnabled: (enabled: boolean) => Promise<void>
+  uploadMode: UploadMode
+  setUploadMode: (mode: UploadMode) => Promise<void>
   isInitialized: boolean
 }
 
-const PersistContext = createContext<PersistContextType | null>(null)
+const SettingsContext = createContext<SettingsContextType | null>(null)
 
 interface PersistProviderProps {
   children: ReactNode
 }
 
 /**
- * PersistProvider manages the data persistence setting across the application.
+ * PersistProvider manages app settings across the application.
  *
- * It stores the persist flag in IndexedDB and provides it via React context.
+ * It stores settings in IndexedDB and provides them via React context.
  * When persistence is disabled and the page is refreshed, all data is cleared.
  */
 const PersistProvider = ({ children }: PersistProviderProps) => {
   const [persistEnabled, setPersistEnabledState] = useState(false)
+  const [uploadMode, setUploadModeState] = useState<UploadMode>('file')
   const [isInitialized, setIsInitialized] = useState(false)
 
-  // Initialize persistence setting on mount
+  // Initialize settings on mount
   useEffect(() => {
-    const initPersistSetting = async () => {
+    const initSettings = async () => {
       try {
         // Initialize the IndexedDB service first
         await indexedDBService.init()
 
-        // Get the persist setting from IndexedDB
-        const savedSetting = await indexedDBService.getPersistSetting()
+        // Get settings from IndexedDB
+        const [savedPersist, savedUploadMode] = await Promise.all([
+          indexedDBService.getPersistSetting(),
+          indexedDBService.getUploadMode(),
+        ])
 
         // Check if this is a page refresh
         const isRefresh =
@@ -44,21 +50,27 @@ const PersistProvider = ({ children }: PersistProviderProps) => {
           window.performance.getEntriesByType('navigation').length > 0 &&
           (window.performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming).type === 'reload'
 
-        // If persistence is disabled and this is a refresh, clear all data
-        if (!savedSetting && isRefresh) {
+        // If persistence is disabled and this is a refresh, clear all data and reset settings
+        if (!savedPersist && isRefresh) {
           await indexedDBService.clearAllFiles()
+          // Reset upload mode to default when persist is disabled
+          await indexedDBService.setUploadMode('file')
+          setUploadModeState('file')
+        } else {
+          setUploadModeState(savedUploadMode)
         }
 
-        setPersistEnabledState(savedSetting)
+        setPersistEnabledState(savedPersist)
         setIsInitialized(true)
       } catch (error) {
-        console.error('Failed to initialize persist setting:', error)
+        console.error('Failed to initialize settings:', error)
         setPersistEnabledState(false)
+        setUploadModeState('file')
         setIsInitialized(true)
       }
     }
 
-    initPersistSetting()
+    initSettings()
   }, [])
 
   const setPersistEnabled = useCallback(async (enabled: boolean) => {
@@ -76,27 +88,47 @@ const PersistProvider = ({ children }: PersistProviderProps) => {
     }
   }, [])
 
+  const setUploadMode = useCallback(async (mode: UploadMode) => {
+    try {
+      // Update state immediately for responsive UI
+      setUploadModeState(mode)
+
+      // Save to IndexedDB
+      await indexedDBService.setUploadMode(mode)
+    } catch (error) {
+      console.error('Failed to update upload mode:', error)
+      // Revert state on error
+      const savedMode = await indexedDBService.getUploadMode()
+      setUploadModeState(savedMode)
+    }
+  }, [])
+
   const value = useMemo(
     () => ({
       persistEnabled,
       setPersistEnabled,
+      uploadMode,
+      setUploadMode,
       isInitialized,
     }),
-    [persistEnabled, setPersistEnabled, isInitialized],
+    [persistEnabled, setPersistEnabled, uploadMode, setUploadMode, isInitialized],
   )
 
-  return <PersistContext.Provider value={value}>{children}</PersistContext.Provider>
+  return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>
 }
 
 /**
- * Hook to access the persist context
+ * Hook to access the settings context
  */
-export const usePersist = (): PersistContextType => {
-  const context = useContext(PersistContext)
+export const useSettings = (): SettingsContextType => {
+  const context = useContext(SettingsContext)
   if (!context) {
-    throw new Error('usePersist must be used within a PersistProvider')
+    throw new Error('useSettings must be used within a PersistProvider')
   }
   return context
 }
+
+// Alias for backward compatibility
+export const usePersist = useSettings
 
 export default PersistProvider

@@ -18,6 +18,7 @@ import { useState } from 'react'
 
 import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
+import { useSettings } from '@/components/PersistProvider'
 import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile } from '@/hooks'
 
 import { ui } from './styled'
@@ -28,7 +29,7 @@ const Page = () => {
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
   const router = useRouter()
-  const [uploadMode, setUploadMode] = useState<'file' | 'folder'>('file')
+  const { uploadMode, setUploadMode } = useSettings()
   const [expandedSections, setExpandedSections] = useState({
     uploading: true,
     complete: false,
