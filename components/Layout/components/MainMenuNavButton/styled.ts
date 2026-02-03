@@ -7,7 +7,7 @@ export const ui = (theme: Theme) => {
       px: 1.5,
       py: 1,
       transition: 'padding 0.5s',
-      borderRadius: 1.5,
+      borderRadius: 1.25,
       backgroundColor: isActive ? theme.vars.palette.action.hover : 'transparent',
       '&:hover': {
         backgroundColor: theme.vars.palette.action.hover,

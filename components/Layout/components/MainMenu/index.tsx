@@ -63,7 +63,7 @@ const Component = ({ onMenuClick }: MainMenuProps) => {
           </Box>
 
           <Box sx={sx.iconMenu}>
-            <LanguageSwitcher showLabel={false} />
+            {/* <LanguageSwitcher showLabel={false} /> */}
             <ThemeSwitcher showLabel={false} />
           </Box>
         </Box>
