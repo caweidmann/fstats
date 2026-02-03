@@ -8,7 +8,6 @@ import {
   Chip,
   Grid,
   IconButton,
-  LinearProgress,
   Stack,
   Tooltip,
   Typography,
@@ -217,31 +216,16 @@ const Page = () => {
                     </Typography>
                   )}
                 </Stack>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  {errorFiles.length > 0 && (
-                    <Chip
-                      icon={<ErrorOutlined sx={{ fontSize: 16 }} />}
-                      label={`${errorFiles.length} failed`}
-                      size="small"
-                      color="error"
-                      variant="outlined"
-                    />
-                  )}
-                  {uploadingInProgress.length > 0 ? (
-                    <Typography variant="body2" color="text.secondary">
-                      {Math.round((completedFiles.length / uploadingFiles.length) * 100)}%
-                    </Typography>
-                  ) : null}
-                </Stack>
+                {errorFiles.length > 0 && (
+                  <Chip
+                    icon={<ErrorOutlined sx={{ fontSize: 16 }} />}
+                    label={`${errorFiles.length} failed`}
+                    size="small"
+                    color="error"
+                    variant="outlined"
+                  />
+                )}
               </Stack>
-
-              {uploadingInProgress.length > 0 && (
-                <LinearProgress
-                  variant="determinate"
-                  value={(completedFiles.length / uploadingFiles.length) * 100}
-                  sx={{ mt: 1.5, height: 4, borderRadius: 2 }}
-                />
-              )}
             </Box>
 
             {showDetails && (

@@ -9,7 +9,6 @@ import { useFileParser, type FileParserType } from './useFileParser'
 export type UploadingFile = {
   id: string
   file: File
-  progress: number
   status: 'uploading' | 'complete' | 'error'
   error?: string
   data?: unknown[]
@@ -43,7 +42,6 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
             return {
               id: fileData.id,
               file,
-              progress: fileData.status === 'error' ? 0 : 100,
               status: fileData.status,
               data: fileData.data,
               error: fileData.error,
@@ -62,13 +60,10 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
 
   const { parseFile } = useFileParser({
     parserType,
-    onProgress: (fileId, progress) => {
-      setUploadingFiles((prev) => prev.map((f) => (f.id === fileId ? { ...f, progress } : f)))
-    },
     onComplete: (fileId, data) => {
       setUploadingFiles((prev) => {
         const updated = prev.map((f) =>
-          f.id === fileId ? { ...f, progress: 100, status: 'complete' as const, data } : f,
+          f.id === fileId ? { ...f, status: 'complete' as const, data } : f,
         )
         const completedFile = updated.find((f) => f.id === fileId)
         if (completedFile && onUploadComplete) {
@@ -109,14 +104,12 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
       const newFiles: UploadingFile[] = acceptedFiles.map((file) => ({
         id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         file,
-        progress: 0,
         status: 'uploading',
       }))
 
       const rejectedAsUploading: UploadingFile[] = fileRejections.map(({ file, errors }) => ({
         id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         file,
-        progress: 0,
         status: 'error' as const,
         error: errors.map((e) => e.message).join(', '),
       }))

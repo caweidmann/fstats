@@ -7,23 +7,17 @@ export type FileParserType = 'csv' | 'json' | 'excel'
 
 export interface UseFileParserOptions {
   parserType: FileParserType
-  onProgress?: (fileId: string, progress: number) => void
   onComplete?: (fileId: string, data: unknown[], fileName: string, fileSize: number) => void
   onError?: (fileId: string, error: Error) => void
   storeInIndexedDB?: boolean
 }
 
 export const useFileParser = (options: UseFileParserOptions) => {
-  const { parserType, onProgress, onComplete, onError, storeInIndexedDB = true } = options
+  const { parserType, onComplete, onError, storeInIndexedDB = true } = options
 
   const parseFile = useCallback(
     (fileId: string, file: File) => {
       const parserOptions: CSVParserOptions = {
-        onProgress: (progress) => {
-          if (onProgress) {
-            onProgress(fileId, progress)
-          }
-        },
         onComplete: async (data) => {
           if (storeInIndexedDB) {
             try {
@@ -57,7 +51,7 @@ export const useFileParser = (options: UseFileParserOptions) => {
           throw new Error(`Unknown parser type: ${parserType}`)
       }
     },
-    [parserType, onProgress, onComplete, onError, storeInIndexedDB],
+    [parserType, onComplete, onError, storeInIndexedDB],
   )
 
   return { parseFile }

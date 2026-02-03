@@ -83,43 +83,12 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
       whiteSpace: 'nowrap',
     },
 
-    progressContainer: {
-      mt: 1,
-    },
-
-    progressBar: (status: 'uploading' | 'complete' | 'error') => ({
-      height: 6,
-      borderRadius: 3,
-      backgroundColor: 'action.hover',
-      '& .MuiLinearProgress-bar': {
-        borderRadius: 3,
-        backgroundColor: status === 'complete' ? 'success.main' : status === 'error' ? 'error.main' : 'primary.main',
-      },
-    }),
-
     statusContainer: {
       mt: 0.5,
     },
 
     deleteButton: {
       ml: 1,
-    },
-
-    summaryCard: {
-      border: `1px solid ${isDarkMode ? blueGrey[700] : grey[300]}`,
-      borderRadius: 2,
-      padding: theme.spacing(2.5),
-      backgroundColor: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
-    },
-
-    overallProgress: {
-      height: 8,
-      borderRadius: 4,
-      backgroundColor: 'action.hover',
-      '& .MuiLinearProgress-bar': {
-        borderRadius: 4,
-        backgroundColor: 'primary.main',
-      },
     },
 
     sectionHeader: {
