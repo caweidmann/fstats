@@ -1,6 +1,6 @@
-# caweidmann.dev
+# fstats
 
-The secret code to my secret website, muhahaha. Oh, wait. Can you see this?
+Simple CSV parser
 
 
 ## Environments
