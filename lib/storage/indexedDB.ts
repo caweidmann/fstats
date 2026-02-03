@@ -8,6 +8,7 @@
 import localforage from 'localforage'
 
 const SESSION_KEY = 'current-session-id'
+const PERSIST_KEY = 'persist-data'
 const FILES_PREFIX = 'file_'
 const SESSION_PREFIX = 'session_'
 
@@ -49,6 +50,10 @@ class StorageService {
   async init(): Promise<void> {
     if (this.initialized) return
 
+    // Check if data persistence is enabled
+    const persistEnabled =
+      typeof window !== 'undefined' && localStorage.getItem(PERSIST_KEY) === 'true'
+
     // Check if this is a page refresh using Performance API
     const isRefresh =
       typeof window !== 'undefined' &&
@@ -60,16 +65,24 @@ class StorageService {
     // Get existing session ID
     this.sessionId = sessionStorage.getItem(SESSION_KEY)
 
-    // Create new session only on refresh or first load (no existing session)
-    if (!this.sessionId || isRefresh) {
+    // If persist is enabled, keep the same session across refreshes
+    if (persistEnabled && !this.sessionId) {
+      // First load with persist enabled - create a new session
       this.sessionId = `session-${Date.now()}-${Math.random().toString(36).slice(2)}`
       sessionStorage.setItem(SESSION_KEY, this.sessionId)
+    } else if (!persistEnabled) {
+      // Persist is disabled - create new session on refresh or first load
+      if (!this.sessionId || isRefresh) {
+        this.sessionId = `session-${Date.now()}-${Math.random().toString(36).slice(2)}`
+        sessionStorage.setItem(SESSION_KEY, this.sessionId)
 
-      // Clear old data on refresh
-      if (isRefresh) {
-        await this.clearAllFiles()
+        // Clear old data on refresh when persist is disabled
+        if (isRefresh) {
+          await this.clearAllFiles()
+        }
       }
     }
+    // If persist is enabled and sessionId exists, keep using it (no action needed)
 
     // Clean up old sessions
     await this.cleanupOldSessions()
@@ -98,7 +111,13 @@ class StorageService {
   private async cleanupOldSessions(): Promise<void> {
     try {
       const now = Date.now()
-      const ACTIVE_THRESHOLD = 24 * 60 * 60 * 1000 // 24 hours
+      const persistEnabled =
+        typeof window !== 'undefined' && localStorage.getItem(PERSIST_KEY) === 'true'
+
+      // Use longer threshold when persist is enabled (30 days vs 24 hours)
+      const ACTIVE_THRESHOLD = persistEnabled
+        ? 30 * 24 * 60 * 60 * 1000 // 30 days for persistent storage
+        : 24 * 60 * 60 * 1000 // 24 hours for temporary storage
 
       // Get all keys
       const keys = await this.store.keys()
@@ -113,7 +132,7 @@ class StorageService {
           // Skip current session
           if (session.id === this.sessionId) continue
 
-          // Clean up old sessions (older than 24 hours)
+          // Clean up old sessions based on threshold
           if (now - session.lastActive > ACTIVE_THRESHOLD) {
             await this.deleteFilesBySession(session.id)
             await this.store.removeItem(sessionKey)

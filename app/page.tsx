@@ -15,10 +15,12 @@ import {
   Button,
   ButtonGroup,
   Card,
+  FormControlLabel,
   Grid,
   IconButton,
   LinearProgress,
   Stack,
+  Switch,
   Typography,
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
@@ -38,6 +40,18 @@ const Page = () => {
   const sx = ui(theme, isMobile, isDarkMode)
   const router = useRouter()
   const [uploadMode, setUploadMode] = useState<'file' | 'folder'>('file')
+  const [persistData, setPersistData] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('persist-data') === 'true'
+    }
+    return false
+  })
+
+  const handlePersistToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.checked
+    setPersistData(newValue)
+    localStorage.setItem('persist-data', String(newValue))
+  }
 
   const { getRootProps, getInputProps, isDragActive, uploadingFiles, removeFile } = useFileUpload({
     maxSize: MISC.MAX_UPLOAD_FILE_SIZE,
@@ -137,22 +151,38 @@ const Page = () => {
         </Grid>
 
         <Grid size={12}>
-          <Typography variant="body2" fontWeight="bold" gutterBottom>
-            Currently supported banks:
-          </Typography>
-        </Grid>
+          <Alert severity="info">
+            <Typography variant="body2" fontWeight="bold" gutterBottom>
+              🔒 100% Private & Secure
+            </Typography>
+            <Typography variant="body2" component="div">
+              • Your files <strong>never leave your device</strong> - all processing happens in your browser
+              <br />
+              • No servers, no cloud storage, no remote databases
+              <br />• This app works completely offline - you can disconnect from the internet right now
+            </Typography>
 
-        <Grid size={3}>
-          <Card>FNB</Card>
-        </Grid>
-        <Grid size={3}>
-          <Card>Capitec</Card>
-        </Grid>
-        <Grid size={3}>
-          <Card>Comdirect</Card>
-        </Grid>
-        <Grid size={3}>
-          <Card>ING</Card>
+            <Box>
+              <Typography variant="body2" fontWeight="bold" gutterBottom>
+                Currently supported banks:
+              </Typography>
+
+              <Grid container spacing={2}>
+                <Grid size={3}>
+                  <Card>FNB</Card>
+                </Grid>
+                <Grid size={3}>
+                  <Card>Capitec</Card>
+                </Grid>
+                <Grid size={3}>
+                  <Card>Comdirect</Card>
+                </Grid>
+                <Grid size={3}>
+                  <Card>ING</Card>
+                </Grid>
+              </Grid>
+            </Box>
+          </Alert>
         </Grid>
 
         <Grid size={12}>
@@ -179,19 +209,21 @@ const Page = () => {
         </Grid>
 
         <Grid size={12}>
-          <Alert severity="success" icon={<CheckCircleOutlined />}>
-            <Typography variant="body2" fontWeight="bold" gutterBottom>
-              🔒 100% Private & Secure
-            </Typography>
-            <Typography variant="body2" component="div">
-              • Your files <strong>never leave your device</strong> - all processing happens in your browser
-              <br />
-              • No servers, no cloud storage, no remote databases
-              <br />
-              • Files are stored locally in your browser and automatically deleted when you close or refresh this tab
-              <br />• This app works completely offline - you can disconnect from the internet right now
-            </Typography>
-          </Alert>
+          <FormControlLabel
+            control={<Switch checked={persistData} onChange={handlePersistToggle} />}
+            label={
+              <Box>
+                <Typography variant="body2" fontWeight="medium" sx={{ mb: 0 }}>
+                  Persist data
+                </Typography>
+                <Typography variant="caption" color={persistData ? 'warning' : 'text.secondary'}>
+                  {persistData
+                    ? 'Files will be kept in your browser storage across sessions until manually deleted'
+                    : 'Files will be automatically cleared when you refresh or close the tab'}
+                </Typography>
+              </Box>
+            }
+          />
         </Grid>
 
         <Grid size={12}>

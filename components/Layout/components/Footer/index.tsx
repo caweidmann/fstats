@@ -15,7 +15,7 @@ const Component = () => {
 
   return (
     <Box>
-      <Divider />
+      <Divider sx={sx.divider} />
 
       <Container component="footer" maxWidth={LAYOUT.CONTAINER_MAX_WIDTH}>
         <Box sx={sx.footer}>

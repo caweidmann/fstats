@@ -45,5 +45,11 @@ export const ui = (theme: Theme, isDarkMode: boolean, isMobile: boolean) => {
         backgroundColor: theme.vars.palette.action.hover,
       },
     }),
+
+    divider: {
+      position: 'sticky',
+      top: LAYOUT.NAV_HEIGHT + LAYOUT.NAV_BORDER,
+      borderWidthBottom: LAYOUT.NAV_BORDER,
+    },
   }
 }
