@@ -22,8 +22,9 @@ import {
   Typography,
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
+import { useRouter } from 'next/navigation'
 
-import { MISC } from '@/common'
+import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile } from '@/hooks'
 
@@ -34,6 +35,7 @@ const Page = () => {
   const isDarkMode = useIsDarkMode()
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
+  const router = useRouter()
 
   const { getRootProps, getInputProps, isDragActive, uploadingFiles, rejectedFiles, removeFile, clearRejectedFiles } =
     useFileUpload({
@@ -42,10 +44,16 @@ const Page = () => {
       multiple: true,
     })
 
+  const allFilesComplete = uploadingFiles.length > 0 && uploadingFiles.every((file) => file.status === 'complete')
+
+  const handleContinue = () => {
+    router.push(ROUTES.STATS)
+  }
+
   return (
     <PageWrapper>
       <Grid container spacing={2}>
-        <Grid size={12}>Currently supported banks</Grid>
+        <Grid size={12}>Currently supported banks:</Grid>
         <Grid size={3}>
           <Card>FNB</Card>
         </Grid>
@@ -153,6 +161,16 @@ const Page = () => {
             </Stack>
           </Grid>
         ) : null}
+
+        {allFilesComplete && (
+          <Grid size={12}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              <Button variant="contained" size="large" onClick={handleContinue} sx={{ minWidth: 200, py: 1.5 }}>
+                Continue
+              </Button>
+            </Box>
+          </Grid>
+        )}
       </Grid>
     </PageWrapper>
   )

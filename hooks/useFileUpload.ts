@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDropzone, type DropzoneOptions, type FileRejection } from 'react-dropzone'
 
 import { MISC } from '@/common'
@@ -33,6 +33,39 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([])
 
+  // Restore uploaded files from session storage on mount
+  useEffect(() => {
+    try {
+      const uploadedFilesMetadata = JSON.parse(sessionStorage.getItem('uploaded_files') || '[]')
+
+      if (uploadedFilesMetadata.length > 0) {
+        const restoredFiles: UploadingFile[] = uploadedFilesMetadata.map(
+          (metadata: { id: string; name: string; size: number }) => {
+            // Try to get the parsed data for this file
+            const dataStr = sessionStorage.getItem(`file_${metadata.id}`)
+            const data = dataStr ? JSON.parse(dataStr) : undefined
+
+            // Create a minimal File object for display purposes
+            const file = new File([], metadata.name, { type: 'text/csv' })
+            Object.defineProperty(file, 'size', { value: metadata.size })
+
+            return {
+              id: metadata.id,
+              file,
+              progress: 100,
+              status: 'complete' as const,
+              data,
+            }
+          },
+        )
+
+        setUploadingFiles(restoredFiles)
+      }
+    } catch (error) {
+      console.error('Failed to restore files from session storage:', error)
+    }
+  }, [])
+
   const { parseFile } = useFileParser({
     parserType,
     onProgress: (fileId, progress) => {
@@ -47,6 +80,21 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
         if (completedFile && onUploadComplete) {
           onUploadComplete(completedFile)
         }
+
+        // Store file metadata in session storage for later retrieval
+        try {
+          const fileMetadata = {
+            id: fileId,
+            name: completedFile?.file.name,
+            size: completedFile?.file.size,
+          }
+          const existingFiles = JSON.parse(sessionStorage.getItem('uploaded_files') || '[]')
+          const updatedFiles = [...existingFiles.filter((f: { id: string }) => f.id !== fileId), fileMetadata]
+          sessionStorage.setItem('uploaded_files', JSON.stringify(updatedFiles))
+        } catch (error) {
+          console.error('Failed to store file metadata:', error)
+        }
+
         return updated
       })
     },
@@ -78,6 +126,16 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
 
   const removeFile = useCallback((fileId: string) => {
     setUploadingFiles((prev) => prev.filter((f) => f.id !== fileId))
+
+    // Remove from session storage
+    try {
+      sessionStorage.removeItem(`file_${fileId}`)
+      const existingFiles = JSON.parse(sessionStorage.getItem('uploaded_files') || '[]')
+      const updatedFiles = existingFiles.filter((f: { id: string }) => f.id !== fileId)
+      sessionStorage.setItem('uploaded_files', JSON.stringify(updatedFiles))
+    } catch (error) {
+      console.error('Failed to remove file from session storage:', error)
+    }
   }, [])
 
   const clearRejectedFiles = useCallback(() => {
@@ -87,6 +145,17 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
   const clearAllFiles = useCallback(() => {
     setUploadingFiles([])
     setRejectedFiles([])
+
+    // Clear from session storage
+    try {
+      const uploadedFilesMetadata = JSON.parse(sessionStorage.getItem('uploaded_files') || '[]')
+      uploadedFilesMetadata.forEach((metadata: { id: string }) => {
+        sessionStorage.removeItem(`file_${metadata.id}`)
+      })
+      sessionStorage.removeItem('uploaded_files')
+    } catch (error) {
+      console.error('Failed to clear files from session storage:', error)
+    }
   }, [])
 
   const dropzone = useDropzone({
