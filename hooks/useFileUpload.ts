@@ -50,9 +50,10 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
             return {
               id: fileData.id,
               file,
-              progress: 100,
-              status: 'complete' as const,
+              progress: fileData.status === 'error' ? 0 : 100,
+              status: fileData.status,
               data: fileData.data,
+              error: fileData.error,
             }
           })
 
@@ -94,7 +95,7 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
   })
 
   const onDrop = useCallback(
-    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+    async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       setRejectedFiles(fileRejections)
 
       const newFiles: UploadingFile[] = acceptedFiles.map((file) => ({
@@ -104,7 +105,32 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
         status: 'uploading',
       }))
 
-      setUploadingFiles((prev) => [...prev, ...newFiles])
+      // Add rejected files to the uploadingFiles array with error status
+      const rejectedAsUploading: UploadingFile[] = fileRejections.map(({ file, errors }) => ({
+        id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        file,
+        progress: 0,
+        status: 'error' as const,
+        error: errors.map((e) => e.message).join(', '),
+      }))
+
+      setUploadingFiles((prev) => [...prev, ...newFiles, ...rejectedAsUploading])
+
+      // Store rejected files in IndexedDB so they persist across navigation
+      for (const rejectedFile of rejectedAsUploading) {
+        try {
+          await indexedDBService.storeFile(
+            rejectedFile.id,
+            rejectedFile.file.name,
+            rejectedFile.file.size,
+            [],
+            'error',
+            rejectedFile.error,
+          )
+        } catch (error) {
+          console.error('Failed to store rejected file:', error)
+        }
+      }
 
       newFiles.forEach((f) => parseFile(f.id, f.file))
     },

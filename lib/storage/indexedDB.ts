@@ -2,7 +2,7 @@
  * Storage Service using LocalForage
  *
  * Provides persistent storage with session-based cleanup.
- * Data is automatically cleared when the tab is closed or refreshed.
+ * Data persists across navigation and is only cleared on page refresh or tab close.
  */
 
 import localforage from 'localforage'
@@ -18,6 +18,8 @@ export interface FileData {
   size: number
   data: unknown[]
   uploadedAt: number
+  status: 'complete' | 'error'
+  error?: string
 }
 
 export interface SessionData {
@@ -47,11 +49,26 @@ class StorageService {
   async init(): Promise<void> {
     if (this.initialized) return
 
-    // Get or create session ID
+    // Check if this is a page refresh using Performance API
+    const isRefresh =
+      typeof window !== 'undefined' &&
+      window.performance &&
+      window.performance.getEntriesByType &&
+      window.performance.getEntriesByType('navigation').length > 0 &&
+      (window.performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming).type === 'reload'
+
+    // Get existing session ID
     this.sessionId = sessionStorage.getItem(SESSION_KEY)
-    if (!this.sessionId) {
+
+    // Create new session only on refresh or first load (no existing session)
+    if (!this.sessionId || isRefresh) {
       this.sessionId = `session-${Date.now()}-${Math.random().toString(36).slice(2)}`
       sessionStorage.setItem(SESSION_KEY, this.sessionId)
+
+      // Clear old data on refresh
+      if (isRefresh) {
+        await this.clearAllFiles()
+      }
     }
 
     // Clean up old sessions
@@ -81,7 +98,7 @@ class StorageService {
   private async cleanupOldSessions(): Promise<void> {
     try {
       const now = Date.now()
-      const ACTIVE_THRESHOLD = 5000 // 5 seconds
+      const ACTIVE_THRESHOLD = 24 * 60 * 60 * 1000 // 24 hours
 
       // Get all keys
       const keys = await this.store.keys()
@@ -96,7 +113,7 @@ class StorageService {
           // Skip current session
           if (session.id === this.sessionId) continue
 
-          // Clean up old sessions
+          // Clean up old sessions (older than 24 hours)
           if (now - session.lastActive > ACTIVE_THRESHOLD) {
             await this.deleteFilesBySession(session.id)
             await this.store.removeItem(sessionKey)
@@ -125,11 +142,6 @@ class StorageService {
   }
 
   private setupCleanupHandlers(): void {
-    // Clean up when page is about to unload
-    window.addEventListener('beforeunload', () => {
-      this.cleanup()
-    })
-
     // Update activity when visibility changes
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
@@ -140,7 +152,7 @@ class StorageService {
     // Update activity periodically
     setInterval(() => {
       this.updateSessionActivity()
-    }, 3000)
+    }, 30000) // Update every 30 seconds
   }
 
   private updateSessionActivity(): void {
@@ -162,7 +174,14 @@ class StorageService {
   /**
    * Store file data
    */
-  async storeFile(id: string, name: string, size: number, data: unknown[]): Promise<void> {
+  async storeFile(
+    id: string,
+    name: string,
+    size: number,
+    data: unknown[],
+    status: 'complete' | 'error' = 'complete',
+    error?: string,
+  ): Promise<void> {
     if (!this.initialized) {
       await this.init()
     }
@@ -178,6 +197,8 @@ class StorageService {
       size,
       data,
       uploadedAt: Date.now(),
+      status,
+      error,
     }
 
     await this.store.setItem(`${FILES_PREFIX}${id}`, fileData)
@@ -246,12 +267,13 @@ class StorageService {
   }
 
   /**
-   * Clean up current session (called on page unload)
+   * Clean up current session data (manually callable)
    */
-  cleanup(): void {
+  async cleanup(): Promise<void> {
     if (!this.sessionId) return
 
     try {
+      await this.clearAllFiles()
       sessionStorage.removeItem(SESSION_KEY)
     } catch (error) {
       console.error('Failed to cleanup session:', error)

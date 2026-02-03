@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import {
   CheckCircleOutlined,
   CloudUploadOutlined,
@@ -24,6 +23,7 @@ import {
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
@@ -39,14 +39,13 @@ const Page = () => {
   const router = useRouter()
   const [uploadMode, setUploadMode] = useState<'file' | 'folder'>('file')
 
-  const { getRootProps, getInputProps, isDragActive, uploadingFiles, rejectedFiles, removeFile, clearRejectedFiles } =
-    useFileUpload({
-      maxSize: MISC.MAX_UPLOAD_FILE_SIZE,
-      accept: { 'text/csv': ['.csv'] },
-      multiple: true,
-    })
+  const { getRootProps, getInputProps, isDragActive, uploadingFiles, removeFile } = useFileUpload({
+    maxSize: MISC.MAX_UPLOAD_FILE_SIZE,
+    accept: { 'text/csv': ['.csv'] },
+    multiple: true,
+  })
 
-  const allFilesComplete = uploadingFiles.length > 0 && uploadingFiles.every((file) => file.status === 'complete')
+  const canContinue = uploadingFiles.length > 0 && uploadingFiles.every((file) => file.status !== 'uploading')
 
   const handleContinue = () => {
     router.push(ROUTES.STATS)
@@ -196,11 +195,7 @@ const Page = () => {
         </Grid>
 
         <Grid size={12}>
-          <Box
-            {...rootProps}
-            onClick={handleDropZoneClick}
-            sx={sx.dropZone(isDragActive)}
-          >
+          <Box {...rootProps} onClick={handleDropZoneClick} sx={sx.dropZone(isDragActive)}>
             <input {...getInputProps()} />
             <CloudUploadOutlined sx={sx.uploadIcon} />
             <Typography variant="h5">
@@ -209,21 +204,6 @@ const Page = () => {
             <Typography variant="body2">CSV files only, max 5MB each.</Typography>
           </Box>
         </Grid>
-
-        {rejectedFiles.length > 0 ? (
-          <Grid size={12}>
-            <Alert severity="warning" onClose={clearRejectedFiles}>
-              <Typography variant="body2" fontWeight="bold">
-                Some files were rejected:
-              </Typography>
-              {rejectedFiles.map(({ file, errors }) => (
-                <Typography key={file.name} variant="body2">
-                  • {file.name}: {errors.map((e) => e.message).join(', ')}
-                </Typography>
-              ))}
-            </Alert>
-          </Grid>
-        ) : null}
 
         {uploadingFiles.length > 0 ? (
           <Grid size={12}>
@@ -257,12 +237,15 @@ const Page = () => {
                         />
                       </Box>
                       <Stack direction="row" justifyContent="space-between" alignItems="center" sx={sx.statusContainer}>
-                        <Typography variant="caption" color="text.secondary">
+                        <Typography
+                          variant="caption"
+                          color={uploadFile.status === 'error' ? 'error.main' : 'text.secondary'}
+                        >
                           {uploadFile.status === 'uploading'
                             ? `${Math.round(uploadFile.progress)}%`
                             : uploadFile.status === 'complete'
                               ? 'Complete'
-                              : 'Failed'}
+                              : uploadFile.error || 'Failed'}
                         </Typography>
                       </Stack>
                     </Box>
@@ -276,7 +259,7 @@ const Page = () => {
           </Grid>
         ) : null}
 
-        {allFilesComplete && (
+        {canContinue && (
           <Grid size={12}>
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
               <Button variant="contained" size="large" onClick={handleContinue} sx={{ minWidth: 200, py: 1.5 }}>
