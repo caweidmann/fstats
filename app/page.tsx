@@ -110,19 +110,39 @@ const Page = () => {
     }
   }
 
-  const handleDropZoneClick = async (e: React.MouseEvent) => {
+  const rootProps = getRootProps()
+
+  const handleDropZoneClick = async (e: React.MouseEvent<HTMLElement>) => {
     if (uploadMode === 'folder') {
       e.preventDefault()
       e.stopPropagation()
       await openFolderPicker()
+    } else {
+      // In file mode, call the original dropzone click handler
+      if (rootProps.onClick) {
+        rootProps.onClick(e)
+      }
     }
-    // In file mode, let the default dropzone behavior handle it
   }
 
   return (
     <PageWrapper>
       <Grid container spacing={2}>
-        <Grid size={12}>Currently supported banks:</Grid>
+        <Grid size={12}>
+          <Typography variant="h4" gutterBottom>
+            Private Bank Statement Analyzer
+          </Typography>
+          <Typography variant="body1" color="text.secondary" gutterBottom>
+            Process your financial CSVs safely - all data stays on your device, nothing is uploaded to any server.
+          </Typography>
+        </Grid>
+
+        <Grid size={12}>
+          <Typography variant="body2" fontWeight="bold" gutterBottom>
+            Currently supported banks:
+          </Typography>
+        </Grid>
+
         <Grid size={3}>
           <Card>FNB</Card>
         </Grid>
@@ -160,15 +180,24 @@ const Page = () => {
         </Grid>
 
         <Grid size={12}>
-          <Alert severity="info">
-            When you upload files, they are kept in session storage. Files never leave your PC. When you close the tab
-            or browser, the files are deleted.
+          <Alert severity="success" icon={<CheckCircleOutlined />}>
+            <Typography variant="body2" fontWeight="bold" gutterBottom>
+              🔒 100% Private & Secure
+            </Typography>
+            <Typography variant="body2" component="div">
+              • Your files <strong>never leave your device</strong> - all processing happens in your browser
+              <br />
+              • No servers, no cloud storage, no remote databases
+              <br />
+              • Files are stored locally in your browser and automatically deleted when you close or refresh this tab
+              <br />• This app works completely offline - you can disconnect from the internet right now
+            </Typography>
           </Alert>
         </Grid>
 
         <Grid size={12}>
           <Box
-            {...getRootProps()}
+            {...rootProps}
             onClick={handleDropZoneClick}
             sx={sx.dropZone(isDragActive)}
           >

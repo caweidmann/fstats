@@ -1,19 +1,20 @@
 import { useCallback } from 'react'
 
 import { parseCSVFile, type CSVParserOptions } from '@/lib/parsers/csvParser'
+import { indexedDBService } from '@/lib/storage/indexedDB'
 
 export type FileParserType = 'csv' | 'json' | 'excel' // Add more types as needed
 
 export interface UseFileParserOptions {
   parserType: FileParserType
   onProgress?: (fileId: string, progress: number) => void
-  onComplete?: (fileId: string, data: unknown[]) => void
+  onComplete?: (fileId: string, data: unknown[], fileName: string, fileSize: number) => void
   onError?: (fileId: string, error: Error) => void
-  storeInSessionStorage?: boolean
+  storeInIndexedDB?: boolean
 }
 
 export const useFileParser = (options: UseFileParserOptions) => {
-  const { parserType, onProgress, onComplete, onError, storeInSessionStorage = true } = options
+  const { parserType, onProgress, onComplete, onError, storeInIndexedDB = true } = options
 
   const parseFile = useCallback(
     (fileId: string, file: File) => {
@@ -23,17 +24,17 @@ export const useFileParser = (options: UseFileParserOptions) => {
             onProgress(fileId, progress)
           }
         },
-        onComplete: (data) => {
-          if (storeInSessionStorage) {
+        onComplete: async (data) => {
+          if (storeInIndexedDB) {
             try {
-              sessionStorage.setItem(`file_${fileId}`, JSON.stringify(data))
+              await indexedDBService.storeFile(fileId, file.name, file.size, data)
             } catch (error) {
-              console.error('Failed to store file in session storage:', error)
+              console.error('Failed to store file in IndexedDB:', error)
             }
           }
 
           if (onComplete) {
-            onComplete(fileId, data)
+            onComplete(fileId, data, file.name, file.size)
           }
         },
         onError: (error) => {
@@ -57,7 +58,7 @@ export const useFileParser = (options: UseFileParserOptions) => {
           throw new Error(`Unknown parser type: ${parserType}`)
       }
     },
-    [parserType, onProgress, onComplete, onError, storeInSessionStorage],
+    [parserType, onProgress, onComplete, onError, storeInIndexedDB],
   )
 
   return { parseFile }

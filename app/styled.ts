@@ -25,7 +25,6 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
       cursor: 'pointer',
       transition: 'all 0.2s ease-in-out',
       backgroundColor: isDragActive ? theme.vars.palette.action.selected : 'transparent',
-      transform: isDragActive ? 'scale(1.01)' : 'scale(1)',
       '&:hover': {
         backgroundColor: theme.vars.palette.action.hover,
         borderColor: theme.vars.palette.primary.light,
