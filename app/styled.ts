@@ -84,5 +84,35 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
     deleteButton: {
       ml: 1,
     },
+
+    summaryCard: {
+      border: `1px solid ${isDarkMode ? blueGrey[700] : grey[300]}`,
+      borderRadius: 2,
+      padding: theme.spacing(2.5),
+      backgroundColor: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+    },
+
+    overallProgress: {
+      height: 8,
+      borderRadius: 4,
+      backgroundColor: 'action.hover',
+      '& .MuiLinearProgress-bar': {
+        borderRadius: 4,
+        backgroundColor: 'primary.main',
+      },
+    },
+
+    sectionHeader: {
+      justifyContent: 'flex-start',
+      textAlign: 'left' as const,
+      textTransform: 'none' as const,
+      padding: theme.spacing(1.5),
+      borderRadius: 2,
+      backgroundColor: isDarkMode ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)',
+      border: `1px solid ${isDarkMode ? blueGrey[800] : grey[200]}`,
+      '&:hover': {
+        backgroundColor: isDarkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+      },
+    },
   }
 }
