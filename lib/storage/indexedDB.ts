@@ -9,6 +9,7 @@ import localforage from 'localforage'
 
 const SESSION_KEY = 'current-session-id'
 const PERSIST_KEY = 'persist-data'
+const PERSIST_SETTING_KEY = 'persist-setting'
 const FILES_PREFIX = 'file_'
 const SESSION_PREFIX = 'session_'
 
@@ -51,8 +52,7 @@ class StorageService {
     if (this.initialized) return
 
     // Check if data persistence is enabled
-    const persistEnabled =
-      typeof window !== 'undefined' && localStorage.getItem(PERSIST_KEY) === 'true'
+    const persistEnabled = typeof window !== 'undefined' && localStorage.getItem(PERSIST_KEY) === 'true'
 
     // Check if this is a page refresh using Performance API
     const isRefresh =
@@ -111,8 +111,7 @@ class StorageService {
   private async cleanupOldSessions(): Promise<void> {
     try {
       const now = Date.now()
-      const persistEnabled =
-        typeof window !== 'undefined' && localStorage.getItem(PERSIST_KEY) === 'true'
+      const persistEnabled = typeof window !== 'undefined' && localStorage.getItem(PERSIST_KEY) === 'true'
 
       // Use longer threshold when persist is enabled (30 days vs 24 hours)
       const ACTIVE_THRESHOLD = persistEnabled
@@ -305,6 +304,35 @@ class StorageService {
   async clearAll(): Promise<void> {
     await this.store.clear()
     sessionStorage.removeItem(SESSION_KEY)
+  }
+
+  /**
+   * Get the persist setting from IndexedDB
+   */
+  async getPersistSetting(): Promise<boolean> {
+    try {
+      const setting = await this.store.getItem<boolean>(PERSIST_SETTING_KEY)
+      return setting === true
+    } catch (error) {
+      console.error('Failed to get persist setting:', error)
+      return false
+    }
+  }
+
+  /**
+   * Set the persist setting in IndexedDB
+   */
+  async setPersistSetting(enabled: boolean): Promise<void> {
+    try {
+      await this.store.setItem(PERSIST_SETTING_KEY, enabled)
+      // Also update localStorage for backward compatibility with init logic
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(PERSIST_KEY, String(enabled))
+      }
+    } catch (error) {
+      console.error('Failed to set persist setting:', error)
+      throw error
+    }
   }
 
   /**

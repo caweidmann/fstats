@@ -1,14 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { ArrowBack } from '@mui/icons-material'
 import {
+  Alert,
   Box,
   Button,
   Card,
   CardContent,
   CardHeader,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -16,11 +17,11 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Alert,
-  Stack,
 } from '@mui/material'
-import { ArrowBack } from '@mui/icons-material'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
+import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { indexedDBService } from '@/lib/storage/indexedDB'
 
@@ -67,7 +68,7 @@ const StatsPage = () => {
   }, [])
 
   const handleBack = () => {
-    router.push('/')
+    router.push(ROUTES.DATA)
   }
 
   if (loading) {
@@ -124,9 +125,7 @@ const StatsPage = () => {
                         <TableRow key={rowIndex} hover>
                           {columns.map((column) => (
                             <TableCell key={column}>
-                              {row[column] !== null && row[column] !== undefined
-                                ? String(row[column])
-                                : '—'}
+                              {row[column] !== null && row[column] !== undefined ? String(row[column]) : '—'}
                             </TableCell>
                           ))}
                         </TableRow>
