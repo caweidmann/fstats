@@ -1,6 +1,17 @@
 'use client'
 
-import { AddOutlined, CloudUploadOutlined, DeleteOutlined, ErrorOutlined, FolderOutlined } from '@mui/icons-material'
+import {
+  AddOutlined,
+  CheckBoxOutlineBlankOutlined,
+  CheckBoxOutlined,
+  CloudUploadOutlined,
+  DeleteOutlined,
+  ErrorOutlined,
+  ExpandLessOutlined,
+  ExpandMoreOutlined,
+  FolderOutlined,
+  IndeterminateCheckBoxOutlined,
+} from '@mui/icons-material'
 import {
   Box,
   Button,
@@ -41,10 +52,18 @@ const Page = () => {
   const [selectedFiles, setSelectedFiles] = useState<Set<string> | null>(null)
   const [showDetails, setShowDetails] = useState(false)
 
-  const { getRootProps, getInputProps, isDragActive, uploadingFiles, removeFile } = useFileUpload({
+  const { getRootProps, getInputProps, isDragActive, uploadingFiles, removeFile, clearAllFiles } = useFileUpload({
     maxSize: MISC.MAX_UPLOAD_FILE_SIZE,
     accept: { 'text/csv': ['.csv'] },
     multiple: true,
+    onUploadComplete: (file) => {
+      setSelectedFiles((prev) => {
+        if (prev === null) return null
+        const next = new Set(prev)
+        next.add(file.id)
+        return next
+      })
+    },
   })
 
   const completedFiles = uploadingFiles.filter((f) => f.status === 'complete')
@@ -78,6 +97,11 @@ const Page = () => {
     }
     saveSelectedFiles()
   }, [selectedFiles])
+
+  const handleDeleteAll = () => {
+    clearAllFiles()
+    setSelectedFiles(null)
+  }
 
   const handleContinue = async () => {
     await indexedDBService.setSelectedFiles(Array.from(effectiveSelectedFiles))
@@ -216,15 +240,23 @@ const Page = () => {
                     </Typography>
                   )}
                 </Stack>
-                {errorFiles.length > 0 && (
-                  <Chip
-                    icon={<ErrorOutlined sx={{ fontSize: 16 }} />}
-                    label={`${errorFiles.length} failed`}
-                    size="small"
-                    color="error"
-                    variant="outlined"
-                  />
-                )}
+                <Stack direction="row" spacing={1} alignItems="center">
+                  {errorFiles.length > 0 && (
+                    <Chip
+                      icon={<ErrorOutlined sx={{ fontSize: 16 }} />}
+                      label={`${errorFiles.length} failed`}
+                      size="small"
+                      color="error"
+                      variant="outlined"
+                    />
+                  )}
+                  {uploadingInProgress.length === 0 &&
+                    (showDetails ? (
+                      <ExpandLessOutlined sx={{ color: 'text.secondary' }} />
+                    ) : (
+                      <ExpandMoreOutlined sx={{ color: 'text.secondary' }} />
+                    ))}
+                </Stack>
               </Stack>
             </Box>
 
@@ -232,9 +264,18 @@ const Page = () => {
               <Box sx={{ mt: 2 }}>
                 <Stack spacing={1.5}>
                   {completedFiles.length > 0 && (
-                    <Stack direction="row" justifyContent="flex-end">
+                    <Stack direction="row" justifyContent="space-between">
                       <Button
                         size="small"
+                        startIcon={
+                          effectiveSelectedFiles.size === completedFiles.length ? (
+                            <CheckBoxOutlined />
+                          ) : effectiveSelectedFiles.size === 0 ? (
+                            <CheckBoxOutlineBlankOutlined />
+                          ) : (
+                            <IndeterminateCheckBoxOutlined />
+                          )
+                        }
                         onClick={(e) => {
                           e.stopPropagation()
                           toggleSelectAll()
@@ -242,6 +283,18 @@ const Page = () => {
                         sx={{ textTransform: 'none' }}
                       >
                         {effectiveSelectedFiles.size === completedFiles.length ? 'Deselect all' : 'Select all'}
+                      </Button>
+                      <Button
+                        size="small"
+                        color="error"
+                        startIcon={<DeleteOutlined />}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeleteAll()
+                        }}
+                        sx={{ textTransform: 'none' }}
+                      >
+                        Delete all
                       </Button>
                     </Stack>
                   )}
