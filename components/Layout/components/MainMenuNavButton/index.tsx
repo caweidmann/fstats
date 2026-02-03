@@ -8,13 +8,12 @@ type MainMenuNavButtonProps = {
   route: string
   children: ReactNode
   icon?: ReactNode
-  isSticky: boolean
   isActive?: boolean
 }
 
-const Component = ({ route, children, icon, isSticky, isActive = false }: MainMenuNavButtonProps) => {
+const Component = ({ route, children, icon, isActive = false }: MainMenuNavButtonProps) => {
   const theme = useTheme()
-  const sx = ui(theme, isSticky)
+  const sx = ui(theme)
 
   return (
     <Button color={isActive ? 'primary' : 'secondary'} href={route} sx={sx.button(isActive)} startIcon={icon}>

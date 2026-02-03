@@ -20,7 +20,7 @@ const Component = ({ items, current, ...rest }: BreadcrumbsProps) => {
   const isMobile = useIsMobile()
 
   return (
-    <Breadcrumbs maxItems={isMobile ? 2 : 5} className="hide-print" {...rest} sx={{ mb: 4, ...rest.sx }}>
+    <Breadcrumbs maxItems={isMobile ? 2 : 5} {...rest} sx={{ mb: 4, ...rest.sx }}>
       <Link href={ROUTES.HOME}>
         <Typography color="textPrimary" sx={{ fontSize: 13 }}>
           {t('NAVIGATION.HOME')}
