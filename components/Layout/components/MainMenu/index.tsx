@@ -1,4 +1,4 @@
-import { HomeOutlined, HomeRounded, Menu } from '@mui/icons-material'
+import { HomeOutlined, HomeRounded, Menu, SettingsOutlined } from '@mui/icons-material'
 import { Box, Container, Divider, IconButton, Tooltip, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { usePathname } from 'next/navigation'
@@ -41,7 +41,7 @@ const Component = ({ onMenuClick }: MainMenuProps) => {
               </>
             ) : (
               <>
-                {/* <Tooltip title={t('NAVIGATION.HOME')}>
+                <Tooltip title={t('NAVIGATION.HOME')}>
                   <IconButton
                     size="small"
                     href={ROUTES.HOME}
@@ -54,12 +54,19 @@ const Component = ({ onMenuClick }: MainMenuProps) => {
                       <HomeOutlined sx={{ fontSize: 18 }} />
                     )}
                   </IconButton>
-                </Tooltip> */}
-                <MainMenuNavButton route={ROUTES.HOME} isActive={pathname === ROUTES.HOME}>
-                  {t('NAVIGATION.HOME')}
+                </Tooltip>
+                <MainMenuNavButton route={ROUTES.DATA} isActive={pathname === ROUTES.DATA}>
+                  {t('NAVIGATION.DATA')}
                 </MainMenuNavButton>
                 <MainMenuNavButton route={ROUTES.STATS} isActive={pathname === ROUTES.STATS}>
                   {t('NAVIGATION.STATS')}
+                </MainMenuNavButton>
+                <MainMenuNavButton
+                  route={ROUTES.SETTINGS}
+                  isActive={pathname === ROUTES.SETTINGS}
+                  // icon={<SettingsOutlined />}
+                >
+                  {t('NAVIGATION.SETTINGS')}
                 </MainMenuNavButton>
               </>
             )}
@@ -71,7 +78,8 @@ const Component = ({ onMenuClick }: MainMenuProps) => {
           </Box>
         </Box>
       </Container>
-      <Divider sx={{ position: 'sticky', top: LAYOUT.NAV_HEIGHT + 1 }} />
+
+      <Divider sx={sx.divider} />
     </>
   )
 }

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDropzone, type DropzoneOptions, type FileRejection } from 'react-dropzone'
 
 import { MISC } from '@/common'
+import { indexedDBService } from '@/lib/storage/indexedDB'
 import { useFileParser, type FileParserType } from './useFileParser'
 
 export type UploadingFile = {
@@ -33,37 +34,37 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([])
 
-  // Restore uploaded files from session storage on mount
+  // Restore uploaded files from IndexedDB on mount
   useEffect(() => {
-    try {
-      const uploadedFilesMetadata = JSON.parse(sessionStorage.getItem('uploaded_files') || '[]')
+    const restoreFiles = async () => {
+      try {
+        await indexedDBService.init()
+        const allFiles = await indexedDBService.getAllFiles()
 
-      if (uploadedFilesMetadata.length > 0) {
-        const restoredFiles: UploadingFile[] = uploadedFilesMetadata.map(
-          (metadata: { id: string; name: string; size: number }) => {
-            // Try to get the parsed data for this file
-            const dataStr = sessionStorage.getItem(`file_${metadata.id}`)
-            const data = dataStr ? JSON.parse(dataStr) : undefined
-
+        if (allFiles.length > 0) {
+          const restoredFiles: UploadingFile[] = allFiles.map((fileData) => {
             // Create a minimal File object for display purposes
-            const file = new File([], metadata.name, { type: 'text/csv' })
-            Object.defineProperty(file, 'size', { value: metadata.size })
+            const file = new File([], fileData.name, { type: 'text/csv' })
+            Object.defineProperty(file, 'size', { value: fileData.size })
 
             return {
-              id: metadata.id,
+              id: fileData.id,
               file,
-              progress: 100,
-              status: 'complete' as const,
-              data,
+              progress: fileData.status === 'error' ? 0 : 100,
+              status: fileData.status,
+              data: fileData.data,
+              error: fileData.error,
             }
-          },
-        )
+          })
 
-        setUploadingFiles(restoredFiles)
+          setUploadingFiles(restoredFiles)
+        }
+      } catch (error) {
+        console.error('Failed to restore files from IndexedDB:', error)
       }
-    } catch (error) {
-      console.error('Failed to restore files from session storage:', error)
     }
+
+    restoreFiles()
   }, [])
 
   const { parseFile } = useFileParser({
@@ -81,20 +82,7 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
           onUploadComplete(completedFile)
         }
 
-        // Store file metadata in session storage for later retrieval
-        try {
-          const fileMetadata = {
-            id: fileId,
-            name: completedFile?.file.name,
-            size: completedFile?.file.size,
-          }
-          const existingFiles = JSON.parse(sessionStorage.getItem('uploaded_files') || '[]')
-          const updatedFiles = [...existingFiles.filter((f: { id: string }) => f.id !== fileId), fileMetadata]
-          sessionStorage.setItem('uploaded_files', JSON.stringify(updatedFiles))
-        } catch (error) {
-          console.error('Failed to store file metadata:', error)
-        }
-
+        // File metadata is now stored in IndexedDB by useFileParser
         return updated
       })
     },
@@ -103,11 +91,11 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
         prev.map((f) => (f.id === fileId ? { ...f, status: 'error' as const, error: error.message } : f)),
       )
     },
-    storeInSessionStorage: true,
+    storeInIndexedDB: true,
   })
 
   const onDrop = useCallback(
-    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+    async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
       setRejectedFiles(fileRejections)
 
       const newFiles: UploadingFile[] = acceptedFiles.map((file) => ({
@@ -117,24 +105,46 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
         status: 'uploading',
       }))
 
-      setUploadingFiles((prev) => [...prev, ...newFiles])
+      // Add rejected files to the uploadingFiles array with error status
+      const rejectedAsUploading: UploadingFile[] = fileRejections.map(({ file, errors }) => ({
+        id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        file,
+        progress: 0,
+        status: 'error' as const,
+        error: errors.map((e) => e.message).join(', '),
+      }))
+
+      setUploadingFiles((prev) => [...prev, ...newFiles, ...rejectedAsUploading])
+
+      // Store rejected files in IndexedDB so they persist across navigation
+      for (const rejectedFile of rejectedAsUploading) {
+        try {
+          await indexedDBService.storeFile(
+            rejectedFile.id,
+            rejectedFile.file.name,
+            rejectedFile.file.size,
+            [],
+            'error',
+            rejectedFile.error,
+          )
+        } catch (error) {
+          console.error('Failed to store rejected file:', error)
+        }
+      }
 
       newFiles.forEach((f) => parseFile(f.id, f.file))
     },
     [parseFile],
   )
 
-  const removeFile = useCallback((fileId: string) => {
+  const removeFile = useCallback(async (fileId: string) => {
     setUploadingFiles((prev) => prev.filter((f) => f.id !== fileId))
 
-    // Remove from session storage
+    // Remove from IndexedDB
     try {
-      sessionStorage.removeItem(`file_${fileId}`)
-      const existingFiles = JSON.parse(sessionStorage.getItem('uploaded_files') || '[]')
-      const updatedFiles = existingFiles.filter((f: { id: string }) => f.id !== fileId)
-      sessionStorage.setItem('uploaded_files', JSON.stringify(updatedFiles))
+      await indexedDBService.deleteFile(fileId)
     } catch (error) {
-      console.error('Failed to remove file from session storage:', error)
+      console.error('Failed to remove file from IndexedDB:', error)
     }
   }, [])
 
@@ -142,19 +152,15 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
     setRejectedFiles([])
   }, [])
 
-  const clearAllFiles = useCallback(() => {
+  const clearAllFiles = useCallback(async () => {
     setUploadingFiles([])
     setRejectedFiles([])
 
-    // Clear from session storage
+    // Clear from IndexedDB
     try {
-      const uploadedFilesMetadata = JSON.parse(sessionStorage.getItem('uploaded_files') || '[]')
-      uploadedFilesMetadata.forEach((metadata: { id: string }) => {
-        sessionStorage.removeItem(`file_${metadata.id}`)
-      })
-      sessionStorage.removeItem('uploaded_files')
+      await indexedDBService.clearAllFiles()
     } catch (error) {
-      console.error('Failed to clear files from session storage:', error)
+      console.error('Failed to clear files from IndexedDB:', error)
     }
   }, [])
 

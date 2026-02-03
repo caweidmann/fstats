@@ -22,15 +22,12 @@ import {
 import { ArrowBack } from '@mui/icons-material'
 
 import { PageWrapper } from '@/components'
+import { indexedDBService } from '@/lib/storage/indexedDB'
 
-interface FileMetadata {
+interface FileData {
   id: string
   name: string
   size: number
-}
-
-interface FileData {
-  metadata: FileMetadata
   data: Record<string, unknown>[]
 }
 
@@ -40,37 +37,33 @@ const StatsPage = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    try {
-      // Retrieve file metadata from session storage
-      const uploadedFiles = JSON.parse(sessionStorage.getItem('uploaded_files') || '[]') as FileMetadata[]
+    const loadFiles = async () => {
+      try {
+        await indexedDBService.init()
+        const allFiles = await indexedDBService.getAllFiles()
 
-      if (uploadedFiles.length === 0) {
+        if (allFiles.length === 0) {
+          setLoading(false)
+          return
+        }
+
+        // Transform to match expected format
+        const allFilesData: FileData[] = allFiles.map((fileData) => ({
+          id: fileData.id,
+          name: fileData.name,
+          size: fileData.size,
+          data: fileData.data as Record<string, unknown>[],
+        }))
+
+        setFilesData(allFilesData)
+      } catch (error) {
+        console.error('Failed to load files from IndexedDB:', error)
+      } finally {
         setLoading(false)
-        return
       }
-
-      // Retrieve data for each file
-      const allFilesData: FileData[] = uploadedFiles
-        .map((metadata) => {
-          const dataStr = sessionStorage.getItem(`file_${metadata.id}`)
-          if (!dataStr) return null
-
-          try {
-            const data = JSON.parse(dataStr) as Record<string, unknown>[]
-            return { metadata, data }
-          } catch (error) {
-            console.error(`Failed to parse data for file ${metadata.name}:`, error)
-            return null
-          }
-        })
-        .filter((item): item is FileData => item !== null)
-
-      setFilesData(allFilesData)
-    } catch (error) {
-      console.error('Failed to load files from session storage:', error)
-    } finally {
-      setLoading(false)
     }
+
+    loadFiles()
   }, [])
 
   const handleBack = () => {
@@ -112,11 +105,8 @@ const StatsPage = () => {
           const columns = fileData.data.length > 0 ? Object.keys(fileData.data[0]) : []
 
           return (
-            <Card key={fileData.metadata.id}>
-              <CardHeader
-                title={fileData.metadata.name}
-                subheader={`${fileData.data.length} rows, ${columns.length} columns`}
-              />
+            <Card key={fileData.id}>
+              <CardHeader title={fileData.name} subheader={`${fileData.data.length} rows, ${columns.length} columns`} />
               <CardContent>
                 <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
                   <Table stickyHeader size="small">

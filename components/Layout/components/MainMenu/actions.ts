@@ -8,6 +8,15 @@ export const getActiveRouteLabel = (pathname: string) => {
     case ROUTES.HOME:
       activeLabel = i18n.t('NAVIGATION.HOME')
       break
+    case ROUTES.DATA:
+      activeLabel = i18n.t('NAVIGATION.DATA')
+      break
+    case ROUTES.STATS:
+      activeLabel = i18n.t('NAVIGATION.STATS')
+      break
+    case ROUTES.SETTINGS:
+      activeLabel = i18n.t('NAVIGATION.SETTINGS')
+      break
     default:
       console.warn(`Route label not defined! ${pathname}`)
   }
