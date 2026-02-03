@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import {
   CheckCircleOutlined,
   CloudUploadOutlined,
@@ -36,6 +37,7 @@ const Page = () => {
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
   const router = useRouter()
+  const [uploadMode, setUploadMode] = useState<'file' | 'folder'>('file')
 
   const { getRootProps, getInputProps, isDragActive, uploadingFiles, rejectedFiles, removeFile, clearRejectedFiles } =
     useFileUpload({
@@ -48,6 +50,73 @@ const Page = () => {
 
   const handleContinue = () => {
     router.push(ROUTES.STATS)
+  }
+
+  const openFolderPicker = async () => {
+    try {
+      // Check if the File System Access API is supported
+      if (!('showDirectoryPicker' in window)) {
+        alert('Folder selection is not supported in your browser. Please use a modern browser like Chrome or Edge.')
+        return
+      }
+
+      // @ts-expect-error - showDirectoryPicker is not yet in TypeScript types
+      const directoryHandle = await window.showDirectoryPicker()
+
+      const csvFiles: File[] = []
+
+      // Recursively get all CSV files from the directory
+      const getFilesRecursively = async (dirHandle: any): Promise<File[]> => {
+        const files: File[] = []
+        for await (const entry of dirHandle.values()) {
+          if (entry.kind === 'file' && entry.name.toLowerCase().endsWith('.csv')) {
+            const file = await entry.getFile()
+            files.push(file)
+          } else if (entry.kind === 'directory') {
+            const subFiles = await getFilesRecursively(entry)
+            files.push(...subFiles)
+          }
+        }
+        return files
+      }
+
+      // Collect all CSV files
+      const files = await getFilesRecursively(directoryHandle)
+      csvFiles.push(...files)
+
+      if (csvFiles.length === 0) {
+        alert('No CSV files found in the selected folder.')
+        return
+      }
+
+      // Manually trigger the onDrop logic by simulating a drop
+      const input = document.querySelector('input[type="file"]') as HTMLInputElement
+      if (input) {
+        // Create a FileList-like object
+        const dataTransfer = new DataTransfer()
+        csvFiles.forEach((file) => dataTransfer.items.add(file))
+        input.files = dataTransfer.files
+
+        // Trigger change event
+        const event = new Event('change', { bubbles: true })
+        input.dispatchEvent(event)
+      }
+    } catch (error) {
+      const err = error as Error
+      if (err.name !== 'AbortError') {
+        console.error('Error selecting folder:', error)
+        alert('Failed to access the folder. Please try again.')
+      }
+    }
+  }
+
+  const handleDropZoneClick = async (e: React.MouseEvent) => {
+    if (uploadMode === 'folder') {
+      e.preventDefault()
+      e.stopPropagation()
+      await openFolderPicker()
+    }
+    // In file mode, let the default dropzone behavior handle it
   }
 
   return (
@@ -71,10 +140,20 @@ const Page = () => {
           <Typography variant="body2">Select how you want to process your CSVs.</Typography>
 
           <ButtonGroup disableElevation variant="outlined">
-            <Button variant="contained" startIcon={<UploadFileOutlined />} sx={sx.button}>
+            <Button
+              variant={uploadMode === 'file' ? 'contained' : 'outlined'}
+              startIcon={<UploadFileOutlined />}
+              sx={sx.button}
+              onClick={() => setUploadMode('file')}
+            >
               File upload
             </Button>
-            <Button startIcon={<FolderOpenOutlined />} sx={sx.button}>
+            <Button
+              variant={uploadMode === 'folder' ? 'contained' : 'outlined'}
+              startIcon={<FolderOpenOutlined />}
+              sx={sx.button}
+              onClick={() => setUploadMode('folder')}
+            >
               Select local folder
             </Button>
           </ButtonGroup>
@@ -88,10 +167,16 @@ const Page = () => {
         </Grid>
 
         <Grid size={12}>
-          <Box {...getRootProps()} sx={sx.dropZone(isDragActive)}>
+          <Box
+            {...getRootProps()}
+            onClick={handleDropZoneClick}
+            sx={sx.dropZone(isDragActive)}
+          >
             <input {...getInputProps()} />
             <CloudUploadOutlined sx={sx.uploadIcon} />
-            <Typography variant="h5">Drop your files here!</Typography>
+            <Typography variant="h5">
+              {uploadMode === 'folder' ? 'Select your folder!' : 'Drop your files here!'}
+            </Typography>
             <Typography variant="body2">CSV files only, max 5MB each.</Typography>
           </Box>
         </Grid>

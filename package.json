@@ -23,6 +23,7 @@
     "@mui/material": "^7.3.7",
     "@mui/material-nextjs": "^7.3.7",
     "@next/third-parties": "^16.1.6",
+    "@serwist/next": "^9.5.3",
     "@vercel/analytics": "^1.6.1",
     "@vercel/speed-insights": "^1.3.1",
     "date-fns": "^4.1.0",
@@ -35,7 +36,8 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-dropzone": "^14.4.0",
-    "react-i18next": "^16.5.4"
+    "react-i18next": "^16.5.4",
+    "serwist": "^9.5.3"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
