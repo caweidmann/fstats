@@ -32,7 +32,6 @@ const Component = ({ onOptionSelected, onClose }: ThemeDrawerProps) => {
     <Box>
       <List
         subheader={<SwipeableDrawerSubheader title={t('COMPONENTS.THEME_SWITCHER.CHOOSE_THEME')} onClose={onClose} />}
-        // disablePadding
       >
         {selectOptions.map((option) => (
           <ThemeDrawerListItem key={option.value} mode={option.value} onClick={() => onClick(option.value)} />

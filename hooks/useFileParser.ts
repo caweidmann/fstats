@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { parseCSVFile, type CSVParserOptions } from '@/lib/parsers/csvParser'
 import { indexedDBService } from '@/lib/storage/indexedDB'
 
-export type FileParserType = 'csv' | 'json' | 'excel' // Add more types as needed
+export type FileParserType = 'csv' | 'json' | 'excel'
 
 export interface UseFileParserOptions {
   parserType: FileParserType
@@ -27,6 +27,7 @@ export const useFileParser = (options: UseFileParserOptions) => {
         onComplete: async (data) => {
           if (storeInIndexedDB) {
             try {
+              await indexedDBService.init()
               await indexedDBService.storeFile(fileId, file.name, file.size, data, 'complete')
             } catch (error) {
               console.error('Failed to store file in IndexedDB:', error)
@@ -49,11 +50,9 @@ export const useFileParser = (options: UseFileParserOptions) => {
           parseCSVFile(file, parserOptions)
           break
         case 'json':
-          // TODO: Implement JSON parser
-          throw new Error('JSON parser not implemented yet')
+          throw new Error('JSON parser not implemented')
         case 'excel':
-          // TODO: Implement Excel parser
-          throw new Error('Excel parser not implemented yet')
+          throw new Error('Excel parser not implemented')
         default:
           throw new Error(`Unknown parser type: ${parserType}`)
       }

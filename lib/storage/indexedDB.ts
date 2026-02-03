@@ -1,20 +1,10 @@
-/**
- * Storage Service using LocalForage
- *
- * Provides persistent storage with session-based cleanup.
- * Data persists across navigation and is only cleared on page refresh or tab close.
- */
-
 import localforage from 'localforage'
 
 const SESSION_KEY = 'current-session-id'
 const PERSIST_KEY = 'persist-data'
 const PERSIST_SETTING_KEY = 'persist-setting'
-const UPLOAD_MODE_KEY = 'upload-mode'
 const FILES_PREFIX = 'file_'
 const SESSION_PREFIX = 'session_'
-
-export type UploadMode = 'file' | 'folder'
 
 export interface FileData {
   id: string
@@ -37,9 +27,10 @@ class StorageService {
   private sessionId: string | null = null
   private store: LocalForage
   private initialized = false
+  private initPromise: Promise<void> | null = null
+  private cleanupHandlersSetup = false
 
   constructor() {
-    // Configure localForage to use IndexedDB
     this.store = localforage.createInstance({
       name: 'fstats-db',
       storeName: 'fstats-store',
@@ -48,16 +39,26 @@ class StorageService {
     })
   }
 
-  /**
-   * Initialize the storage and session
-   */
   async init(): Promise<void> {
-    if (this.initialized) return
+    if (this.initPromise) {
+      return this.initPromise
+    }
 
-    // Check if data persistence is enabled
+    if (this.initialized) {
+      const storedSessionId = typeof window !== 'undefined' ? sessionStorage.getItem(SESSION_KEY) : null
+      if (storedSessionId && this.sessionId !== storedSessionId) {
+        this.sessionId = storedSessionId
+      }
+      return
+    }
+
+    this.initPromise = this._doInit()
+    return this.initPromise
+  }
+
+  private async _doInit(): Promise<void> {
     const persistEnabled = typeof window !== 'undefined' && localStorage.getItem(PERSIST_KEY) === 'true'
 
-    // Check if this is a page refresh using Performance API
     const isRefresh =
       typeof window !== 'undefined' &&
       window.performance &&
@@ -65,37 +66,25 @@ class StorageService {
       window.performance.getEntriesByType('navigation').length > 0 &&
       (window.performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming).type === 'reload'
 
-    // Get existing session ID
     this.sessionId = sessionStorage.getItem(SESSION_KEY)
 
-    // If persist is enabled, keep the same session across refreshes
     if (persistEnabled && !this.sessionId) {
-      // First load with persist enabled - create a new session
       this.sessionId = `session-${Date.now()}-${Math.random().toString(36).slice(2)}`
       sessionStorage.setItem(SESSION_KEY, this.sessionId)
     } else if (!persistEnabled) {
-      // Persist is disabled - create new session on refresh or first load
       if (!this.sessionId || isRefresh) {
         this.sessionId = `session-${Date.now()}-${Math.random().toString(36).slice(2)}`
         sessionStorage.setItem(SESSION_KEY, this.sessionId)
 
-        // Clear old data on refresh when persist is disabled
         if (isRefresh) {
           await this.clearAllFiles()
         }
       }
     }
-    // If persist is enabled and sessionId exists, keep using it (no action needed)
 
-    // Clean up old sessions
     await this.cleanupOldSessions()
-
-    // Register current session
     await this.registerSession()
-
-    // Set up cleanup handlers
     this.setupCleanupHandlers()
-
     this.initialized = true
   }
 
@@ -116,25 +105,17 @@ class StorageService {
       const now = Date.now()
       const persistEnabled = typeof window !== 'undefined' && localStorage.getItem(PERSIST_KEY) === 'true'
 
-      // Use longer threshold when persist is enabled (30 days vs 24 hours)
-      const ACTIVE_THRESHOLD = persistEnabled
-        ? 30 * 24 * 60 * 60 * 1000 // 30 days for persistent storage
-        : 24 * 60 * 60 * 1000 // 24 hours for temporary storage
+      const ACTIVE_THRESHOLD = persistEnabled ? 30 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000
 
-      // Get all keys
       const keys = await this.store.keys()
-
-      // Find session keys
       const sessionKeys = keys.filter((key) => key.startsWith(SESSION_PREFIX))
 
       for (const sessionKey of sessionKeys) {
         const session = await this.store.getItem<SessionData>(sessionKey)
 
         if (session) {
-          // Skip current session
           if (session.id === this.sessionId) continue
 
-          // Clean up old sessions based on threshold
           if (now - session.lastActive > ACTIVE_THRESHOLD) {
             await this.deleteFilesBySession(session.id)
             await this.store.removeItem(sessionKey)
@@ -163,17 +144,18 @@ class StorageService {
   }
 
   private setupCleanupHandlers(): void {
-    // Update activity when visibility changes
+    if (this.cleanupHandlersSetup) return
+    this.cleanupHandlersSetup = true
+
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
         this.updateSessionActivity()
       }
     })
 
-    // Update activity periodically
     setInterval(() => {
       this.updateSessionActivity()
-    }, 30000) // Update every 30 seconds
+    }, 30000)
   }
 
   private updateSessionActivity(): void {
@@ -192,9 +174,6 @@ class StorageService {
       })
   }
 
-  /**
-   * Store file data
-   */
   async storeFile(
     id: string,
     name: string,
@@ -208,7 +187,12 @@ class StorageService {
     }
 
     if (!this.sessionId) {
-      throw new Error('Storage not initialized')
+      const storedSessionId = typeof window !== 'undefined' ? sessionStorage.getItem(SESSION_KEY) : null
+      if (storedSessionId) {
+        this.sessionId = storedSessionId
+      } else {
+        throw new Error('Storage not initialized - no session ID available')
+      }
     }
 
     const fileData: FileData = {
@@ -225,9 +209,6 @@ class StorageService {
     await this.store.setItem(`${FILES_PREFIX}${id}`, fileData)
   }
 
-  /**
-   * Get file data by ID
-   */
   async getFile(id: string): Promise<FileData | null> {
     if (!this.initialized) {
       await this.init()
@@ -236,16 +217,19 @@ class StorageService {
     return this.store.getItem<FileData>(`${FILES_PREFIX}${id}`)
   }
 
-  /**
-   * Get all files for current session
-   */
   async getAllFiles(): Promise<FileData[]> {
     if (!this.initialized) {
       await this.init()
     }
 
     if (!this.sessionId) {
-      throw new Error('Storage not initialized')
+      const storedSessionId = typeof window !== 'undefined' ? sessionStorage.getItem(SESSION_KEY) : null
+      if (storedSessionId) {
+        this.sessionId = storedSessionId
+      } else {
+        console.error('No session ID available')
+        return []
+      }
     }
 
     try {
@@ -267,9 +251,6 @@ class StorageService {
     }
   }
 
-  /**
-   * Delete a file
-   */
   async deleteFile(id: string): Promise<void> {
     if (!this.initialized) {
       await this.init()
@@ -278,18 +259,12 @@ class StorageService {
     await this.store.removeItem(`${FILES_PREFIX}${id}`)
   }
 
-  /**
-   * Clear all files for current session
-   */
   async clearAllFiles(): Promise<void> {
     if (!this.sessionId) return
 
     await this.deleteFilesBySession(this.sessionId)
   }
 
-  /**
-   * Clean up current session data (manually callable)
-   */
   async cleanup(): Promise<void> {
     if (!this.sessionId) return
 
@@ -301,17 +276,11 @@ class StorageService {
     }
   }
 
-  /**
-   * Completely clear all storage (useful for debugging or reset)
-   */
   async clearAll(): Promise<void> {
     await this.store.clear()
     sessionStorage.removeItem(SESSION_KEY)
   }
 
-  /**
-   * Get the persist setting from IndexedDB
-   */
   async getPersistSetting(): Promise<boolean> {
     try {
       const setting = await this.store.getItem<boolean>(PERSIST_SETTING_KEY)
@@ -322,13 +291,9 @@ class StorageService {
     }
   }
 
-  /**
-   * Set the persist setting in IndexedDB
-   */
   async setPersistSetting(enabled: boolean): Promise<void> {
     try {
       await this.store.setItem(PERSIST_SETTING_KEY, enabled)
-      // Also update localStorage for backward compatibility with init logic
       if (typeof window !== 'undefined') {
         localStorage.setItem(PERSIST_KEY, String(enabled))
       }
@@ -338,34 +303,6 @@ class StorageService {
     }
   }
 
-  /**
-   * Get the upload mode setting from IndexedDB
-   */
-  async getUploadMode(): Promise<UploadMode> {
-    try {
-      const mode = await this.store.getItem<UploadMode>(UPLOAD_MODE_KEY)
-      return mode === 'folder' ? 'folder' : 'file'
-    } catch (error) {
-      console.error('Failed to get upload mode:', error)
-      return 'file'
-    }
-  }
-
-  /**
-   * Set the upload mode setting in IndexedDB
-   */
-  async setUploadMode(mode: UploadMode): Promise<void> {
-    try {
-      await this.store.setItem(UPLOAD_MODE_KEY, mode)
-    } catch (error) {
-      console.error('Failed to set upload mode:', error)
-      throw error
-    }
-  }
-
-  /**
-   * Get storage statistics
-   */
   async getStats(): Promise<{ fileCount: number; sessionCount: number }> {
     try {
       const keys = await this.store.keys()
@@ -380,8 +317,5 @@ class StorageService {
   }
 }
 
-// Export singleton instance
 export const indexedDBService = new StorageService()
-
-// For backward compatibility
 export const storageService = indexedDBService

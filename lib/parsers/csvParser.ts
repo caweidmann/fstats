@@ -37,15 +37,8 @@ export const parseCSVFile = (file: File, options: CSVParserOptions = {}) => {
         onProgress(100)
       }
 
-      const finalResults = {
-        ...results,
-        data: parsedData,
-      }
-      console.log('parsedData', parsedData)
-      console.log('finalResults', finalResults)
-
       if (onComplete) {
-        onComplete(parsedData, finalResults)
+        onComplete(parsedData, { ...results, data: parsedData })
       }
     },
     error: (error) => {

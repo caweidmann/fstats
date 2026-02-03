@@ -9,10 +9,30 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
       borderRadius: 1.5,
     },
 
+    addFolderButton: {
+      borderRadius: 1.5,
+      textTransform: 'none' as const,
+    },
+
     uploadIcon: {
       fontSize: 48,
       mb: 1,
       opacity: 0.7,
+    },
+
+    summaryCard: {
+      border: `1px solid ${isDarkMode ? blueGrey[700] : grey[300]}`,
+      borderRadius: 2,
+      padding: theme.spacing(2.5),
+      backgroundColor: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+    },
+
+    detailsCard: {
+      border: `1px solid ${isDarkMode ? blueGrey[700] : grey[300]}`,
+      borderTop: 'none',
+      borderRadius: '0 0 8px 8px',
+      padding: theme.spacing(2),
+      backgroundColor: isDarkMode ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.01)',
     },
 
     dropZone: (isDragActive: boolean) => ({
@@ -41,15 +61,15 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
               ? blueGrey[700]
               : grey[300]
       }`,
-      borderRadius: 2,
-      padding: theme.spacing(2),
+      borderRadius: 1.5,
+      padding: theme.spacing(1, 1.5),
       backgroundColor: isDarkMode ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.01)',
-      transition: 'all 0.3s ease-in-out',
+      transition: 'all 0.2s ease-in-out',
     }),
 
     fileIcon: {
       color: 'primary.main',
-      fontSize: 32,
+      fontSize: 20,
     },
 
     fileContentBox: {
