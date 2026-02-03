@@ -15,11 +15,12 @@ import {
 } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile } from '@/hooks'
+import { indexedDBService } from '@/lib/storage/indexedDB'
 
 import { ui } from './styled'
 
@@ -58,7 +59,29 @@ const Page = () => {
 
   const canContinue = effectiveSelectedFiles.size > 0 && uploadingInProgress.length === 0
 
-  const handleContinue = () => {
+  useEffect(() => {
+    const loadSelectedFiles = async () => {
+      const saved = await indexedDBService.getSelectedFiles()
+      if (saved !== null) {
+        setSelectedFiles(new Set(saved))
+      }
+    }
+    loadSelectedFiles()
+  }, [])
+
+  useEffect(() => {
+    const saveSelectedFiles = async () => {
+      if (selectedFiles === null) {
+        await indexedDBService.setSelectedFiles(null)
+      } else {
+        await indexedDBService.setSelectedFiles(Array.from(selectedFiles))
+      }
+    }
+    saveSelectedFiles()
+  }, [selectedFiles])
+
+  const handleContinue = async () => {
+    await indexedDBService.setSelectedFiles(Array.from(effectiveSelectedFiles))
     router.push(ROUTES.STATS)
   }
 
@@ -329,15 +352,21 @@ const Page = () => {
           </Grid>
         )}
 
-        {canContinue && (
+        {Array.from(completedFiles).length ? (
           <Grid size={12}>
             <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-              <Button variant="contained" size="large" onClick={handleContinue} sx={{ minWidth: 200, py: 1.5 }}>
+              <Button
+                variant="contained"
+                size="large"
+                onClick={handleContinue}
+                sx={{ minWidth: 200, py: 1.5 }}
+                disabled={!canContinue}
+              >
                 Continue with {effectiveSelectedFiles.size} {effectiveSelectedFiles.size === 1 ? 'file' : 'files'}
               </Button>
             </Box>
           </Grid>
-        )}
+        ) : null}
       </Grid>
     </PageWrapper>
   )

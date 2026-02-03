@@ -3,6 +3,7 @@ import localforage from 'localforage'
 const SESSION_KEY = 'current-session-id'
 const PERSIST_KEY = 'persist-data'
 const PERSIST_SETTING_KEY = 'persist-setting'
+const SELECTED_FILES_KEY = 'selected-files'
 const FILES_PREFIX = 'file_'
 const SESSION_PREFIX = 'session_'
 
@@ -314,6 +315,20 @@ class StorageService {
       console.error('Failed to get storage stats:', error)
       return { fileCount: 0, sessionCount: 0 }
     }
+  }
+
+  async setSelectedFiles(fileIds: string[] | null): Promise<void> {
+    if (!this.initialized) {
+      await this.init()
+    }
+    await this.store.setItem(SELECTED_FILES_KEY, fileIds)
+  }
+
+  async getSelectedFiles(): Promise<string[] | null> {
+    if (!this.initialized) {
+      await this.init()
+    }
+    return this.store.getItem<string[] | null>(SELECTED_FILES_KEY)
   }
 }
 

@@ -164,14 +164,20 @@ const StatsPage = () => {
     const loadFiles = async () => {
       try {
         await indexedDBService.init()
-        const allFiles = await indexedDBService.getAllFiles()
+        const [allFiles, selectedFileIds] = await Promise.all([
+          indexedDBService.getAllFiles(),
+          indexedDBService.getSelectedFiles(),
+        ])
 
         if (allFiles.length === 0) {
           setLoading(false)
           return
         }
 
-        const allFilesData: FileData[] = allFiles.map((fileData) => ({
+        const selectedSet = selectedFileIds ? new Set(selectedFileIds) : null
+        const filteredFiles = selectedSet ? allFiles.filter((f) => selectedSet.has(f.id)) : allFiles
+
+        const allFilesData: FileData[] = filteredFiles.map((fileData) => ({
           id: fileData.id,
           name: fileData.name,
           size: fileData.size,
