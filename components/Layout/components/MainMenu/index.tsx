@@ -2,7 +2,6 @@ import { HomeOutlined, HomeRounded, Menu } from '@mui/icons-material'
 import { Box, Container, Divider, IconButton, Tooltip, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { usePathname } from 'next/navigation'
-import { useIntersectionObserver } from 'usehooks-ts'
 
 import { LAYOUT, ROUTES } from '@/common'
 import { LanguageSwitcher, ThemeSwitcher } from '@/components'
@@ -25,20 +24,12 @@ const Component = ({ onMenuClick }: MainMenuProps) => {
   const isDarkMode = useIsDarkMode()
   const sx = ui(theme, isDarkMode, isMobile)
   const activeLabel = getActiveRouteLabel(pathname)
-  const { isIntersecting, ref } = useIntersectionObserver({
-    initialIsIntersecting: true,
-  })
-  const isSticky = !isIntersecting
 
   return (
     <>
-      <Box sx={{ height: 0, mb: 1 }} ref={ref} className="hide-print" />
-
-      <Divider sx={sx.divider(isSticky)} className="hide-print" />
-
-      <Container maxWidth={LAYOUT.CONTAINER_MAX_WIDTH} sx={sx.menuContainer(isSticky)} className="hide-print">
+      <Container maxWidth={LAYOUT.CONTAINER_MAX_WIDTH} sx={sx.menuContainer}>
         <Box sx={sx.menuWrapper}>
-          <Box sx={sx.menu(isSticky)}>
+          <Box sx={sx.menu}>
             {isMobile ? (
               <>
                 <IconButton color="primary" sx={{ ml: -1 }} onClick={onMenuClick}>
@@ -50,38 +41,37 @@ const Component = ({ onMenuClick }: MainMenuProps) => {
               </>
             ) : (
               <>
-                {isSticky ? (
-                  <Tooltip title={t('NAVIGATION.HOME')}>
-                    <IconButton
-                      size="small"
-                      href={ROUTES.HOME}
-                      color={pathname === ROUTES.HOME ? 'primary' : 'secondary'}
-                      sx={sx.homeButton(pathname === ROUTES.HOME)}
-                    >
-                      {pathname === ROUTES.HOME ? (
-                        <HomeRounded sx={{ fontSize: 18 }} />
-                      ) : (
-                        <HomeOutlined sx={{ fontSize: 18 }} />
-                      )}
-                    </IconButton>
-                  </Tooltip>
-                ) : (
-                  <MainMenuNavButton route={ROUTES.HOME} isSticky={isSticky} isActive={pathname === ROUTES.HOME}>
-                    {t('NAVIGATION.HOME')}
-                  </MainMenuNavButton>
-                )}
+                {/* <Tooltip title={t('NAVIGATION.HOME')}>
+                  <IconButton
+                    size="small"
+                    href={ROUTES.HOME}
+                    color={pathname === ROUTES.HOME ? 'primary' : 'secondary'}
+                    sx={sx.homeButton(pathname === ROUTES.HOME)}
+                  >
+                    {pathname === ROUTES.HOME ? (
+                      <HomeRounded sx={{ fontSize: 18 }} />
+                    ) : (
+                      <HomeOutlined sx={{ fontSize: 18 }} />
+                    )}
+                  </IconButton>
+                </Tooltip> */}
+                <MainMenuNavButton route={ROUTES.HOME} isActive={pathname === ROUTES.HOME}>
+                  {t('NAVIGATION.HOME')}
+                </MainMenuNavButton>
+                <MainMenuNavButton route={ROUTES.STATS} isActive={pathname === ROUTES.STATS}>
+                  {t('NAVIGATION.STATS')}
+                </MainMenuNavButton>
               </>
             )}
           </Box>
 
           <Box sx={sx.iconMenu}>
-            <LanguageSwitcher showLabel={!isSticky} />
-            <ThemeSwitcher showLabel={!isMobile && !isSticky} />
+            {/* <LanguageSwitcher showLabel={false} /> */}
+            <ThemeSwitcher showLabel={false} />
           </Box>
         </Box>
       </Container>
-
-      <Divider sx={sx.divider(isSticky)} className="hide-print" />
+      <Divider sx={{ position: 'sticky', top: LAYOUT.NAV_HEIGHT + 1 }} />
     </>
   )
 }

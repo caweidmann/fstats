@@ -3,7 +3,8 @@
     "ALL_RIGHTS_RESERVED": "All rights reserved."
   },
   "NAVIGATION": {
-    "HOME": "Home"
+    "HOME": "Data",
+    "STATS": "Stats"
   },
   "DATA_DISPLAY": {
     "MENU": "Menu"
