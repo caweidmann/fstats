@@ -3,7 +3,10 @@
     "ALL_RIGHTS_RESERVED": "All rights reserved."
   },
   "NAVIGATION": {
-    "HOME": "Home"
+    "HOME": "Home",
+    "DATA": "Data",
+    "STATS": "Stats",
+    "SETTINGS": "Settings"
   },
   "DATA_DISPLAY": {
     "MENU": "Menu"
