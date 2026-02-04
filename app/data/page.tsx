@@ -17,12 +17,10 @@ import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
-import { UserLocale } from '@/types-enums'
 import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
-import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile } from '@/hooks'
+import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
 import { toDisplayDate } from '@/utils/Date'
-import { i18n } from '@/lib/i18n'
 import { getSelectedFiles, setSelectedFiles as saveSelectedFiles } from '@/lib/storage'
 
 import { ui } from './styled'
@@ -36,6 +34,7 @@ const Page = () => {
   const [selectedFiles, setSelectedFiles] = useState<Set<string> | null>(null)
   const [showDetails, setShowDetails] = useState(false)
   const initialLoadDone = useRef(false)
+  const { locale } = useUserPreferences()
 
   const { getRootProps, getInputProps, isDragActive, uploadingFiles, removeFile, clearAllFiles } = useFileUpload({
     maxSize: MISC.MAX_UPLOAD_FILE_SIZE,
@@ -336,7 +335,7 @@ const Page = () => {
                                   </Typography>
                                   <Typography variant="caption" color="text.secondary">
                                     Uploaded{' '}
-                                    {toDisplayDate(new Date(uploadFile.uploadedAt), i18n.language as UserLocale, {
+                                    {toDisplayDate(new Date(uploadFile.uploadedAt), locale, {
                                       formatTo: 'd MMM yyyy, HH:mm:ss',
                                     })}
                                   </Typography>
@@ -354,7 +353,7 @@ const Page = () => {
                               </Box>
                               <Tooltip title="Remove file">
                                 <IconButton
-                                  color={isError ? 'error' : 'text.secondary'}
+                                  color={isError ? 'error' : 'secondary'}
                                   onClick={(e) => {
                                     e.stopPropagation()
                                     removeFile(uploadFile.id)

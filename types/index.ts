@@ -2,6 +2,14 @@ import type { Locale } from 'date-fns'
 import type { ReactNode } from 'react'
 import { z } from 'zod'
 
+import { ColorMode, UserLocale } from '@/types-enums'
+
+export type UserPreferences = {
+  locale: UserLocale
+  colorMode: ColorMode
+  persistData: boolean
+}
+
 export type DateFnsLocale = Locale
 
 export type FeatureFlags = Record<string, boolean>

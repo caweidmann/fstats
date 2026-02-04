@@ -1,6 +1,6 @@
 import localforage from 'localforage'
 
-import { readSetting } from './settings'
+import { getLocalUserPreferences } from '@/utils/LocalStorage'
 
 const SESSION_KEY = 'fstats-session'
 const SELECTED_FILES_KEY = 'selected-files'
@@ -28,7 +28,8 @@ export interface FileData {
 let initPromise: Promise<void> | null = null
 
 const doInit = async () => {
-  if (!readSetting('persist') && !sessionStorage.getItem(SESSION_KEY)) {
+  const { persistData } = getLocalUserPreferences()
+  if (!persistData && !sessionStorage.getItem(SESSION_KEY)) {
     await clearAllFiles()
     await store.removeItem(SELECTED_FILES_KEY)
   }
