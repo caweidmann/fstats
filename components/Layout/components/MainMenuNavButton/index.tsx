@@ -1,5 +1,6 @@
 import { Button, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
+import Link from 'next/link'
 import type { ReactNode } from 'react'
 
 import { ui } from './styled'
@@ -16,11 +17,13 @@ const Component = ({ route, children, icon, isActive = false }: MainMenuNavButto
   const sx = ui(theme)
 
   return (
-    <Button color={isActive ? 'primary' : 'secondary'} href={route} sx={sx.button(isActive)} startIcon={icon}>
-      <Typography color={isActive ? 'primary' : 'secondary'} sx={sx.text(isActive)}>
-        {children}
-      </Typography>
-    </Button>
+    <Link href={route}>
+      <Button color={isActive ? 'primary' : 'secondary'} sx={sx.button(isActive)} startIcon={icon}>
+        <Typography color={isActive ? 'primary' : 'secondary'} sx={sx.text(isActive)}>
+          {children}
+        </Typography>
+      </Button>
+    </Link>
   )
 }
 

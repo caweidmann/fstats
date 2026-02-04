@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react'
 import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile } from '@/hooks'
-import { indexedDBService } from '@/lib/storage/indexedDB'
+import { getSelectedFiles, setSelectedFiles as saveSelectedFiles } from '@/lib/storage'
 
 import { ui } from './styled'
 
@@ -72,7 +72,7 @@ const Page = () => {
 
   useEffect(() => {
     const loadSelectedFiles = async () => {
-      const saved = await indexedDBService.getSelectedFiles()
+      const saved = await getSelectedFiles()
       if (saved !== null) {
         setSelectedFiles(new Set(saved))
       }
@@ -81,14 +81,7 @@ const Page = () => {
   }, [])
 
   useEffect(() => {
-    const saveSelectedFiles = async () => {
-      if (selectedFiles === null) {
-        await indexedDBService.setSelectedFiles(null)
-      } else {
-        await indexedDBService.setSelectedFiles(Array.from(selectedFiles))
-      }
-    }
-    saveSelectedFiles()
+    saveSelectedFiles(selectedFiles === null ? null : Array.from(selectedFiles))
   }, [selectedFiles])
 
   const handleDeleteAll = () => {
@@ -97,7 +90,7 @@ const Page = () => {
   }
 
   const handleContinue = async () => {
-    await indexedDBService.setSelectedFiles(Array.from(effectiveSelectedFiles))
+    await saveSelectedFiles(Array.from(effectiveSelectedFiles))
     router.push(ROUTES.STATS)
   }
 
@@ -388,6 +381,7 @@ const Page = () => {
               <Button
                 variant="contained"
                 size="large"
+                onMouseEnter={() => router.prefetch(ROUTES.STATS)}
                 onClick={handleContinue}
                 sx={{ minWidth: 200, py: 1.5 }}
                 disabled={!canContinue}

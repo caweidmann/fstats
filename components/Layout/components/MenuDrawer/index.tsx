@@ -29,16 +29,16 @@ const Component = ({ onClose }: MenuDrawerProps) => {
       disablePadding
     >
       <Box sx={{ mt: 3 }}>
-        <MenuDrawerNavButton route={ROUTES.HOME} isActive={pathname === ROUTES.HOME}>
+        <MenuDrawerNavButton route={ROUTES.HOME} isActive={pathname === ROUTES.HOME} onClose={onClose}>
           {t('NAVIGATION.HOME')}
         </MenuDrawerNavButton>
-        <MenuDrawerNavButton route={ROUTES.DATA} isActive={pathname === ROUTES.DATA}>
+        <MenuDrawerNavButton route={ROUTES.DATA} isActive={pathname === ROUTES.DATA} onClose={onClose}>
           {t('NAVIGATION.DATA')}
         </MenuDrawerNavButton>
-        <MenuDrawerNavButton route={ROUTES.STATS} isActive={pathname === ROUTES.STATS}>
+        <MenuDrawerNavButton route={ROUTES.STATS} isActive={pathname === ROUTES.STATS} onClose={onClose}>
           {t('NAVIGATION.STATS')}
         </MenuDrawerNavButton>
-        <MenuDrawerNavButton route={ROUTES.SETTINGS} isActive={pathname === ROUTES.SETTINGS}>
+        <MenuDrawerNavButton route={ROUTES.SETTINGS} isActive={pathname === ROUTES.SETTINGS} onClose={onClose}>
           {t('NAVIGATION.SETTINGS')}
         </MenuDrawerNavButton>
       </Box>
