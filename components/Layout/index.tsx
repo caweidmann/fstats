@@ -22,7 +22,6 @@ const Component = ({ children }: LayoutProps) => {
   }, [])
 
   if (!mounted) {
-    // Avoid rendering with incorrect theme on initial load
     return null
   }
 

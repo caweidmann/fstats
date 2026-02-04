@@ -33,7 +33,6 @@ const Component = ({ onOptionSelected, onClose }: LanguageDrawerProps) => {
         subheader={
           <SwipeableDrawerSubheader title={t('COMPONENTS.LANGUAGE_SWITCHER.CHANGE_LANGUAGE')} onClose={onClose} />
         }
-        // disablePadding
       >
         {selectOptions.map((option) => (
           <LanguageDrawerListItem key={option.value} locale={option.value} onClick={() => onClick(option.value)} />

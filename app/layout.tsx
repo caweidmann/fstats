@@ -7,7 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
-import { LanguageProvider, Layout, ThemeProvider } from '@/components'
+import { LanguageProvider, Layout, PersistProvider, ThemeProvider } from '@/components'
 
 const SEO_TITLE = `fstats - Private Financial Statement Analyzer`
 const SEO_DESCRIPTION = `Analyze your bank statements safely. 100% private - all data stays on your device, nothing is uploaded. Works completely offline.`
@@ -45,9 +45,11 @@ const Component = ({ children }: LayoutProps) => {
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider>
             <InitColorSchemeScript attribute="class" />
-            <LanguageProvider>
-              <Layout>{children}</Layout>
-            </LanguageProvider>
+            <PersistProvider>
+              <LanguageProvider>
+                <Layout>{children}</Layout>
+              </LanguageProvider>
+            </PersistProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

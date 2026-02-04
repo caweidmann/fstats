@@ -3,13 +3,14 @@ import { useDropzone, type DropzoneOptions, type FileRejection } from 'react-dro
 
 import { MISC } from '@/common'
 import { indexedDBService } from '@/lib/storage/indexedDB'
+
 import { useFileParser, type FileParserType } from './useFileParser'
 
 export type UploadingFile = {
   id: string
   file: File
-  progress: number
   status: 'uploading' | 'complete' | 'error'
+  uploadedAt: number
   error?: string
   data?: unknown[]
 }
@@ -23,18 +24,10 @@ export type UseFileUploadOptions = {
 }
 
 export const useFileUpload = (options: UseFileUploadOptions = {}) => {
-  const {
-    maxSize = MISC.MAX_UPLOAD_FILE_SIZE,
-    accept,
-    multiple = true,
-    parserType = 'csv',
-    onUploadComplete,
-  } = options
+  const { maxSize = MISC.MAX_UPLOAD_FILE_SIZE, accept, multiple = true, parserType = 'csv', onUploadComplete } = options
 
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([])
-  const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([])
 
-  // Restore uploaded files from IndexedDB on mount
   useEffect(() => {
     const restoreFiles = async () => {
       try {
@@ -43,15 +36,14 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
 
         if (allFiles.length > 0) {
           const restoredFiles: UploadingFile[] = allFiles.map((fileData) => {
-            // Create a minimal File object for display purposes
-            const file = new File([], fileData.name, { type: 'text/csv' })
+            const file = new File([], fileData.name, { type: 'text/csv', lastModified: fileData.lastModified })
             Object.defineProperty(file, 'size', { value: fileData.size })
 
             return {
               id: fileData.id,
               file,
-              progress: fileData.status === 'error' ? 0 : 100,
               status: fileData.status,
+              uploadedAt: fileData.uploadedAt,
               data: fileData.data,
               error: fileData.error,
             }
@@ -69,20 +61,15 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
 
   const { parseFile } = useFileParser({
     parserType,
-    onProgress: (fileId, progress) => {
-      setUploadingFiles((prev) => prev.map((f) => (f.id === fileId ? { ...f, progress } : f)))
-    },
     onComplete: (fileId, data) => {
       setUploadingFiles((prev) => {
         const updated = prev.map((f) =>
-          f.id === fileId ? { ...f, progress: 100, status: 'complete' as const, data } : f,
+          f.id === fileId ? { ...f, status: 'complete' as const, data } : f,
         )
         const completedFile = updated.find((f) => f.id === fileId)
         if (completedFile && onUploadComplete) {
           onUploadComplete(completedFile)
         }
-
-        // File metadata is now stored in IndexedDB by useFileParser
         return updated
       })
     },
@@ -91,38 +78,51 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
         prev.map((f) => (f.id === fileId ? { ...f, status: 'error' as const, error: error.message } : f)),
       )
     },
-    storeInIndexedDB: true,
   })
 
   const onDrop = useCallback(
     async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-      setRejectedFiles(fileRejections)
+      const newFileNames = new Set(acceptedFiles.map((f) => f.name))
+      const duplicateIds: string[] = []
+
+      setUploadingFiles((prev) => {
+        const duplicates = prev.filter((f) => newFileNames.has(f.file.name))
+        duplicateIds.push(...duplicates.map((f) => f.id))
+        return prev.filter((f) => !newFileNames.has(f.file.name))
+      })
+
+      for (const id of duplicateIds) {
+        try {
+          await indexedDBService.deleteFile(id)
+        } catch (error) {
+          console.error('Failed to remove duplicate file from IndexedDB:', error)
+        }
+      }
 
       const newFiles: UploadingFile[] = acceptedFiles.map((file) => ({
         id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         file,
-        progress: 0,
         status: 'uploading',
+        uploadedAt: Date.now(),
       }))
 
-      // Add rejected files to the uploadingFiles array with error status
       const rejectedAsUploading: UploadingFile[] = fileRejections.map(({ file, errors }) => ({
         id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         file,
-        progress: 0,
         status: 'error' as const,
+        uploadedAt: Date.now(),
         error: errors.map((e) => e.message).join(', '),
       }))
 
       setUploadingFiles((prev) => [...prev, ...newFiles, ...rejectedAsUploading])
 
-      // Store rejected files in IndexedDB so they persist across navigation
       for (const rejectedFile of rejectedAsUploading) {
         try {
           await indexedDBService.storeFile(
             rejectedFile.id,
             rejectedFile.file.name,
             rejectedFile.file.size,
+            rejectedFile.file.lastModified,
             [],
             'error',
             rejectedFile.error,
@@ -139,8 +139,6 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
 
   const removeFile = useCallback(async (fileId: string) => {
     setUploadingFiles((prev) => prev.filter((f) => f.id !== fileId))
-
-    // Remove from IndexedDB
     try {
       await indexedDBService.deleteFile(fileId)
     } catch (error) {
@@ -148,15 +146,8 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
     }
   }, [])
 
-  const clearRejectedFiles = useCallback(() => {
-    setRejectedFiles([])
-  }, [])
-
   const clearAllFiles = useCallback(async () => {
     setUploadingFiles([])
-    setRejectedFiles([])
-
-    // Clear from IndexedDB
     try {
       await indexedDBService.clearAllFiles()
     } catch (error) {
@@ -176,9 +167,7 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
     getInputProps: dropzone.getInputProps,
     isDragActive: dropzone.isDragActive,
     uploadingFiles,
-    rejectedFiles,
     removeFile,
-    clearRejectedFiles,
     clearAllFiles,
   }
 }
