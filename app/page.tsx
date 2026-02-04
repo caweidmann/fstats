@@ -35,7 +35,7 @@ const Page = () => {
         </Typography>
 
         <Typography variant="body1" component="p" sx={sx.heroSubtitle}>
-          Drop your CSV files and get instant insights. All processing happens entirely on your device — no uploads, no
+          Add files locally and get instant insights. All processing happens entirely on your device — no uploads, no
           accounts, no tracking.
         </Typography>
 
