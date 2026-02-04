@@ -10,7 +10,7 @@ import { ui } from './styled'
 const Component = () => {
   const isMobile = useIsMobile()
   const theme = useTheme()
-  const sx = ui(theme)
+  const sx = ui(theme, isMobile)
   const { t } = useTranslation()
 
   return (
