@@ -1,3 +1,9 @@
+import { ColorMode, DateFormat, UserLocale } from '@/types-enums'
+
+export const CONFIG = {
+  ENABLE_CONSOLE_LOGGING: process.env.NODE_ENV === 'development',
+} as const
+
 export const MISC = {
   CENTER_DOT: '·',
   CENTER_DOT_XL: '•',
@@ -6,6 +12,16 @@ export const MISC = {
   GLASS_EFFECT: 0.8,
   MAX_UPLOAD_FILE_SIZE: 5 * 1024 * 1024,
   SUPPORTED_BANKS: ['FNB', 'Capitec', 'Comdirect', 'ING'],
+  SYSTEM_DATE_FORMAT: DateFormat.YMD_DASH,
+  DEFAULT_DATE_FORMAT: DateFormat.YMD_DASH,
+  DEFAULT_LOCALE: UserLocale.EN,
+  DEFAULT_COLOR_MODE: ColorMode.SYSTEM,
+  DEFAULT_PERSIST_DATA: false,
+  LS_LOCALE_KEY: 'fstats__locale',
+  LS_COLOR_MODE_KEY: 'fstats__color_mode',
+  LS_PERSIST_DATA_KEY: 'fstats__persist_data',
+  SS_SESSION_KEY: 'fstats__session',
+  SS_SELECTED_FILES_KEY: 'fstats__selected_files',
 } as const
 
 export const LAYOUT = {

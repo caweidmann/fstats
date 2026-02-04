@@ -19,22 +19,11 @@ import { useEffect, useRef, useState } from 'react'
 
 import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
-import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile } from '@/hooks'
+import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
+import { toDisplayDate } from '@/utils/Date'
 import { getSelectedFiles, setSelectedFiles as saveSelectedFiles } from '@/lib/storage'
 
 import { ui } from './styled'
-
-const formatDate = (date: Date | number) => {
-  const d = new Date(date)
-  return d.toLocaleString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  })
-}
 
 const Page = () => {
   const isMobile = useIsMobile()
@@ -45,6 +34,7 @@ const Page = () => {
   const [selectedFiles, setSelectedFiles] = useState<Set<string> | null>(null)
   const [showDetails, setShowDetails] = useState(false)
   const initialLoadDone = useRef(false)
+  const { locale } = useUserPreferences()
 
   const { getRootProps, getInputProps, isDragActive, uploadingFiles, removeFile, clearAllFiles } = useFileUpload({
     maxSize: MISC.MAX_UPLOAD_FILE_SIZE,
@@ -283,7 +273,7 @@ const Page = () => {
                         }}
                         sx={{ textTransform: 'none' }}
                       >
-                        Delete all
+                        Remove all
                       </Button>
                     </Stack>
                   )}
@@ -300,7 +290,9 @@ const Page = () => {
                             sx={sx.fileCard(isError)}
                             onClick={(e) => {
                               e.stopPropagation()
-                              !isError && toggleFileSelection(uploadFile.id)
+                              if (!isError) {
+                                toggleFileSelection(uploadFile.id)
+                              }
                             }}
                           >
                             <Stack direction="row" alignItems="center" spacing={1}>
@@ -319,7 +311,12 @@ const Page = () => {
                               )}
                               <Box sx={sx.fileContentBox}>
                                 <Stack direction="row" alignItems="center" spacing={1}>
-                                  <Typography variant="body2" fontWeight="medium" sx={sx.fileName}>
+                                  <Typography
+                                    variant="body2"
+                                    color={isError ? 'error' : 'text.primary'}
+                                    fontWeight="medium"
+                                    sx={sx.fileName}
+                                  >
                                     {uploadFile.file.name}
                                   </Typography>
                                   {isError && (
@@ -337,31 +334,35 @@ const Page = () => {
                                     {formatFileSize(uploadFile.file.size)}
                                   </Typography>
                                   <Typography variant="caption" color="text.secondary">
-                                    Uploaded {formatDate(uploadFile.uploadedAt)}
+                                    Uploaded{' '}
+                                    {toDisplayDate(new Date(uploadFile.uploadedAt), locale, {
+                                      formatTo: 'd MMM yyyy, HH:mm:ss',
+                                    })}
                                   </Typography>
-                                  {isError && uploadFile.error && (
-                                    <Tooltip title={uploadFile.error}>
-                                      <Typography
-                                        variant="caption"
-                                        color="error.main"
-                                        sx={{ cursor: 'help', textDecoration: 'underline dotted' }}
-                                      >
-                                        View error
+                                  {isError && uploadFile.error ? (
+                                    <>
+                                      <Typography variant="caption" color="text.secondary">
+                                        {MISC.CENTER_DOT}
                                       </Typography>
-                                    </Tooltip>
-                                  )}
+                                      <Typography variant="caption" color="error.main" sx={{ display: 'block' }}>
+                                        {uploadFile.error}
+                                      </Typography>
+                                    </>
+                                  ) : null}
                                 </Stack>
                               </Box>
-                              <IconButton
-                                size="small"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  removeFile(uploadFile.id)
-                                }}
-                                sx={sx.deleteButton}
-                              >
-                                <DeleteOutlined fontSize="small" />
-                              </IconButton>
+                              <Tooltip title="Remove file">
+                                <IconButton
+                                  color={isError ? 'error' : 'secondary'}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    removeFile(uploadFile.id)
+                                  }}
+                                  sx={sx.deleteButton}
+                                >
+                                  <DeleteOutlined sx={{ fontSize: 20 }} />
+                                </IconButton>
+                              </Tooltip>
                             </Stack>
                           </Box>
                         )
@@ -382,7 +383,7 @@ const Page = () => {
                 size="large"
                 onMouseEnter={() => router.prefetch(ROUTES.STATS)}
                 onClick={handleContinue}
-                sx={{ minWidth: 200, py: 1.5, borderRadius: 1.75 }}
+                sx={sx.ctaButton}
                 disabled={!canContinue}
               >
                 Continue with {effectiveSelectedFiles.size} {effectiveSelectedFiles.size === 1 ? 'file' : 'files'}

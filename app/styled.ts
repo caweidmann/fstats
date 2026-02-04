@@ -6,9 +6,9 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
   return {
     hero: {
       display: 'flex',
-      flexDirection: 'column' as const,
+      flexDirection: 'column',
       alignItems: 'center',
-      textAlign: 'center' as const,
+      textAlign: 'center',
       pt: isMobile ? 2 : 6,
       pb: isMobile ? 2 : 4,
     },
@@ -38,7 +38,7 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
       px: 5,
       fontSize: 17,
       fontWeight: 600,
-      borderRadius: 3,
+      borderRadius: 100,
     },
 
     trustSection: {
@@ -50,10 +50,10 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
       borderRadius: 2,
       border: `1px solid ${isDarkMode ? 'rgba(0,188,212,0.18)' : 'rgba(0,96,100,0.15)'}`,
       backgroundColor: isDarkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,96,100,0.04)',
-      textAlign: 'center' as const,
+      textAlign: 'center',
       height: '100%',
       display: 'flex',
-      flexDirection: 'column' as const,
+      flexDirection: 'column',
       alignItems: 'center',
     },
 
@@ -77,17 +77,18 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
 
     section: {
       mt: isMobile ? 5 : 7,
+      textAlign: 'center',
     },
 
     sectionTitle: {
-      textAlign: 'center' as const,
+      textAlign: 'center',
       fontWeight: 700,
       mt: 12,
       mb: isMobile ? 3 : 5,
     },
 
     stepCard: {
-      textAlign: 'center' as const,
+      textAlign: 'center',
     },
 
     stepBadge: {
@@ -132,7 +133,7 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
 
     bankGrid: {
       display: 'flex',
-      flexWrap: 'wrap' as const,
+      flexWrap: 'wrap',
       gap: 1.5,
       justifyContent: 'center',
     },

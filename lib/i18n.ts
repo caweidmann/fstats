@@ -3,6 +3,7 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next, Trans, useTranslation } from 'react-i18next'
 
 import { UserLocale } from '@/types-enums'
+import { MISC } from '@/common'
 import en from '@/public/locales/en.json'
 
 const resources = {
@@ -15,7 +16,7 @@ export const initTranslations = () => {
     .use(LanguageDetector)
     .init({
       resources,
-      fallbackLng: UserLocale.EN,
+      fallbackLng: MISC.DEFAULT_LOCALE,
       detection: {
         order: ['localStorage'],
         caches: ['localStorage'],

@@ -1,9 +1,8 @@
 import localforage from 'localforage'
 
-import { readSetting } from './settings'
+import { MISC } from '@/common'
+import { getLocalUserPreferences } from '@/utils/LocalStorage'
 
-const SESSION_KEY = 'fstats-session'
-const SELECTED_FILES_KEY = 'selected-files'
 const FILES_PREFIX = 'file_'
 
 const store = localforage.createInstance({
@@ -28,11 +27,12 @@ export interface FileData {
 let initPromise: Promise<void> | null = null
 
 const doInit = async () => {
-  if (!readSetting('persist') && !sessionStorage.getItem(SESSION_KEY)) {
+  const { persistData } = getLocalUserPreferences()
+  if (!persistData && !sessionStorage.getItem(MISC.SS_SESSION_KEY)) {
     await clearAllFiles()
-    await store.removeItem(SELECTED_FILES_KEY)
+    await store.removeItem(MISC.SS_SELECTED_FILES_KEY)
   }
-  sessionStorage.setItem(SESSION_KEY, 'true')
+  sessionStorage.setItem(MISC.SS_SESSION_KEY, 'true')
 }
 
 export const initStorage = (): Promise<void> => {
@@ -72,10 +72,10 @@ export const clearAllFiles = async (): Promise<void> => {
 
 export const setSelectedFiles = async (fileIds: string[] | null): Promise<void> => {
   await initStorage()
-  await store.setItem(SELECTED_FILES_KEY, fileIds)
+  await store.setItem(MISC.SS_SELECTED_FILES_KEY, fileIds)
 }
 
 export const getSelectedFiles = async (): Promise<string[] | null> => {
   await initStorage()
-  return store.getItem<string[] | null>(SELECTED_FILES_KEY)
+  return store.getItem<string[] | null>(MISC.SS_SELECTED_FILES_KEY)
 }
