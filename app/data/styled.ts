@@ -65,7 +65,6 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
 
     fileCard: (isError: boolean) => ({
       py: 0.5,
-      opacity: isError ? 0.7 : 1,
       cursor: isError ? 'default' : 'pointer',
       borderRadius: 1.25,
       WebkitTapHighlightColor: 'transparent',

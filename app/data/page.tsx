@@ -312,7 +312,12 @@ const Page = () => {
                               )}
                               <Box sx={sx.fileContentBox}>
                                 <Stack direction="row" alignItems="center" spacing={1}>
-                                  <Typography variant="body2" fontWeight="medium" sx={sx.fileName}>
+                                  <Typography
+                                    variant="body2"
+                                    color={isError ? 'error' : 'text.primary'}
+                                    fontWeight="medium"
+                                    sx={sx.fileName}
+                                  >
                                     {uploadFile.file.name}
                                   </Typography>
                                   {isError && (
@@ -335,22 +340,21 @@ const Page = () => {
                                       formatTo: 'd MMM yyyy, HH:mm:ss',
                                     })}
                                   </Typography>
-                                  {isError && uploadFile.error && (
-                                    <Tooltip title={uploadFile.error}>
-                                      <Typography
-                                        variant="caption"
-                                        color="error.main"
-                                        sx={{ cursor: 'help', textDecoration: 'underline dotted' }}
-                                      >
-                                        View error
+                                  {isError && uploadFile.error ? (
+                                    <>
+                                      <Typography variant="caption" color="text.secondary">
+                                        {MISC.CENTER_DOT}
                                       </Typography>
-                                    </Tooltip>
-                                  )}
+                                      <Typography variant="caption" color="error.main" sx={{ display: 'block' }}>
+                                        {uploadFile.error}
+                                      </Typography>
+                                    </>
+                                  ) : null}
                                 </Stack>
                               </Box>
                               <Tooltip title="Remove file">
                                 <IconButton
-                                  // size="small"
+                                  color={isError ? 'error' : 'text.secondary'}
                                   onClick={(e) => {
                                     e.stopPropagation()
                                     removeFile(uploadFile.id)
