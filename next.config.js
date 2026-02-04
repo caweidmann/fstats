@@ -2,7 +2,7 @@ const withSerwist = require('@serwist/next').default({
   swSrc: 'app/sw.ts',
   swDest: 'public/sw.js',
   cacheOnNavigation: true,
-  reloadOnOnline: true,
+  reloadOnOnline: false,
   disable: process.env.NODE_ENV === 'development',
 })
 

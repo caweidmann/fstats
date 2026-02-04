@@ -17,10 +17,6 @@ const Page = () => {
   const sx = ui(theme, isMobile, isDarkMode)
   const router = useRouter()
 
-  const handleClick = () => {
-    router.push(ROUTES.DATA)
-  }
-
   return (
     <PageWrapper>
       <Grid container spacing={2}>
@@ -72,7 +68,13 @@ const Page = () => {
 
         <Grid size={12}>
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-            <Button variant="contained" size="large" onClick={handleClick} sx={{ minWidth: 200, py: 1.5 }}>
+            <Button
+              variant="contained"
+              size="large"
+              onMouseEnter={() => router.prefetch(ROUTES.DATA)}
+              onClick={() => router.push(ROUTES.DATA)}
+              sx={{ minWidth: 200, py: 1.5 }}
+            >
               Get started
             </Button>
           </Box>

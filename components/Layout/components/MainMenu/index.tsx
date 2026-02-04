@@ -1,6 +1,7 @@
 import { HomeOutlined, HomeRounded, Menu } from '@mui/icons-material'
 import { Box, Container, Divider, IconButton, Tooltip, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { LAYOUT, ROUTES } from '@/common'
@@ -42,18 +43,19 @@ const Component = ({ onMenuClick }: MainMenuProps) => {
             ) : (
               <>
                 <Tooltip title={t('NAVIGATION.HOME')}>
-                  <IconButton
-                    size="small"
-                    href={ROUTES.HOME}
-                    color={pathname === ROUTES.HOME ? 'primary' : 'secondary'}
-                    sx={sx.homeButton(pathname === ROUTES.HOME)}
-                  >
-                    {pathname === ROUTES.HOME ? (
-                      <HomeRounded sx={{ fontSize: 18 }} />
-                    ) : (
-                      <HomeOutlined sx={{ fontSize: 18 }} />
-                    )}
-                  </IconButton>
+                  <Link href={ROUTES.HOME}>
+                    <IconButton
+                      size="small"
+                      color={pathname === ROUTES.HOME ? 'primary' : 'secondary'}
+                      sx={sx.homeButton(pathname === ROUTES.HOME)}
+                    >
+                      {pathname === ROUTES.HOME ? (
+                        <HomeRounded sx={{ fontSize: 18 }} />
+                      ) : (
+                        <HomeOutlined sx={{ fontSize: 18 }} />
+                      )}
+                    </IconButton>
+                  </Link>
                 </Tooltip>
                 <MainMenuNavButton route={ROUTES.DATA} isActive={pathname === ROUTES.DATA}>
                   {t('NAVIGATION.DATA')}
