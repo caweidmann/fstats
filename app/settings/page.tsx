@@ -2,9 +2,9 @@
 
 import { Box, FormControlLabel, Grid, Switch, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { useState } from 'react'
 
 import { PageWrapper } from '@/components'
+import { usePersist } from '@/components/PersistProvider'
 import { useIsDarkMode, useIsMobile } from '@/hooks'
 
 import { ui } from './styled'
@@ -14,17 +14,10 @@ const Page = () => {
   const isDarkMode = useIsDarkMode()
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
-  const [persistData, setPersistData] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('persist-data') === 'true'
-    }
-    return false
-  })
+  const { persistEnabled, setPersistEnabled, isInitialized } = usePersist()
 
   const handlePersistToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.checked
-    setPersistData(newValue)
-    localStorage.setItem('persist-data', String(newValue))
+    setPersistEnabled(event.target.checked)
   }
 
   return (
@@ -32,16 +25,17 @@ const Page = () => {
       <Grid container spacing={2}>
         <Grid size={12}>
           <FormControlLabel
-            control={<Switch checked={persistData} onChange={handlePersistToggle} />}
+            disabled={!isInitialized}
+            control={<Switch checked={persistEnabled} onChange={handlePersistToggle} />}
             label={
               <Box>
                 <Typography variant="body2" fontWeight="medium" sx={{ mb: 0 }}>
                   Persist data
                 </Typography>
-                <Typography variant="caption" color={persistData ? 'warning' : 'text.secondary'}>
-                  {persistData
+                <Typography variant="caption" color={persistEnabled ? 'warning' : 'text.secondary'}>
+                  {persistEnabled
                     ? 'Files will be kept in your browser storage across sessions until manually deleted'
-                    : 'Files will be automatically cleared when you refresh or close the tab'}
+                    : 'Files will be automatically cleared when you close the tab or app'}
                 </Typography>
               </Box>
             }

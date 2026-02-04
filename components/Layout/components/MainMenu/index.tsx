@@ -1,4 +1,4 @@
-import { HomeOutlined, HomeRounded, Menu, SettingsOutlined } from '@mui/icons-material'
+import { HomeOutlined, HomeRounded, Menu } from '@mui/icons-material'
 import { Box, Container, Divider, IconButton, Tooltip, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { usePathname } from 'next/navigation'
@@ -61,11 +61,7 @@ const Component = ({ onMenuClick }: MainMenuProps) => {
                 <MainMenuNavButton route={ROUTES.STATS} isActive={pathname === ROUTES.STATS}>
                   {t('NAVIGATION.STATS')}
                 </MainMenuNavButton>
-                <MainMenuNavButton
-                  route={ROUTES.SETTINGS}
-                  isActive={pathname === ROUTES.SETTINGS}
-                  // icon={<SettingsOutlined />}
-                >
+                <MainMenuNavButton route={ROUTES.SETTINGS} isActive={pathname === ROUTES.SETTINGS}>
                   {t('NAVIGATION.SETTINGS')}
                 </MainMenuNavButton>
               </>

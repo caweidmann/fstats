@@ -12,11 +12,3 @@ export const Color = {
   selectionGrey: '#6d778c',
   darkGrey: '#505050',
 }
-
-// Dark background (#2a2e36 → #1f2128)
-// "f" in dark teal (#006064), "stats" in bright cyan (#00bcd4)
-
-// Light Mode (second artifact):
-
-// Light background (white → #f0f4f8)
-// Colors inverted: "f" in bright cyan (#00bcd4), "stats" in dark teal (#006064)
