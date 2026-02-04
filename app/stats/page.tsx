@@ -230,7 +230,7 @@ const StatsPage = () => {
             component="p"
             sx={{ color: 'text.secondary', maxWidth: 440, fontSize: isMobile ? 15 : 17, lineHeight: 1.7, mb: 4 }}
           >
-            Upload some files and then come back to view your stats.
+            Upload files and then come back to view your stats.
           </Typography>
           <Button
             variant="contained"
