@@ -21,7 +21,7 @@ export const ui = (theme: Theme, isDarkMode: boolean, isMobile: boolean) => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      height: LAYOUT.NAV_HEIGHT,
+      height: isMobile ? LAYOUT.NAV_HEIGHT_MOBILE : LAYOUT.NAV_HEIGHT,
     },
 
     menu: {
@@ -48,7 +48,7 @@ export const ui = (theme: Theme, isDarkMode: boolean, isMobile: boolean) => {
 
     divider: {
       position: 'sticky',
-      top: LAYOUT.NAV_HEIGHT + LAYOUT.NAV_BORDER,
+      top: (isMobile ? LAYOUT.NAV_HEIGHT_MOBILE : LAYOUT.NAV_HEIGHT) + LAYOUT.NAV_BORDER,
       borderWidthBottom: LAYOUT.NAV_BORDER,
     },
   }
