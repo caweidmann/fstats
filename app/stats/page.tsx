@@ -25,7 +25,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
-import { indexedDBService } from '@/lib/storage/indexedDB'
+import { getAllFiles, getSelectedFiles } from '@/lib/storage'
 
 interface FileData {
   id: string
@@ -163,11 +163,7 @@ const StatsPage = () => {
   useEffect(() => {
     const loadFiles = async () => {
       try {
-        await indexedDBService.init()
-        const [allFiles, selectedFileIds] = await Promise.all([
-          indexedDBService.getAllFiles(),
-          indexedDBService.getSelectedFiles(),
-        ])
+        const [allFiles, selectedFileIds] = await Promise.all([getAllFiles(), getSelectedFiles()])
 
         if (allFiles.length === 0) {
           setLoading(false)
@@ -195,10 +191,6 @@ const StatsPage = () => {
     loadFiles()
   }, [])
 
-  const handleBack = () => {
-    router.push(ROUTES.DATA)
-  }
-
   if (loading) {
     return (
       <PageWrapper>
@@ -212,7 +204,12 @@ const StatsPage = () => {
       <PageWrapper>
         <Stack spacing={2}>
           <Alert severity="info">No files found. Please upload CSV files first.</Alert>
-          <Button variant="contained" startIcon={<ArrowBack />} onClick={handleBack}>
+          <Button
+            variant="contained"
+            startIcon={<ArrowBack />}
+            onMouseEnter={() => router.prefetch(ROUTES.DATA)}
+            onClick={() => router.push(ROUTES.DATA)}
+          >
             Back to Upload
           </Button>
         </Stack>
@@ -225,7 +222,12 @@ const StatsPage = () => {
       <Stack spacing={3}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h4">CSV Statistics</Typography>
-          <Button variant="outlined" startIcon={<ArrowBack />} onClick={handleBack}>
+          <Button
+            variant="outlined"
+            startIcon={<ArrowBack />}
+            onMouseEnter={() => router.prefetch(ROUTES.DATA)}
+            onClick={() => router.push(ROUTES.DATA)}
+          >
             Back
           </Button>
         </Box>

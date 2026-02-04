@@ -25,6 +25,7 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
       borderRadius: 2,
       padding: theme.spacing(2.5),
       backgroundColor: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+      WebkitTapHighlightColor: 'transparent',
     },
 
     detailsCard: {
@@ -45,6 +46,8 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
       cursor: 'pointer',
       transition: 'all 0.2s ease-in-out',
       backgroundColor: isDragActive ? theme.vars.palette.action.selected : 'transparent',
+      WebkitTapHighlightColor: 'transparent',
+
       '&:hover': {
         backgroundColor: theme.vars.palette.action.hover,
         borderColor: theme.vars.palette.primary.light,

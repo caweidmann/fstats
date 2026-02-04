@@ -15,12 +15,12 @@ import {
 import { Box, Button, Checkbox, Chip, Grid, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile } from '@/hooks'
-import { indexedDBService } from '@/lib/storage/indexedDB'
+import { getSelectedFiles, setSelectedFiles as saveSelectedFiles } from '@/lib/storage'
 
 import { ui } from './styled'
 
@@ -44,6 +44,7 @@ const Page = () => {
   const router = useRouter()
   const [selectedFiles, setSelectedFiles] = useState<Set<string> | null>(null)
   const [showDetails, setShowDetails] = useState(false)
+  const initialLoadDone = useRef(false)
 
   const { getRootProps, getInputProps, isDragActive, uploadingFiles, removeFile, clearAllFiles } = useFileUpload({
     maxSize: MISC.MAX_UPLOAD_FILE_SIZE,
@@ -72,23 +73,18 @@ const Page = () => {
 
   useEffect(() => {
     const loadSelectedFiles = async () => {
-      const saved = await indexedDBService.getSelectedFiles()
+      const saved = await getSelectedFiles()
       if (saved !== null) {
         setSelectedFiles(new Set(saved))
       }
+      initialLoadDone.current = true
     }
     loadSelectedFiles()
   }, [])
 
   useEffect(() => {
-    const saveSelectedFiles = async () => {
-      if (selectedFiles === null) {
-        await indexedDBService.setSelectedFiles(null)
-      } else {
-        await indexedDBService.setSelectedFiles(Array.from(selectedFiles))
-      }
-    }
-    saveSelectedFiles()
+    if (!initialLoadDone.current) return
+    saveSelectedFiles(selectedFiles === null ? null : Array.from(selectedFiles))
   }, [selectedFiles])
 
   const handleDeleteAll = () => {
@@ -97,7 +93,7 @@ const Page = () => {
   }
 
   const handleContinue = async () => {
-    await indexedDBService.setSelectedFiles(Array.from(effectiveSelectedFiles))
+    await saveSelectedFiles(Array.from(effectiveSelectedFiles))
     router.push(ROUTES.STATS)
   }
 
@@ -388,6 +384,7 @@ const Page = () => {
               <Button
                 variant="contained"
                 size="large"
+                onMouseEnter={() => router.prefetch(ROUTES.STATS)}
                 onClick={handleContinue}
                 sx={{ minWidth: 200, py: 1.5 }}
                 disabled={!canContinue}
