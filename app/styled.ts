@@ -82,7 +82,8 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
     sectionTitle: {
       textAlign: 'center' as const,
       fontWeight: 700,
-      mb: isMobile ? 2 : 3,
+      mt: 12,
+      mb: isMobile ? 3 : 5,
     },
 
     stepCard: {
@@ -97,7 +98,8 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
       alignItems: 'center',
       justifyContent: 'center',
       mx: 'auto',
-      mb: 1.5,
+      // mb: 1.5,
+      mb: 4,
       background: isDarkMode
         ? 'linear-gradient(135deg, rgba(0,188,212,0.25), rgba(0,96,100,0.2))'
         : 'linear-gradient(135deg, rgba(0,188,212,0.18), rgba(0,96,100,0.12))',
