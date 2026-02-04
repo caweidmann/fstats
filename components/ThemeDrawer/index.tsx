@@ -5,6 +5,7 @@ import { useColorScheme } from '@mui/material/styles'
 
 import { ColorMode } from '@/types-enums'
 import { SwipeableDrawerSubheader } from '@/components'
+import { useUserPreferences } from '@/hooks'
 import { useTranslation } from '@/lib/i18n'
 
 import { ThemeDrawerListItem } from './components'
@@ -22,9 +23,11 @@ const Component = ({ onOptionSelected, onClose }: ThemeDrawerProps) => {
   const { t } = useTranslation()
   const { setMode } = useColorScheme()
   const selectOptions = getThemeSelectOptions()
+  const { set } = useUserPreferences()
 
   const onClick = (mode: ColorMode) => {
     setMode(mode)
+    set('colorMode', mode)
     onOptionSelected()
   }
 

@@ -5,6 +5,15 @@ import { trispace } from '@/styles/fonts'
 
 export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
   return {
+    ctaButton: {
+      minWidth: 200,
+      py: 1.5,
+      px: 5,
+      fontSize: 17,
+      fontWeight: 600,
+      borderRadius: 100,
+    },
+
     button: {
       borderRadius: 1.5,
     },
@@ -56,7 +65,6 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
 
     fileCard: (isError: boolean) => ({
       py: 0.5,
-      opacity: isError ? 0.7 : 1,
       cursor: isError ? 'default' : 'pointer',
       borderRadius: 1.25,
       WebkitTapHighlightColor: 'transparent',

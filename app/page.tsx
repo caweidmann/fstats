@@ -1,6 +1,5 @@
 'use client'
 
-import { CloudOff, Lock, PersonOff } from '@mui/icons-material'
 import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
@@ -9,43 +8,8 @@ import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useIsDarkMode, useIsMobile } from '@/hooks'
 
+import { CARD_ITEMS, STEPS } from './actions'
 import { ui } from './styled'
-
-const TRUST_ITEMS = [
-  {
-    Icon: Lock,
-    title: '100% on-device',
-    description: 'All parsing and storage happens in your browser. Your data never touches a server.',
-  },
-  {
-    Icon: CloudOff,
-    title: 'Works offline',
-    description: 'Once loaded, the app works with no internet connection at all.',
-  },
-  {
-    Icon: PersonOff,
-    title: 'No account needed',
-    description: 'No sign-up, no login, no cloud sync. Everything stays local.',
-  },
-]
-
-const STEPS = [
-  {
-    number: 1,
-    title: 'Drop your CSVs',
-    description: 'Drag & drop or browse for your bank statement files.',
-  },
-  {
-    number: 2,
-    title: 'Parsed instantly',
-    description: 'Files are automatically parsed on your device.',
-  },
-  {
-    number: 3,
-    title: 'View your stats',
-    description: 'Browse paginated tables of your transaction data.',
-  },
-]
 
 const Page = () => {
   const isMobile = useIsMobile()
@@ -87,7 +51,7 @@ const Page = () => {
       </Box>
 
       <Grid container spacing={isMobile ? 2 : 3} sx={sx.trustSection}>
-        {TRUST_ITEMS.map(({ Icon, title, description }) => (
+        {CARD_ITEMS.map(({ Icon, title, description }) => (
           <Grid size={isMobile ? 12 : 4} key={title}>
             <Box sx={sx.trustCard}>
               <Icon sx={sx.trustIcon} />
@@ -106,11 +70,12 @@ const Page = () => {
         <Typography variant="h5" sx={sx.sectionTitle}>
           How it works
         </Typography>
-        <Grid container spacing={isMobile ? 3 : 4}>
-          {STEPS.map(({ number, title, description }) => (
-            <Grid size={isMobile ? 12 : 4} key={number}>
+
+        <Grid container spacing={isMobile ? 3 : 4} sx={{ mb: 6 }}>
+          {STEPS.map(({ step, title, description }) => (
+            <Grid size={isMobile ? 12 : 4} key={step}>
               <Box sx={sx.stepCard}>
-                <Box sx={sx.stepBadge}>{number}</Box>
+                <Box sx={sx.stepBadge}>{step}</Box>
                 <Typography variant="h6" sx={sx.stepTitle}>
                   {title}
                 </Typography>
@@ -121,6 +86,16 @@ const Page = () => {
             </Grid>
           ))}
         </Grid>
+
+        <Button
+          variant="contained"
+          size="large"
+          sx={sx.ctaButton}
+          onMouseEnter={() => router.prefetch(ROUTES.DATA)}
+          onClick={() => router.push(ROUTES.DATA)}
+        >
+          Get started now
+        </Button>
       </Box>
 
       <Box sx={sx.banksSection}>

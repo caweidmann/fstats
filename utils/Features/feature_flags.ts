@@ -1,4 +1,4 @@
-import { FeatureFlags } from '@/types'
+import type { FeatureFlags } from '@/types'
 
 export const FEATURES: FeatureFlags = {
   wip: false,
