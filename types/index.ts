@@ -10,6 +10,10 @@ export type UserPreferences = {
   persistData: boolean
 }
 
+export type LocalSettings = {
+  selectedFileIds: string[]
+}
+
 export type DateFnsLocale = Locale
 
 export type FeatureFlags = Record<string, boolean>

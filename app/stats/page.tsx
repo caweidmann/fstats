@@ -24,9 +24,9 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
-import { useIsDarkMode, useIsMobile } from '@/hooks'
+import { useIsDarkMode, useIsMobile, useLocalSettings } from '@/hooks'
 import { Color } from '@/styles/colors'
-import { getAllFiles, getSelectedFiles } from '@/lib/storage'
+import { getAllFiles } from '@/lib/storage'
 
 interface FileData {
   id: string
@@ -160,21 +160,21 @@ const StatsPage = () => {
   const router = useRouter()
   const isMobile = useIsMobile()
   const isDarkMode = useIsDarkMode()
+  const { selectedFileIds } = useLocalSettings()
   const [filesData, setFilesData] = useState<FileData[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const loadFiles = async () => {
       try {
-        const [allFiles, selectedFileIds] = await Promise.all([getAllFiles(), getSelectedFiles()])
+        const allFiles = await getAllFiles()
 
         if (allFiles.length === 0) {
           setLoading(false)
           return
         }
 
-        const selectedSet = selectedFileIds ? new Set(selectedFileIds) : null
-        const filteredFiles = selectedSet ? allFiles.filter((f) => selectedSet.has(f.id)) : allFiles
+        const filteredFiles = allFiles.filter((f) => selectedFileIds.includes(f.id))
 
         const allFilesData: FileData[] = filteredFiles.map((fileData) => ({
           id: fileData.id,
@@ -192,7 +192,7 @@ const StatsPage = () => {
     }
 
     loadFiles()
-  }, [])
+  }, [selectedFileIds])
 
   if (loading) {
     return (
