@@ -1,6 +1,7 @@
 'use client'
 
-import { Alert, Box, Button, Card, Grid, Typography } from '@mui/material'
+import { CloudOff, Lock, PersonOff } from '@mui/icons-material'
+import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 
@@ -9,6 +10,42 @@ import { PageWrapper } from '@/components'
 import { useIsDarkMode, useIsMobile } from '@/hooks'
 
 import { ui } from './styled'
+
+const TRUST_ITEMS = [
+  {
+    Icon: Lock,
+    title: '100% on-device',
+    description: 'All parsing and storage happens in your browser. Your data never touches a server.',
+  },
+  {
+    Icon: CloudOff,
+    title: 'Works offline',
+    description: 'Once loaded, the app works with no internet connection at all.',
+  },
+  {
+    Icon: PersonOff,
+    title: 'No account needed',
+    description: 'No sign-up, no login, no cloud sync. Everything stays local.',
+  },
+]
+
+const STEPS = [
+  {
+    number: 1,
+    title: 'Drop your CSVs',
+    description: 'Drag & drop or browse for your bank statement files.',
+  },
+  {
+    number: 2,
+    title: 'Parsed instantly',
+    description: 'Files are automatically parsed on your device.',
+  },
+  {
+    number: 3,
+    title: 'View your stats',
+    description: 'Browse paginated tables of your transaction data.',
+  },
+]
 
 const Page = () => {
   const isMobile = useIsMobile()
@@ -19,67 +56,83 @@ const Page = () => {
 
   return (
     <PageWrapper>
-      <Grid container spacing={2}>
-        <Grid size={12}>
-          <Typography variant="h4" gutterBottom>
-            Private Bank Statement Analyzer
-          </Typography>
-          <Typography variant="body1" color="text.secondary" gutterBottom>
-            Process your financial CSVs safely - all data stays on your device, nothing is uploaded to any server.
-          </Typography>
-        </Grid>
+      <Box sx={sx.hero}>
+        <img
+          src={isDarkMode ? '/img/logo-dark.svg' : '/img/logo.svg'}
+          alt="fstats"
+          style={{ width: isMobile ? 96 : 128, height: 'auto', marginBottom: 24 }}
+        />
 
-        <Grid size={12}>
-          <Alert severity="info">
-            <Typography variant="body2" fontWeight="bold" gutterBottom>
-              🔒 100% Private & Secure
-            </Typography>
-            <Typography variant="body2" component="div">
-              {MISC.CENTER_DOT_XL} Your files <strong>never leave your device</strong> - all processing happens in your
-              browser
-              <br />
-              {MISC.CENTER_DOT_XL} No servers, no cloud storage, no remote databases
-              <br />
-              {MISC.CENTER_DOT_XL} This app works completely offline - you can disconnect from the internet right now
-            </Typography>
-
-            <Box>
-              <Typography variant="body2" fontWeight="bold" gutterBottom>
-                Currently supported banks:
-              </Typography>
-
-              <Grid container spacing={2}>
-                <Grid size={3}>
-                  <Card>FNB</Card>
-                </Grid>
-                <Grid size={3}>
-                  <Card>Capitec</Card>
-                </Grid>
-                <Grid size={3}>
-                  <Card>Comdirect</Card>
-                </Grid>
-                <Grid size={3}>
-                  <Card>ING</Card>
-                </Grid>
-              </Grid>
-            </Box>
-          </Alert>
-        </Grid>
-
-        <Grid size={12}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-            <Button
-              variant="contained"
-              size="large"
-              onMouseEnter={() => router.prefetch(ROUTES.DATA)}
-              onClick={() => router.push(ROUTES.DATA)}
-              sx={{ minWidth: 200, py: 1.5 }}
-            >
-              Get started
-            </Button>
+        <Typography variant="h1" sx={sx.heroTitle}>
+          Analyse bank statements{' '}
+          <Box component="span" sx={sx.heroTitleAccent}>
+            privately
           </Box>
-        </Grid>
+        </Typography>
+
+        <Typography variant="body1" component="p" sx={sx.heroSubtitle}>
+          Drop your CSV files and get instant insights. All processing happens entirely on your device — no uploads, no
+          accounts, no tracking.
+        </Typography>
+
+        <Button
+          variant="contained"
+          size="large"
+          sx={sx.ctaButton}
+          onMouseEnter={() => router.prefetch(ROUTES.DATA)}
+          onClick={() => router.push(ROUTES.DATA)}
+        >
+          Get started
+        </Button>
+      </Box>
+
+      <Grid container spacing={isMobile ? 2 : 3} sx={sx.trustSection}>
+        {TRUST_ITEMS.map(({ Icon, title, description }) => (
+          <Grid size={isMobile ? 12 : 4} key={title}>
+            <Box sx={sx.trustCard}>
+              <Icon sx={sx.trustIcon} />
+              <Typography variant="h6" sx={sx.trustTitle}>
+                {title}
+              </Typography>
+              <Typography variant="body2" sx={sx.trustDescription}>
+                {description}
+              </Typography>
+            </Box>
+          </Grid>
+        ))}
       </Grid>
+
+      <Box sx={sx.section}>
+        <Typography variant="h5" sx={sx.sectionTitle}>
+          How it works
+        </Typography>
+        <Grid container spacing={isMobile ? 3 : 4}>
+          {STEPS.map(({ number, title, description }) => (
+            <Grid size={isMobile ? 12 : 4} key={number}>
+              <Box sx={sx.stepCard}>
+                <Box sx={sx.stepBadge}>{number}</Box>
+                <Typography variant="h6" sx={sx.stepTitle}>
+                  {title}
+                </Typography>
+                <Typography variant="body2" sx={sx.stepDescription}>
+                  {description}
+                </Typography>
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+
+      <Box sx={sx.banksSection}>
+        <Typography variant="h6" sx={sx.sectionTitle}>
+          Supported banks
+        </Typography>
+        <Box sx={sx.bankGrid}>
+          {MISC.SUPPORTED_BANKS.map((bank) => (
+            <Chip key={bank} label={bank} sx={sx.bankChip} />
+          ))}
+        </Box>
+      </Box>
     </PageWrapper>
   )
 }

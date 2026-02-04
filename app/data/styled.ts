@@ -20,20 +20,20 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
       opacity: 0.7,
     },
 
-    summaryCard: {
-      border: `1px solid ${isDarkMode ? blueGrey[700] : grey[300]}`,
-      borderRadius: 2,
-      padding: theme.spacing(2.5),
-      backgroundColor: isDarkMode ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
-      WebkitTapHighlightColor: 'transparent',
-    },
+    summaryCard: () => {
+      const backgroundColor = isDarkMode ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'
 
-    detailsCard: {
-      border: `1px solid ${isDarkMode ? blueGrey[700] : grey[300]}`,
-      borderTop: 'none',
-      borderRadius: '0 0 8px 8px',
-      padding: theme.spacing(2),
-      backgroundColor: isDarkMode ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.01)',
+      return {
+        border: `1px solid ${isDarkMode ? blueGrey[700] : grey[300]}`,
+        borderRadius: 2,
+        padding: theme.spacing(2.5),
+        backgroundColor,
+        WebkitTapHighlightColor: 'transparent',
+
+        '&:active': {
+          backgroundColor: isMobile ? theme.vars.palette.action.selected : backgroundColor,
+        },
+      }
     },
 
     dropZone: (isDragActive: boolean) => ({
@@ -54,26 +54,13 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
       },
     }),
 
-    fileCard: (status: 'uploading' | 'complete' | 'error') => ({
-      border: `1px solid ${
-        status === 'complete'
-          ? theme.vars.palette.success.main
-          : status === 'error'
-            ? theme.vars.palette.error.main
-            : isDarkMode
-              ? blueGrey[700]
-              : grey[300]
-      }`,
-      borderRadius: 1.5,
-      padding: theme.spacing(1, 1.5),
-      backgroundColor: isDarkMode ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.01)',
-      transition: 'all 0.2s ease-in-out',
+    fileCard: (isError: boolean) => ({
+      py: 0.5,
+      opacity: isError ? 0.7 : 1,
+      cursor: isError ? 'default' : 'pointer',
+      borderRadius: 1.25,
+      WebkitTapHighlightColor: 'transparent',
     }),
-
-    fileIcon: {
-      color: 'primary.main',
-      fontSize: 20,
-    },
 
     fileContentBox: {
       flexGrow: 1,

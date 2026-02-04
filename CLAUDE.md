@@ -177,6 +177,7 @@ Translation files live in `public/locales/{locale}.json`. Only `en` is wired up.
   third-party → `@/types` → `@/types-enums` → `@/common` → `@/components` → `@/hooks` → `@/styles` → `@/utils` → `@/lib` → relative paths.
 - Path alias: `@/*` resolves to the project root.
 - Components must be arrow functions (ESLint rule).
+- **British English** for all client-facing copy (labels, descriptions, button text, error messages). American English is fine in variable names, comments, and code.
 - Commit messages use conventional commits: `feat:`, `fix:`, `chore:`, `style:`, `refactor:`.
 
 ## CI / Deployment

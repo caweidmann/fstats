@@ -213,7 +213,7 @@ const Page = () => {
           <Grid size={12}>
             <Box
               sx={{
-                ...sx.summaryCard,
+                ...sx.summaryCard(),
                 cursor: uploadingInProgress.length === 0 ? 'pointer' : 'default',
               }}
               onClick={() => uploadingInProgress.length === 0 && setShowDetails(!showDetails)}
@@ -297,11 +297,7 @@ const Page = () => {
                         return (
                           <Box
                             key={uploadFile.id}
-                            sx={{
-                              py: 0.5,
-                              opacity: isError ? 0.7 : 1,
-                              cursor: isError ? 'default' : 'pointer',
-                            }}
+                            sx={sx.fileCard(isError)}
                             onClick={(e) => {
                               e.stopPropagation()
                               !isError && toggleFileSelection(uploadFile.id)
@@ -386,7 +382,7 @@ const Page = () => {
                 size="large"
                 onMouseEnter={() => router.prefetch(ROUTES.STATS)}
                 onClick={handleContinue}
-                sx={{ minWidth: 200, py: 1.5 }}
+                sx={{ minWidth: 200, py: 1.5, borderRadius: 1.75 }}
                 disabled={!canContinue}
               >
                 Continue with {effectiveSelectedFiles.size} {effectiveSelectedFiles.size === 1 ? 'file' : 'files'}
