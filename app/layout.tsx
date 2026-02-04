@@ -9,8 +9,8 @@ import type { ReactNode } from 'react'
 
 import { LanguageProvider, Layout, ThemeProvider } from '@/components'
 
-const SEO_TITLE = `fstats - Private Financial Statement Analyzer`
-const SEO_DESCRIPTION = `Analyze your bank statements safely. 100% private - all data stays on your device, nothing is uploaded. Works completely offline.`
+const SEO_TITLE = `fstats - Analyse bank statements privately`
+const SEO_DESCRIPTION = `Add files locally and get instant insights. All processing happens entirely on your device — no uploads, no accounts, no tracking.`
 
 export const metadata: Metadata = {
   title: SEO_TITLE,
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_SITE_URL,
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/logo.svg`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/img/logo.svg`,
         width: 440,
         height: 440,
       },
