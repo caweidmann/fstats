@@ -17,24 +17,15 @@ import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
+import { UserLocale } from '@/types-enums'
 import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile } from '@/hooks'
+import { toDisplayDate } from '@/utils/Date'
+import { i18n } from '@/lib/i18n'
 import { getSelectedFiles, setSelectedFiles as saveSelectedFiles } from '@/lib/storage'
 
 import { ui } from './styled'
-
-const formatDate = (date: Date | number) => {
-  const d = new Date(date)
-  return d.toLocaleString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  })
-}
 
 const Page = () => {
   const isMobile = useIsMobile()
@@ -339,7 +330,10 @@ const Page = () => {
                                     {formatFileSize(uploadFile.file.size)}
                                   </Typography>
                                   <Typography variant="caption" color="text.secondary">
-                                    Uploaded {formatDate(uploadFile.uploadedAt)}
+                                    Uploaded{' '}
+                                    {toDisplayDate(new Date(uploadFile.uploadedAt), i18n.language as UserLocale, {
+                                      formatTo: 'd MMM yyyy, HH:mm:ss',
+                                    })}
                                   </Typography>
                                   {isError && uploadFile.error && (
                                     <Tooltip title={uploadFile.error}>

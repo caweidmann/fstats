@@ -1,3 +1,5 @@
+import { DateFormat } from '@/types-enums'
+
 export const MISC = {
   CENTER_DOT: '·',
   CENTER_DOT_XL: '•',
@@ -6,6 +8,7 @@ export const MISC = {
   GLASS_EFFECT: 0.8,
   MAX_UPLOAD_FILE_SIZE: 5 * 1024 * 1024,
   SUPPORTED_BANKS: ['FNB', 'Capitec', 'Comdirect', 'ING'],
+  SYSTEM_DATE_FORMAT: DateFormat.YMD_DASH,
 } as const
 
 export const LAYOUT = {
@@ -17,4 +20,8 @@ export const LAYOUT = {
   FOOTER_HEIGHT: 50,
   FOOTER_HEIGHT_MOBILE: 60,
   FOOTER_BORDER: 1,
+} as const
+
+export const CONFIG = {
+  ENABLE_CONSOLE_LOGGING: process.env.NODE_ENV === 'development',
 } as const
