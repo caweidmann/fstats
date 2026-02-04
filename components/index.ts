@@ -1,4 +1,3 @@
-export { default as Breadcrumb } from './Breadcrumb'
 export { default as LanguageDrawer } from './LanguageDrawer'
 export { default as LanguageProvider } from './LanguageProvider'
 export { default as LanguageSwitcher } from './LanguageSwitcher'
