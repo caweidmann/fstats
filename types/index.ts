@@ -11,7 +11,7 @@ export type UserPreferences = {
 }
 
 export type LocalSettings = {
-  selectedFileIds: string[]
+  selectedFileIds: string[] | null
 }
 
 export type DateFnsLocale = Locale

@@ -8,7 +8,7 @@ type SetLocalSetting = <K extends keyof LocalSettings>(key: K, value: LocalSetti
 type UseLocalSettingsReturn = LocalSettings & { set: SetLocalSetting }
 
 export const useLocalSettings = (): UseLocalSettingsReturn => {
-  const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[]>(MISC.LS_SELECTED_FILE_IDS_KEY, [])
+  const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[] | null>(MISC.LS_SELECTED_FILE_IDS_KEY, null)
 
   const set: SetLocalSetting = (key, value) => {
     switch (key) {

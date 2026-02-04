@@ -40,7 +40,7 @@ const Page = () => {
     accept: { 'text/csv': ['.csv'] },
     multiple: true,
     onUploadComplete: (file) => {
-      set('selectedFileIds', [...selectedFileIds, file.id])
+      set('selectedFileIds', [...(selectedFileIds ?? []), file.id])
     },
   })
 
@@ -48,14 +48,14 @@ const Page = () => {
   const uploadingInProgress = uploadingFiles.filter((f) => f.status === 'uploading')
   const errorFiles = uploadingFiles.filter((f) => f.status === 'error')
 
-  const effectiveSelectedFiles = new Set(selectedFileIds.filter((id) => completedFiles.some((f) => f.id === id)))
+  const effectiveSelectedFiles = new Set((selectedFileIds ?? []).filter((id) => completedFiles.some((f) => f.id === id)))
 
   const canContinue = effectiveSelectedFiles.size > 0 && uploadingInProgress.length === 0
 
   useEffect(() => {
     if (hasInitialised.current || completedFiles.length === 0) return
     hasInitialised.current = true
-    if (selectedFileIds.length === 0) {
+    if (selectedFileIds === null) {
       set('selectedFileIds', completedFiles.map((f) => f.id))
     }
   }, [completedFiles, selectedFileIds])
@@ -71,7 +71,7 @@ const Page = () => {
   }
 
   const toggleFileSelection = (fileId: string) => {
-    const current = new Set(selectedFileIds)
+    const current = new Set(selectedFileIds ?? [])
     if (current.has(fileId)) {
       current.delete(fileId)
     } else {

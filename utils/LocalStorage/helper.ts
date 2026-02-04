@@ -1,15 +1,15 @@
 import { MISC } from '@/common'
 
-export const parseSelectedFileIds = (): string[] => {
+export const parseSelectedFileIds = (): string[] | null => {
   const raw = window.localStorage.getItem(MISC.LS_SELECTED_FILE_IDS_KEY)
 
   if (raw === null) {
-    return []
+    return null
   }
 
   try {
     return JSON.parse(raw) as string[]
   } catch {
-    return []
+    return null
   }
 }

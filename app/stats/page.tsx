@@ -174,7 +174,7 @@ const StatsPage = () => {
           return
         }
 
-        const filteredFiles = allFiles.filter((f) => selectedFileIds.includes(f.id))
+        const filteredFiles = allFiles.filter((f) => (selectedFileIds ?? []).includes(f.id))
 
         const allFilesData: FileData[] = filteredFiles.map((fileData) => ({
           id: fileData.id,
