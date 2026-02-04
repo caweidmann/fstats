@@ -25,7 +25,6 @@ export interface FileData {
   error?: string
 }
 
-// --- Init — runs once, result is cached ---
 let isInitialised: Promise<void> | null = null
 
 const doInit = async () => {
@@ -47,19 +46,18 @@ export const initStorage = (): Promise<void> => {
   return isInitialised
 }
 
-// --- Files ---
-
-export const storeFile = async (file: Omit<FileData, 'uploadedAt'> & { uploadedAt?: number }): Promise<void> => {
+export const storeFile = async (file: Omit<FileData, 'uploadedAt'>): Promise<void> => {
   await initStorage()
-  const fileData: FileData = { ...file, uploadedAt: file.uploadedAt ?? Date.now() }
-  await filesStore.setItem(file.id, fileData)
+  await filesStore.setItem(file.id, { ...file, uploadedAt: Date.now() })
 }
 
 export const getAllFiles = async (): Promise<FileData[]> => {
   await initStorage()
-  const keys = await filesStore.keys()
-  const files = await Promise.all(keys.map((key) => filesStore.getItem<FileData>(key)))
-  return files.filter((f): f is FileData => f != null)
+  const files: FileData[] = []
+  await filesStore.iterate<FileData, void>((value) => {
+    files.push(value)
+  })
+  return files
 }
 
 export const deleteFile = async (id: string): Promise<void> => {
@@ -67,7 +65,6 @@ export const deleteFile = async (id: string): Promise<void> => {
   await filesStore.removeItem(id)
 }
 
-// NOTE: does not await initStorage — called during init itself
 export const clearAllFiles = async (): Promise<void> => {
   await filesStore.clear()
 }
