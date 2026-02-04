@@ -382,7 +382,7 @@ const Page = () => {
                 size="large"
                 onMouseEnter={() => router.prefetch(ROUTES.STATS)}
                 onClick={handleContinue}
-                sx={{ minWidth: 200, py: 1.5, borderRadius: 1.75 }}
+                sx={sx.ctaButton}
                 disabled={!canContinue}
               >
                 Continue with {effectiveSelectedFiles.size} {effectiveSelectedFiles.size === 1 ? 'file' : 'files'}

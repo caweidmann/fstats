@@ -38,7 +38,7 @@ export const ui = (theme: Theme, isMobile: boolean, isDarkMode: boolean) => {
       px: 5,
       fontSize: 17,
       fontWeight: 600,
-      borderRadius: 3,
+      borderRadius: 100,
     },
 
     trustSection: {
