@@ -2,7 +2,6 @@
 
 import { ArrowBack, KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material'
 import {
-  Alert,
   Box,
   Button,
   Card,
@@ -25,6 +24,8 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
+import { useIsDarkMode, useIsMobile } from '@/hooks'
+import { Color } from '@/styles/colors'
 import { getAllFiles, getSelectedFiles } from '@/lib/storage'
 
 interface FileData {
@@ -157,6 +158,8 @@ const FileTable = ({ fileData }: FileTableProps) => {
 
 const StatsPage = () => {
   const router = useRouter()
+  const isMobile = useIsMobile()
+  const isDarkMode = useIsDarkMode()
   const [filesData, setFilesData] = useState<FileData[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -202,17 +205,43 @@ const StatsPage = () => {
   if (filesData.length === 0) {
     return (
       <PageWrapper>
-        <Stack spacing={2}>
-          <Alert severity="info">No files found. Please upload CSV files first.</Alert>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            pt: isMobile ? 2 : 6,
+          }}
+        >
+          <img
+            src={isDarkMode ? '/img/logo-dark.svg' : '/img/logo.svg'}
+            alt="fstats"
+            style={{ width: isMobile ? 96 : 128, height: 'auto', marginBottom: 24 }}
+          />
+          <Typography variant="h4" sx={{ fontWeight: 800, lineHeight: 1.2, mb: 2 }}>
+            No data to{' '}
+            <Box component="span" sx={{ color: isDarkMode ? Color.cyan : Color.cyanDark }}>
+              analyse
+            </Box>
+          </Typography>
+          <Typography
+            variant="body1"
+            component="p"
+            sx={{ color: 'text.secondary', maxWidth: 440, fontSize: isMobile ? 15 : 17, lineHeight: 1.7, mb: 4 }}
+          >
+            Upload some files and then come back to view your stats.
+          </Typography>
           <Button
             variant="contained"
-            startIcon={<ArrowBack />}
+            size="large"
+            sx={{ minWidth: 200, py: 1.5, px: 5, fontSize: 17, fontWeight: 600, borderRadius: 100 }}
             onMouseEnter={() => router.prefetch(ROUTES.DATA)}
             onClick={() => router.push(ROUTES.DATA)}
           >
-            Back to Upload
+            Upload files
           </Button>
-        </Stack>
+        </Box>
       </PageWrapper>
     )
   }
