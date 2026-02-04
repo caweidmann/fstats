@@ -283,7 +283,7 @@ const Page = () => {
                         }}
                         sx={{ textTransform: 'none' }}
                       >
-                        Delete all
+                        Remove all
                       </Button>
                     </Stack>
                   )}
@@ -300,7 +300,9 @@ const Page = () => {
                             sx={sx.fileCard(isError)}
                             onClick={(e) => {
                               e.stopPropagation()
-                              !isError && toggleFileSelection(uploadFile.id)
+                              if (!isError) {
+                                toggleFileSelection(uploadFile.id)
+                              }
                             }}
                           >
                             <Stack direction="row" alignItems="center" spacing={1}>
@@ -352,16 +354,18 @@ const Page = () => {
                                   )}
                                 </Stack>
                               </Box>
-                              <IconButton
-                                size="small"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  removeFile(uploadFile.id)
-                                }}
-                                sx={sx.deleteButton}
-                              >
-                                <DeleteOutlined fontSize="small" />
-                              </IconButton>
+                              <Tooltip title="Remove file">
+                                <IconButton
+                                  // size="small"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    removeFile(uploadFile.id)
+                                  }}
+                                  sx={sx.deleteButton}
+                                >
+                                  <DeleteOutlined sx={{ fontSize: 20 }} />
+                                </IconButton>
+                              </Tooltip>
                             </Stack>
                           </Box>
                         )
