@@ -15,7 +15,7 @@ import {
 import { Box, Button, Checkbox, Chip, Grid, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
@@ -44,6 +44,7 @@ const Page = () => {
   const router = useRouter()
   const [selectedFiles, setSelectedFiles] = useState<Set<string> | null>(null)
   const [showDetails, setShowDetails] = useState(false)
+  const initialLoadDone = useRef(false)
 
   const { getRootProps, getInputProps, isDragActive, uploadingFiles, removeFile, clearAllFiles } = useFileUpload({
     maxSize: MISC.MAX_UPLOAD_FILE_SIZE,
@@ -76,11 +77,13 @@ const Page = () => {
       if (saved !== null) {
         setSelectedFiles(new Set(saved))
       }
+      initialLoadDone.current = true
     }
     loadSelectedFiles()
   }, [])
 
   useEffect(() => {
+    if (!initialLoadDone.current) return
     saveSelectedFiles(selectedFiles === null ? null : Array.from(selectedFiles))
   }, [selectedFiles])
 

@@ -7,7 +7,6 @@ export type ParserOptions = {
 
 export type ParserFn = (file: File, options: ParserOptions) => void
 
-// --- Add new parsers here ---
 const PARSERS = {
   csv: parseCSVFile,
 }
