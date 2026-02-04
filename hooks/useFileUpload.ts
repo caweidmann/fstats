@@ -27,7 +27,6 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
   const { maxSize = MISC.MAX_UPLOAD_FILE_SIZE, accept, multiple = true, parserType = 'csv', onUploadComplete } = options
 
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([])
-  const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([])
 
   useEffect(() => {
     const restoreFiles = async () => {
@@ -79,13 +78,10 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
         prev.map((f) => (f.id === fileId ? { ...f, status: 'error' as const, error: error.message } : f)),
       )
     },
-    storeInIndexedDB: true,
   })
 
   const onDrop = useCallback(
     async (acceptedFiles: File[], fileRejections: FileRejection[]) => {
-      setRejectedFiles(fileRejections)
-
       const newFileNames = new Set(acceptedFiles.map((f) => f.name))
       const duplicateIds: string[] = []
 
@@ -150,13 +146,8 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
     }
   }, [])
 
-  const clearRejectedFiles = useCallback(() => {
-    setRejectedFiles([])
-  }, [])
-
   const clearAllFiles = useCallback(async () => {
     setUploadingFiles([])
-    setRejectedFiles([])
     try {
       await indexedDBService.clearAllFiles()
     } catch (error) {
@@ -176,9 +167,7 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
     getInputProps: dropzone.getInputProps,
     isDragActive: dropzone.isDragActive,
     uploadingFiles,
-    rejectedFiles,
     removeFile,
-    clearRejectedFiles,
     clearAllFiles,
   }
 }

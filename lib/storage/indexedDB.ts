@@ -1,6 +1,7 @@
 import localforage from 'localforage'
 
 const PERSIST_KEY = 'persist-data'
+const SESSION_KEY = 'fstats-session'
 const SELECTED_FILES_KEY = 'selected-files'
 const FILES_PREFIX = 'file_'
 
@@ -38,9 +39,14 @@ class StorageService {
   }
 
   private async _doInit(): Promise<void> {
-    if (!this.getPersistSetting()) {
+    // sessionStorage is automatically cleared by the browser when the tab,
+    // browser window, or PWA is closed — but survives page refreshes.
+    // So: no marker = new session. If persist is off, wipe stale data.
+    if (!this.getPersistSetting() && !sessionStorage.getItem(SESSION_KEY)) {
       await this.clearAllFiles()
+      await this.store.removeItem(SELECTED_FILES_KEY)
     }
+    sessionStorage.setItem(SESSION_KEY, 'true')
     this.initialized = true
   }
 

@@ -6,7 +6,7 @@ import { indexedDBService } from '@/lib/storage/indexedDB'
 
 interface PersistContextType {
   persistEnabled: boolean
-  setPersistEnabled: (enabled: boolean) => Promise<void>
+  setPersistEnabled: (enabled: boolean) => void
   isInitialized: boolean
 }
 
@@ -29,7 +29,7 @@ const PersistProvider = ({ children }: { children: ReactNode }) => {
       })
   }, [])
 
-  const setPersistEnabled = useCallback(async (enabled: boolean) => {
+  const setPersistEnabled = useCallback((enabled: boolean) => {
     indexedDBService.setPersistSetting(enabled)
     setPersistEnabledState(enabled)
   }, [])

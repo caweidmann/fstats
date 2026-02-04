@@ -16,9 +16,8 @@ const Page = () => {
   const sx = ui(theme, isMobile, isDarkMode)
   const { persistEnabled, setPersistEnabled, isInitialized } = usePersist()
 
-  const handlePersistToggle = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.checked
-    await setPersistEnabled(newValue)
+  const handlePersistToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPersistEnabled(event.target.checked)
   }
 
   return (
@@ -36,7 +35,7 @@ const Page = () => {
                 <Typography variant="caption" color={persistEnabled ? 'warning' : 'text.secondary'}>
                   {persistEnabled
                     ? 'Files will be kept in your browser storage across sessions until manually deleted'
-                    : 'Files will be automatically cleared when you refresh or close the tab'}
+                    : 'Files will be automatically cleared when you close the tab or app'}
                 </Typography>
               </Box>
             }

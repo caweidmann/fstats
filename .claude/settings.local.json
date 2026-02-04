@@ -12,7 +12,8 @@
       "Bash(npx tsc:*)",
       "Bash(grep:*)",
       "WebFetch(domain:github.com)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(pnpm build:*)"
     ]
   }
 }

@@ -9,23 +9,20 @@ export interface UseFileParserOptions {
   parserType: FileParserType
   onComplete?: (fileId: string, data: unknown[], fileName: string, fileSize: number) => void
   onError?: (fileId: string, error: Error) => void
-  storeInIndexedDB?: boolean
 }
 
 export const useFileParser = (options: UseFileParserOptions) => {
-  const { parserType, onComplete, onError, storeInIndexedDB = true } = options
+  const { parserType, onComplete, onError } = options
 
   const parseFile = useCallback(
     (fileId: string, file: File) => {
       const parserOptions: CSVParserOptions = {
         onComplete: async (data) => {
-          if (storeInIndexedDB) {
-            try {
-              await indexedDBService.init()
-              await indexedDBService.storeFile(fileId, file.name, file.size, file.lastModified, data, 'complete')
-            } catch (error) {
-              console.error('Failed to store file in IndexedDB:', error)
-            }
+          try {
+            await indexedDBService.init()
+            await indexedDBService.storeFile(fileId, file.name, file.size, file.lastModified, data, 'complete')
+          } catch (error) {
+            console.error('Failed to store file in IndexedDB:', error)
           }
 
           if (onComplete) {
@@ -51,7 +48,7 @@ export const useFileParser = (options: UseFileParserOptions) => {
           throw new Error(`Unknown parser type: ${parserType}`)
       }
     },
-    [parserType, onComplete, onError, storeInIndexedDB],
+    [parserType, onComplete, onError],
   )
 
   return { parseFile }
