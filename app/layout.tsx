@@ -39,6 +39,10 @@ type LayoutProps = {
 const Component = ({ children }: LayoutProps) => {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#2a2e36" media="(prefers-color-scheme: dark)" />
+      </head>
       <body>
         {process.env.NODE_ENV === 'production' ? <SpeedInsights /> : null}
         {process.env.NODE_ENV === 'production' ? <Analytics /> : null}
