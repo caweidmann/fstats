@@ -1,6 +1,6 @@
 import Papa from 'papaparse'
 
-export const parseCSVFile = (
+export const parseCsvFile = (
   file: File,
   { onComplete, onError }: { onComplete: (data: unknown[]) => void; onError: (error: Error) => void },
 ) => {

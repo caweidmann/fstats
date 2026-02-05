@@ -60,9 +60,6 @@ const Component = ({ onMenuClick }: MainMenuProps) => {
                 <MainMenuNavButton route={ROUTES.DATA} isActive={pathname === ROUTES.DATA}>
                   {t('NAVIGATION.DATA')}
                 </MainMenuNavButton>
-                <MainMenuNavButton route={'/data-new'} isActive={pathname === '/data-new'}>
-                  Data New
-                </MainMenuNavButton>
                 <MainMenuNavButton route={ROUTES.STATS} isActive={pathname === ROUTES.STATS}>
                   {t('NAVIGATION.STATS')}
                 </MainMenuNavButton>

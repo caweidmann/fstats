@@ -12,25 +12,22 @@ export type UserPreferences = {
 
 export type FileData = {
   id: string
-  name: string
-  size: number
-  lastModified: number
-  data: unknown[]
-  uploadedAt: number
-  status: 'complete' | 'error'
+  file: File
+  status: 'parsing' | 'parsed' | 'error'
   error?: string
+  parsedContent?: unknown
 }
 
 export type StorageContextState = {
   isLoading: boolean
   files: FileData[]
-  storeFile: (file: Omit<FileData, 'uploadedAt'>) => Promise<void>
-  deleteFile: (id: string) => Promise<void>
-  deleteAllFiles: () => Promise<void>
+  addFiles: (files: FileData[]) => Promise<void>
+  removeFile: (id: string) => Promise<void>
+  removeAllFiles: () => Promise<void>
 }
 
 export type LocalSettings = {
-  selectedFileIds: string[] | null
+  selectedFileIds: string[]
 }
 
 export type DateFnsLocale = Locale

@@ -1,4 +1,4 @@
-import { parseCSVFile } from './csvParser'
+import { parseCsvFile } from './csvParser'
 
 export type ParserOptions = {
   onComplete: (data: unknown[]) => void
@@ -8,7 +8,7 @@ export type ParserOptions = {
 export type ParserFn = (file: File, options: ParserOptions) => void
 
 const PARSERS = {
-  csv: parseCSVFile,
+  csv: parseCsvFile,
 }
 
 export type ParserType = keyof typeof PARSERS

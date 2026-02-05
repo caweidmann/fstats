@@ -9,7 +9,6 @@ export const getActiveRouteLabel = (pathname: string) => {
       activeLabel = i18n.t('NAVIGATION.HOME')
       break
     case ROUTES.DATA:
-    case '/data-new':
       activeLabel = i18n.t('NAVIGATION.DATA')
       break
     case ROUTES.STATS:

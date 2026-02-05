@@ -96,7 +96,7 @@ All parsing happens **on-device, in a Web Worker** — no data ever leaves the b
 
 ```ts
 const PARSERS = {
-  csv: parseCSVFile,
+  csv: parseCsvFile,
   // add new parsers here — ParserType is derived from the keys automatically
 }
 ```

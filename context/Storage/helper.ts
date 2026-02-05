@@ -14,7 +14,7 @@ export const initStorage = async () => {
   sessionStorage.setItem(MISC.SS_SESSION_KEY, 'true')
 }
 
-export const getAllFiles = async (): Promise<FileData[]> => {
+export const getFiles = async (): Promise<FileData[]> => {
   const files: FileData[] = []
 
   await db.filesStore.iterate<FileData, void>((value) => {
