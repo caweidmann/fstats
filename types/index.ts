@@ -1,5 +1,5 @@
 import type { Locale } from 'date-fns'
-import type { ReactNode } from 'react'
+import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { z } from 'zod'
 
 import { ColorMode, UserLocale } from '@/types-enums'
@@ -12,25 +12,25 @@ export type UserPreferences = {
 
 export type FileData = {
   id: string
-  name: string
-  size: number
-  lastModified: number
-  data: unknown[]
-  uploadedAt: number
-  status: 'complete' | 'error'
+  file: File
+  status: 'parsing' | 'parsed' | 'error'
   error?: string
+  parsedContent?: unknown
 }
 
 export type StorageContextState = {
   isLoading: boolean
   files: FileData[]
-  storeFile: (file: Omit<FileData, 'uploadedAt'>) => Promise<void>
-  deleteFile: (id: string) => Promise<void>
-  deleteAllFiles: () => Promise<void>
+  selectedFileIds: string[]
+  setSelectedFileIds: Dispatch<SetStateAction<string[]>>
+  addFiles: (files: FileData[]) => Promise<void>
+  updateFile: (id: string, updates: Partial<FileData>) => Promise<void>
+  removeFile: (id: string) => Promise<void>
+  removeAllFiles: () => Promise<void>
 }
 
 export type LocalSettings = {
-  selectedFileIds: string[] | null
+  selectedFileIds: string[]
 }
 
 export type DateFnsLocale = Locale
