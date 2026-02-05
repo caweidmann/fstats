@@ -1,3 +1,4 @@
+export * from './useDarkModeMetaTagUpdater'
 export * from './useFileUpload'
 export * from './useIsDarkMode'
 export * from './useIsMobile'
