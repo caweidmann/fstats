@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 import { useDropzone, type DropzoneOptions, type FileRejection } from 'react-dropzone'
 
 import { MISC } from '@/common'
-import { useStorage } from '@/components'
+import { useStorage } from '@/context/Storage'
 import { type ParserType } from '@/utils/FileParser'
 
 import { useFileParser } from './useFileParser'
@@ -40,9 +40,7 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
     parserType,
     onComplete: (fileId, data) => {
       setUploadingFiles((prev) => {
-        const updated = prev.map((f) =>
-          f.id === fileId ? { ...f, status: 'complete' as const, data } : f,
-        )
+        const updated = prev.map((f) => (f.id === fileId ? { ...f, status: 'complete' as const, data } : f))
         const completedFile = updated.find((f) => f.id === fileId)
         if (completedFile && onUploadComplete) {
           onUploadComplete(completedFile)

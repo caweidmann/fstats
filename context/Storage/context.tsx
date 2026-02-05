@@ -3,31 +3,22 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 
-import type { FileData } from '@/types'
+import type { FileData, StorageContextState } from '@/types'
 import {
   clearAllFiles as _clearAllFiles,
   deleteFile as _deleteFile,
+  storeFile as _storeFile,
   getAllFiles,
   initStorage,
-  storeFile as _storeFile,
 } from '@/lib/storage'
 
-type StorageContextValue = {
-  files: FileData[]
-  storeFile: (file: Omit<FileData, 'uploadedAt'>) => Promise<void>
-  deleteFile: (id: string) => Promise<void>
-  clearAllFiles: () => Promise<void>
+const StorageContext = createContext<StorageContextState | null>(null)
+
+type StorageContextProviderProps = {
+  children: ReactNode
 }
 
-const StorageContext = createContext<StorageContextValue | null>(null)
-
-export const useStorage = () => {
-  const context = useContext(StorageContext)
-  if (!context) throw new Error('useStorage must be used within a StorageProvider')
-  return context
-}
-
-const StorageProvider = ({ children }: { children: ReactNode }) => {
+export const StorageProvider = ({ children }: StorageContextProviderProps) => {
   const [files, setFiles] = useState<FileData[]>([])
   const [isReady, setIsReady] = useState(false)
 
@@ -69,4 +60,10 @@ const StorageProvider = ({ children }: { children: ReactNode }) => {
   return <StorageContext.Provider value={value}>{children}</StorageContext.Provider>
 }
 
-export default StorageProvider
+export const useStorage = () => {
+  const context = useContext(StorageContext)
+  if (!context) {
+    throw new Error('Please ensure to wrap your component in a "StorageProvider"!')
+  }
+  return context
+}

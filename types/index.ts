@@ -21,6 +21,13 @@ export type FileData = {
   error?: string
 }
 
+export type StorageContextState = {
+  files: FileData[]
+  storeFile: (file: Omit<FileData, 'uploadedAt'>) => Promise<void>
+  deleteFile: (id: string) => Promise<void>
+  clearAllFiles: () => Promise<void>
+}
+
 export type LocalSettings = {
   selectedFileIds: string[] | null
 }

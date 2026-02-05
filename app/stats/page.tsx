@@ -23,7 +23,8 @@ import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 
 import { ROUTES } from '@/common'
-import { PageWrapper, useStorage } from '@/components'
+import { PageWrapper } from '@/components'
+import { useStorage } from '@/context/Storage'
 import { useIsDarkMode, useIsMobile, useSettings } from '@/hooks'
 import { Color } from '@/styles/colors'
 

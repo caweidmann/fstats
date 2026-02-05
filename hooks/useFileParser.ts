@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { useStorage } from '@/components'
+import { useStorage } from '@/context/Storage'
 import { getParser, type ParserType } from '@/utils/FileParser'
 
 export interface UseFileParserOptions {
