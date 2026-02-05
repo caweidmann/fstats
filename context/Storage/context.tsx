@@ -20,15 +20,15 @@ type StorageContextProviderProps = {
 
 export const StorageProvider = ({ children }: StorageContextProviderProps) => {
   const [files, setFiles] = useState<FileData[]>([])
-  const [isReady, setIsReady] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const load = async () => {
+    const init = async () => {
       await initStorage()
       setFiles(await getAllFiles())
-      setIsReady(true)
+      setIsLoading(false)
     }
-    load()
+    init()
   }, [])
 
   const storeFile = useCallback(async (file: Omit<FileData, 'uploadedAt'>) => {
@@ -50,12 +50,15 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
     setFiles([])
   }, [])
 
-  const value = useMemo(
-    () => ({ files, storeFile, deleteFile, clearAllFiles }),
-    [files, storeFile, deleteFile, clearAllFiles],
-  )
-
-  if (!isReady) return null
+  const value = useMemo(() => {
+    return {
+      isLoading,
+      files,
+      storeFile,
+      deleteFile,
+      clearAllFiles,
+    }
+  }, [isLoading, files, storeFile, deleteFile, clearAllFiles])
 
   return <StorageContext.Provider value={value}>{children}</StorageContext.Provider>
 }
