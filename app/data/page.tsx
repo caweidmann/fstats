@@ -36,7 +36,7 @@ const Page = () => {
   console.log('selectedFileIds', selectedFileIds)
   const hasInitialised = useRef(false)
 
-  const { getRootProps, getInputProps, isDragActive, uploadingFiles, removeFile, clearAllFiles } = useFileUpload({
+  const { getRootProps, getInputProps, isDragActive, uploadingFiles, removeFile, deleteAllFiles } = useFileUpload({
     maxSize: MISC.MAX_UPLOAD_FILE_SIZE,
     accept: { 'text/csv': ['.csv'] },
     multiple: true,
@@ -67,7 +67,7 @@ const Page = () => {
   }, [completedFiles, selectedFileIds])
 
   const handleDeleteAll = () => {
-    clearAllFiles()
+    deleteAllFiles()
     set('selectedFileIds', [])
   }
 

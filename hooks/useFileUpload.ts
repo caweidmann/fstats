@@ -26,7 +26,7 @@ export type UseFileUploadOptions = {
 
 export const useFileUpload = (options: UseFileUploadOptions = {}) => {
   const { maxSize = MISC.MAX_UPLOAD_FILE_SIZE, accept, multiple = true, parserType = 'csv', onUploadComplete } = options
-  const { files: storedFiles, storeFile, deleteFile, clearAllFiles } = useStorage()
+  const { files: storedFiles, storeFile, deleteFile, deleteAllFiles } = useStorage()
 
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>(() =>
     storedFiles.map((fd) => {
@@ -127,11 +127,11 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
   const clearAll = useCallback(async () => {
     setUploadingFiles([])
     try {
-      await clearAllFiles()
+      await deleteAllFiles()
     } catch (error) {
       console.error('Failed to clear files from IndexedDB:', error)
     }
-  }, [clearAllFiles])
+  }, [deleteAllFiles])
 
   const dropzone = useDropzone({
     onDrop,
@@ -146,7 +146,7 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
     isDragActive: dropzone.isDragActive,
     uploadingFiles,
     removeFile,
-    clearAllFiles: clearAll,
+    deleteAllFiles: clearAll,
   }
 }
 
