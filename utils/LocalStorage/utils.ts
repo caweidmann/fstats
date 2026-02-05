@@ -1,14 +1,6 @@
-import type { LocalSettings, UserPreferences } from '@/types'
+import type { UserPreferences } from '@/types'
 import { ColorMode, UserLocale } from '@/types-enums'
 import { MISC } from '@/common'
-
-import { parseSelectedFileIds } from './helper'
-
-export const getLocalSettings = (): LocalSettings => {
-  return {
-    selectedFileIds: parseSelectedFileIds(),
-  }
-}
 
 export const getLocalUserPreferences = (): UserPreferences => {
   return {

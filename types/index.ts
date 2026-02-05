@@ -21,7 +21,10 @@ export type FileData = {
 export type StorageContextState = {
   isLoading: boolean
   files: FileData[]
+  selectedFileIds: string[]
+  setSelectedFileIds: (ids: string[]) => void
   addFiles: (files: FileData[]) => Promise<void>
+  updateFile: (id: string, updates: Partial<FileData>) => Promise<void>
   removeFile: (id: string) => Promise<void>
   removeAllFiles: () => Promise<void>
 }

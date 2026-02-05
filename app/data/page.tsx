@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useStorage } from '@/context/Storage'
-import { useSettings } from '@/hooks'
 
 import { AddFolderButton, FileDropZone, Summary } from './components'
 import { ui } from './styled'
@@ -14,8 +13,7 @@ import { ui } from './styled'
 const Page = () => {
   const sx = ui()
   const router = useRouter()
-  const { isLoading, files } = useStorage()
-  const { selectedFileIds } = useSettings()
+  const { isLoading, files, selectedFileIds } = useStorage()
   const selectedFiles = files.filter((file) => selectedFileIds.includes(file.id))
 
   if (isLoading) {
@@ -43,20 +41,22 @@ const Page = () => {
           <Summary />
         </Grid>
 
-        <Grid size={12}>
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-            <Button
-              variant="contained"
-              size="large"
-              onMouseEnter={() => router.prefetch(ROUTES.STATS)}
-              onClick={() => router.push(ROUTES.STATS)}
-              sx={sx.ctaButton}
-              disabled={!selectedFiles.length}
-            >
-              Continue with {selectedFiles.length} {selectedFiles.length === 1 ? 'file' : 'files'}
-            </Button>
-          </Box>
-        </Grid>
+        {files.length ? (
+          <Grid size={12}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              <Button
+                variant="contained"
+                size="large"
+                onMouseEnter={() => router.prefetch(ROUTES.STATS)}
+                onClick={() => router.push(ROUTES.STATS)}
+                sx={sx.ctaButton}
+                disabled={!selectedFiles.length}
+              >
+                Continue with {selectedFiles.length} {selectedFiles.length === 1 ? 'file' : 'files'}
+              </Button>
+            </Box>
+          </Grid>
+        ) : null}
       </Grid>
     </PageWrapper>
   )

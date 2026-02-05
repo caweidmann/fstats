@@ -6,7 +6,7 @@ import { Box, Checkbox, Chip, IconButton, Stack, Tooltip, Typography } from '@mu
 import { FileData } from '@/types'
 import { MISC } from '@/common'
 import { useStorage } from '@/context/Storage'
-import { useSettings, useUserPreferences } from '@/hooks'
+import { useUserPreferences } from '@/hooks'
 import { toDisplayDate } from '@/utils/Date'
 
 import { ui } from './styled'
@@ -18,13 +18,12 @@ type DetailsRowProps = {
 const Component = ({ file }: DetailsRowProps) => {
   const sx = ui()
   const { locale } = useUserPreferences()
-  const { selectedFileIds, set } = useSettings()
+  const { selectedFileIds, setSelectedFileIds } = useStorage()
   const isSelected = selectedFileIds.includes(file.id)
   const { removeFile } = useStorage()
 
   const toggleFileSelection = (fileId: string) => {
-    set(
-      'selectedFileIds',
+    setSelectedFileIds(
       selectedFileIds.includes(fileId) ? selectedFileIds.filter((id) => id !== fileId) : [...selectedFileIds, fileId],
     )
   }

@@ -10,7 +10,7 @@ import type { FileRejection, FileWithPath } from 'react-dropzone'
 import { FileData } from '@/types'
 import { MISC } from '@/common'
 import { useStorage } from '@/context/Storage'
-import { useIsDarkMode, useIsMobile, useSettings } from '@/hooks'
+import { useIsDarkMode, useIsMobile } from '@/hooks'
 
 import { ui } from './styled'
 
@@ -20,7 +20,6 @@ const Component = () => {
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
   const { addFiles } = useStorage()
-  const { selectedFileIds, set } = useSettings()
 
   const onDrop = useCallback(async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
     const newFiles: FileData[] = []
@@ -42,7 +41,6 @@ const Component = () => {
     })
 
     await addFiles(newFiles)
-    set('selectedFileIds', [...selectedFileIds, ...newFiles.filter((file) => !file.error).map((file) => file.id)])
   }, [])
 
   const dropzone = useDropzone({

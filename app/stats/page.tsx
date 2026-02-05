@@ -8,7 +8,7 @@ import type { FileData } from '@/types'
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useStorage } from '@/context/Storage'
-import { useIsDarkMode, useIsMobile, useSettings } from '@/hooks'
+import { useIsDarkMode, useIsMobile } from '@/hooks'
 import { Color } from '@/styles/colors'
 
 type FileTableProps = {
@@ -28,8 +28,7 @@ const StatsPage = () => {
   const router = useRouter()
   const isMobile = useIsMobile()
   const isDarkMode = useIsDarkMode()
-  const { selectedFileIds } = useSettings()
-  const { files } = useStorage()
+  const { files, selectedFileIds } = useStorage()
 
   if (!selectedFileIds.length) {
     return (

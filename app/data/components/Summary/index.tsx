@@ -14,7 +14,7 @@ import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
 import { useStorage } from '@/context/Storage'
-import { useIsDarkMode, useIsMobile, useSettings } from '@/hooks'
+import { useIsDarkMode, useIsMobile } from '@/hooks'
 
 import DetailsRow from '../DetailsRow'
 import { ui } from './styled'
@@ -25,20 +25,16 @@ const Component = () => {
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
   const [expanded, setExpanded] = useState(false)
-  const { files, removeAllFiles } = useStorage()
-  const { selectedFileIds, set } = useSettings()
+  const { files, removeAllFiles, selectedFileIds, setSelectedFileIds } = useStorage()
   const selectableFiles = files.filter((file) => !file.error)
   const selectedFiles = files.filter((file) => selectedFileIds.includes(file.id))
   const errorFiles = files.filter((file) => file.error)
 
   const toggleSelectAll = () => {
     if (selectedFiles.length === selectableFiles.length) {
-      set('selectedFileIds', [])
+      setSelectedFileIds([])
     } else {
-      set(
-        'selectedFileIds',
-        files.map((file) => file.id),
-      )
+      setSelectedFileIds(files.map((file) => file.id))
     }
   }
 
@@ -99,15 +95,7 @@ const Component = () => {
               >
                 {selectedFiles.length === selectableFiles.length ? 'Deselect all' : 'Select all'}
               </Button>
-              <Button
-                size="small"
-                color="error"
-                startIcon={<DeleteOutlined />}
-                onClick={() => {
-                  removeAllFiles()
-                  set('selectedFileIds', [])
-                }}
-              >
+              <Button size="small" color="error" startIcon={<DeleteOutlined />} onClick={() => removeAllFiles()}>
                 Remove all
               </Button>
             </Stack>

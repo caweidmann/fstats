@@ -8,7 +8,7 @@ const baseConfig = {
 const filesStore = localforage.createInstance({
   ...baseConfig,
   storeName: 'fstats__files',
-  description: 'Uploaded CSV files.',
+  description: 'Uploaded files store',
 })
 
 export const db = {
