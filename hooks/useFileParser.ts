@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
+import { useStorage } from '@/components'
 import { getParser, type ParserType } from '@/utils/FileParser'
-import { storeFile } from '@/lib/storage'
 
 export interface UseFileParserOptions {
   parserType: ParserType
@@ -11,6 +11,7 @@ export interface UseFileParserOptions {
 
 export const useFileParser = (options: UseFileParserOptions) => {
   const { parserType, onComplete, onError } = options
+  const { storeFile } = useStorage()
 
   const parseFile = useCallback(
     (fileId: string, file: File) => {
@@ -38,7 +39,7 @@ export const useFileParser = (options: UseFileParserOptions) => {
         },
       })
     },
-    [parserType, onComplete, onError],
+    [parserType, onComplete, onError, storeFile],
   )
 
   return { parseFile }

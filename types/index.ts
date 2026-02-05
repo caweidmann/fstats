@@ -10,6 +10,17 @@ export type UserPreferences = {
   persistData: boolean
 }
 
+export type FileData = {
+  id: string
+  name: string
+  size: number
+  lastModified: number
+  data: unknown[]
+  uploadedAt: number
+  status: 'complete' | 'error'
+  error?: string
+}
+
 export type LocalSettings = {
   selectedFileIds: string[] | null
 }

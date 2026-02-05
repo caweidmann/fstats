@@ -1,5 +1,6 @@
 import localforage from 'localforage'
 
+import { FileData } from '@/types'
 import { MISC } from '@/common'
 import { getLocalUserPreferences } from '@/utils/LocalStorage'
 
@@ -13,17 +14,6 @@ const filesStore = localforage.createInstance({
   storeName: 'fstats__files',
   description: 'Uploaded CSV files.',
 })
-
-export interface FileData {
-  id: string
-  name: string
-  size: number
-  lastModified: number
-  data: unknown[]
-  uploadedAt: number
-  status: 'complete' | 'error'
-  error?: string
-}
 
 let isInitialised: Promise<void> | null = null
 
@@ -46,13 +36,11 @@ export const initStorage = (): Promise<void> => {
   return isInitialised
 }
 
-export const storeFile = async (file: Omit<FileData, 'uploadedAt'>): Promise<void> => {
-  await initStorage()
-  await filesStore.setItem(file.id, { ...file, uploadedAt: Date.now() })
+export const storeFile = async (file: FileData): Promise<void> => {
+  await filesStore.setItem(file.id, file)
 }
 
 export const getAllFiles = async (): Promise<FileData[]> => {
-  await initStorage()
   const files: FileData[] = []
   await filesStore.iterate<FileData, void>((value) => {
     files.push(value)
@@ -61,7 +49,6 @@ export const getAllFiles = async (): Promise<FileData[]> => {
 }
 
 export const deleteFile = async (id: string): Promise<void> => {
-  await initStorage()
   await filesStore.removeItem(id)
 }
 

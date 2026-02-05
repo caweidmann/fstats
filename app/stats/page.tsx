@@ -20,13 +20,12 @@ import {
   Typography,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { ROUTES } from '@/common'
-import { PageWrapper } from '@/components'
-import { useIsDarkMode, useIsMobile, useLocalSettings } from '@/hooks'
+import { PageWrapper, useStorage } from '@/components'
+import { useIsDarkMode, useIsMobile, useSettings } from '@/hooks'
 import { Color } from '@/styles/colors'
-import { getAllFiles } from '@/lib/storage'
 
 interface FileData {
   id: string
@@ -160,47 +159,16 @@ const StatsPage = () => {
   const router = useRouter()
   const isMobile = useIsMobile()
   const isDarkMode = useIsDarkMode()
-  const { selectedFileIds } = useLocalSettings()
-  const [filesData, setFilesData] = useState<FileData[]>([])
-  const [loading, setLoading] = useState(true)
+  const { selectedFileIds } = useSettings()
+  const { files } = useStorage()
 
-  useEffect(() => {
-    const loadFiles = async () => {
-      try {
-        const allFiles = await getAllFiles()
-
-        if (allFiles.length === 0) {
-          setLoading(false)
-          return
-        }
-
-        const filteredFiles = allFiles.filter((f) => (selectedFileIds ?? []).includes(f.id))
-
-        const allFilesData: FileData[] = filteredFiles.map((fileData) => ({
-          id: fileData.id,
-          name: fileData.name,
-          size: fileData.size,
-          data: fileData.data as Record<string, unknown>[],
-        }))
-
-        setFilesData(allFilesData)
-      } catch (error) {
-        console.error('Failed to load files from IndexedDB:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadFiles()
-  }, [selectedFileIds])
-
-  if (loading) {
-    return (
-      <PageWrapper>
-        <Typography>Loading...</Typography>
-      </PageWrapper>
-    )
-  }
+  const filesData = useMemo<FileData[]>(
+    () =>
+      files
+        .filter((f) => (selectedFileIds ?? []).includes(f.id))
+        .map((f) => ({ id: f.id, name: f.name, size: f.size, data: f.data as Record<string, unknown>[] })),
+    [files, selectedFileIds],
+  )
 
   if (filesData.length === 0) {
     return (

@@ -7,7 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
-import { LanguageProvider, Layout, ThemeProvider } from '@/components'
+import { LanguageProvider, Layout, StorageProvider, ThemeProvider } from '@/components'
 
 const SEO_TITLE = `fstats - Analyse bank statements privately`
 const SEO_DESCRIPTION = `Add files locally and get instant insights. All processing happens entirely on your device — no uploads, no accounts, no tracking.`
@@ -46,7 +46,9 @@ const Component = ({ children }: LayoutProps) => {
           <ThemeProvider>
             <InitColorSchemeScript attribute="class" />
             <LanguageProvider>
-              <Layout>{children}</Layout>
+              <StorageProvider>
+                <Layout>{children}</Layout>
+              </StorageProvider>
             </LanguageProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>

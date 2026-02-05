@@ -19,7 +19,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
-import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile, useLocalSettings, useUserPreferences } from '@/hooks'
+import { formatFileSize, useFileUpload, useIsDarkMode, useIsMobile, useSettings, useUserPreferences } from '@/hooks'
 import { toDisplayDate } from '@/utils/Date'
 
 import { ui } from './styled'
@@ -32,7 +32,8 @@ const Page = () => {
   const router = useRouter()
   const [showDetails, setShowDetails] = useState(false)
   const { locale } = useUserPreferences()
-  const { selectedFileIds, set } = useLocalSettings()
+  const { selectedFileIds, set } = useSettings()
+  console.log('selectedFileIds', selectedFileIds)
   const hasInitialised = useRef(false)
 
   const { getRootProps, getInputProps, isDragActive, uploadingFiles, removeFile, clearAllFiles } = useFileUpload({
@@ -48,7 +49,9 @@ const Page = () => {
   const uploadingInProgress = uploadingFiles.filter((f) => f.status === 'uploading')
   const errorFiles = uploadingFiles.filter((f) => f.status === 'error')
 
-  const effectiveSelectedFiles = new Set((selectedFileIds ?? []).filter((id) => completedFiles.some((f) => f.id === id)))
+  const effectiveSelectedFiles = new Set(
+    (selectedFileIds ?? []).filter((id) => completedFiles.some((f) => f.id === id)),
+  )
 
   const canContinue = effectiveSelectedFiles.size > 0 && uploadingInProgress.length === 0
 
@@ -56,7 +59,10 @@ const Page = () => {
     if (hasInitialised.current || completedFiles.length === 0) return
     hasInitialised.current = true
     if (selectedFileIds === null) {
-      set('selectedFileIds', completedFiles.map((f) => f.id))
+      set(
+        'selectedFileIds',
+        completedFiles.map((f) => f.id),
+      )
     }
   }, [completedFiles, selectedFileIds])
 
@@ -84,7 +90,10 @@ const Page = () => {
     if (effectiveSelectedFiles.size === completedFiles.length) {
       set('selectedFileIds', [])
     } else {
-      set('selectedFileIds', completedFiles.map((f) => f.id))
+      set(
+        'selectedFileIds',
+        completedFiles.map((f) => f.id),
+      )
     }
   }
 
