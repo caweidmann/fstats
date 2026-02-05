@@ -25,7 +25,7 @@ const Component = () => {
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
   const [expanded, setExpanded] = useState(false)
-  const { files, removeAllFiles, setSelectedFileIds } = useStorage()
+  const { files, removeAllFiles, removeFile, setSelectedFileIds } = useStorage()
   const { selectedFiles, selectableFiles, errorFiles } = useFileHelper()
 
   const toggleSelectAll = () => {
@@ -93,9 +93,20 @@ const Component = () => {
               >
                 {selectedFiles.length === selectableFiles.length ? 'Deselect all' : 'Select all'}
               </Button>
-              <Button size="small" color="error" startIcon={<DeleteOutlined />} onClick={() => removeAllFiles()}>
-                Remove all
-              </Button>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Button size="small" color="primary" startIcon={<DeleteOutlined />} onClick={() => removeAllFiles()}>
+                  Remove all
+                </Button>
+                <Button
+                  size="small"
+                  color="error"
+                  startIcon={<DeleteOutlined />}
+                  onClick={() => errorFiles.forEach((file) => removeFile(file.id))}
+                  disabled={!errorFiles.length}
+                >
+                  Remove invalid
+                </Button>
+              </Box>
             </Stack>
 
             {files.map((file) => (
