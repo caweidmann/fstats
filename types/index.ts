@@ -22,10 +22,11 @@ export type FileData = {
 }
 
 export type StorageContextState = {
+  isLoading: boolean
   files: FileData[]
   storeFile: (file: Omit<FileData, 'uploadedAt'>) => Promise<void>
   deleteFile: (id: string) => Promise<void>
-  clearAllFiles: () => Promise<void>
+  deleteAllFiles: () => Promise<void>
 }
 
 export type LocalSettings = {

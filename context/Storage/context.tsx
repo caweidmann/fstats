@@ -4,13 +4,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import type { ReactNode } from 'react'
 
 import type { FileData, StorageContextState } from '@/types'
-import {
-  clearAllFiles as _clearAllFiles,
-  deleteFile as _deleteFile,
-  storeFile as _storeFile,
-  getAllFiles,
-  initStorage,
-} from '@/lib/storage'
+import { db } from '@/lib/localforage'
+
+import { getAllFiles, initStorage } from './helper'
 
 const StorageContext = createContext<StorageContextState | null>(null)
 
@@ -25,28 +21,34 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
   useEffect(() => {
     const init = async () => {
       await initStorage()
-      setFiles(await getAllFiles())
+      const storedFiles = await getAllFiles()
+      setFiles(storedFiles)
       setIsLoading(false)
     }
     init()
   }, [])
 
   const storeFile = useCallback(async (file: Omit<FileData, 'uploadedAt'>) => {
-    const entry: FileData = { ...file, uploadedAt: Date.now() }
-    await _storeFile(entry)
+    const newFile: FileData = {
+      ...file,
+      uploadedAt: Date.now(),
+    }
+
+    await db.filesStore.setItem(newFile.id, newFile)
+
     setFiles((prev) => {
-      const idx = prev.findIndex((f) => f.id === file.id)
-      return idx >= 0 ? prev.map((f) => (f.id === file.id ? entry : f)) : [...prev, entry]
+      const idx = prev.findIndex((ifile) => ifile.id === file.id)
+      return idx >= 0 ? prev.map((ifile) => (ifile.id === file.id ? newFile : ifile)) : [...prev, newFile]
     })
   }, [])
 
   const deleteFile = useCallback(async (id: string) => {
-    await _deleteFile(id)
+    await db.filesStore.removeItem(id)
     setFiles((prev) => prev.filter((f) => f.id !== id))
   }, [])
 
-  const clearAllFiles = useCallback(async () => {
-    await _clearAllFiles()
+  const deleteAllFiles = useCallback(async () => {
+    await db.filesStore.clear()
     setFiles([])
   }, [])
 
@@ -56,9 +58,9 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
       files,
       storeFile,
       deleteFile,
-      clearAllFiles,
+      deleteAllFiles,
     }
-  }, [isLoading, files, storeFile, deleteFile, clearAllFiles])
+  }, [isLoading, files, storeFile, deleteFile, deleteAllFiles])
 
   return <StorageContext.Provider value={value}>{children}</StorageContext.Provider>
 }
