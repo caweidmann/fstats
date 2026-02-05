@@ -1,3 +1,14 @@
+html {
+  color-scheme: light dark;
+  background-color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    background-color: #2a2e36;
+  }
+}
+
 ::selection {
   background: #6d778c;
   color: #fff;
