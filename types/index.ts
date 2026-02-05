@@ -1,5 +1,5 @@
 import type { Locale } from 'date-fns'
-import type { ReactNode } from 'react'
+import type { Dispatch, ReactNode, SetStateAction } from 'react'
 import { z } from 'zod'
 
 import { ColorMode, UserLocale } from '@/types-enums'
@@ -22,7 +22,7 @@ export type StorageContextState = {
   isLoading: boolean
   files: FileData[]
   selectedFileIds: string[]
-  setSelectedFileIds: (ids: string[]) => void
+  setSelectedFileIds: Dispatch<SetStateAction<string[]>>
   addFiles: (files: FileData[]) => Promise<void>
   updateFile: (id: string, updates: Partial<FileData>) => Promise<void>
   removeFile: (id: string) => Promise<void>

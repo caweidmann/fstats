@@ -23,9 +23,7 @@ const Component = ({ file }: DetailsRowProps) => {
   const { removeFile } = useStorage()
 
   const toggleFileSelection = (fileId: string) => {
-    setSelectedFileIds(
-      selectedFileIds.includes(fileId) ? selectedFileIds.filter((id) => id !== fileId) : [...selectedFileIds, fileId],
-    )
+    setSelectedFileIds((prev) => (prev.includes(fileId) ? prev.filter((id) => id !== fileId) : [...prev, fileId]))
   }
 
   return (

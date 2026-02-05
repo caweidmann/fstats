@@ -20,7 +20,6 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
   const [files, setFiles] = useState<FileData[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[]>(MISC.LS_SELECTED_FILE_IDS_KEY, [])
-  console.log('selectedFileIds', selectedFileIds)
 
   useEffect(() => {
     const init = async () => {
@@ -39,10 +38,9 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
         await db.filesStore.setItem(newFile.id, newFile)
       }
       setFiles((prev) => [...prev, ...filesToAdd])
-      console.log('[addFiles] selectedFileIds', selectedFileIds)
-      setSelectedFileIds([...selectedFileIds, ...filesToAdd.map((file) => file.id)])
+      setSelectedFileIds((prev) => [...prev, ...filesToAdd.map((file) => file.id)])
     },
-    [selectedFileIds, setSelectedFileIds],
+    [setSelectedFileIds],
   )
 
   const updateFile = useCallback(async (id: string, updates: Partial<FileData>) => {
@@ -59,16 +57,16 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
     async (id: string) => {
       await db.filesStore.removeItem(id)
       setFiles((prev) => prev.filter((file) => file.id !== id))
-      setSelectedFileIds(selectedFileIds.filter((fileId) => fileId !== id))
+      setSelectedFileIds((prev) => prev.filter((fileId) => fileId !== id))
     },
-    [selectedFileIds, setSelectedFileIds],
+    [setSelectedFileIds],
   )
 
   const removeAllFiles = useCallback(async () => {
     await db.filesStore.clear()
     setFiles([])
     setSelectedFileIds([])
-  }, [selectedFileIds, setSelectedFileIds])
+  }, [setSelectedFileIds])
 
   const value = useMemo(() => {
     return {
