@@ -20,8 +20,8 @@ export const MISC = {
   LS_LOCALE_KEY: 'fstats__locale',
   LS_COLOR_MODE_KEY: 'fstats__color_mode',
   LS_PERSIST_DATA_KEY: 'fstats__persist_data',
+  LS_SELECTED_FILE_IDS_KEY: 'fstats__selected_file_ids',
   SS_SESSION_KEY: 'fstats__session',
-  SS_SELECTED_FILES_KEY: 'fstats__selected_files',
 } as const
 
 export const LAYOUT = {

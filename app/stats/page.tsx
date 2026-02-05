@@ -20,13 +20,13 @@ import {
   Typography,
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
-import { useIsDarkMode, useIsMobile } from '@/hooks'
+import { useStorage } from '@/context/Storage'
+import { useIsDarkMode, useIsMobile, useSettings } from '@/hooks'
 import { Color } from '@/styles/colors'
-import { getAllFiles, getSelectedFiles } from '@/lib/storage'
 
 interface FileData {
   id: string
@@ -160,47 +160,16 @@ const StatsPage = () => {
   const router = useRouter()
   const isMobile = useIsMobile()
   const isDarkMode = useIsDarkMode()
-  const [filesData, setFilesData] = useState<FileData[]>([])
-  const [loading, setLoading] = useState(true)
+  const { selectedFileIds } = useSettings()
+  const { files } = useStorage()
 
-  useEffect(() => {
-    const loadFiles = async () => {
-      try {
-        const [allFiles, selectedFileIds] = await Promise.all([getAllFiles(), getSelectedFiles()])
-
-        if (allFiles.length === 0) {
-          setLoading(false)
-          return
-        }
-
-        const selectedSet = selectedFileIds ? new Set(selectedFileIds) : null
-        const filteredFiles = selectedSet ? allFiles.filter((f) => selectedSet.has(f.id)) : allFiles
-
-        const allFilesData: FileData[] = filteredFiles.map((fileData) => ({
-          id: fileData.id,
-          name: fileData.name,
-          size: fileData.size,
-          data: fileData.data as Record<string, unknown>[],
-        }))
-
-        setFilesData(allFilesData)
-      } catch (error) {
-        console.error('Failed to load files from IndexedDB:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadFiles()
-  }, [])
-
-  if (loading) {
-    return (
-      <PageWrapper>
-        <Typography>Loading...</Typography>
-      </PageWrapper>
-    )
-  }
+  const filesData = useMemo<FileData[]>(
+    () =>
+      files
+        .filter((f) => (selectedFileIds ?? []).includes(f.id))
+        .map((f) => ({ id: f.id, name: f.name, size: f.size, data: f.data as Record<string, unknown>[] })),
+    [files, selectedFileIds],
+  )
 
   if (filesData.length === 0) {
     return (
@@ -230,7 +199,7 @@ const StatsPage = () => {
             component="p"
             sx={{ color: 'text.secondary', maxWidth: 440, fontSize: isMobile ? 15 : 17, lineHeight: 1.7, mb: 4 }}
           >
-            Upload some files and then come back to view your stats.
+            Upload files and then come back to view your stats.
           </Typography>
           <Button
             variant="contained"

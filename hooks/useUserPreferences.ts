@@ -6,9 +6,7 @@ import { MISC } from '@/common'
 
 type SetUserPreference = <K extends keyof UserPreferences>(key: K, value: UserPreferences[K]) => void
 
-type UseUserPreferencesReturn = UserPreferences & { set: SetUserPreference }
-
-export const useUserPreferences = (): UseUserPreferencesReturn => {
+export const useUserPreferences = (): UserPreferences & { set: SetUserPreference } => {
   const [locale, setLocale] = useLocalStorage<UserLocale>(MISC.LS_LOCALE_KEY, MISC.DEFAULT_LOCALE)
   const [colorMode, setColorMode] = useLocalStorage<ColorMode>(MISC.LS_COLOR_MODE_KEY, MISC.DEFAULT_COLOR_MODE)
   const [persistData, setPersistData] = useLocalStorage<boolean>(MISC.LS_PERSIST_DATA_KEY, MISC.DEFAULT_PERSIST_DATA)

@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useDropzone, type DropzoneOptions, type FileRejection } from 'react-dropzone'
 
 import { MISC } from '@/common'
+import { useStorage } from '@/context/Storage'
 import { type ParserType } from '@/utils/FileParser'
-import { clearAllFiles, deleteFile, getAllFiles, storeFile } from '@/lib/storage'
 
 import { useFileParser } from './useFileParser'
 
@@ -26,43 +26,21 @@ export type UseFileUploadOptions = {
 
 export const useFileUpload = (options: UseFileUploadOptions = {}) => {
   const { maxSize = MISC.MAX_UPLOAD_FILE_SIZE, accept, multiple = true, parserType = 'csv', onUploadComplete } = options
+  const { files: storedFiles, storeFile, deleteFile, clearAllFiles } = useStorage()
 
-  const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([])
-
-  useEffect(() => {
-    const restoreFiles = async () => {
-      try {
-        const allFiles = await getAllFiles()
-        setUploadingFiles(
-          allFiles.map((fileData) => {
-            const file = new File([], fileData.name, { type: 'text/csv', lastModified: fileData.lastModified })
-            Object.defineProperty(file, 'size', { value: fileData.size })
-
-            return {
-              id: fileData.id,
-              file,
-              status: fileData.status,
-              uploadedAt: fileData.uploadedAt,
-              data: fileData.data,
-              error: fileData.error,
-            }
-          }),
-        )
-      } catch (error) {
-        console.error('Failed to restore files from IndexedDB:', error)
-      }
-    }
-
-    restoreFiles()
-  }, [])
+  const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>(() =>
+    storedFiles.map((fd) => {
+      const file = new File([], fd.name, { type: 'text/csv', lastModified: fd.lastModified })
+      Object.defineProperty(file, 'size', { value: fd.size })
+      return { id: fd.id, file, status: fd.status, uploadedAt: fd.uploadedAt, data: fd.data, error: fd.error }
+    }),
+  )
 
   const { parseFile } = useFileParser({
     parserType,
     onComplete: (fileId, data) => {
       setUploadingFiles((prev) => {
-        const updated = prev.map((f) =>
-          f.id === fileId ? { ...f, status: 'complete' as const, data } : f,
-        )
+        const updated = prev.map((f) => (f.id === fileId ? { ...f, status: 'complete' as const, data } : f))
         const completedFile = updated.find((f) => f.id === fileId)
         if (completedFile && onUploadComplete) {
           onUploadComplete(completedFile)
@@ -131,17 +109,20 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
 
       newFiles.forEach((f) => parseFile(f.id, f.file))
     },
-    [parseFile],
+    [parseFile, storeFile, deleteFile],
   )
 
-  const removeFile = useCallback(async (fileId: string) => {
-    setUploadingFiles((prev) => prev.filter((f) => f.id !== fileId))
-    try {
-      await deleteFile(fileId)
-    } catch (error) {
-      console.error('Failed to remove file from IndexedDB:', error)
-    }
-  }, [])
+  const removeFile = useCallback(
+    async (fileId: string) => {
+      setUploadingFiles((prev) => prev.filter((f) => f.id !== fileId))
+      try {
+        await deleteFile(fileId)
+      } catch (error) {
+        console.error('Failed to remove file from IndexedDB:', error)
+      }
+    },
+    [deleteFile],
+  )
 
   const clearAll = useCallback(async () => {
     setUploadingFiles([])
@@ -150,7 +131,7 @@ export const useFileUpload = (options: UseFileUploadOptions = {}) => {
     } catch (error) {
       console.error('Failed to clear files from IndexedDB:', error)
     }
-  }, [])
+  }, [clearAllFiles])
 
   const dropzone = useDropzone({
     onDrop,

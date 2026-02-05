@@ -10,6 +10,28 @@ export type UserPreferences = {
   persistData: boolean
 }
 
+export type FileData = {
+  id: string
+  name: string
+  size: number
+  lastModified: number
+  data: unknown[]
+  uploadedAt: number
+  status: 'complete' | 'error'
+  error?: string
+}
+
+export type StorageContextState = {
+  files: FileData[]
+  storeFile: (file: Omit<FileData, 'uploadedAt'>) => Promise<void>
+  deleteFile: (id: string) => Promise<void>
+  clearAllFiles: () => Promise<void>
+}
+
+export type LocalSettings = {
+  selectedFileIds: string[] | null
+}
+
 export type DateFnsLocale = Locale
 
 export type FeatureFlags = Record<string, boolean>

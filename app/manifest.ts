@@ -4,7 +4,8 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'fstats',
     short_name: 'fstats',
-    description: 'Simple CSV parser',
+    description:
+      'Analyse bank statements privately. Add files locally and get instant insights. All processing happens entirely on your device — no uploads, no accounts, no tracking.',
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',
