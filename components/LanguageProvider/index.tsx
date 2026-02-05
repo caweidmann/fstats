@@ -14,7 +14,7 @@ type LanguageProviderProps = {
 
 const Component = ({ children }: LanguageProviderProps) => {
   useEffect(() => {
-    const savedLanguage = window.localStorage.getItem(MISC.LS_LOCALE_KEY)
+    const savedLanguage = localStorage.getItem(MISC.LS_LOCALE_KEY)
     if (savedLanguage) {
       i18n.changeLanguage(savedLanguage)
     }

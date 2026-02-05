@@ -1,9 +1,21 @@
+'use client'
+
 import { CssBaseline } from '@mui/material'
 import { ThemeProvider } from '@mui/material/styles'
 import type { ReactNode } from 'react'
 
 import { MISC } from '@/common'
+import { useDarkModeMetaTagUpdater } from '@/hooks'
 import { theme } from '@/styles/theme'
+
+type InnerWrapperProps = {
+  children: ReactNode
+}
+
+const InnerWrapper = ({ children }: InnerWrapperProps) => {
+  useDarkModeMetaTagUpdater()
+  return <>{children}</>
+}
 
 type ThemeProviderProps = {
   children: ReactNode
@@ -13,7 +25,7 @@ const Component = ({ children }: ThemeProviderProps) => {
   return (
     <ThemeProvider theme={theme} defaultMode={MISC.DEFAULT_COLOR_MODE}>
       <CssBaseline />
-      {children}
+      <InnerWrapper>{children}</InnerWrapper>
     </ThemeProvider>
   )
 }
