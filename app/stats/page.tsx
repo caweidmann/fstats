@@ -4,33 +4,20 @@ import { ArrowBack } from '@mui/icons-material'
 import { Box, Button, Card, CardContent, CardHeader, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
-import type { FileData } from '@/types'
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useStorage } from '@/context/Storage'
-import { useIsDarkMode, useIsMobile } from '@/hooks'
+import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
 import { Color } from '@/styles/colors'
-
-type FileTableProps = {
-  file: FileData
-}
-
-const FileTable = ({ file }: FileTableProps) => {
-  return (
-    <Card>
-      <CardHeader title={file.file.name} subheader={`${0} rows, ${0} columns`} />
-      <CardContent>hi</CardContent>
-    </Card>
-  )
-}
 
 const StatsPage = () => {
   const router = useRouter()
   const isMobile = useIsMobile()
   const isDarkMode = useIsDarkMode()
-  const { files, selectedFileIds } = useStorage()
+  const { files } = useStorage()
+  const { selectedFiles } = useFileHelper()
 
-  if (!selectedFileIds.length) {
+  if (!selectedFiles.length) {
     return (
       <PageWrapper>
         <Box
@@ -89,8 +76,11 @@ const StatsPage = () => {
           </Button>
         </Box>
 
-        {files.map((file) => (
-          <FileTable key={file.id} file={file} />
+        {selectedFiles.map((file) => (
+          <Card key={file.id}>
+            <CardHeader title={file.file.name} subheader={`${0} rows, ${0} columns`} />
+            <CardContent>hi</CardContent>
+          </Card>
         ))}
       </Stack>
     </PageWrapper>

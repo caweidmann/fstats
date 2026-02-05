@@ -8,6 +8,7 @@ import { MISC } from '@/common'
 import { useStorage } from '@/context/Storage'
 import { useUserPreferences } from '@/hooks'
 import { toDisplayDate } from '@/utils/Date'
+import { formatFileSize } from '@/utils/File'
 
 import { ui } from './styled'
 
@@ -18,9 +19,8 @@ type DetailsRowProps = {
 const Component = ({ file }: DetailsRowProps) => {
   const sx = ui()
   const { locale } = useUserPreferences()
-  const { selectedFileIds, setSelectedFileIds } = useStorage()
+  const { selectedFileIds, setSelectedFileIds, removeFile } = useStorage()
   const isSelected = selectedFileIds.includes(file.id)
-  const { removeFile } = useStorage()
 
   const toggleFileSelection = (fileId: string) => {
     setSelectedFileIds((prev) => (prev.includes(fileId) ? prev.filter((id) => id !== fileId) : [...prev, fileId]))
@@ -30,15 +30,14 @@ const Component = ({ file }: DetailsRowProps) => {
     <Box
       key={file.id}
       sx={sx.fileCard(!!file.error)}
-      onClick={(e) => {
-        e.stopPropagation()
-        if (!file.error) {
-          toggleFileSelection(file.id)
-        }
-      }}
+      onClick={file.error ? undefined : () => toggleFileSelection(file.id)}
     >
       <Stack direction="row" alignItems="center" spacing={1}>
-        {!file.error ? (
+        {file.error ? (
+          <Box sx={{ width: 28, display: 'flex', justifyContent: 'center' }}>
+            <ErrorOutlined sx={{ color: 'error.main', fontSize: 18 }} />
+          </Box>
+        ) : (
           <Checkbox
             checked={isSelected}
             onChange={() => toggleFileSelection(file.id)}
@@ -46,11 +45,8 @@ const Component = ({ file }: DetailsRowProps) => {
             size="small"
             sx={{ p: 0.5 }}
           />
-        ) : (
-          <Box sx={{ width: 28, display: 'flex', justifyContent: 'center' }}>
-            <ErrorOutlined sx={{ color: 'error.main', fontSize: 18 }} />
-          </Box>
         )}
+
         <Box sx={sx.fileContentBox}>
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography
@@ -73,8 +69,7 @@ const Component = ({ file }: DetailsRowProps) => {
           </Stack>
           <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
             <Typography variant="caption" color="text.secondary">
-              {file.file.size}
-              {/* {formatFileSize(file.file.size)} */}
+              {formatFileSize(file.file.size)}
             </Typography>
             <Typography variant="caption" color="text.secondary">
               Uploaded{' '}
@@ -82,7 +77,8 @@ const Component = ({ file }: DetailsRowProps) => {
                 formatTo: 'd MMM yyyy, HH:mm:ss',
               })}
             </Typography>
-            {file.error && file.error ? (
+
+            {file.error ? (
               <>
                 <Typography variant="caption" color="text.secondary">
                   {MISC.CENTER_DOT}
@@ -94,13 +90,11 @@ const Component = ({ file }: DetailsRowProps) => {
             ) : null}
           </Stack>
         </Box>
+
         <Tooltip title="Remove file">
           <IconButton
             color={file.error ? 'error' : 'secondary'}
-            onClick={(e) => {
-              e.stopPropagation()
-              removeFile(file.id)
-            }}
+            onClick={() => removeFile(file.id)}
             sx={sx.deleteButton}
           >
             <DeleteOutlined sx={{ fontSize: 20 }} />

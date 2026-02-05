@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useStorage } from '@/context/Storage'
+import { useFileHelper } from '@/hooks'
 
 import { AddFolderButton, FileDropZone, Summary } from './components'
 import { ui } from './styled'
@@ -13,8 +14,8 @@ import { ui } from './styled'
 const Page = () => {
   const sx = ui()
   const router = useRouter()
-  const { isLoading, files, selectedFileIds } = useStorage()
-  const selectedFiles = files.filter((file) => selectedFileIds.includes(file.id))
+  const { isLoading, files } = useStorage()
+  const { selectedFiles } = useFileHelper()
 
   if (isLoading) {
     return <PageWrapper>Loading...</PageWrapper>

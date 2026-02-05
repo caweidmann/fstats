@@ -38,7 +38,7 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
         await db.filesStore.setItem(newFile.id, newFile)
       }
       setFiles((prev) => [...prev, ...filesToAdd])
-      setSelectedFileIds((prev) => [...prev, ...filesToAdd.map((file) => file.id)])
+      setSelectedFileIds((prev) => [...prev, ...filesToAdd.filter((file) => !file.error).map((file) => file.id)])
     },
     [setSelectedFileIds],
   )

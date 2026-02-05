@@ -23,6 +23,7 @@ const Component = () => {
 
   const onDrop = useCallback(async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
     const newFiles: FileData[] = []
+
     acceptedFiles.map((file) => {
       newFiles.push({
         id: crypto.randomUUID(),
