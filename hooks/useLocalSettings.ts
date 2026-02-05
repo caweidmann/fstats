@@ -5,9 +5,7 @@ import { MISC } from '@/common'
 
 type SetLocalSetting = <K extends keyof LocalSettings>(key: K, value: LocalSettings[K]) => void
 
-type UseLocalSettingsReturn = LocalSettings & { set: SetLocalSetting }
-
-export const useLocalSettings = (): UseLocalSettingsReturn => {
+export const useLocalSettings = (): LocalSettings & { set: SetLocalSetting } => {
   const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[] | null>(MISC.LS_SELECTED_FILE_IDS_KEY, null)
 
   const set: SetLocalSetting = (key, value) => {
