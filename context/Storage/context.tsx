@@ -44,7 +44,7 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
 
   const deleteFile = useCallback(async (id: string) => {
     await db.filesStore.removeItem(id)
-    setFiles((prev) => prev.filter((f) => f.id !== id))
+    setFiles((prev) => prev.filter((file) => file.id !== id))
   }, [])
 
   const deleteAllFiles = useCallback(async () => {
