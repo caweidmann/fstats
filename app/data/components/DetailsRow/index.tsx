@@ -3,7 +3,7 @@
 import { DeleteOutlined, ErrorOutlined } from '@mui/icons-material'
 import { Box, Checkbox, CircularProgress, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 
-import { FileData } from '@/types'
+import { StatsFile } from '@/types'
 import { MISC } from '@/common'
 import { useStorage } from '@/context/Storage'
 import { useUserPreferences } from '@/hooks'
@@ -14,10 +14,11 @@ import { BankChip } from './components'
 import { ui } from './styled'
 
 type DetailsRowProps = {
-  file: FileData
+  file: StatsFile
 }
 
 const Component = ({ file }: DetailsRowProps) => {
+  console.log('file', file)
   const sx = ui()
   const { locale } = useUserPreferences()
   const { selectedFileIds, setSelectedFileIds, removeFiles } = useStorage()

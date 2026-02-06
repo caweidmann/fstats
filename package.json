@@ -26,6 +26,7 @@
     "@serwist/next": "^9.5.4",
     "@vercel/analytics": "^1.6.1",
     "@vercel/speed-insights": "^1.3.1",
+    "big.js": "^7.0.1",
     "date-fns": "^4.1.0",
     "i18next": "^25.8.4",
     "i18next-browser-languagedetector": "^8.2.0",
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
+    "@types/big.js": "^6.2.2",
     "@types/localforage": "^0.0.34",
     "@types/node": "^25.2.1",
     "@types/papaparse": "^5.5.2",

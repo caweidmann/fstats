@@ -79,7 +79,7 @@ const Component = () => {
             {errorFiles.length ? (
               <Chip
                 icon={<ErrorOutlined sx={{ fontSize: 16 }} />}
-                label={`${errorFiles.length} failed`}
+                label={`${errorFiles.length} invalid`}
                 size="small"
                 color="error"
                 variant="outlined"
@@ -129,7 +129,7 @@ const Component = () => {
                 {unknownFiles.length ? (
                   <Button
                     size="small"
-                    color="warning"
+                    color="secondary"
                     startIcon={<DeleteOutlined />}
                     onClick={() => removeUnkownFiles()}
                     disabled={!unknownFiles.length}

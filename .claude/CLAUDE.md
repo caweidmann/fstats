@@ -76,7 +76,7 @@ Plain exported functions wrapping `localforage` (IndexedDB → WebSQL → localS
 - **Every storage function calls `await initStorage()` internally** — callers never need to invoke it explicitly. After the first call it resolves immediately.
 - `setSelectedFiles` / `getSelectedFiles` is how the upload page communicates which files to show on the stats page (via IndexedDB, not URL params or state).
 
-`FileData` shape: `{ id, name, size, lastModified, data, uploadedAt, status, error? }`. `uploadedAt` is stamped with `Date.now()` at store time and surfaced on the data page.
+`StatsFile` shape: `{ id, name, size, lastModified, data, uploadedAt, status, error? }`. `uploadedAt` is stamped with `Date.now()` at store time and surfaced on the data page.
 
 ### File Upload & Parsing Flow
 

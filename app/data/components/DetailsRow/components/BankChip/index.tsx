@@ -4,12 +4,13 @@ import { ErrorOutlineOutlined, HelpOutlineOutlined } from '@mui/icons-material'
 import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import type { FileData } from '@/types'
+import type { StatsFile } from '@/types'
+import { formatType } from '@/utils/Misc'
 
 import { ui } from './styled'
 
 type BankChipProps = {
-  file: FileData
+  file: StatsFile
 }
 
 const Component = ({ file }: BankChipProps) => {
@@ -32,10 +33,10 @@ const Component = ({ file }: BankChipProps) => {
 
   return (
     <Box sx={sx.chip(false)}>
-      {isUnknown ? <HelpOutlineOutlined color="warning" sx={{ fontSize: 14 }} /> : null}
+      {isUnknown ? <HelpOutlineOutlined color="secondary" sx={{ fontSize: 14 }} /> : null}
 
-      <Typography variant="caption" sx={{ ...sx.label, color: isUnknown ? 'warning.main' : 'text.secondary' }}>
-        {isUnknown ? 'Unknown format' : bankType.charAt(0).toUpperCase() + bankType.slice(1)}
+      <Typography variant="caption" sx={{ ...sx.label, color: 'text.secondary' }}>
+        {formatType(bankType)}
       </Typography>
     </Box>
   )
