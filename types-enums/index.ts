@@ -65,20 +65,19 @@ export const WeekStartsOn = {
 
 export type WeekStartsOn = (typeof WeekStartsOn)[keyof typeof WeekStartsOn]
 
-// /**
-//  * The user's chosen display currency preference.
-//  */
-// export enum Currency {
-//   // @currency-updates
-//   USD = 'USD',
-//   EUR = 'EUR',
-//   GBP = 'GBP',
-//   CHF = 'CHF',
-//   SEK = 'SEK',
-//   BTC = 'BTC',
-//   CNY = 'CNY',
-//   RUB = 'RUB',
-//   JPY = 'JPY',
-//   INR = 'INR',
-//   ZAR = 'ZAR',
-// }
+/**
+ * The user's chosen display currency preference.
+ */
+export enum Currency {
+  USD = 'USD',
+  EUR = 'EUR',
+  GBP = 'GBP',
+  CHF = 'CHF',
+  SEK = 'SEK',
+  BTC = 'BTC',
+  CNY = 'CNY',
+  RUB = 'RUB',
+  JPY = 'JPY',
+  INR = 'INR',
+  ZAR = 'ZAR',
+}

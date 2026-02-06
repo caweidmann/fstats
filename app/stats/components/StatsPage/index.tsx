@@ -1,24 +1,30 @@
 'use client'
 
-import { ArrowBack } from '@mui/icons-material'
-import { Box, Button, Card, CardHeader, Grid, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import { Card, CardHeader, Grid } from '@mui/material'
+import { green, red } from '@mui/material/colors'
+import { useTheme } from '@mui/material/styles'
+import type { ChartData, ChartDataset, ScriptableContext } from 'chart.js'
+import { parse } from 'date-fns'
 import { useForm } from 'react-hook-form'
 
-import { ROUTES } from '@/common'
-import { PageWrapper } from '@/components'
+import { Currency } from '@/types-enums'
+import { BarChart, PageWrapper } from '@/components'
 import { Select } from '@/components/FormFieldsControlled'
-import { useFileHelper } from '@/hooks'
+import { useFileHelper, useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
+import { getGradient } from '@/utils/Misc'
 import { AVAILABLE_PARSERS } from '@/utils/Parsers'
 
-import { getBankSelectOptions } from './actions'
+import { getBankSelectOptions, getChartOptions } from './actions'
 
 type LocalForm = {
   selectedId: string
 }
 
 const Component = () => {
-  const router = useRouter()
+  const { locale } = useUserPreferences()
+  const isMobile = useIsMobile()
+  const isDarkMode = useIsDarkMode()
+  const theme = useTheme()
   const { selectedFiles } = useFileHelper()
   const bankOptions = getBankSelectOptions(selectedFiles)
   const defaultValues: LocalForm = {
@@ -33,26 +39,71 @@ const Component = () => {
         ? selectedFiles.filter((file) => !file.parserId)
         : selectedFiles.filter((file) => file.parserId === selectedBankId)
 
-  console.log('selectedFiles', selectedFiles)
-  console.log('selectedBankId', selectedBankId)
+  const allRows = filteredFiles
+    .flatMap((file) => file.parsedContentRows)
+    .sort((a, b) => {
+      const dateA = parse(a.date, 'dd/MM/yyyy', new Date()).getTime()
+      const dateB = parse(b.date, 'dd/MM/yyyy', new Date()).getTime()
+      return dateA - dateB
+    })
+
+  const calculateBarThickness = () => {
+    const transactionCount = allRows.length
+    const baseWidth = isMobile ? 300 : 800
+    const calculatedThickness = Math.floor(baseWidth / transactionCount)
+
+    const minThickness = isMobile ? 2 : 3
+    const maxThickness = isMobile ? 15 : 25
+
+    return Math.max(minThickness, Math.min(maxThickness, calculatedThickness))
+  }
+
+  const dataset: ChartDataset<'bar'> = {
+    type: 'bar',
+    label: 'Transactions',
+    data: allRows.map((row) => row.value.toNumber()),
+    backgroundColor: (context) => {
+      const value = context.parsed?.y ?? 0
+      const isPositive = value >= 0
+
+      return getGradient({
+        context: context as ScriptableContext<'line' | 'bar'>,
+        colors: {
+          start: isPositive ? green[100] : red[200],
+          end: isPositive ? green[600] : red[900],
+        },
+        direction: 'vertical',
+      })
+    },
+    borderRadius: (context) => {
+      const value = context.parsed?.y ?? 0
+      const isPositive = value >= 0
+
+      return isPositive
+        ? { topLeft: 100, topRight: 100, bottomLeft: 0, bottomRight: 0 }
+        : { topLeft: 0, topRight: 0, bottomLeft: 100, bottomRight: 100 }
+    },
+    barThickness: calculateBarThickness(),
+    order: 2,
+  }
+
+  const chartData: ChartData = {
+    labels: allRows.map((row) => row.date),
+    datasets: [dataset],
+  }
+
+  const chartOptions = getChartOptions({
+    theme,
+    isDarkMode,
+    averageLabel: '',
+    averageValue: 0,
+    currency: Currency.EUR,
+    locale,
+  })
 
   return (
     <PageWrapper>
       <Grid container spacing={2}>
-        <Grid size={12}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h4">Stats</Typography>
-            <Button
-              variant="outlined"
-              startIcon={<ArrowBack />}
-              onMouseEnter={() => router.prefetch(ROUTES.DATA)}
-              onClick={() => router.push(ROUTES.DATA)}
-            >
-              Back
-            </Button>
-          </Box>
-        </Grid>
-
         <Grid size={2}>
           <Select<LocalForm, LocalForm['selectedId']>
             control={localForm.control}
@@ -65,6 +116,13 @@ const Component = () => {
         {/* <Grid size={2}>Display currency</Grid> */}
         {/* <Grid size={2}>Compress x-axis</Grid> */}
         {/* <Grid size={2}>Combine datasets</Grid> */}
+
+        <Grid size={12}>
+          <Card sx={{ height: 300, px: 3, pt: 4, pb: 2 }}>
+            {/* @ts-expect-error Type '"line"' is not assignable to type '"bar"'. */}
+            <BarChart type="bar" data={chartData} options={chartOptions} />
+          </Card>
+        </Grid>
 
         {filteredFiles.map((file) => {
           const rowCount = file.parserId ? file.parsedContentRows.length : file.rawParseResult?.data.length
