@@ -144,7 +144,7 @@ import { CapitecParser, FNBParser } from '../Parsers'
 
 // In parseFile function:
 if (isEqual(rawParseResult.data[0], FNBParser.headers)) {
-  parsedType = SupportedParsers.FNB
+  parserId = SupportedParsers.FNB
   parsedContentRows = FNBParser.parse(rawParseResult, locale)
 }
 ```

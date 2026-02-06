@@ -29,8 +29,8 @@ const Component = () => {
   const [expanded, setExpanded] = useState(false)
   const { files, removeAllFiles, removeFiles, setSelectedFileIds } = useStorage()
   const { selectedFiles, selectableFiles, errorFiles, unknownFiles } = useFileHelper()
-  const parsedTypes = Array.from(new Set(selectedFiles.map((file) => file.parsedType || SupportedParsers.UNKNOWN)))
-  const typesFound = parsedTypes.map((type) => formatType(type).short).join(', ')
+  const parserIds = Array.from(new Set(selectedFiles.map((file) => file.parserId || SupportedParsers.UNKNOWN)))
+  const typesFound = parserIds.map((type) => formatType(type).short).join(', ')
 
   const toggleSelectAll = () => {
     if (selectedFiles.length === selectableFiles.length) {

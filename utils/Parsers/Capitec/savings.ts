@@ -5,33 +5,34 @@ import { Big } from '@/lib/w-big'
 
 import { toDisplayDate } from '../../Date'
 
-const EXPECTED_HEADER_ROW_INDEX = 0
-const EXPECTED_HEADERS = [
-  'Nr',
-  'Account',
-  'Posting Date',
-  'Transaction Date',
-  'Description',
-  'Original Description',
-  'Parent Category',
-  'Category',
-  'Money In',
-  'Money Out',
-  'Fee',
-  'Balance',
-]
-
 export const CapitecParser: Parser = {
   id: SupportedParsers.CAPITEC,
 
+  expectedHeaderRowIndex: 0,
+
+  expectedHeaders: [
+    'Nr',
+    'Account',
+    'Posting Date',
+    'Transaction Date',
+    'Description',
+    'Original Description',
+    'Parent Category',
+    'Category',
+    'Money In',
+    'Money Out',
+    'Fee',
+    'Balance',
+  ],
+
   detect: (input) => {
-    return isEqual(input.data[EXPECTED_HEADER_ROW_INDEX], EXPECTED_HEADERS)
+    return isEqual(input.data[CapitecParser.expectedHeaderRowIndex], CapitecParser.expectedHeaders)
   },
 
   parse: (input, locale) => {
     const rowsToParse = input.data
-      .slice(EXPECTED_HEADER_ROW_INDEX + 1)
-      .filter((row) => row.length === EXPECTED_HEADERS.length)
+      .slice(CapitecParser.expectedHeaderRowIndex + 1)
+      .filter((row) => row.length === CapitecParser.expectedHeaders.length)
 
     return rowsToParse.map((row) => {
       const [

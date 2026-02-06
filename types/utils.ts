@@ -28,6 +28,8 @@ export type FeatureFlags = Record<string, boolean>
 
 export type Parser = {
   id: SupportedParsers
+  expectedHeaderRowIndex: number
+  expectedHeaders: string[]
   detect: (input: PPRawParseResult) => boolean
   parse: (input: PPRawParseResult, locale: UserLocale) => ParsedContentRow[]
 }
