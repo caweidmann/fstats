@@ -5,6 +5,7 @@ import { Big } from '@/lib/w-big'
 
 import { toDisplayDate } from '../../Date'
 
+const EXPECTED_HEADER_ROW_INDEX = 0
 const EXPECTED_HEADERS = [
   'Nr',
   'Account',
@@ -24,11 +25,13 @@ export const CapitecParser: Parser = {
   id: SupportedParsers.CAPITEC,
 
   detect: (input) => {
-    return isEqual(input.data[0], EXPECTED_HEADERS)
+    return isEqual(input.data[EXPECTED_HEADER_ROW_INDEX], EXPECTED_HEADERS)
   },
 
   parse: (input, locale) => {
-    const rowsToParse = input.data.slice(1).filter((row) => row.length === EXPECTED_HEADERS.length)
+    const rowsToParse = input.data
+      .slice(EXPECTED_HEADER_ROW_INDEX + 1)
+      .filter((row) => row.length === EXPECTED_HEADERS.length)
 
     return rowsToParse.map((row) => {
       const [
