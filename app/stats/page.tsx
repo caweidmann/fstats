@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowBack } from '@mui/icons-material'
-import { Box, Button, Card, CardHeader, Grid, Stack, Typography } from '@mui/material'
+import { Box, Button, Card, CardHeader, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
 import { SupportedParsers } from '@/types-enums'
@@ -68,21 +68,21 @@ const StatsPage = () => {
           </Box>
         </Grid>
 
-        <Grid size={12}>
-          {selectedFiles.map((file) => {
-            const rowCount =
-              file.parserId !== SupportedParsers.UNKNOWN
-                ? file.parsedContentRows?.length
-                : file.rawParseResult?.data.length
-            const columnCount = file.parserId !== SupportedParsers.UNKNOWN ? 3 : file.rawParseResult?.data[0]?.length
+        {selectedFiles.map((file) => {
+          const rowCount =
+            file.parserId !== SupportedParsers.UNKNOWN
+              ? file.parsedContentRows?.length
+              : file.rawParseResult?.data.length
+          const columnCount = file.parserId !== SupportedParsers.UNKNOWN ? 3 : file.rawParseResult?.data[0]?.length
 
-            return (
-              <Card key={file.id}>
+          return (
+            <Grid key={file.id} size={12}>
+              <Card>
                 <CardHeader title={file.file.name} subheader={`${rowCount} rows, ${columnCount} columns`} />
               </Card>
-            )
-          })}
-        </Grid>
+            </Grid>
+          )
+        })}
       </Grid>
     </PageWrapper>
   )
