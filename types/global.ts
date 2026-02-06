@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react'
 import { z } from 'zod'
 
+// See: https://github.com/mui/material-ui/issues/35910
+import type {} from '@mui/material/themeCssVarsAugmentation'
+
 export const zDateRange = z.object({
   /** Start date of the interval */
   start: z.date(),
