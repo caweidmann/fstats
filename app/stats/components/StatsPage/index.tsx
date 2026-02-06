@@ -47,6 +47,17 @@ const Component = () => {
       return dateA - dateB
     })
 
+  const calculateBarThickness = () => {
+    const transactionCount = allRows.length
+    const baseWidth = isMobile ? 300 : 800
+    const calculatedThickness = Math.floor(baseWidth / transactionCount)
+
+    const minThickness = isMobile ? 2 : 3
+    const maxThickness = isMobile ? 15 : 25
+
+    return Math.max(minThickness, Math.min(maxThickness, calculatedThickness))
+  }
+
   const dataset: ChartDataset<'bar'> = {
     type: 'bar',
     label: 'Transactions',
@@ -72,7 +83,7 @@ const Component = () => {
         ? { topLeft: 100, topRight: 100, bottomLeft: 0, bottomRight: 0 }
         : { topLeft: 0, topRight: 0, bottomLeft: 100, bottomRight: 100 }
     },
-    barThickness: isMobile ? 11 : 18,
+    barThickness: calculateBarThickness(),
     order: 2,
   }
 
