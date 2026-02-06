@@ -2,7 +2,7 @@ import type { Locale } from 'date-fns'
 import type { Dispatch, SetStateAction } from 'react'
 import type { FileWithPath } from 'react-dropzone'
 
-import { ColorMode, UserLocale } from '@/types-enums'
+import { ColorMode, SupportedFormats, UserLocale } from '@/types-enums'
 
 import { DateTimeString } from './global'
 
@@ -19,7 +19,7 @@ export type FileData = {
   status: 'parsing' | 'parsed' | 'error'
   error?: string
   parsedContent?: unknown
-  parsedType?: 'unknown' | 'capitec' | 'fnb' | 'comdirect' | 'ing'
+  parsedType?: SupportedFormats
 }
 
 export type StorageContextState = {

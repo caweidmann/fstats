@@ -13,8 +13,10 @@ import { Box, Button, Chip, CircularProgress, Stack, Typography } from '@mui/mat
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
+import { SupportedFormats } from '@/types-enums'
 import { useStorage } from '@/context/Storage'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
+import { formatType } from '@/utils/Misc'
 
 import DetailsRow from '../DetailsRow'
 import { ui } from './styled'
@@ -27,6 +29,9 @@ const Component = () => {
   const [expanded, setExpanded] = useState(false)
   const { files, removeAllFiles, removeFile, setSelectedFileIds } = useStorage()
   const { selectedFiles, selectableFiles, errorFiles } = useFileHelper()
+  const parsedFiles = files.filter((file) => file.status === 'parsed')
+  const parsedTypes = Array.from(new Set(parsedFiles.map((file) => file.parsedType || SupportedFormats.UNKNOWN)))
+  const typesFound = parsedTypes.map(formatType).join(', ')
 
   const toggleSelectAll = () => {
     if (selectedFiles.length === selectableFiles.length) {
@@ -61,6 +66,11 @@ const Component = () => {
           </Stack>
 
           <Stack direction="row" spacing={1} alignItems="center" sx={{ gap: 1 }}>
+            {files.some((file) => file.status === 'parsed') ? (
+              <Typography variant="body2" color="text.secondary">
+                {typesFound}
+              </Typography>
+            ) : null}
             {files.some((file) => file.status === 'parsing') ? <CircularProgress size={20} /> : null}
 
             {errorFiles.length ? (

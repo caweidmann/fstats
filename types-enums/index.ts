@@ -7,7 +7,7 @@ export const ColorMode = {
   DARK: 'dark',
 } as const
 
-export type ColorMode = typeof ColorMode[keyof typeof ColorMode]
+export type ColorMode = (typeof ColorMode)[keyof typeof ColorMode]
 
 /**
  * The user's chosen locale, under the hood determines the language across the app.
@@ -17,7 +17,7 @@ export const UserLocale = {
   DE: 'de',
 } as const
 
-export type UserLocale = typeof UserLocale[keyof typeof UserLocale]
+export type UserLocale = (typeof UserLocale)[keyof typeof UserLocale]
 
 export const SupportedFormats = {
   UNKNOWN: 'unknown',
@@ -27,7 +27,7 @@ export const SupportedFormats = {
   // ING: 'ing',
 } as const
 
-export type SupportedFormats = typeof SupportedFormats[keyof typeof SupportedFormats]
+export type SupportedFormats = (typeof SupportedFormats)[keyof typeof SupportedFormats]
 
 /**
  * The user's chosen date format which applies across the app.
@@ -46,7 +46,7 @@ export const DateFormat = {
   YMD: 'yyyyMMdd',
 } as const
 
-export type DateFormat = typeof DateFormat[keyof typeof DateFormat]
+export type DateFormat = (typeof DateFormat)[keyof typeof DateFormat]
 
 /**
  * The user's chosen preference which determines on what day the week starts.
@@ -59,7 +59,7 @@ export const WeekStartsOn = {
   MONDAY: 'MONDAY',
 } as const
 
-export type WeekStartsOn = typeof WeekStartsOn[keyof typeof WeekStartsOn]
+export type WeekStartsOn = (typeof WeekStartsOn)[keyof typeof WeekStartsOn]
 
 // /**
 //  * The user's chosen display currency preference.

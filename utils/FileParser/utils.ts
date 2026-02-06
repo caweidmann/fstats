@@ -2,6 +2,7 @@ import { parse } from 'papaparse'
 import type { FileWithPath } from 'react-dropzone'
 
 import type { FileData } from '@/types'
+import { SupportedFormats } from '@/types-enums'
 
 import { isEqual } from '../Misc'
 
@@ -26,11 +27,11 @@ export const parseFiles = async (files: FileData[]): Promise<FileData[]> => {
 }
 
 export const parseFile = async (file: FileData): Promise<FileData> => {
-  let parsedType: FileData['parsedType'] = 'unknown'
+  let parsedType: FileData['parsedType'] = SupportedFormats.UNKNOWN
   const parsedContent = await parseRaw(file.file)
 
   if (isEqual(parsedContent.data[0], capitecHeaders)) {
-    parsedType = 'capitec'
+    parsedType = SupportedFormats.CAPITEC
   }
 
   return {
@@ -41,18 +42,17 @@ export const parseFile = async (file: FileData): Promise<FileData> => {
   }
 }
 
-export const parseRaw = async (file: File | FileWithPath): Promise<any> => {
+export const parseRaw = async (file: File): Promise<any> => {
   return new Promise((resolve, reject) => {
     parse(file, {
       // header: true,
       skipEmptyLines: true,
       worker: true,
-      complete: (results, ifile) => {
-        console.log('parsing complete:', { file: ifile, results })
+      complete: (results) => {
+        console.log('parsing complete:', results)
         resolve(results)
       },
-      error: (err, ifile) => {
-        console.error('parsing error:', { file: ifile, err })
+      error: (err) => {
         reject(err)
       },
     })
