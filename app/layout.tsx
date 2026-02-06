@@ -7,7 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
-import { LanguageProvider, Layout, ThemeProvider } from '@/components'
+import { ChartProvider, LanguageProvider, Layout, ThemeProvider } from '@/components'
 import { StorageProvider } from '@/context/Storage'
 
 const SEO_TITLE = `fstats - Analyse bank statements privately`
@@ -52,7 +52,9 @@ const Component = ({ children }: LayoutProps) => {
             <InitColorSchemeScript attribute="class" />
             <LanguageProvider>
               <StorageProvider>
-                <Layout>{children}</Layout>
+                <ChartProvider>
+                  <Layout>{children}</Layout>
+                </ChartProvider>
               </StorageProvider>
             </LanguageProvider>
           </ThemeProvider>

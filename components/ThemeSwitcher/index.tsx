@@ -3,10 +3,10 @@
 import { Button, IconButton, Tooltip, Typography } from '@mui/material'
 import { useColorScheme } from '@mui/material/styles'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { SwipeableDrawer, ThemeDrawer } from '@/components'
 import { useIsMobile } from '@/hooks'
+import { useTranslation } from '@/lib/i18n'
 
 import { getActiveIcon, getActiveLabel } from './actions'
 

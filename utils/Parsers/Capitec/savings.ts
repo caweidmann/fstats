@@ -1,13 +1,15 @@
 import type { ParsedContentRow, Parser } from '@/types'
-import { SupportedParsers } from '@/types-enums'
+import { ParserId } from '@/types-enums'
 import { isEqual } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
 import { toDisplayDate } from '../../Date'
 
 export const CapitecSavings: Parser = {
-  id: SupportedParsers.CAPITEC,
+  id: ParserId.CAPITEC,
+
   bankName: 'Capitec',
+
   accountType: 'Savings',
 
   expectedHeaderRowIndex: 0,

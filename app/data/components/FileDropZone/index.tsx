@@ -9,6 +9,7 @@ import { useDropzone } from 'react-dropzone'
 import type { FileRejection, FileWithPath } from 'react-dropzone'
 
 import { StatsFile } from '@/types'
+import { ParserId } from '@/types-enums'
 import { MISC } from '@/common'
 import { useStorage } from '@/context/Storage'
 import { useIsDarkMode, useIsMobile } from '@/hooks'
@@ -32,6 +33,8 @@ const Component = () => {
         uploaded: formatISO(new Date()),
         file,
         status: 'parsing',
+        parserId: null,
+        parsedContentRows: [],
       })
     })
 
@@ -41,6 +44,8 @@ const Component = () => {
         uploaded: formatISO(new Date()),
         file,
         status: 'error',
+        parserId: null,
+        parsedContentRows: [],
         error: errors.map((e) => e.message).join(', '),
       })
     })

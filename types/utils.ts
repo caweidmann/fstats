@@ -1,8 +1,9 @@
 import type { Locale } from 'date-fns'
 import type { Dispatch, SetStateAction } from 'react'
 
-import { ColorMode, SupportedParsers, UserLocale } from '@/types-enums'
+import { ColorMode, ParserId, UserLocale } from '@/types-enums'
 
+import type { SelectOptionWithType } from './global'
 import type { ParsedContentRow, PPRawParseResult, StatsFile } from './stats-file'
 
 export type UserPreferences = {
@@ -27,7 +28,7 @@ export type DateFnsLocale = Locale
 export type FeatureFlags = Record<string, boolean>
 
 export type Parser = {
-  id: SupportedParsers
+  id: ParserId
   bankName: string
   accountType: string
   expectedHeaderRowIndex: number
@@ -35,3 +36,5 @@ export type Parser = {
   detect: (input: PPRawParseResult) => boolean
   parse: (input: PPRawParseResult, locale: UserLocale) => ParsedContentRow[]
 }
+
+export type BankSelectOption = SelectOptionWithType<ParserId | 'all' | 'unknown'>
