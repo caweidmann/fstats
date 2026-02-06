@@ -1,7 +1,7 @@
 'use client'
 
 import { DeleteOutlined, ErrorOutlined } from '@mui/icons-material'
-import { Box, Checkbox, Chip, IconButton, Stack, Tooltip, Typography } from '@mui/material'
+import { Box, Checkbox, Chip, CircularProgress, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 
 import { FileData } from '@/types'
 import { MISC } from '@/common'
@@ -10,6 +10,7 @@ import { useUserPreferences } from '@/hooks'
 import { toDisplayDate } from '@/utils/Date'
 import { formatFileSize } from '@/utils/File'
 
+import { BankChip } from './components'
 import { ui } from './styled'
 
 type DetailsRowProps = {
@@ -29,7 +30,7 @@ const Component = ({ file }: DetailsRowProps) => {
   return (
     <Box
       key={file.id}
-      sx={sx.fileCard(!!file.error)}
+      sx={sx.fileCard(!!file.error, file.status === 'parsing')}
       onClick={file.error ? undefined : () => toggleFileSelection(file.id)}
     >
       <Stack direction="row" alignItems="center" spacing={1}>
@@ -57,7 +58,8 @@ const Component = ({ file }: DetailsRowProps) => {
             >
               {file.file.name}
             </Typography>
-            {file.error && (
+
+            {file.error ? (
               <Chip
                 label="Failed"
                 size="small"
@@ -65,17 +67,15 @@ const Component = ({ file }: DetailsRowProps) => {
                 variant="outlined"
                 sx={{ height: 18, fontSize: '0.7rem' }}
               />
-            )}
+            ) : null}
           </Stack>
+
           <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
             <Typography variant="caption" color="text.secondary">
               {formatFileSize(file.file.size)}
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              Uploaded{' '}
-              {toDisplayDate(new Date(file.uploaded), locale, {
-                formatTo: 'd MMM yyyy, HH:mm:ss',
-              })}
+              Uploaded {toDisplayDate(new Date(file.uploaded), locale, { formatTo: 'd MMM yyyy, HH:mm:ss' })}
             </Typography>
 
             {file.error ? (
@@ -91,15 +91,16 @@ const Component = ({ file }: DetailsRowProps) => {
           </Stack>
         </Box>
 
-        <Tooltip title="Remove file">
-          <IconButton
-            color={file.error ? 'error' : 'secondary'}
-            onClick={() => removeFile(file.id)}
-            sx={sx.deleteButton}
-          >
-            <DeleteOutlined sx={{ fontSize: 20 }} />
-          </IconButton>
-        </Tooltip>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+          {file.status === 'parsing' ? <CircularProgress size={14} /> : null}
+          {file.status === 'parsed' ? <BankChip file={file} /> : null}
+
+          <Tooltip title="Remove file">
+            <IconButton color={file.error ? 'error' : 'secondary'} onClick={() => removeFile(file.id)}>
+              <DeleteOutlined sx={{ fontSize: 20 }} />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Stack>
     </Box>
   )

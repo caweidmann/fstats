@@ -19,6 +19,7 @@ export type FileData = {
   status: 'parsing' | 'parsed' | 'error'
   error?: string
   parsedContent?: unknown
+  parsedType?: 'unknown' | 'capitec' | 'fnb' | 'comdirect' | 'ing'
 }
 
 export type StorageContextState = {

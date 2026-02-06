@@ -34,9 +34,8 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
 
   const addFiles = useCallback(
     async (filesToAdd: FileData[]) => {
-      for (const file of filesToAdd) {
-        await db.filesStore.setItem(file.id, file)
-      }
+      const promises = filesToAdd.map((file) => db.filesStore.setItem(file.id, file))
+      await Promise.all(promises)
       setFiles((prev) => [...prev, ...filesToAdd])
       setSelectedFileIds((prev) => [...prev, ...filesToAdd.filter((file) => !file.error).map((file) => file.id)])
     },

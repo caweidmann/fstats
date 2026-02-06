@@ -36,6 +36,11 @@ const Component = () => {
     }
   }
 
+  const removeInvalidFiles = async () => {
+    const promises = errorFiles.map((file) => removeFile(file.id))
+    await Promise.all(promises)
+  }
+
   if (!files.length) {
     return null
   }
@@ -100,7 +105,7 @@ const Component = () => {
                   size="small"
                   color="error"
                   startIcon={<DeleteOutlined />}
-                  onClick={() => errorFiles.forEach((file) => removeFile(file.id))}
+                  onClick={() => removeInvalidFiles()}
                   disabled={!errorFiles.length}
                 >
                   Remove invalid

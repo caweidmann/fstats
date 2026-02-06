@@ -1,9 +1,10 @@
 export const ui = () => {
   return {
-    fileCard: (isError: boolean) => ({
+    fileCard: (isError: boolean, isParsing: boolean) => ({
       py: 0.5,
       cursor: isError ? 'default' : 'pointer',
       borderRadius: 1.25,
+      opacity: isParsing ? 0.6 : 1,
       WebkitTapHighlightColor: 'transparent',
     }),
 
@@ -16,10 +17,6 @@ export const ui = () => {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
-    },
-
-    deleteButton: {
-      ml: 1,
     },
   }
 }
