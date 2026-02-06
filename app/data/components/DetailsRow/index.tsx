@@ -18,7 +18,6 @@ type DetailsRowProps = {
 }
 
 const Component = ({ file }: DetailsRowProps) => {
-  console.log('file', file)
   const sx = ui()
   const { locale } = useUserPreferences()
   const { selectedFileIds, setSelectedFileIds, removeFiles } = useStorage()

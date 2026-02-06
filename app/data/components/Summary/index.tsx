@@ -13,7 +13,7 @@ import { Box, Button, Chip, CircularProgress, Stack, Typography } from '@mui/mat
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
-import { SupportedFormats } from '@/types-enums'
+import { SupportedParsers } from '@/types-enums'
 import { useStorage } from '@/context/Storage'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
 import { formatType } from '@/utils/Misc'
@@ -29,9 +29,8 @@ const Component = () => {
   const [expanded, setExpanded] = useState(false)
   const { files, removeAllFiles, removeFiles, setSelectedFileIds } = useStorage()
   const { selectedFiles, selectableFiles, errorFiles, unknownFiles } = useFileHelper()
-  const parsedFiles = files.filter((file) => file.status === 'parsed')
-  const parsedTypes = Array.from(new Set(parsedFiles.map((file) => file.parsedType || SupportedFormats.UNKNOWN)))
-  const typesFound = parsedTypes.map(formatType).join(', ')
+  const parsedTypes = Array.from(new Set(selectedFiles.map((file) => file.parsedType || SupportedParsers.UNKNOWN)))
+  const typesFound = parsedTypes.map((type) => formatType(type).short).join(', ')
 
   const toggleSelectAll = () => {
     if (selectedFiles.length === selectableFiles.length) {

@@ -1,9 +1,9 @@
 import type { Locale } from 'date-fns'
 import type { Dispatch, SetStateAction } from 'react'
 
-import { ColorMode, UserLocale } from '@/types-enums'
+import { ColorMode, SupportedParsers, UserLocale } from '@/types-enums'
 
-import { StatsFile } from './stats-file'
+import type { ParsedContentRow, PPDataRow, PPRawParseResult, StatsFile } from './stats-file'
 
 export type UserPreferences = {
   locale: UserLocale
@@ -25,3 +25,10 @@ export type StorageContextState = {
 export type DateFnsLocale = Locale
 
 export type FeatureFlags = Record<string, boolean>
+
+export type Parser = {
+  format: SupportedParsers
+  name: string
+  detect: (rows: PPDataRow[]) => boolean
+  parse: (input: PPRawParseResult, locale: UserLocale) => ParsedContentRow[]
+}

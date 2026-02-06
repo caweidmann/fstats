@@ -1,9 +1,8 @@
-import Big from 'big.js'
-
 import { StatsFile, StatsFileAtRest } from '@/types'
 import { MISC } from '@/common'
 import { getLocalUserPreferences } from '@/utils/LocalStorage'
 import { db } from '@/lib/localforage'
+import { Big } from '@/lib/w-big'
 
 export const initStorage = async () => {
   const { persistData } = getLocalUserPreferences()

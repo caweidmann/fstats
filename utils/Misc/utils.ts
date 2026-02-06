@@ -1,4 +1,5 @@
-import { SupportedFormats } from '@/types-enums'
+import { SupportedParsers } from '@/types-enums'
+import { MISC } from '@/common'
 
 export const sleep = (ms: number) => {
   return new Promise((resolve) => {
@@ -10,20 +11,23 @@ export const isEqual = (array1: string[], array2: string[]) => {
   return array1.length === array2.length && array1.every((value, index) => value === array2[index])
 }
 
-export const formatType = (type: SupportedFormats) => {
+export const formatType = (type: SupportedParsers): { short: string; long: string } => {
   switch (type) {
-    case SupportedFormats.UNKNOWN:
-      return 'Unknown format'
-    case SupportedFormats.CAPITEC:
-      return 'Capitec'
-    // case SupportedFormats.FNB:
-    //   return 'FNB'
-    // case SupportedFormats.COMDIRECT:
-    //   return 'Comdirect'
-    // case SupportedFormats.ING:
-    //   return 'ING'
+    case SupportedParsers.UNKNOWN:
+      return {
+        short: 'Unknown',
+        long: 'Unknown format',
+      }
+    case SupportedParsers.CAPITEC:
+      return {
+        short: 'Capitec',
+        long: `Capitec ${MISC.CENTER_DOT} Savings`,
+      }
     default:
       console.warn(`Unsupported format type: ${type}`)
-      return type
+      return {
+        short: 'Unsupported',
+        long: 'Unsupported format',
+      }
   }
 }

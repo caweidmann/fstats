@@ -1,26 +1,14 @@
-import Big from 'big.js'
 import { parse } from 'papaparse'
 
-import type { StatsFile } from '@/types'
-import { SupportedFormats } from '@/types-enums'
-import { getLocalUserPreferences } from '@/utils/LocalStorage'
+import type { Parser, PPRawParseResult, StatsFile } from '@/types'
+import { SupportedParsers } from '@/types-enums'
 
-import { toDisplayDate } from '../Date'
-import { isEqual } from '../Misc'
+import { getLocalUserPreferences } from '../LocalStorage'
+import { CapitecParser } from '../Parsers'
 
-const capitecHeaders = [
-  'Nr',
-  'Account',
-  'Posting Date',
-  'Transaction Date',
-  'Description',
-  'Original Description',
-  'Parent Category',
-  'Category',
-  'Money In',
-  'Money Out',
-  'Fee',
-  'Balance',
+const AVAILABLE_PARSERS: Parser[] = [
+  // Order matters, more specific parsers first
+  CapitecParser,
 ]
 
 export const parseFiles = async (files: StatsFile[]): Promise<StatsFile[]> => {
@@ -30,56 +18,51 @@ export const parseFiles = async (files: StatsFile[]): Promise<StatsFile[]> => {
 
 export const parseFile = async (file: StatsFile): Promise<StatsFile> => {
   const { locale } = getLocalUserPreferences()
-  let parsedType: StatsFile['parsedType'] = SupportedFormats.UNKNOWN
-  let parsedContentRows: StatsFile['parsedContentRows']
-  const parsedRaw = await parseRaw(file.file)
+  const rawParseResult = await parseRaw(file.file)
 
-  if (isEqual(parsedRaw.data[0], capitecHeaders)) {
-    parsedType = SupportedFormats.CAPITEC
-    parsedContentRows = parsedRaw.data.slice(1).map((row: string[]) => {
-      const [
-        _nr,
-        account,
-        postingDate,
-        transactionDate,
-        description,
-        originalDescription,
-        parentCategory,
-        category,
-        moneyIn,
-        moneyOut,
-        fee,
-        balance,
-      ] = row
+  let parsedType: StatsFile['parsedType'] = SupportedParsers.UNKNOWN
+  let parsedContentRows: StatsFile['parsedContentRows'] = []
 
-      return {
-        date: toDisplayDate(transactionDate, locale, {
-          formatTo: 'dd/MM/yyyy HH:SS',
-          formatFrom: 'yyyy-MM-dd HH:SS',
-        }),
-        description,
-        value: moneyIn ? Big(moneyIn || 0) : Big(moneyOut || 0),
+  let matchedParser: Parser | null = null
+
+  for (const parser of AVAILABLE_PARSERS) {
+    try {
+      if (parser.detect(rawParseResult.data)) {
+        matchedParser = parser
+        break
       }
-    })
+    } catch (err) {
+      console.error(`Error detecting with ${parser.name}:`, err)
+    }
+  }
+
+  if (matchedParser) {
+    try {
+      parsedType = matchedParser.format
+      parsedContentRows = matchedParser.parse(rawParseResult, locale)
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : String(err)
+      console.error(`Parsing failed with ${matchedParser.name}: ${errorMessage}`)
+    }
   }
 
   return {
     ...file,
     status: 'parsed',
-    parsedRaw,
+    rawParseResult,
     parsedContentRows,
     parsedType,
   }
 }
 
-export const parseRaw = async (file: File): Promise<any> => {
+export const parseRaw = async (file: File): Promise<PPRawParseResult> => {
   return new Promise((resolve, reject) => {
     parse(file, {
-      // header: true,
+      header: false,
       skipEmptyLines: true,
       worker: true,
       complete: (results) => {
-        resolve(results)
+        resolve(results as PPRawParseResult)
       },
       error: (err) => {
         reject(err)
