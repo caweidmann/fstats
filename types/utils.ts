@@ -3,6 +3,7 @@ import type { Dispatch, SetStateAction } from 'react'
 
 import { ColorMode, ParserId, UserLocale } from '@/types-enums'
 
+import type { SelectOptionWithType } from './global'
 import type { ParsedContentRow, PPRawParseResult, StatsFile } from './stats-file'
 
 export type UserPreferences = {
@@ -35,3 +36,5 @@ export type Parser = {
   detect: (input: PPRawParseResult) => boolean
   parse: (input: PPRawParseResult, locale: UserLocale) => ParsedContentRow[]
 }
+
+export type BankSelectOption = SelectOptionWithType<ParserId | 'all' | 'unknown'>
