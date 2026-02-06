@@ -1,8 +1,7 @@
 import type { Parser } from '@/types'
-import { SupportedParsers } from '@/types-enums'
 
 import { CapitecParser } from './Capitec'
 
-export const AVAILABLE_PARSERS: Partial<Record<SupportedParsers, Parser>> = {
-  [CapitecParser.id]: CapitecParser,
+export const AVAILABLE_PARSERS: Record<'capitec__savings', Parser> = {
+  capitec__savings: CapitecParser,
 }

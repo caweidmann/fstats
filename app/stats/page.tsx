@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowBack } from '@mui/icons-material'
-import { Box, Button, Card, CardContent, CardHeader, Grid, Stack, Typography } from '@mui/material'
+import { Box, Button, Card, CardHeader, Grid, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
 import { SupportedParsers } from '@/types-enums'

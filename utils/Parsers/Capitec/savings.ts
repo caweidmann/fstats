@@ -7,6 +7,8 @@ import { toDisplayDate } from '../../Date'
 
 export const CapitecParser: Parser = {
   id: SupportedParsers.CAPITEC,
+  bankName: 'Capitec',
+  accountType: 'Savings',
 
   expectedHeaderRowIndex: 0,
 
