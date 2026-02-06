@@ -1,32 +1,40 @@
-import type { Parser } from '@/types'
+import type { ParsedContentRow, Parser } from '@/types'
 import { SupportedParsers } from '@/types-enums'
+import { isEqual } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
 import { toDisplayDate } from '../../Date'
 
 export const CapitecParser: Parser = {
-  format: SupportedParsers.CAPITEC,
+  id: SupportedParsers.CAPITEC,
 
-  name: 'Capitec Bank Savings Account',
+  expectedHeaderRowIndex: 0,
 
-  detect: (rows) => {
-    if (!rows || rows.length < 2) return false
+  expectedHeaders: [
+    'Nr',
+    'Account',
+    'Posting Date',
+    'Transaction Date',
+    'Description',
+    'Original Description',
+    'Parent Category',
+    'Category',
+    'Money In',
+    'Money Out',
+    'Fee',
+    'Balance',
+  ],
 
-    const headers = rows[0] || []
-    if (headers.length < 12) return false
-
-    // Check for exact Capitec headers
-    return (
-      headers[0] === 'Nr' &&
-      headers[3] === 'Transaction Date' &&
-      headers[4] === 'Description' &&
-      headers[8] === 'Money In' &&
-      headers[9] === 'Money Out'
-    )
+  detect: (input) => {
+    return isEqual(input.data[CapitecParser.expectedHeaderRowIndex], CapitecParser.expectedHeaders)
   },
 
   parse: (input, locale) => {
-    return input.data.slice(1).map((row: string[]) => {
+    const rowsToParse = input.data
+      .slice(CapitecParser.expectedHeaderRowIndex + 1)
+      .filter((row) => row.length === CapitecParser.expectedHeaders.length)
+
+    return rowsToParse.map((row) => {
       const [
         nr,
         account,
@@ -42,14 +50,16 @@ export const CapitecParser: Parser = {
         balance,
       ] = row
 
-      return {
+      const data: ParsedContentRow = {
         date: toDisplayDate(transactionDate, locale, {
-          formatTo: 'dd/MM/yyyy HH:SS',
+          formatTo: 'dd/MM/yyyy',
           formatFrom: 'yyyy-MM-dd HH:SS',
         }),
         description,
         value: moneyIn ? Big(moneyIn) : moneyOut ? Big(moneyOut).times(-1) : fee ? Big(fee).times(-1) : Big(0),
       }
+
+      return data
     })
   },
 }

@@ -4,6 +4,7 @@ import { ArrowBack } from '@mui/icons-material'
 import { Box, Button, Card, CardContent, CardHeader, Grid, Stack, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
+import { SupportedParsers } from '@/types-enums'
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
@@ -65,12 +66,19 @@ const StatsPage = () => {
           </Button>
         </Box>
 
-        {selectedFiles.map((file) => (
-          <Card key={file.id}>
-            <CardHeader title={file.file.name} subheader={`${0} rows, ${0} columns`} />
-            <CardContent>hi</CardContent>
-          </Card>
-        ))}
+        {selectedFiles.map((file) => {
+          const rowCount =
+            file.parserId !== SupportedParsers.UNKNOWN
+              ? file.parsedContentRows?.length
+              : file.rawParseResult?.data.length
+          const columnCount = file.parserId !== SupportedParsers.UNKNOWN ? 3 : file.rawParseResult?.data[0]?.length
+
+          return (
+            <Card key={file.id}>
+              <CardHeader title={file.file.name} subheader={`${rowCount} rows, ${columnCount} columns`} />
+            </Card>
+          )
+        })}
       </Stack>
     </PageWrapper>
   )
