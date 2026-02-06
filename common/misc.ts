@@ -11,7 +11,6 @@ export const MISC = {
   M_DASH_ALT: '–',
   GLASS_EFFECT: 0.8,
   MAX_UPLOAD_FILE_SIZE: 5 * 1024 * 1024,
-  SUPPORTED_BANKS: ['FNB', 'Capitec', 'Comdirect', 'ING'],
   SYSTEM_DATE_FORMAT: DateFormat.YMD_DASH,
   DEFAULT_DATE_FORMAT: DateFormat.YMD_DASH,
   DEFAULT_LOCALE: UserLocale.EN,
