@@ -26,7 +26,7 @@ export type StatsFile = {
   uploaded: DateTimeString
   status: 'parsing' | 'parsed' | 'error'
   error?: string
-  parsedType?: SupportedParsers
+  parserId?: SupportedParsers
   rawParseResult?: PPRawParseResult
   parsedContentRows?: ParsedContentRow[]
 }

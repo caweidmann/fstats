@@ -15,7 +15,7 @@ type BankChipProps = {
 }
 
 const Component = ({ file }: BankChipProps) => {
-  const bankType = file.parsedType || SupportedParsers.UNKNOWN
+  const bankType = file.parserId || SupportedParsers.UNKNOWN
   const isUnknown = bankType === SupportedParsers.UNKNOWN
   const theme = useTheme()
   const sx = ui(theme)

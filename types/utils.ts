@@ -3,7 +3,7 @@ import type { Dispatch, SetStateAction } from 'react'
 
 import { ColorMode, SupportedParsers, UserLocale } from '@/types-enums'
 
-import type { ParsedContentRow, PPDataRow, PPRawParseResult, StatsFile } from './stats-file'
+import type { ParsedContentRow, PPRawParseResult, StatsFile } from './stats-file'
 
 export type UserPreferences = {
   locale: UserLocale
@@ -27,8 +27,9 @@ export type DateFnsLocale = Locale
 export type FeatureFlags = Record<string, boolean>
 
 export type Parser = {
-  format: SupportedParsers
-  name: string
-  detect: (rows: PPDataRow[]) => boolean
+  id: SupportedParsers
+  expectedHeaderRowIndex: number
+  expectedHeaders: string[]
+  detect: (input: PPRawParseResult) => boolean
   parse: (input: PPRawParseResult, locale: UserLocale) => ParsedContentRow[]
 }
