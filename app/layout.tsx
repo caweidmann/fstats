@@ -11,7 +11,7 @@ import { LanguageProvider, Layout, ThemeProvider } from '@/components'
 import { StorageProvider } from '@/context/Storage'
 
 const SEO_TITLE = `fstats - Analyse bank statements privately`
-const SEO_DESCRIPTION = `Add your CSV statements and get instant insights. All processing happens entirely on your device — no uploads, no accounts, no tracking.`
+const SEO_DESCRIPTION = `Add CSV statements and get instant insights. All processing happens entirely on your device — no uploads, no accounts, no tracking.`
 
 export const metadata: Metadata = {
   title: SEO_TITLE,

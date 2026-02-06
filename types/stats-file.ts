@@ -24,7 +24,7 @@ export type StatsFile = {
   status: 'parsing' | 'parsed' | 'error'
   error?: string
   parsedType?: SupportedFormats
-  parsedRaw?: ParseResult<any>
+  rawParseResult?: ParseResult<any>
   parsedContentRows?: ParsedContentRow[]
 }
 

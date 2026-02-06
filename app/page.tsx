@@ -35,8 +35,8 @@ const Page = () => {
         </Typography>
 
         <Typography variant="body1" component="p" sx={sx.heroSubtitle}>
-          Add your CSV statements and get instant insights. All processing happens entirely on your device — no uploads,
-          no accounts, no tracking.
+          Add CSV statements and get instant insights. All processing happens entirely on your device — no uploads, no
+          accounts, no tracking.
         </Typography>
 
         <Button
