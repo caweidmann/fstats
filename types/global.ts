@@ -4,6 +4,8 @@ import { z } from 'zod'
 // See: https://github.com/mui/material-ui/issues/35910
 import type {} from '@mui/material/themeCssVarsAugmentation'
 
+import type { Big as TypeBig } from 'big.js'
+
 export const zDateRange = z.object({
   /** Start date of the interval */
   start: z.date(),
@@ -52,3 +54,8 @@ export const zWeekStartsOnValue = z.union([z.literal(0), z.literal(1)])
  * i.e. 0 or 1.
  */
 export type WeekStartsOnValue = z.infer<typeof zWeekStartsOnValue>
+
+/**
+ * Proxy for Big type.
+ */
+export type NumberBig = TypeBig

@@ -13,8 +13,10 @@ import { Box, Button, Chip, CircularProgress, Stack, Typography } from '@mui/mat
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
+import { SupportedFormats } from '@/types-enums'
 import { useStorage } from '@/context/Storage'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
+import { formatType } from '@/utils/Misc'
 
 import DetailsRow from '../DetailsRow'
 import { ui } from './styled'
@@ -25,8 +27,11 @@ const Component = () => {
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
   const [expanded, setExpanded] = useState(false)
-  const { files, removeAllFiles, removeFile, setSelectedFileIds } = useStorage()
-  const { selectedFiles, selectableFiles, errorFiles } = useFileHelper()
+  const { files, removeAllFiles, removeFiles, setSelectedFileIds } = useStorage()
+  const { selectedFiles, selectableFiles, errorFiles, unknownFiles } = useFileHelper()
+  const parsedFiles = files.filter((file) => file.status === 'parsed')
+  const parsedTypes = Array.from(new Set(parsedFiles.map((file) => file.parsedType || SupportedFormats.UNKNOWN)))
+  const typesFound = parsedTypes.map(formatType).join(', ')
 
   const toggleSelectAll = () => {
     if (selectedFiles.length === selectableFiles.length) {
@@ -37,8 +42,11 @@ const Component = () => {
   }
 
   const removeInvalidFiles = async () => {
-    const promises = errorFiles.map((file) => removeFile(file.id))
-    await Promise.all(promises)
+    await removeFiles(errorFiles.map((file) => file.id))
+  }
+
+  const removeUnkownFiles = async () => {
+    await removeFiles(unknownFiles.map((file) => file.id))
   }
 
   if (!files.length) {
@@ -61,12 +69,17 @@ const Component = () => {
           </Stack>
 
           <Stack direction="row" spacing={1} alignItems="center" sx={{ gap: 1 }}>
+            {files.some((file) => file.status === 'parsed') ? (
+              <Typography variant="body2" color="text.secondary">
+                {typesFound}
+              </Typography>
+            ) : null}
             {files.some((file) => file.status === 'parsing') ? <CircularProgress size={20} /> : null}
 
             {errorFiles.length ? (
               <Chip
                 icon={<ErrorOutlined sx={{ fontSize: 16 }} />}
-                label={`${errorFiles.length} failed`}
+                label={`${errorFiles.length} invalid`}
                 size="small"
                 color="error"
                 variant="outlined"
@@ -101,15 +114,30 @@ const Component = () => {
                 {selectedFiles.length === selectableFiles.length ? 'Deselect all' : 'Select all'}
               </Button>
               <Box sx={{ display: 'flex', gap: 1 }}>
-                <Button
-                  size="small"
-                  color="error"
-                  startIcon={<DeleteOutlined />}
-                  onClick={() => removeInvalidFiles()}
-                  disabled={!errorFiles.length}
-                >
-                  Remove invalid
-                </Button>
+                {errorFiles.length ? (
+                  <Button
+                    size="small"
+                    color="error"
+                    startIcon={<DeleteOutlined />}
+                    onClick={() => removeInvalidFiles()}
+                    disabled={!errorFiles.length}
+                  >
+                    Remove invalid
+                  </Button>
+                ) : null}
+
+                {unknownFiles.length ? (
+                  <Button
+                    size="small"
+                    color="secondary"
+                    startIcon={<DeleteOutlined />}
+                    onClick={() => removeUnkownFiles()}
+                    disabled={!unknownFiles.length}
+                  >
+                    Remove unknown
+                  </Button>
+                ) : null}
+
                 <Button size="small" color="primary" startIcon={<DeleteOutlined />} onClick={() => removeAllFiles()}>
                   Remove all
                 </Button>

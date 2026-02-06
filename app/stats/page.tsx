@@ -34,7 +34,7 @@ const StatsPage = () => {
             variant="body2"
             sx={{ color: 'text.secondary', fontSize: isMobile ? 15 : 17, lineHeight: 1.7, mb: 4 }}
           >
-            Upload some files and then come back to view your stats.
+            Upload a CSV file and then come back to view your stats.
           </Typography>
           <Button
             variant="contained"

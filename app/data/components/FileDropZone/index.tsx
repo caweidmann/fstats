@@ -8,7 +8,7 @@ import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { FileRejection, FileWithPath } from 'react-dropzone'
 
-import { FileData } from '@/types'
+import { StatsFile } from '@/types'
 import { MISC } from '@/common'
 import { useStorage } from '@/context/Storage'
 import { useIsDarkMode, useIsMobile } from '@/hooks'
@@ -24,7 +24,7 @@ const Component = () => {
   const { addFiles, updateFile } = useStorage()
 
   const onDrop = useCallback(async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
-    const newFiles: FileData[] = []
+    const newFiles: StatsFile[] = []
 
     acceptedFiles.map((file) => {
       newFiles.push({

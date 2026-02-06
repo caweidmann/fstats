@@ -1,15 +1,14 @@
 'use client'
 
-import { formatISO } from 'date-fns'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
-import type { FileData, StorageContextState } from '@/types'
+import type { StatsFile, StatsFileAtRest, StorageContextState } from '@/types'
 import { MISC } from '@/common'
 import { db } from '@/lib/localforage'
 
-import { getFiles, initStorage } from './helper'
+import { getFiles, initStorage, parseFileFromStorage, syncFileToStorage } from './helper'
 
 const StorageContext = createContext<StorageContextState | null>(null)
 
@@ -18,7 +17,7 @@ type StorageContextProviderProps = {
 }
 
 export const StorageProvider = ({ children }: StorageContextProviderProps) => {
-  const [files, setFiles] = useState<FileData[]>([])
+  const [files, setFiles] = useState<StatsFile[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[]>(MISC.LS_SELECTED_FILE_IDS_KEY, [])
 
@@ -33,8 +32,10 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
   }, [])
 
   const addFiles = useCallback(
-    async (filesToAdd: FileData[]) => {
-      const promises = filesToAdd.map((file) => db.filesStore.setItem(file.id, file))
+    async (filesToAdd: StatsFile[]) => {
+      const promises = filesToAdd.map((file) =>
+        db.filesStore.setItem<StatsFileAtRest>(file.id, syncFileToStorage(file)),
+      )
       await Promise.all(promises)
       setFiles((prev) => [...prev, ...filesToAdd])
       setSelectedFileIds((prev) => [...prev, ...filesToAdd.filter((file) => !file.error).map((file) => file.id)])
@@ -42,21 +43,22 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
     [setSelectedFileIds],
   )
 
-  const updateFile = useCallback(async (id: string, updates: Partial<FileData>) => {
-    const file = await db.filesStore.getItem<FileData>(id)
+  const updateFile = useCallback(async (id: string, updates: Partial<StatsFile>) => {
+    const file = await db.filesStore.getItem<StatsFileAtRest>(id)
     if (!file) {
       throw new Error('File not found!')
     }
-    const updatedFile = { ...file, ...updates }
-    await db.filesStore.setItem(id, updatedFile)
+    const updatedFile = { ...parseFileFromStorage(file), ...updates }
+    await db.filesStore.setItem<StatsFileAtRest>(id, syncFileToStorage(updatedFile))
     setFiles((prev) => prev.map((ifile) => (ifile.id === id ? updatedFile : ifile)))
   }, [])
 
-  const removeFile = useCallback(
-    async (id: string) => {
-      await db.filesStore.removeItem(id)
-      setFiles((prev) => prev.filter((file) => file.id !== id))
-      setSelectedFileIds((prev) => prev.filter((fileId) => fileId !== id))
+  const removeFiles = useCallback(
+    async (ids: string[]) => {
+      const promises = ids.map((id) => db.filesStore.removeItem(id))
+      await Promise.all(promises)
+      setFiles((prev) => prev.filter((file) => !ids.includes(file.id)))
+      setSelectedFileIds((prev) => prev.filter((fileId) => !ids.includes(fileId)))
     },
     [setSelectedFileIds],
   )
@@ -75,10 +77,10 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
       setSelectedFileIds,
       addFiles,
       updateFile,
-      removeFile,
+      removeFiles,
       removeAllFiles,
     }
-  }, [isLoading, files, selectedFileIds, setSelectedFileIds, addFiles, updateFile, removeFile, removeAllFiles])
+  }, [isLoading, files, selectedFileIds, setSelectedFileIds, addFiles, updateFile, removeFiles, removeAllFiles])
 
   return <StorageContext.Provider value={value}>{children}</StorageContext.Provider>
 }
