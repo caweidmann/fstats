@@ -1,36 +1,57 @@
 /**
  * The color mode which is currently applied in the app.
  */
-export enum ColorMode {
-  SYSTEM = 'system',
-  LIGHT = 'light',
-  DARK = 'dark',
-}
+export const ColorMode = {
+  SYSTEM: 'system',
+  LIGHT: 'light',
+  DARK: 'dark',
+} as const
+
+export type ColorMode = (typeof ColorMode)[keyof typeof ColorMode]
 
 /**
  * The user's chosen locale, under the hood determines the language across the app.
  */
-export enum UserLocale {
-  EN = 'en',
-  DE = 'de',
-}
+export const UserLocale = {
+  EN: 'en',
+  DE: 'de',
+} as const
+
+export type UserLocale = (typeof UserLocale)[keyof typeof UserLocale]
+
+export const SupportedParsers = {
+  UNKNOWN: 'unknown',
+  // South African Banks
+  CAPITEC: 'capitec__savings',
+  // FNB: 'fnb__credit_card',
+  // // German Banks
+  // COMDIRECT_GIRO: 'comdirect__giro',
+  // COMDIRECT_VISA: 'comdirect__visa',
+  // COMDIRECT_COMBINED: 'comdirect__combined',
+  // ING_GIRO: 'ing__giro',
+  // ING_GIRO_WB: 'ing__giro_with_balance',
+} as const
+
+export type SupportedParsers = (typeof SupportedParsers)[keyof typeof SupportedParsers]
 
 /**
  * The user's chosen date format which applies across the app.
  */
-export enum DateFormat {
-  DMY_LONG = 'd MMMM yyyy',
-  DMY_SHORT = 'd MMM yyyy',
-  MDY_LONG = 'MMMM d, yyyy',
-  MDY_SHORT = 'MMM d, yyyy',
-  DMY_SLASH = 'dd/MM/yyyy',
-  DMY_DOT = 'dd.MM.yyyy',
-  DMY_DASH = 'dd-MM-yyyy',
-  YMD_SLASH = 'yyyy/MM/dd',
-  YMD_DOT = 'yyyy.MM.dd',
-  YMD_DASH = 'yyyy-MM-dd',
-  YMD = 'yyyyMMdd',
-}
+export const DateFormat = {
+  DMY_LONG: 'd MMMM yyyy',
+  DMY_SHORT: 'd MMM yyyy',
+  MDY_LONG: 'MMMM d, yyyy',
+  MDY_SHORT: 'MMM d, yyyy',
+  DMY_SLASH: 'dd/MM/yyyy',
+  DMY_DOT: 'dd.MM.yyyy',
+  DMY_DASH: 'dd-MM-yyyy',
+  YMD_SLASH: 'yyyy/MM/dd',
+  YMD_DOT: 'yyyy.MM.dd',
+  YMD_DASH: 'yyyy-MM-dd',
+  YMD: 'yyyyMMdd',
+} as const
+
+export type DateFormat = (typeof DateFormat)[keyof typeof DateFormat]
 
 /**
  * The user's chosen preference which determines on what day the week starts.
@@ -38,10 +59,12 @@ export enum DateFormat {
  * @remarks
  * The index of the first day of the week (0 - Sunday, 1 - Monday).
  */
-export enum WeekStartsOn {
-  SUNDAY = 'SUNDAY',
-  MONDAY = 'MONDAY',
-}
+export const WeekStartsOn = {
+  SUNDAY: 'SUNDAY',
+  MONDAY: 'MONDAY',
+} as const
+
+export type WeekStartsOn = (typeof WeekStartsOn)[keyof typeof WeekStartsOn]
 
 // /**
 //  * The user's chosen display currency preference.

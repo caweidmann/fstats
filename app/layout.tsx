@@ -11,7 +11,7 @@ import { LanguageProvider, Layout, ThemeProvider } from '@/components'
 import { StorageProvider } from '@/context/Storage'
 
 const SEO_TITLE = `fstats - Analyse bank statements privately`
-const SEO_DESCRIPTION = `Add files locally and get instant insights. All processing happens entirely on your device — no uploads, no accounts, no tracking.`
+const SEO_DESCRIPTION = `Add CSV statements and get instant insights. All processing happens entirely on your device — no uploads, no accounts, no tracking.`
 
 export const metadata: Metadata = {
   title: SEO_TITLE,
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_SITE_URL,
     images: [
       {
-        url: `${process.env.NEXT_PUBLIC_SITE_URL}/img/logo.svg`,
+        url: `${process.env.NEXT_PUBLIC_SITE_URL}/img/logo-440x440.png`,
         width: 440,
         height: 440,
       },
@@ -39,6 +39,10 @@ type LayoutProps = {
 const Component = ({ children }: LayoutProps) => {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#2a2e36" media="(prefers-color-scheme: dark)" />
+      </head>
       <body>
         {process.env.NODE_ENV === 'production' ? <SpeedInsights /> : null}
         {process.env.NODE_ENV === 'production' ? <Analytics /> : null}

@@ -12,6 +12,8 @@ The website is hosted on Vercel. The website makes use of MUI for styling.
 | Local | http://localhost:3000/ |
 | Vercel - Staging | https://csv-fstats-staging.vercel.app/ |
 | Vercel - Production | https://csv-fstats.vercel.app/ |
+| Staging | https://staging.fstats.site/ |
+| Production | https://fstats.site/ |
 
 
 ## Development

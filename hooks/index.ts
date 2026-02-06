@@ -1,6 +1,5 @@
 export * from './useDarkModeMetaTagUpdater'
-export * from './useFileUpload'
+export * from './useFileHelper'
 export * from './useIsDarkMode'
 export * from './useIsMobile'
-export * from './useSettings'
 export * from './useUserPreferences'
