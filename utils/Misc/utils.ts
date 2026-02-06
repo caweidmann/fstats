@@ -21,7 +21,7 @@ export const formatType = (type: SupportedParsers): { short: string; long: strin
     }
   }
 
-  const parser = AVAILABLE_PARSERS[type as keyof typeof AVAILABLE_PARSERS]
+  const parser = AVAILABLE_PARSERS[type]
 
   if (parser) {
     return {
