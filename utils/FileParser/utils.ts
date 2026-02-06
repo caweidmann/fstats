@@ -2,7 +2,8 @@ import { parse } from 'papaparse'
 import type { FileWithPath } from 'react-dropzone'
 
 import type { FileData } from '@/types'
-import { isEqual } from '@/utils/Misc'
+
+import { isEqual } from '../Misc'
 
 const capitecHeaders = [
   'Nr',
