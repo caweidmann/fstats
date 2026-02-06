@@ -24,8 +24,8 @@ export const SupportedParsers = {
   // South African Banks
   CAPITEC: 'capitec__savings',
   // FNB: 'fnb__credit_card',
-  // // German Banks
-  // COMDIRECT_GIRO: 'comdirect__giro',
+  // German Banks
+  COMDIRECT_GIRO: 'comdirect__giro',
   // COMDIRECT_VISA: 'comdirect__visa',
   // COMDIRECT_COMBINED: 'comdirect__combined',
   // ING_GIRO: 'ing__giro',

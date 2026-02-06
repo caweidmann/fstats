@@ -9,6 +9,7 @@ import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
 import { Color } from '@/styles/colors'
+import { AVAILABLE_PARSERS } from '@/utils/Parsers'
 
 const StatsPage = () => {
   const router = useRouter()
@@ -73,7 +74,10 @@ const StatsPage = () => {
             file.parserId !== SupportedParsers.UNKNOWN
               ? file.parsedContentRows?.length
               : file.rawParseResult?.data.length
-          const columnCount = file.parserId !== SupportedParsers.UNKNOWN ? 3 : file.rawParseResult?.data[0]?.length
+          const columnCount =
+            file.parserId && file.parserId !== SupportedParsers.UNKNOWN
+              ? AVAILABLE_PARSERS[file.parserId].expectedHeaders.length
+              : file.rawParseResult?.data[0]?.length
 
           return (
             <Grid key={file.id} size={12}>

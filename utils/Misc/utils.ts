@@ -14,22 +14,30 @@ export const isEqual = (array1: string[], array2: string[]) => {
 }
 
 export const formatType = (type: SupportedParsers): { short: string; long: string } => {
-  switch (type) {
-    case SupportedParsers.UNKNOWN:
-      return {
-        short: 'Unknown',
-        long: 'Unknown format',
-      }
-    case SupportedParsers.CAPITEC:
-      return {
-        short: AVAILABLE_PARSERS[SupportedParsers.CAPITEC].bankName,
-        long: `${AVAILABLE_PARSERS[SupportedParsers.CAPITEC].bankName} ${MISC.CENTER_DOT} ${AVAILABLE_PARSERS[SupportedParsers.CAPITEC].accountType}`,
-      }
-    default:
-      console.warn(`Unsupported format type: ${type}`)
-      return {
-        short: 'Unsupported',
-        long: 'Unsupported format',
-      }
+  if (type === SupportedParsers.UNKNOWN) {
+    return {
+      short: 'Unknown',
+      long: 'Unknown format',
+    }
   }
+
+  const parser = AVAILABLE_PARSERS[type as keyof typeof AVAILABLE_PARSERS]
+
+  if (parser) {
+    return {
+      short: parser.bankName,
+      long: `${parser.bankName} ${MISC.CENTER_DOT} ${parser.accountType}`,
+    }
+  }
+
+  console.warn(`Unsupported format type: ${type}`)
+
+  return {
+    short: 'Unsupported',
+    long: 'Unsupported format',
+  }
+}
+
+export const parseGermanNumber = (germanStr: string): string => {
+  return germanStr.replace(/\./g, '').replace(/,/g, '.')
 }

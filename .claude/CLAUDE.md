@@ -75,7 +75,7 @@ Each bank has a parser in `utils/Parsers/{BankName}/index.ts` that exports a `Pa
 The parsing flow:
 1. User uploads CSV files via `/data` page
 2. `FileParser/utils.ts` uses PapaParse to parse raw CSV
-3. Headers are matched against registered parsers (e.g., CapitecParser)
+3. Headers are matched against registered parsers (e.g., CapitecSavings)
 4. Matching parser transforms rows into `ParsedContentRow[]` with `{ date, description, value }`
 5. Files are stored in IndexedDB via `context/Storage`
 
@@ -116,7 +116,7 @@ import type { Parser } from '@/types'
 import { Big } from '@/lib/w-big'
 import { toDisplayDate } from '../../Date'
 
-export const FNBParser: Parser = {
+export const FnbCreditCard: Parser = {
   headers: ['Date', 'Description', 'Amount', 'Balance'], // Match bank's CSV headers exactly
 
   parse: (input, locale) => {
@@ -140,12 +140,12 @@ export * from './FNB'
 
 3. Register in `utils/FileParser/utils.ts`:
 ```typescript
-import { CapitecParser, FNBParser } from '../Parsers'
+import { CapitecSavings, FnbCreditCard } from '../Parsers'
 
 // In parseFile function:
-if (isEqual(rawParseResult.data[0], FNBParser.headers)) {
+if (isEqual(rawParseResult.data[0], FnbCreditCard.headers)) {
   parserId = SupportedParsers.FNB
-  parsedContentRows = FNBParser.parse(rawParseResult, locale)
+  parsedContentRows = FnbCreditCard.parse(rawParseResult, locale)
 }
 ```
 
@@ -157,8 +157,6 @@ export const SupportedParsers = {
   FNB: 'fnb',
 } as const
 ```
-
-5. Update `MISC.SUPPORTED_BANKS` in `common/misc.ts`
 
 ## Technology Stack
 

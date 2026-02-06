@@ -5,7 +5,7 @@ import { Big } from '@/lib/w-big'
 
 import { toDisplayDate } from '../../Date'
 
-export const CapitecParser: Parser = {
+export const CapitecSavings: Parser = {
   id: SupportedParsers.CAPITEC,
   bankName: 'Capitec',
   accountType: 'Savings',
@@ -28,13 +28,13 @@ export const CapitecParser: Parser = {
   ],
 
   detect: (input) => {
-    return isEqual(input.data[CapitecParser.expectedHeaderRowIndex], CapitecParser.expectedHeaders)
+    return isEqual(input.data[CapitecSavings.expectedHeaderRowIndex], CapitecSavings.expectedHeaders)
   },
 
   parse: (input, locale) => {
     const rowsToParse = input.data
-      .slice(CapitecParser.expectedHeaderRowIndex + 1)
-      .filter((row) => row.length === CapitecParser.expectedHeaders.length)
+      .slice(CapitecSavings.expectedHeaderRowIndex + 1)
+      .filter((row) => row.length === CapitecSavings.expectedHeaders.length)
 
     return rowsToParse.map((row) => {
       const [
