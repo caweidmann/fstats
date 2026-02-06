@@ -73,7 +73,7 @@ const Component = ({ file }: DetailsRowProps) => {
             </Typography>
             <Typography variant="caption" color="text.secondary">
               Uploaded{' '}
-              {toDisplayDate(new Date(file.file.lastModified), locale, {
+              {toDisplayDate(new Date(file.uploaded), locale, {
                 formatTo: 'd MMM yyyy, HH:mm:ss',
               })}
             </Typography>

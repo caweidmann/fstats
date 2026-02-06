@@ -3,6 +3,7 @@
 import { CloudUploadOutlined } from '@mui/icons-material'
 import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
+import { formatISO } from 'date-fns'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { FileRejection, FileWithPath } from 'react-dropzone'
@@ -27,6 +28,7 @@ const Component = () => {
     acceptedFiles.map((file) => {
       newFiles.push({
         id: crypto.randomUUID(),
+        uploaded: formatISO(new Date()),
         file,
         status: 'parsing',
       })
@@ -35,6 +37,7 @@ const Component = () => {
     fileRejections.map(({ file, errors }) => {
       newFiles.push({
         id: crypto.randomUUID(),
+        uploaded: formatISO(new Date()),
         file,
         status: 'error',
         error: errors.map((e) => e.message).join(', '),

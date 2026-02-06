@@ -1,5 +1,6 @@
 'use client'
 
+import { formatISO } from 'date-fns'
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
@@ -33,9 +34,8 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
 
   const addFiles = useCallback(
     async (filesToAdd: FileData[]) => {
-      for (const newFile of filesToAdd) {
-        // const modified = formatISO(new Date())
-        await db.filesStore.setItem(newFile.id, newFile)
+      for (const file of filesToAdd) {
+        await db.filesStore.setItem(file.id, file)
       }
       setFiles((prev) => [...prev, ...filesToAdd])
       setSelectedFileIds((prev) => [...prev, ...filesToAdd.filter((file) => !file.error).map((file) => file.id)])
