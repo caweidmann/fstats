@@ -1,4 +1,4 @@
-import { SupportedFormats } from '@/types-enums'
+import { SupportedParsers } from '@/types-enums'
 
 export const sleep = (ms: number) => {
   return new Promise((resolve) => {
@@ -10,17 +10,17 @@ export const isEqual = (array1: string[], array2: string[]) => {
   return array1.length === array2.length && array1.every((value, index) => value === array2[index])
 }
 
-export const formatType = (type: SupportedFormats) => {
+export const formatType = (type: SupportedParsers) => {
   switch (type) {
-    case SupportedFormats.UNKNOWN:
+    case SupportedParsers.UNKNOWN:
       return 'Unknown format'
-    case SupportedFormats.CAPITEC:
+    case SupportedParsers.CAPITEC:
       return 'Capitec'
-    // case SupportedFormats.FNB:
+    // case SupportedParsers.FNB:
     //   return 'FNB'
-    // case SupportedFormats.COMDIRECT:
+    // case SupportedParsers.COMDIRECT:
     //   return 'Comdirect'
-    // case SupportedFormats.ING:
+    // case SupportedParsers.ING:
     //   return 'ING'
     default:
       console.warn(`Unsupported format type: ${type}`)
