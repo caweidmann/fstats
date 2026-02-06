@@ -67,7 +67,7 @@ const StatsPage = () => {
 
         {selectedFiles.map((file) => (
           <Card key={file.id}>
-            <CardHeader title={file.file.name} subheader={`${0} rows, ${0} columns`} />
+            <CardHeader title={file.file.name} subheader={`${file.parsedContentRows?.length} rows, ${3} columns`} />
             <CardContent>hi</CardContent>
           </Card>
         ))}

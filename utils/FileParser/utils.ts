@@ -27,22 +27,22 @@ export const parseFile = async (file: StatsFile): Promise<StatsFile> => {
 
   for (const parser of AVAILABLE_PARSERS) {
     try {
-      if (parser.detect(rawParseResult.data)) {
+      if (parser.detect(rawParseResult)) {
         matchedParser = parser
         break
       }
     } catch (err) {
-      console.error(`Error detecting with ${parser.name}:`, err)
+      console.error(`Error detecting with ${parser.id}:`, err)
     }
   }
 
   if (matchedParser) {
     try {
-      parsedType = matchedParser.format
+      parsedType = matchedParser.id
       parsedContentRows = matchedParser.parse(rawParseResult, locale)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err)
-      console.error(`Parsing failed with ${matchedParser.name}: ${errorMessage}`)
+      console.error(`Parsing failed with ${matchedParser.id}: ${errorMessage}`)
     }
   }
 
@@ -59,7 +59,7 @@ export const parseRaw = async (file: File): Promise<PPRawParseResult> => {
   return new Promise((resolve, reject) => {
     parse(file, {
       header: false,
-      skipEmptyLines: true,
+      skipEmptyLines: false,
       worker: true,
       complete: (results) => {
         resolve(results as PPRawParseResult)
