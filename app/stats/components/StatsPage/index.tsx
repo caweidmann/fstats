@@ -104,7 +104,7 @@ const Component = () => {
   return (
     <PageWrapper>
       <Grid container spacing={2}>
-        <Grid size={2}>
+        <Grid size={{ xs: 12, sm: 2 }}>
           <Select<LocalForm, LocalForm['selectedId']>
             control={localForm.control}
             name="selectedId"
