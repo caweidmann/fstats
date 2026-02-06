@@ -9,7 +9,7 @@ import {
   PointElement,
   Title,
   Tooltip,
-} from 'chart.js/auto'
+} from 'chart.js'
 import annotationPlugin from 'chartjs-plugin-annotation'
 
 import { roboto } from '@/styles/fonts'
