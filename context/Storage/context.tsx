@@ -52,11 +52,12 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
     setFiles((prev) => prev.map((ifile) => (ifile.id === id ? updatedFile : ifile)))
   }, [])
 
-  const removeFile = useCallback(
-    async (id: string) => {
-      await db.filesStore.removeItem(id)
-      setFiles((prev) => prev.filter((file) => file.id !== id))
-      setSelectedFileIds((prev) => prev.filter((fileId) => fileId !== id))
+  const removeFiles = useCallback(
+    async (ids: string[]) => {
+      const promises = ids.map((id) => db.filesStore.removeItem(id))
+      await Promise.all(promises)
+      setFiles((prev) => prev.filter((file) => !ids.includes(file.id)))
+      setSelectedFileIds((prev) => prev.filter((fileId) => !ids.includes(fileId)))
     },
     [setSelectedFileIds],
   )
@@ -75,10 +76,10 @@ export const StorageProvider = ({ children }: StorageContextProviderProps) => {
       setSelectedFileIds,
       addFiles,
       updateFile,
-      removeFile,
+      removeFiles,
       removeAllFiles,
     }
-  }, [isLoading, files, selectedFileIds, setSelectedFileIds, addFiles, updateFile, removeFile, removeAllFiles])
+  }, [isLoading, files, selectedFileIds, setSelectedFileIds, addFiles, updateFile, removeFiles, removeAllFiles])
 
   return <StorageContext.Provider value={value}>{children}</StorageContext.Provider>
 }

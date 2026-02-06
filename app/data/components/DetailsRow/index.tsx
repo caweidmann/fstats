@@ -20,7 +20,7 @@ type DetailsRowProps = {
 const Component = ({ file }: DetailsRowProps) => {
   const sx = ui()
   const { locale } = useUserPreferences()
-  const { selectedFileIds, setSelectedFileIds, removeFile } = useStorage()
+  const { selectedFileIds, setSelectedFileIds, removeFiles } = useStorage()
   const isSelected = selectedFileIds.includes(file.id)
 
   const toggleFileSelection = (fileId: string) => {
@@ -86,7 +86,7 @@ const Component = ({ file }: DetailsRowProps) => {
           {file.status === 'parsed' || file.error ? <BankChip file={file} /> : null}
 
           <Tooltip title="Remove file">
-            <IconButton color={file.error ? 'error' : 'secondary'} onClick={() => removeFile(file.id)}>
+            <IconButton color={file.error ? 'error' : 'secondary'} onClick={() => removeFiles([file.id])}>
               <DeleteOutlined sx={{ fontSize: 20 }} />
             </IconButton>
           </Tooltip>

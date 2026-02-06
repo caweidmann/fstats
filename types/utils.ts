@@ -29,7 +29,7 @@ export type StorageContextState = {
   setSelectedFileIds: Dispatch<SetStateAction<string[]>>
   addFiles: (files: FileData[]) => Promise<void>
   updateFile: (id: string, updates: Partial<FileData>) => Promise<void>
-  removeFile: (id: string) => Promise<void>
+  removeFiles: (ids: string[]) => Promise<void>
   removeAllFiles: () => Promise<void>
 }
 

@@ -27,7 +27,7 @@ const Component = () => {
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
   const [expanded, setExpanded] = useState(false)
-  const { files, removeAllFiles, removeFile, setSelectedFileIds } = useStorage()
+  const { files, removeAllFiles, removeFiles, setSelectedFileIds } = useStorage()
   const { selectedFiles, selectableFiles, errorFiles, unknownFiles } = useFileHelper()
   const parsedFiles = files.filter((file) => file.status === 'parsed')
   const parsedTypes = Array.from(new Set(parsedFiles.map((file) => file.parsedType || SupportedFormats.UNKNOWN)))
@@ -42,13 +42,11 @@ const Component = () => {
   }
 
   const removeInvalidFiles = async () => {
-    const promises = errorFiles.map((file) => removeFile(file.id))
-    await Promise.all(promises)
+    await removeFiles(errorFiles.map((file) => file.id))
   }
 
   const removeUnkownFiles = async () => {
-    const promises = unknownFiles.map((file) => removeFile(file.id))
-    await Promise.all(promises)
+    await removeFiles(unknownFiles.map((file) => file.id))
   }
 
   if (!files.length) {
