@@ -59,3 +59,19 @@ export type WeekStartsOnValue = z.infer<typeof zWeekStartsOnValue>
  * Proxy for Big type.
  */
 export type NumberBig = TypeBig
+
+export type ChartDataPoint = {
+  label: string
+  value: number
+}
+
+export type ChartDataPointWithData<T> = ChartDataPoint & {
+  data: T
+}
+
+export type GradientDirection = 'horizontal' | 'vertical'
+
+export type GradientColors = {
+  start: string
+  end: string
+}
