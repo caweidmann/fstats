@@ -52,6 +52,7 @@ const Page = () => {
                 onClick={() => router.push(ROUTES.STATS)}
                 sx={sx.ctaButton}
                 disabled={!selectedFiles.length}
+                loading={selectedFiles.some((file) => file.status === 'parsing')}
               >
                 Continue with {selectedFiles.length} {selectedFiles.length === 1 ? 'file' : 'files'}
               </Button>

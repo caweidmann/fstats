@@ -3,6 +3,7 @@
 import { CloudUploadOutlined } from '@mui/icons-material'
 import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
+import { formatISO } from 'date-fns'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { FileRejection, FileWithPath } from 'react-dropzone'
@@ -11,6 +12,7 @@ import { FileData } from '@/types'
 import { MISC } from '@/common'
 import { useStorage } from '@/context/Storage'
 import { useIsDarkMode, useIsMobile } from '@/hooks'
+import { parseFiles } from '@/utils/FileParser'
 
 import { ui } from './styled'
 
@@ -19,7 +21,7 @@ const Component = () => {
   const isDarkMode = useIsDarkMode()
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
-  const { addFiles } = useStorage()
+  const { addFiles, updateFile } = useStorage()
 
   const onDrop = useCallback(async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
     const newFiles: FileData[] = []
@@ -27,6 +29,7 @@ const Component = () => {
     acceptedFiles.map((file) => {
       newFiles.push({
         id: crypto.randomUUID(),
+        uploaded: formatISO(new Date()),
         file,
         status: 'parsing',
       })
@@ -35,6 +38,7 @@ const Component = () => {
     fileRejections.map(({ file, errors }) => {
       newFiles.push({
         id: crypto.randomUUID(),
+        uploaded: formatISO(new Date()),
         file,
         status: 'error',
         error: errors.map((e) => e.message).join(', '),
@@ -42,6 +46,9 @@ const Component = () => {
     })
 
     await addFiles(newFiles)
+    const parsedFiles = await parseFiles(newFiles.filter((file) => file.status === 'parsing'))
+    const promises = parsedFiles.map((file) => updateFile(file.id, file))
+    await Promise.all(promises)
   }, [])
 
   const dropzone = useDropzone({

@@ -2,7 +2,8 @@ import { format, isValid, parse } from 'date-fns'
 
 import { UserLocale } from '@/types-enums'
 import { MISC } from '@/common'
-import { getDateFnsLocale } from '@/utils/Date'
+
+import { getDateFnsLocale } from '../Date'
 
 /**
  * Converts a date string or date object to "yyyy-MM-dd" format

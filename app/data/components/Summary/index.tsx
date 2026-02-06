@@ -9,7 +9,7 @@ import {
   ExpandMoreOutlined,
   IndeterminateCheckBoxOutlined,
 } from '@mui/icons-material'
-import { Box, Button, Chip, Stack, Typography } from '@mui/material'
+import { Box, Button, Chip, CircularProgress, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
@@ -36,6 +36,11 @@ const Component = () => {
     }
   }
 
+  const removeInvalidFiles = async () => {
+    const promises = errorFiles.map((file) => removeFile(file.id))
+    await Promise.all(promises)
+  }
+
   if (!files.length) {
     return null
   }
@@ -55,7 +60,9 @@ const Component = () => {
             }
           </Stack>
 
-          <Stack direction="row" spacing={1} alignItems="center">
+          <Stack direction="row" spacing={1} alignItems="center" sx={{ gap: 1 }}>
+            {files.some((file) => file.status === 'parsing') ? <CircularProgress size={20} /> : null}
+
             {errorFiles.length ? (
               <Chip
                 icon={<ErrorOutlined sx={{ fontSize: 16 }} />}
@@ -94,17 +101,17 @@ const Component = () => {
                 {selectedFiles.length === selectableFiles.length ? 'Deselect all' : 'Select all'}
               </Button>
               <Box sx={{ display: 'flex', gap: 1 }}>
-                <Button size="small" color="primary" startIcon={<DeleteOutlined />} onClick={() => removeAllFiles()}>
-                  Remove all
-                </Button>
                 <Button
                   size="small"
                   color="error"
                   startIcon={<DeleteOutlined />}
-                  onClick={() => errorFiles.forEach((file) => removeFile(file.id))}
+                  onClick={() => removeInvalidFiles()}
                   disabled={!errorFiles.length}
                 >
                   Remove invalid
+                </Button>
+                <Button size="small" color="primary" startIcon={<DeleteOutlined />} onClick={() => removeAllFiles()}>
+                  Remove all
                 </Button>
               </Box>
             </Stack>
