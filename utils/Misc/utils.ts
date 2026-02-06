@@ -1,6 +1,5 @@
 import type { Theme } from '@mui/material/styles'
 import type { ScriptableContext } from 'chart.js'
-import colorAlpha from 'color-alpha'
 
 import type { GradientColors, GradientDirection } from '@/types'
 import { ParserId } from '@/types-enums'
@@ -89,8 +88,4 @@ export const getGradient = ({
   gradient.addColorStop(1, colors.end)
 
   return gradient
-}
-
-export const toRgba = (hex: string, alpha: number): string => {
-  return colorAlpha(hex, alpha)
 }

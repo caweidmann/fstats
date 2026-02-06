@@ -1,16 +1,17 @@
 'use client'
 
-import { Box, Card, CardHeader, Grid } from '@mui/material'
-import { green } from '@mui/material/colors'
+import { Card, CardHeader, Grid } from '@mui/material'
+import { green, red } from '@mui/material/colors'
 import { useTheme } from '@mui/material/styles'
-import type { ChartData, ChartDataset } from 'chart.js'
+import type { ChartData, ChartDataset, ScriptableContext } from 'chart.js'
+import { parse } from 'date-fns'
 import { useForm } from 'react-hook-form'
 
 import { Currency } from '@/types-enums'
 import { BarChart, PageWrapper } from '@/components'
 import { Select } from '@/components/FormFieldsControlled'
 import { useFileHelper, useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
-import { getGradient, toRgba } from '@/utils/Misc'
+import { getGradient } from '@/utils/Misc'
 import { AVAILABLE_PARSERS } from '@/utils/Parsers'
 
 import { getBankSelectOptions, getChartOptions } from './actions'
@@ -37,33 +38,46 @@ const Component = () => {
       : selectedBankId === 'unknown'
         ? selectedFiles.filter((file) => !file.parserId)
         : selectedFiles.filter((file) => file.parserId === selectedBankId)
-  console.log('filteredFiles', filteredFiles)
-  console.log(
-    'data',
-    filteredFiles[0].parsedContentRows.map((row) => row.value.toNumber()),
-  )
 
-  const dataset: ChartDataset<'bar' | 'line'> = {
+  const allRows = filteredFiles
+    .flatMap((file) => file.parsedContentRows)
+    .sort((a, b) => {
+      const dateA = parse(a.date, 'dd/MM/yyyy', new Date()).getTime()
+      const dateB = parse(b.date, 'dd/MM/yyyy', new Date()).getTime()
+      return dateA - dateB
+    })
+
+  const dataset: ChartDataset<'bar'> = {
     type: 'bar',
     label: 'Transactions',
-    data: filteredFiles[0].parsedContentRows.map((row) => row.value.toNumber()),
-    backgroundColor: (context) =>
-      getGradient({
-        // @ts-expect-error Type '"line"' is not assignable to type '"bar"'.
-        context,
+    data: allRows.map((row) => row.value.toNumber()),
+    backgroundColor: (context) => {
+      const value = context.parsed?.y ?? 0
+      const isPositive = value >= 0
+
+      return getGradient({
+        context: context as ScriptableContext<'line' | 'bar'>,
         colors: {
-          start: isDarkMode ? toRgba(green[50], 0.1) : green[50],
-          end: green[600],
+          start: isPositive ? green[100] : red[200],
+          end: isPositive ? green[600] : red[900],
         },
         direction: 'vertical',
-      }),
-    borderRadius: { topLeft: 100, topRight: 100 },
-    barThickness: isMobile ? 11 : 20,
+      })
+    },
+    borderRadius: (context) => {
+      const value = context.parsed?.y ?? 0
+      const isPositive = value >= 0
+
+      return isPositive
+        ? { topLeft: 100, topRight: 100, bottomLeft: 0, bottomRight: 0 }
+        : { topLeft: 0, topRight: 0, bottomLeft: 100, bottomRight: 100 }
+    },
+    barThickness: isMobile ? 11 : 18,
     order: 2,
   }
 
   const chartData: ChartData = {
-    labels: filteredFiles[0].parsedContentRows.map((row) => row.date),
+    labels: allRows.map((row) => row.date),
     datasets: [dataset],
   }
 
