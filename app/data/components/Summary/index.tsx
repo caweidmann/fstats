@@ -28,7 +28,7 @@ const Component = () => {
   const sx = ui(theme, isMobile, isDarkMode)
   const [expanded, setExpanded] = useState(false)
   const { files, removeAllFiles, removeFile, setSelectedFileIds } = useStorage()
-  const { selectedFiles, selectableFiles, errorFiles } = useFileHelper()
+  const { selectedFiles, selectableFiles, errorFiles, unknownFiles } = useFileHelper()
   const parsedFiles = files.filter((file) => file.status === 'parsed')
   const parsedTypes = Array.from(new Set(parsedFiles.map((file) => file.parsedType || SupportedFormats.UNKNOWN)))
   const typesFound = parsedTypes.map(formatType).join(', ')
@@ -43,6 +43,11 @@ const Component = () => {
 
   const removeInvalidFiles = async () => {
     const promises = errorFiles.map((file) => removeFile(file.id))
+    await Promise.all(promises)
+  }
+
+  const removeUnkownFiles = async () => {
+    const promises = unknownFiles.map((file) => removeFile(file.id))
     await Promise.all(promises)
   }
 
@@ -111,15 +116,30 @@ const Component = () => {
                 {selectedFiles.length === selectableFiles.length ? 'Deselect all' : 'Select all'}
               </Button>
               <Box sx={{ display: 'flex', gap: 1 }}>
-                <Button
-                  size="small"
-                  color="error"
-                  startIcon={<DeleteOutlined />}
-                  onClick={() => removeInvalidFiles()}
-                  disabled={!errorFiles.length}
-                >
-                  Remove invalid
-                </Button>
+                {errorFiles.length ? (
+                  <Button
+                    size="small"
+                    color="error"
+                    startIcon={<DeleteOutlined />}
+                    onClick={() => removeInvalidFiles()}
+                    disabled={!errorFiles.length}
+                  >
+                    Remove invalid
+                  </Button>
+                ) : null}
+
+                {unknownFiles.length ? (
+                  <Button
+                    size="small"
+                    color="warning"
+                    startIcon={<DeleteOutlined />}
+                    onClick={() => removeUnkownFiles()}
+                    disabled={!unknownFiles.length}
+                  >
+                    Remove unknown
+                  </Button>
+                ) : null}
+
                 <Button size="small" color="primary" startIcon={<DeleteOutlined />} onClick={() => removeAllFiles()}>
                   Remove all
                 </Button>
