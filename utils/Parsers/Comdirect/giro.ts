@@ -1,13 +1,15 @@
 import type { ParsedContentRow, Parser } from '@/types'
-import { SupportedParsers } from '@/types-enums'
+import { ParserId } from '@/types-enums'
 import { isEqual, parseGermanNumber } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
 import { toDisplayDate } from '../../Date'
 
 export const ComdirectGiro: Parser = {
-  id: SupportedParsers.COMDIRECT_GIRO,
+  id: ParserId.COMDIRECT_GIRO,
+
   bankName: 'Comdirect',
+
   accountType: 'Giro',
 
   expectedHeaderRowIndex: 1,

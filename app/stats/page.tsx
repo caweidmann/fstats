@@ -3,19 +3,49 @@
 import { ArrowBack } from '@mui/icons-material'
 import { Box, Button, Card, CardHeader, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
 
-import { SupportedParsers } from '@/types-enums'
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
+import { Select } from '@/components/FormFieldsControlled'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
 import { Color } from '@/styles/colors'
 import { AVAILABLE_PARSERS } from '@/utils/Parsers'
+
+type BankIds = {
+  selectedId: string
+}
 
 const StatsPage = () => {
   const router = useRouter()
   const isMobile = useIsMobile()
   const isDarkMode = useIsDarkMode()
   const { selectedFiles } = useFileHelper()
+  console.log('selectedFiles', selectedFiles)
+  const banks = selectedFiles.map((file) => file.parserId)
+  console.log('banks', banks)
+
+  const defaultValues: BankIds = {
+    selectedId: '',
+  }
+  const localForm = useForm<BankIds>({ defaultValues })
+  const bankOptions = [
+    {
+      label: 'All',
+      value: '0_sdays',
+    },
+    {
+      label: 'Capitec',
+      value: '0_days',
+    },
+    {
+      label: 'Comdirect',
+      value: '7_days',
+    },
+  ]
+
+  const selectedBankId = localForm.watch('selectedId')
+  console.log('selectedBankId', selectedBankId)
 
   if (!selectedFiles.length) {
     return (
@@ -69,15 +99,24 @@ const StatsPage = () => {
           </Box>
         </Grid>
 
+        <Grid size={2}>
+          <Select<BankIds, BankIds['selectedId']>
+            control={localForm.control}
+            name="selectedId"
+            options={bankOptions}
+            fullWidth
+          />
+        </Grid>
+        <Grid size={2}>Date range</Grid>
+        <Grid size={2}>Display currency</Grid>
+        <Grid size={2}>Compress x-axis</Grid>
+        <Grid size={2}>Combine datasets</Grid>
+
         {selectedFiles.map((file) => {
-          const rowCount =
-            file.parserId !== SupportedParsers.UNKNOWN
-              ? file.parsedContentRows?.length
-              : file.rawParseResult?.data.length
-          const columnCount =
-            file.parserId && file.parserId !== SupportedParsers.UNKNOWN
-              ? AVAILABLE_PARSERS[file.parserId].expectedHeaders.length
-              : file.rawParseResult?.data[0]?.length
+          const rowCount = file.parserId ? file.parsedContentRows.length : file.rawParseResult?.data.length
+          const columnCount = file.parserId
+            ? AVAILABLE_PARSERS[file.parserId].expectedHeaders.length
+            : file.rawParseResult?.data[0]?.length
 
           return (
             <Grid key={file.id} size={12}>

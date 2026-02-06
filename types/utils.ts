@@ -1,7 +1,7 @@
 import type { Locale } from 'date-fns'
 import type { Dispatch, SetStateAction } from 'react'
 
-import { ColorMode, SupportedParsers, UserLocale } from '@/types-enums'
+import { ColorMode, ParserId, UserLocale } from '@/types-enums'
 
 import type { ParsedContentRow, PPRawParseResult, StatsFile } from './stats-file'
 
@@ -27,7 +27,7 @@ export type DateFnsLocale = Locale
 export type FeatureFlags = Record<string, boolean>
 
 export type Parser = {
-  id: SupportedParsers
+  id: ParserId
   bankName: string
   accountType: string
   expectedHeaderRowIndex: number

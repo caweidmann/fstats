@@ -1,7 +1,7 @@
 import type { ParseResult as PPParseResult } from 'papaparse'
 import type { FileWithPath } from 'react-dropzone'
 
-import { SupportedParsers } from '@/types-enums'
+import { ParserId } from '@/types-enums'
 
 import { DateTimeString, NumberBig } from './global'
 
@@ -25,12 +25,12 @@ export type StatsFile = {
   file: FileWithPath
   uploaded: DateTimeString
   status: 'parsing' | 'parsed' | 'error'
-  error?: string
-  parserId?: SupportedParsers
+  parserId: ParserId | null
+  parsedContentRows: ParsedContentRow[]
   rawParseResult?: PPRawParseResult
-  parsedContentRows?: ParsedContentRow[]
+  error?: string
 }
 
 export type StatsFileAtRest = Omit<StatsFile, 'parsedContentRows'> & {
-  parsedContentRows?: ParsedContentRowAtRest[]
+  parsedContentRows: ParsedContentRowAtRest[]
 }

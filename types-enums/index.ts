@@ -19,8 +19,7 @@ export const UserLocale = {
 
 export type UserLocale = (typeof UserLocale)[keyof typeof UserLocale]
 
-export const SupportedParsers = {
-  UNKNOWN: 'unknown',
+export const ParserId = {
   // South African Banks
   CAPITEC: 'capitec__savings',
   // FNB: 'fnb__credit_card',
@@ -32,7 +31,7 @@ export const SupportedParsers = {
   // ING_GIRO_WB: 'ing__giro_with_balance',
 } as const
 
-export type SupportedParsers = (typeof SupportedParsers)[keyof typeof SupportedParsers]
+export type ParserId = (typeof ParserId)[keyof typeof ParserId]
 
 /**
  * The user's chosen date format which applies across the app.

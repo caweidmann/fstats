@@ -41,7 +41,7 @@ pnpm postbuild
 
 - **`/types`** - TypeScript type definitions (organized by domain: global.ts, stats-file.ts, utils.ts)
 
-- **`/types-enums`** - Enum-like constants with TypeScript types (ColorMode, UserLocale, SupportedParsers, DateFormat, WeekStartsOn)
+- **`/types-enums`** - Enum-like constants with TypeScript types (ColorMode, UserLocale, ParserId, DateFormat, WeekStartsOn)
 
 - **`/utils`** - Domain-organized utility functions:
   - `Date/` - Date formatting and manipulation
@@ -144,14 +144,14 @@ import { CapitecSavings, FnbCreditCard } from '../Parsers'
 
 // In parseFile function:
 if (isEqual(rawParseResult.data[0], FnbCreditCard.headers)) {
-  parserId = SupportedParsers.FNB
+  parserId = ParserId.FNB
   parsedContentRows = FnbCreditCard.parse(rawParseResult, locale)
 }
 ```
 
 4. Add format to `types-enums/index.ts`:
 ```typescript
-export const SupportedParsers = {
+export const ParserId = {
   UNKNOWN: 'unknown',
   CAPITEC: 'capitec',
   FNB: 'fnb',
