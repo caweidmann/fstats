@@ -1,7 +1,7 @@
 'use client'
 
 import { DeleteOutlined, ErrorOutlined } from '@mui/icons-material'
-import { Box, Checkbox, Chip, CircularProgress, IconButton, Stack, Tooltip, Typography } from '@mui/material'
+import { Box, Checkbox, CircularProgress, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 
 import { FileData } from '@/types'
 import { MISC } from '@/common'
@@ -58,16 +58,6 @@ const Component = ({ file }: DetailsRowProps) => {
             >
               {file.file.name}
             </Typography>
-
-            {file.error ? (
-              <Chip
-                label="Failed"
-                size="small"
-                color="error"
-                variant="outlined"
-                sx={{ height: 18, fontSize: '0.7rem' }}
-              />
-            ) : null}
           </Stack>
 
           <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
@@ -93,7 +83,7 @@ const Component = ({ file }: DetailsRowProps) => {
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
           {file.status === 'parsing' ? <CircularProgress size={14} /> : null}
-          {file.status === 'parsed' ? <BankChip file={file} /> : null}
+          {file.status === 'parsed' || file.error ? <BankChip file={file} /> : null}
 
           <Tooltip title="Remove file">
             <IconButton color={file.error ? 'error' : 'secondary'} onClick={() => removeFile(file.id)}>
