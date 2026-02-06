@@ -4,7 +4,7 @@ import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useRouter } from 'next/navigation'
 
-import { MISC, ROUTES } from '@/common'
+import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useIsDarkMode, useIsMobile } from '@/hooks'
 import { AVAILABLE_PARSERS } from '@/utils/Parsers'

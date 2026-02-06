@@ -1,4 +1,4 @@
-import { SupportedParsers } from '@/types-enums'
+import { ParserId } from '@/types-enums'
 import { MISC } from '@/common'
 
 import { AVAILABLE_PARSERS } from '../Parsers'
@@ -13,15 +13,15 @@ export const isEqual = (array1: string[], array2: string[]) => {
   return array1.length === array2.length && array1.every((value, index) => value === array2[index])
 }
 
-export const formatType = (type: SupportedParsers): { short: string; long: string } => {
-  if (type === SupportedParsers.UNKNOWN) {
+export const getParserName = (value: ParserId): { short: string; long: string } => {
+  if (!value) {
     return {
       short: 'Unknown',
       long: 'Unknown format',
     }
   }
 
-  const parser = AVAILABLE_PARSERS[type as keyof typeof AVAILABLE_PARSERS]
+  const parser = AVAILABLE_PARSERS[value]
 
   if (parser) {
     return {
@@ -30,7 +30,7 @@ export const formatType = (type: SupportedParsers): { short: string; long: strin
     }
   }
 
-  console.warn(`Unsupported format type: ${type}`)
+  console.warn(`Unsupported parser ID: ${value}`)
 
   return {
     short: 'Unsupported',
@@ -38,6 +38,6 @@ export const formatType = (type: SupportedParsers): { short: string; long: strin
   }
 }
 
-export const parseGermanNumber = (germanStr: string): string => {
-  return germanStr.replace(/\./g, '').replace(/,/g, '.')
+export const parseGermanNumber = (numberString: string): string => {
+  return numberString.replace(/\./g, '').replace(/,/g, '.')
 }

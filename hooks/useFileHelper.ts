@@ -1,6 +1,5 @@
 'use client'
 
-import { SupportedParsers } from '@/types-enums'
 import { useStorage } from '@/context/Storage'
 
 export const useFileHelper = () => {
@@ -9,7 +8,7 @@ export const useFileHelper = () => {
   const selectedFiles = files.filter((file) => selectedFileIds.includes(file.id))
   const selectableFiles = files.filter((file) => !file.error)
   const errorFiles = files.filter((file) => file.error)
-  const unknownFiles = files.filter((file) => file.parserId === SupportedParsers.UNKNOWN)
+  const unknownFiles = files.filter((file) => !file.parserId)
 
   return {
     selectedFiles,

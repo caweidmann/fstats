@@ -77,6 +77,14 @@ const defaultTheme = {
       },
     },
 
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          height: 48,
+        },
+      },
+    },
+
     MuiCard: {
       defaultProps: {
         elevation: 0,

@@ -13,10 +13,10 @@ import { Box, Button, Chip, CircularProgress, Stack, Typography } from '@mui/mat
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
-import { SupportedParsers } from '@/types-enums'
+import { ParserId } from '@/types-enums'
 import { useStorage } from '@/context/Storage'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
-import { formatType } from '@/utils/Misc'
+import { getParserName } from '@/utils/Misc'
 
 import DetailsRow from '../DetailsRow'
 import { ui } from './styled'
@@ -29,9 +29,9 @@ const Component = () => {
   const [expanded, setExpanded] = useState(false)
   const { files, removeAllFiles, removeFiles, setSelectedFileIds } = useStorage()
   const { selectedFiles, selectableFiles, errorFiles, unknownFiles } = useFileHelper()
-  const parserIds = Array.from(new Set(selectedFiles.map((file) => file.parserId || SupportedParsers.UNKNOWN)))
+  const parserIds = Array.from(new Set(selectedFiles.map((file) => file.parserId)))
   const typesFound = parserIds
-    .map((type) => formatType(type).short)
+    .map((parserId) => (parserId ? getParserName(parserId).short : 'Unknown'))
     .sort((a: string, b: string) => a.localeCompare(b))
     .join(', ')
 

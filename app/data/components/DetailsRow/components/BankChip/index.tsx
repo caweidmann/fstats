@@ -5,8 +5,7 @@ import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import type { StatsFile } from '@/types'
-import { SupportedParsers } from '@/types-enums'
-import { formatType } from '@/utils/Misc'
+import { getParserName } from '@/utils/Misc'
 
 import { ui } from './styled'
 
@@ -15,8 +14,7 @@ type BankChipProps = {
 }
 
 const Component = ({ file }: BankChipProps) => {
-  const bankType = file.parserId || SupportedParsers.UNKNOWN
-  const isUnknown = bankType === SupportedParsers.UNKNOWN
+  const isUnknown = !file.parserId
   const theme = useTheme()
   const sx = ui(theme)
 
@@ -37,7 +35,7 @@ const Component = ({ file }: BankChipProps) => {
       {isUnknown ? <HelpOutlineOutlined color="secondary" sx={{ fontSize: 14 }} /> : null}
 
       <Typography variant="caption" sx={{ ...sx.label, color: 'text.secondary' }}>
-        {formatType(bankType).long}
+        {file.parserId ? getParserName(file.parserId).long : 'Unknown format'}
       </Typography>
     </Box>
   )

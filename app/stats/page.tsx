@@ -1,17 +1,16 @@
 'use client'
 
-import { ArrowBack } from '@mui/icons-material'
-import { Box, Button, Card, CardHeader, Grid, Typography } from '@mui/material'
+import { Box, Button, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
-import { SupportedParsers } from '@/types-enums'
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
 import { Color } from '@/styles/colors'
-import { AVAILABLE_PARSERS } from '@/utils/Parsers'
 
-const StatsPage = () => {
+import { StatsPage } from './components'
+
+const Page = () => {
   const router = useRouter()
   const isMobile = useIsMobile()
   const isDarkMode = useIsDarkMode()
@@ -52,44 +51,7 @@ const StatsPage = () => {
     )
   }
 
-  return (
-    <PageWrapper>
-      <Grid container spacing={2}>
-        <Grid size={12}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h4">Stats</Typography>
-            <Button
-              variant="outlined"
-              startIcon={<ArrowBack />}
-              onMouseEnter={() => router.prefetch(ROUTES.DATA)}
-              onClick={() => router.push(ROUTES.DATA)}
-            >
-              Back
-            </Button>
-          </Box>
-        </Grid>
-
-        {selectedFiles.map((file) => {
-          const rowCount =
-            file.parserId !== SupportedParsers.UNKNOWN
-              ? file.parsedContentRows?.length
-              : file.rawParseResult?.data.length
-          const columnCount =
-            file.parserId && file.parserId !== SupportedParsers.UNKNOWN
-              ? AVAILABLE_PARSERS[file.parserId].expectedHeaders.length
-              : file.rawParseResult?.data[0]?.length
-
-          return (
-            <Grid key={file.id} size={12}>
-              <Card>
-                <CardHeader title={file.file.name} subheader={`${rowCount} rows, ${columnCount} columns`} />
-              </Card>
-            </Grid>
-          )
-        })}
-      </Grid>
-    </PageWrapper>
-  )
+  return <StatsPage />
 }
 
-export default StatsPage
+export default Page

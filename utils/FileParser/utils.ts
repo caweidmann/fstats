@@ -1,7 +1,7 @@
 import { parse } from 'papaparse'
 
 import type { Parser, PPRawParseResult, StatsFile } from '@/types'
-import { SupportedParsers } from '@/types-enums'
+import { ParserId } from '@/types-enums'
 
 import { getLocalUserPreferences } from '../LocalStorage'
 import { AVAILABLE_PARSERS } from '../Parsers'
@@ -15,7 +15,7 @@ export const parseFile = async (file: StatsFile): Promise<StatsFile> => {
   const { locale } = getLocalUserPreferences()
   const rawParseResult = await parseRaw(file.file)
 
-  let parserId: StatsFile['parserId'] = SupportedParsers.UNKNOWN
+  let parserId: StatsFile['parserId'] = null
   let parsedContentRows: StatsFile['parsedContentRows'] = []
 
   let matchedParser: Parser | null = null

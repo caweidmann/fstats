@@ -26,29 +26,17 @@ export const getFiles = async (): Promise<StatsFile[]> => {
 }
 
 export const syncFileToStorage = (file: StatsFile): StatsFileAtRest => {
-  if (!file.parsedContentRows) {
-    return file as StatsFileAtRest
-  }
-
   const updatedFile: StatsFileAtRest = {
     ...file,
-    parsedContentRows: file.parsedContentRows.map((row) => {
-      return { ...row, value: row.value.toString() }
-    }),
+    parsedContentRows: file.parsedContentRows.map((row) => ({ ...row, value: row.value.toString() })),
   }
   return updatedFile
 }
 
 export const parseFileFromStorage = (file: StatsFileAtRest): StatsFile => {
-  if (!file.parsedContentRows) {
-    return file as StatsFile
-  }
-
   const updatedFile: StatsFile = {
     ...file,
-    parsedContentRows: file.parsedContentRows.map((row) => {
-      return { ...row, value: Big(row.value) }
-    }),
+    parsedContentRows: file.parsedContentRows.map((row) => ({ ...row, value: Big(row.value) })),
   }
   return updatedFile
 }
