@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useIsDarkMode, useIsMobile } from '@/hooks'
+import { AVAILABLE_PARSERS } from '@/utils/Parsers'
 
 import { CARD_ITEMS, STEPS } from './actions'
 import { ui } from './styled'
@@ -103,8 +104,8 @@ const Page = () => {
           Supported banks
         </Typography>
         <Box sx={sx.bankGrid}>
-          {MISC.SUPPORTED_BANKS.map((bank) => (
-            <Chip key={bank} label={bank} sx={sx.bankChip} />
+          {Object.values(AVAILABLE_PARSERS).map((parser) => (
+            <Chip key={parser.id} label={parser.bankName} sx={sx.bankChip} />
           ))}
         </Box>
       </Box>

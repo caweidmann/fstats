@@ -28,6 +28,8 @@ export type FeatureFlags = Record<string, boolean>
 
 export type Parser = {
   id: SupportedParsers
+  bankName: string
+  accountType: string
   expectedHeaderRowIndex: number
   expectedHeaders: string[]
   detect: (input: PPRawParseResult) => boolean
