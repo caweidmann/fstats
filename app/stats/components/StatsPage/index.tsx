@@ -37,11 +37,16 @@ const Component = () => {
       : selectedBankId === 'unknown'
         ? selectedFiles.filter((file) => !file.parserId)
         : selectedFiles.filter((file) => file.parserId === selectedBankId)
+  console.log('filteredFiles', filteredFiles)
+  console.log(
+    'data',
+    filteredFiles[0].parsedContentRows.map((row) => row.value.toNumber()),
+  )
 
   const dataset: ChartDataset<'bar' | 'line'> = {
     type: 'bar',
-    label: 'Cool dataset',
-    data: [10, 20],
+    label: 'Transactions',
+    data: filteredFiles[0].parsedContentRows.map((row) => row.value.toNumber()),
     backgroundColor: (context) =>
       getGradient({
         // @ts-expect-error Type '"line"' is not assignable to type '"bar"'.
@@ -58,7 +63,7 @@ const Component = () => {
   }
 
   const chartData: ChartData = {
-    labels: ['asd', 'xyz'],
+    labels: filteredFiles[0].parsedContentRows.map((row) => row.date),
     datasets: [dataset],
   }
 
