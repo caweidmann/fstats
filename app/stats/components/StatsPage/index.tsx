@@ -1,11 +1,8 @@
 'use client'
 
-import { ArrowBack } from '@mui/icons-material'
-import { Box, Button, Card, CardHeader, Grid, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import { Card, CardHeader, Grid } from '@mui/material'
 import { useForm } from 'react-hook-form'
 
-import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { Select } from '@/components/FormFieldsControlled'
 import { useFileHelper } from '@/hooks'
@@ -18,7 +15,6 @@ type LocalForm = {
 }
 
 const Component = () => {
-  const router = useRouter()
   const { selectedFiles } = useFileHelper()
   const bankOptions = getBankSelectOptions(selectedFiles)
   const defaultValues: LocalForm = {
@@ -33,26 +29,9 @@ const Component = () => {
         ? selectedFiles.filter((file) => !file.parserId)
         : selectedFiles.filter((file) => file.parserId === selectedBankId)
 
-  console.log('selectedFiles', selectedFiles)
-  console.log('selectedBankId', selectedBankId)
-
   return (
     <PageWrapper>
       <Grid container spacing={2}>
-        <Grid size={12}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h4">Stats</Typography>
-            <Button
-              variant="outlined"
-              startIcon={<ArrowBack />}
-              onMouseEnter={() => router.prefetch(ROUTES.DATA)}
-              onClick={() => router.push(ROUTES.DATA)}
-            >
-              Back
-            </Button>
-          </Box>
-        </Grid>
-
         <Grid size={2}>
           <Select<LocalForm, LocalForm['selectedId']>
             control={localForm.control}
