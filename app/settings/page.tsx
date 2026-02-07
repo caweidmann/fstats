@@ -7,6 +7,7 @@ import type { ChangeEvent } from 'react'
 import { PageWrapper } from '@/components'
 import { useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
 
+import { StorageSettings } from './components'
 import { ui } from './styled'
 
 const Page = () => {
@@ -39,6 +40,10 @@ const Page = () => {
               </Box>
             }
           />
+        </Grid>
+
+        <Grid size={12}>
+          <StorageSettings />
         </Grid>
       </Grid>
     </PageWrapper>
