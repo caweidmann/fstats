@@ -1,107 +1,78 @@
+'use client'
+
+import { DeleteOutlined, FolderOutlined, StorageOutlined } from '@mui/icons-material'
+import { Box, Button, Card, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-type StorageInfo = {
-  usage: number | null
-  quota: number | null
-}
+import { useStorage } from '@/context/Storage'
+import { formatFileSize } from '@/utils/File'
 
-function formatBytes(bytes: number) {
-  const units = ['B', 'KB', 'MB', 'GB']
-  let i = 0
-  let value = bytes
-
-  while (value >= 1024 && i < units.length - 1) {
-    value /= 1024
-    i += 1
-  }
-
-  return `${value.toFixed(2)} ${units[i]}`
-}
+import { calculateStorageSize } from './actions'
+import { ui } from './styled'
 
 const Component = () => {
-  const [storage, setStorage] = useState<StorageInfo>({
-    usage: null,
-    quota: null,
-  })
-  const [clearing, setClearing] = useState(false)
-
-  async function refreshStorageInfo() {
-    if (!('storage' in navigator) || !navigator.storage.estimate) {
-      return
-    }
-
-    const estimate = await navigator.storage.estimate()
-    setStorage({
-      usage: estimate.usage ?? null,
-      quota: estimate.quota ?? null,
-    })
-  }
+  const sx = ui()
+  const { files, removeAllFiles } = useStorage()
+  const [storageSize, setStorageSize] = useState<string>('')
+  const [isCalculating, setIsCalculating] = useState(true)
 
   useEffect(() => {
-    refreshStorageInfo()
-  }, [])
-
-  async function deleteAllData() {
-    const confirmed = window.confirm('This will delete all locally stored app data. Continue?')
-    if (!confirmed) return
-
-    setClearing(true)
-
-    try {
-      // 1. Clear localStorage
-      localStorage.clear()
-
-      // 2. Clear all IndexedDB databases (Chromium + Firefox)
-      if (indexedDB.databases) {
-        const databases = await indexedDB.databases()
-        await Promise.all(
-          databases.map((db) => {
-            if (db.name) {
-              const dbName = db.name // Capture name in closure for TypeScript
-              return new Promise<void>((resolve, reject) => {
-                const request = indexedDB.deleteDatabase(dbName)
-                request.onsuccess = () => resolve()
-                request.onerror = () => reject()
-                request.onblocked = () => resolve() // still consider cleared
-              })
-            }
-          }),
-        )
+    const calculateInfo = async () => {
+      setIsCalculating(true)
+      try {
+        const size = await calculateStorageSize()
+        setStorageSize(formatFileSize(size))
+      } catch {
+        setStorageSize('Error')
+      } finally {
+        setIsCalculating(false)
       }
-
-      // Optional: clear Cache API if you use it
-      if ('caches' in window) {
-        const cacheNames = await caches.keys()
-        await Promise.all(cacheNames.map((name) => caches.delete(name)))
-      }
-    } finally {
-      setClearing(false)
-      refreshStorageInfo()
     }
-  }
 
-  if (storage.usage == null || storage.quota == null) {
-    return <p>Storage usage unavailable</p>
-  }
+    calculateInfo()
+  }, [files.length])
 
-  const percentUsed = (storage.usage / storage.quota) * 100
+  const fileCount = files.length
+  const hasFiles = fileCount > 0
 
   return (
-    <div>
-      <h3>App storage usage</h3>
+    <Card sx={{ borderRadius: 2, p: 3 }}>
+      <Typography variant="caption" component="p" sx={{ mb: 2 }}>
+        Storage details
+      </Typography>
 
-      <p>
-        Used: <strong>{formatBytes(storage.usage)}</strong>
-      </p>
-      <p>
-        Available: <strong>{formatBytes(storage.quota)}</strong>
-      </p>
-      <p>{percentUsed.toFixed(1)}% of available storage used</p>
+      <Box sx={sx.statsContainer}>
+        <Box sx={sx.statItem}>
+          <FolderOutlined sx={sx.statIcon} />
+          <Box>
+            <Typography sx={sx.statValue}>{fileCount}</Typography>
+            <Typography variant="caption" sx={sx.statLabel}>
+              {fileCount === 1 ? 'File' : 'Files'}
+            </Typography>
+          </Box>
+        </Box>
 
-      <button onClick={deleteAllData} disabled={clearing}>
-        {clearing ? 'Deleting…' : 'Delete all local data'}
-      </button>
-    </div>
+        <Box sx={sx.statItem}>
+          <StorageOutlined sx={sx.statIcon} />
+          <Box>
+            <Typography sx={sx.statValue}>{isCalculating ? '' : storageSize}</Typography>
+            <Typography variant="caption" sx={sx.statLabel}>
+              Storage used
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+
+      <Button
+        color="error"
+        variant="outlined"
+        startIcon={<DeleteOutlined />}
+        onClick={() => removeAllFiles()}
+        disabled={!hasFiles}
+      >
+        Clear all data
+      </Button>
+    </Card>
   )
 }
 
