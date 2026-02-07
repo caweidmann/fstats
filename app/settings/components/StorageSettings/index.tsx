@@ -5,14 +5,15 @@ import { Box, Button, Card, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 import { useStorage } from '@/context/Storage'
+import { formatFileSize } from '@/utils/File'
 
-import { calculateStorageSize, formatBytes } from './actions'
+import { calculateStorageSize } from './actions'
 import { ui } from './styled'
 
 const Component = () => {
   const sx = ui()
   const { files, removeAllFiles } = useStorage()
-  const [storageSize, setStorageSize] = useState<string>('...')
+  const [storageSize, setStorageSize] = useState<string>('')
   const [isCalculating, setIsCalculating] = useState(true)
 
   useEffect(() => {
@@ -20,7 +21,7 @@ const Component = () => {
       setIsCalculating(true)
       try {
         const size = await calculateStorageSize()
-        setStorageSize(formatBytes(size))
+        setStorageSize(formatFileSize(size))
       } catch {
         setStorageSize('Error')
       } finally {
@@ -44,9 +45,7 @@ const Component = () => {
         <Box sx={sx.statItem}>
           <FolderOutlined sx={sx.statIcon} />
           <Box>
-            <Typography variant="body1" sx={sx.statValue}>
-              {fileCount}
-            </Typography>
+            <Typography sx={sx.statValue}>{fileCount}</Typography>
             <Typography variant="caption" sx={sx.statLabel}>
               {fileCount === 1 ? 'File' : 'Files'}
             </Typography>
@@ -56,9 +55,7 @@ const Component = () => {
         <Box sx={sx.statItem}>
           <StorageOutlined sx={sx.statIcon} />
           <Box>
-            <Typography variant="body1" sx={sx.statValue}>
-              {isCalculating ? '...' : storageSize}
-            </Typography>
+            <Typography sx={sx.statValue}>{isCalculating ? '' : storageSize}</Typography>
             <Typography variant="caption" sx={sx.statLabel}>
               Storage used
             </Typography>
