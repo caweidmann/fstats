@@ -22,7 +22,7 @@ const Page = () => {
         </Grid>
 
         <Grid size={12}>
-          <Typography sx={{ color: 'text.secondary', fontSize: 12 }}>App version: v{CONFIG.APP_VERSION}</Typography>
+          <Typography sx={{ color: 'text.secondary', fontSize: 12 }}>Version: v{CONFIG.APP_VERSION}</Typography>
         </Grid>
       </Grid>
     </PageWrapper>
