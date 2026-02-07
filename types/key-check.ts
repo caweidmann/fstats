@@ -4,7 +4,7 @@ import { ZodDiscriminatedUnion, ZodIntersection, ZodObject, ZodRawShape, ZodUnio
  * This is a utility type which is solely there to ensure that when types
  * get created which need to be encrypted that they match the keys exactly.
  */
-export const zKeysCheck = <T extends ZodRawShape, U extends ZodRawShape>(
+export const _zKeysCheck = <T extends ZodRawShape, U extends ZodRawShape>(
   schemaA: ZodObject<T> | ZodUnion<any> | ZodDiscriminatedUnion<any, any> | ZodIntersection<any, any>,
   schemaB: ZodObject<U> | ZodUnion<any> | ZodDiscriminatedUnion<any, any> | ZodIntersection<any, any>,
   assertKeys: true,
@@ -38,4 +38,4 @@ export const zKeysCheck = <T extends ZodRawShape, U extends ZodRawShape>(
 /**
  * This is a utility type to check whether keys of two types match.
  */
-export type KeysCheck<T, U> = keyof T extends keyof U ? (keyof U extends keyof T ? true : never) : never
+export type _KeysCheck<T, U> = keyof T extends keyof U ? (keyof U extends keyof T ? true : never) : never

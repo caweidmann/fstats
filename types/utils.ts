@@ -4,7 +4,7 @@ import type { Dispatch, SetStateAction } from 'react'
 import { ColorMode, ParserId, UserLocale } from '@/types-enums'
 
 import type { SelectOptionWithType } from './global'
-import type { ParsedContentRow, PPRawParseResult, StatsFile } from './stats-file'
+import type { ParsedContentRow, PPRawParseResult, StatsFile } from './services/stats-file'
 
 export type UserPreferences = {
   locale: UserLocale
