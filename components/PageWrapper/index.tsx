@@ -7,7 +7,7 @@ import { LAYOUT } from '@/common'
 import { useIsMobile } from '@/hooks'
 
 type PageWrapperProps = {
-  children: ReactNode
+  children?: ReactNode
 }
 
 const Component = ({ children }: PageWrapperProps) => {
