@@ -213,15 +213,31 @@ That's it! The parser will automatically be detected and used when matching CSV 
 
 **Golden Rule**: Less code in correct places > overwhelming single files with lots of code.
 
+**Locality Rule**: Keep logic close to where it's used. Only extract to global when used 3+ times.
+
 Each directory follows a consistent structure:
 ```
 DirectoryName/
 ├── index.ts(x)        # Public API: exports only (named exports preferred)
 ├── utils.ts           # Implementation: helper functions
-├── actions.ts(x)      # Optional: action/helper functions for components
-├── styled.ts          # Optional: MUI styling functions
-├── components/        # Optional: sub-components (follows same pattern)
+├── actions.ts(x)      # Component-specific logic (COMMON - most components have this)
+├── styled.ts          # MUI styling functions (COMMON - most components have this)
+├── components/        # Optional: sub-components when component needs more logic
 └── [domain].ts        # Optional: domain-specific files (e.g., formatters.ts)
+```
+
+**Typical Component Structure**:
+```
+ComponentName/
+├── index.tsx          # Component implementation
+├── actions.ts         # Logic specific to THIS component only
+├── styled.ts          # Styles specific to THIS component only
+└── components/        # Sub-components when component grows complex
+    ├── index.ts       # Export sub-components
+    └── SubComponent/
+        ├── index.tsx
+        ├── actions.ts
+        └── styled.ts
 ```
 
 ### Page Structure (`/app/**/page.tsx`)
@@ -309,7 +325,8 @@ export default Component
 - Use arrow function syntax
 - Name it `Component` (not descriptive names)
 - Extract sub-components when a component exceeds ~100 lines
-- Keep render logic simple—extract complex logic to hooks or utils
+- Keep render logic simple—extract logic to `actions.ts` or `components/` subfolder
+- **Most components should have `actions.ts` and `styled.ts`** for separation of concerns
 
 ### Styling Pattern (`styled.ts`)
 
@@ -514,25 +531,34 @@ export const useFileHelper = () => {
 
 ### Action/Helper Files (`actions.ts` or `actions.tsx`)
 
-Helper functions that support components but don't belong in utils:
+**Most components have an `actions.ts` file** for component-specific logic.
 
 ```typescript
 import type { BankSelectOption, StatsFile } from '@/types'
 import { AVAILABLE_PARSERS } from '@/utils/Parsers'
 
 export const getBankSelectOptions = (selectedFiles: StatsFile[]): BankSelectOption[] => {
-  // Implementation
+  // Implementation specific to this component
+}
+
+export const calculateChartOptions = (theme: Theme, isDarkMode: boolean) => {
+  // Chart configuration specific to this component
 }
 ```
 
-**When to use**:
-- Functions specific to a component/page
+**When to use `actions.ts` in component**:
+- Functions used ONLY by this component
 - Functions that use component-specific types
-- Helper functions that don't belong in global utils
+- Business logic that doesn't need to be shared yet
+- Helper functions for formatting/calculating data for THIS component
+
+**When to move to global `/utils` or `/hooks`**:
+- **Rule of 3**: Only when logic is used in 3+ different places in the app
+- Example: If 3 different components need `formatCurrency()`, move to `/utils/Currency/`
 
 **When NOT to use**:
-- Reusable functions → use `/utils`
-- React hooks → use `/hooks`
+- Already-reusable functions → check if `/utils` has it first
+- React hooks with state → use component's `components/` subfolder or local hooks
 
 ### Constants Pattern (`/common/**/`)
 
@@ -627,21 +653,34 @@ export const CapitecSavings: Parser = {
 
 ### Create a New File When:
 
-1. **Component exceeds ~100 lines** → Extract sub-component to `./components/SubComponent/index.tsx`
-2. **New domain of functionality** → Create new utility domain in `/utils/NewDomain/`
-3. **New page/route** → Create new route directory in `/app/new-route/`
-4. **Related helper functions** → Create `actions.ts` alongside component
-5. **New context** → Create new context directory in `/context/NewContext/`
-6. **New reusable hook** → Create new file in `/hooks/useNewHook.ts`
+1. **New component** → Create `ComponentName/index.tsx` + `actions.ts` + `styled.ts`
+2. **Component exceeds ~100 lines** → Extract sub-component to `./components/SubComponent/`
+3. **Component needs more complex logic** → Create `./components/` subfolder with sub-components
+4. **New page/route** → Create new route directory in `/app/new-route/`
+5. **Logic used 3+ times** → Create new utility in `/utils/NewDomain/` or hook in `/hooks/`
+6. **New context** → Create new context directory in `/context/NewContext/`
 7. **New bank parser** → Create new directory in `/utils/Parsers/BankName/`
 
 ### Add to Existing File When:
 
-1. **Utility function fits existing domain** → Add to `/utils/ExistingDomain/utils.ts`
-2. **Type fits existing domain** → Add to `/types/existing-domain.ts`
-3. **Constant fits existing category** → Add to `/common/existing.ts`
-4. **Small helper specific to component** → Add to component's `actions.ts`
+1. **Helper for THIS component only** → Add to component's `actions.ts` (used 1-2 times)
+2. **Utility function fits existing domain** → Add to `/utils/ExistingDomain/utils.ts`
+3. **Type fits existing domain** → Add to `/types/existing-domain.ts`
+4. **Constant fits existing category** → Add to `/common/existing.ts`
 5. **Enum value** → Add to existing enum in `/types-enums/index.ts`
+
+### The "Rule of 3" for Extraction:
+
+**Keep it local until used 3+ times**, then extract to global:
+
+```
+Used 1-2 times → Keep in component's actions.ts
+Used 3+ times  → Move to /utils or /hooks or /components
+```
+
+**Example**:
+- `formatBankName()` used only in `BankChip` → Keep in `BankChip/actions.ts`
+- `formatCurrency()` used in `BankChip`, `Summary`, `StatsPage` → Move to `/utils/Currency/`
 
 ### File Size Guidelines:
 
@@ -650,7 +689,63 @@ export const CapitecSavings: Parser = {
 - **Types**: No strict limit, but group by domain
 - **Pages**: 30-60 lines ideal (should be thin)
 
+## Code Organization Philosophy
+
+### Locality First, Extract When Needed
+
+**Start local → Extract only when reused 3+ times**
+
+1. **First component** → Logic in `ComponentName/actions.ts`
+2. **Second component needs it** → Copy to second component's `actions.ts` (that's ok!)
+3. **Third component needs it** → NOW extract to `/utils` or `/hooks`
+
+**Why?**: Premature abstraction is worse than a little duplication. Wait until you see the pattern clearly.
+
+### Component Growth Pattern
+
+```
+Simple Component (50 lines)
+├── index.tsx
+├── actions.ts    ← Component-specific helpers
+└── styled.ts     ← Component-specific styles
+
+↓ Component grows (100+ lines)
+
+Complex Component
+├── index.tsx     ← Orchestrator only
+├── actions.ts    ← Shared helpers
+├── styled.ts     ← Shared styles
+└── components/   ← Sub-components with their own actions.ts & styled.ts
+    ├── index.ts
+    ├── SubComponentA/
+    │   ├── index.tsx
+    │   ├── actions.ts
+    │   └── styled.ts
+    └── SubComponentB/
+        ├── index.tsx
+        ├── actions.ts
+        └── styled.ts
+```
+
 ## Anti-Patterns to Avoid
+
+❌ **DON'T**: Prematurely extract to global utils
+```typescript
+// BAD: Used once, but already in /utils
+// utils/BankName/utils.ts
+export const formatBankName = (name: string) => name.toUpperCase()
+
+// Only used in BankChip component
+```
+
+✅ **DO**: Keep it local until used 3+ times
+```typescript
+// GOOD: Keep in component's actions.ts until reused
+// components/BankChip/actions.ts
+export const formatBankName = (name: string) => name.toUpperCase()
+```
+
+---
 
 ❌ **DON'T**: Put business logic in page.tsx
 ```typescript
