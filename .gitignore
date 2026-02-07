@@ -49,4 +49,4 @@ public/serwist-*.js
 public/serwist-*.js.map
 public/swe-worker-*.js
 
-/data
+/_data
