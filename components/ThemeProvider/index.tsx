@@ -23,7 +23,7 @@ type ThemeProviderProps = {
 
 const Component = ({ children }: ThemeProviderProps) => {
   return (
-    <ThemeProvider theme={theme} defaultMode={MISC.DEFAULT_COLOR_MODE}>
+    <ThemeProvider theme={theme} defaultMode={MISC.DEFAULT_COLOR_MODE} modeStorageKey={MISC.LS_MUI_COLOR_MODE_KEY}>
       <CssBaseline />
       <InnerWrapper>{children}</InnerWrapper>
     </ThemeProvider>
