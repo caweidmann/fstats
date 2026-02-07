@@ -57,8 +57,9 @@ const Component = () => {
         await Promise.all(
           databases.map((db) => {
             if (db.name) {
+              const dbName = db.name // Capture name in closure for TypeScript
               return new Promise<void>((resolve, reject) => {
-                const request = indexedDB.deleteDatabase(db.name)
+                const request = indexedDB.deleteDatabase(dbName)
                 request.onsuccess = () => resolve()
                 request.onerror = () => reject()
                 request.onblocked = () => resolve() // still consider cleared
