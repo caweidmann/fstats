@@ -1,7 +1,6 @@
 import { parse } from 'papaparse'
 
 import type { Parser, PPRawParseResult, StatsFile } from '@/types'
-import { ParserId } from '@/types-enums'
 
 import { getLocalUserPreferences } from '../LocalStorage'
 import { AVAILABLE_PARSERS } from '../Parsers'
