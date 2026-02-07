@@ -19,6 +19,8 @@ export const MISC = {
   DEFAULT_LOCALE: UserLocale.EN,
   DEFAULT_COLOR_MODE: ColorMode.SYSTEM,
   DEFAULT_PERSIST_DATA: false,
+  LS_I18N_LOCALE_KEY: 'fstats__i18nextLng',
+  LS_MUI_COLOR_MODE_KEY: 'fstats__mui-mode',
   LS_LOCALE_KEY: 'fstats__locale',
   LS_COLOR_MODE_KEY: 'fstats__color_mode',
   LS_PERSIST_DATA_KEY: 'fstats__persist_data',
