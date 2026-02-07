@@ -18,7 +18,7 @@ const Page = () => {
   const { selectedFiles } = useFileHelper()
 
   if (isLoading) {
-    return <PageWrapper>Loading...</PageWrapper>
+    return <PageWrapper />
   }
 
   return (
