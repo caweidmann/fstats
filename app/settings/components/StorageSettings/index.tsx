@@ -1,6 +1,6 @@
 'use client'
 
-import { DeleteOutlined, FolderOutlined, StorageOutlined } from '@mui/icons-material'
+import { DeleteOutlined, FolderOutlined, StorageRounded } from '@mui/icons-material'
 import { Box, Button, Card, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 
@@ -53,7 +53,7 @@ const Component = () => {
         </Box>
 
         <Box sx={sx.statItem}>
-          <StorageOutlined sx={sx.statIcon} />
+          <StorageRounded sx={sx.statIcon} />
           <Box>
             <Typography sx={sx.statValue}>{isCalculating ? '' : storageSize}</Typography>
             <Typography variant="caption" sx={sx.statLabel}>
