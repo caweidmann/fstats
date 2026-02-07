@@ -13,7 +13,6 @@ import { Box, Button, Chip, CircularProgress, Stack, Typography } from '@mui/mat
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
-import { ParserId } from '@/types-enums'
 import { useStorage } from '@/context/Storage'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
 import { getParserName } from '@/utils/Misc'
