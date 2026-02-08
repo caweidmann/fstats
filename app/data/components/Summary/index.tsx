@@ -12,11 +12,9 @@ import {
 import { Box, Button, Chip, CircularProgress, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
 
 import { StatsFileStatus } from '@/types-enums'
-import { MISC } from '@/common'
-import { useFiles, useMutateRemoveAllFiles, useMutateRemoveFiles } from '@/m-stats-file/service'
+import { useMutateRemoveAllFiles, useMutateRemoveFiles } from '@/m-stats-file/service'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
 import { getParserName } from '@/utils/Misc'
 
@@ -29,11 +27,10 @@ const Component = () => {
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
   const [expanded, setExpanded] = useState(false)
-  const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[]>(MISC.LS_SELECTED_FILE_IDS_KEY, [])
   const { mutate: removeAllFiles, isPending: isRemovingAllFiles } = useMutateRemoveAllFiles()
   const { mutate: removeFiles, isPending: isRemovingFiles } = useMutateRemoveFiles()
-  const { data: files = [], isLoading: isLoadingFiles } = useFiles()
-  const { selectedFiles, selectableFiles, errorFiles, unknownFiles } = useFileHelper(files, selectedFileIds)
+  const { files, isLoadingFiles, selectedFiles, selectableFiles, errorFiles, unknownFiles, setSelectedFileIds } =
+    useFileHelper()
   const parserIds = Array.from(
     new Set(selectedFiles.filter((file) => file.status === StatsFileStatus.PARSED).map((file) => file.parserId)),
   )

@@ -2,12 +2,10 @@
 
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import { useLocalStorage } from 'usehooks-ts'
 
 import { StatsFileStatus } from '@/types-enums'
-import { MISC, ROUTES } from '@/common'
+import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
-import { useFiles } from '@/m-stats-file/service'
 import { useFileHelper } from '@/hooks'
 
 import { AddFolderButton, FileDropZone, Summary } from './components'
@@ -16,10 +14,7 @@ import { ui } from './styled'
 const Page = () => {
   const sx = ui()
   const router = useRouter()
-  const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[]>(MISC.LS_SELECTED_FILE_IDS_KEY, [])
-  const { data: files = [], isLoading: isLoadingFiles } = useFiles()
-  const { selectedFiles } = useFileHelper(files, selectedFileIds)
-  console.log('isLoadingFiles', { isLoadingFiles, files })
+  const { files, isLoadingFiles, selectedFiles } = useFileHelper()
 
   if (isLoadingFiles) {
     return <PageWrapper />
