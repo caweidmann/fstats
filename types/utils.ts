@@ -4,7 +4,7 @@ import type { Dispatch, SetStateAction } from 'react'
 import { ColorMode, ParserId, UserLocale } from '@/types-enums'
 
 import type { SelectOptionWithType } from './global'
-import { PPRawParseResult } from './lib/papaparse'
+import type { PPRawParseResult } from './lib/papaparse'
 import type { ParsedContentRow } from './services/parsed-content-row'
 import type { StatsFile } from './services/stats-file'
 

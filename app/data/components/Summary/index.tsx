@@ -52,7 +52,7 @@ const Component = () => {
     removeFiles(errorFiles.map((file) => file.id))
   }
 
-  const removeUnkownFiles = () => {
+  const removeUnknownFiles = () => {
     removeFiles(unknownFiles.map((file) => file.id))
   }
 
@@ -140,7 +140,7 @@ const Component = () => {
                     size="small"
                     color="secondary"
                     startIcon={<DeleteOutlined />}
-                    onClick={() => removeUnkownFiles()}
+                    onClick={() => removeUnknownFiles()}
                     disabled={isLoadingFiles || isParsing || !unknownFiles.length}
                     loading={isRemovingFiles}
                   >
