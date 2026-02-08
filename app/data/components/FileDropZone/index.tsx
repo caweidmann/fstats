@@ -49,7 +49,7 @@ const Component = () => {
       const parsedFiles = await parseFiles(addedFiles.filter((file) => file.status === StatsFileStatus.PARSING))
       await updateFiles(parsedFiles.map((file) => ({ id: file.id, updates: file })))
     },
-    [addFiles, updateFiles],
+    [addFiles, updateFiles, setSelectedFileIds],
   )
 
   const dropzone = useDropzone({
