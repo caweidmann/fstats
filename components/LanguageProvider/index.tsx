@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { initTranslations } from '@/lib/i18n'
@@ -10,14 +10,18 @@ type LanguageProviderProps = {
 }
 
 const Component = ({ children }: LanguageProviderProps) => {
-  const isInitialized = useRef(false)
+  const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
-    if (!isInitialized.current) {
+    if (!isInitialized) {
       initTranslations()
-      isInitialized.current = true
+      setIsInitialized(true)
     }
   }, [])
+
+  if (!isInitialized) {
+    return null
+  }
 
   return <>{children}</>
 }
