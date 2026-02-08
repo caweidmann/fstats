@@ -15,7 +15,7 @@ import { getGradient } from '@/utils/Misc'
 import { AVAILABLE_PARSERS } from '@/utils/Parsers'
 
 import { getBankSelectOptions, getChartOptions } from './actions'
-import { ProfitLoss } from './components'
+import { ProfitLoss, TaxOptimizationInsights } from './components'
 
 type LocalForm = {
   selectedId: string
@@ -111,6 +111,7 @@ const Component = () => {
             name="selectedId"
             options={bankOptions}
             fullWidth
+            sx={{ borderRadius: 1.5 }}
           />
         </Grid>
         {/* <Grid size={2}>Date range</Grid> */}
@@ -127,6 +128,10 @@ const Component = () => {
             {/* @ts-expect-error Type '"line"' is not assignable to type '"bar"'. */}
             <BarChart type="bar" data={chartData} options={chartOptions} />
           </Card>
+        </Grid>
+
+        <Grid size={12}>
+          <TaxOptimizationInsights />
         </Grid>
 
         {filteredFiles.map((file) => {
