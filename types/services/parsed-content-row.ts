@@ -22,6 +22,6 @@ export const zParsedContentRowAtRest = z.object({
 
 export type ParsedContentRowAtRest = z.infer<typeof zParsedContentRowAtRest>
 
-// Safety checks - ensure StatsFile and StatsFileAtRest have the same keys
-const assertKeysParsedContentRow: _KeysCheck<ParsedContentRow, ParsedContentRowAtRest> = true
-_zKeysCheck(zParsedContentRow, zParsedContentRowAtRest, assertKeysParsedContentRow)
+// Safety checks
+const assertKeys: _KeysCheck<ParsedContentRow, ParsedContentRowAtRest> = true
+_zKeysCheck(zParsedContentRow, zParsedContentRowAtRest, assertKeys)

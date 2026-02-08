@@ -49,6 +49,6 @@ export const zStatsFileAtRest = z.object({
 
 export type StatsFileAtRest = z.infer<typeof zStatsFileAtRest>
 
-// Safety checks - ensure StatsFile and StatsFileAtRest have the same keys
-const assertKeysStatsFile: _KeysCheck<StatsFile, StatsFileAtRest> = true
-_zKeysCheck(zStatsFile, zStatsFileAtRest, assertKeysStatsFile)
+// Safety checks
+const assertKeys: _KeysCheck<StatsFile, StatsFileAtRest> = true
+_zKeysCheck(zStatsFile, zStatsFileAtRest, assertKeys)
