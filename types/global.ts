@@ -8,7 +8,7 @@ import type { Big as TypeBig } from 'big.js'
 
 export const zNonEmptyString = z.string().trim().nonempty({ error: 'ERRORS:REQUIRED' })
 /**
- * The NonEmptyString ensure that there is a string value after being trimmed.
+ * The NonEmptyString ensures that there is a string value after being trimmed.
  */
 export type NonEmptyString = z.infer<typeof zNonEmptyString>
 
