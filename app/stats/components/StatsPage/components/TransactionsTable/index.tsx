@@ -25,6 +25,7 @@ import {
   Typography,
 } from '@mui/material'
 import { blue, green, orange, red } from '@mui/material/colors'
+import { useTheme } from '@mui/material/styles'
 import { useMemo, useState } from 'react'
 
 import { ui } from './styled'
@@ -138,7 +139,8 @@ type TransactionsTableProps = {
 }
 
 const Component = ({ selectedCategory = null }: TransactionsTableProps) => {
-  const sx = ui()
+  const theme = useTheme()
+  const sx = ui(theme)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [searchQuery, setSearchQuery] = useState('')
@@ -187,20 +189,11 @@ const Component = ({ selectedCategory = null }: TransactionsTableProps) => {
       <>
         {parts.map((part, index) =>
           part.toLowerCase() === query.toLowerCase() ? (
-            <Box
-              key={index}
-              component="span"
-              sx={{
-                backgroundColor: 'warning.light',
-                color: 'warning.contrastText',
-                px: 0.5,
-                borderRadius: 0.5,
-              }}
-            >
+            <Box key={`${part}-${index}`} component="span" sx={sx.highlight}>
               {part}
             </Box>
           ) : (
-            part
+            <span key={`${part}-${index}`}>{part}</span>
           ),
         )}
       </>
@@ -263,57 +256,67 @@ const Component = ({ selectedCategory = null }: TransactionsTableProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredTransactions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-              <TableRow key={row.id} hover sx={sx.tableRow}>
-                <TableCell sx={sx.compactCell}>
-                  <Typography variant="body2" sx={{ fontSize: '0.875rem' }}>
-                    {highlightText(row.date, searchQuery)}
+            {filteredTransactions.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} sx={{ textAlign: 'center', py: 6 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 0 }}>
+                    No transactions found
                   </Typography>
-                </TableCell>
-                <TableCell sx={sx.compactCell}>
-                  <Box sx={sx.descriptionCell}>
-                    {getStatusIcon(row.status)}
-                    <Typography variant="body2" sx={{ ml: 1, fontSize: '0.875rem', mb: 0 }}>
-                      {highlightText(row.description, searchQuery)}
-                    </Typography>
-                  </Box>
-                </TableCell>
-                <TableCell sx={sx.compactCell}>
-                  <Chip
-                    label={highlightText(row.category, searchQuery)}
-                    size="small"
-                    color={getCategoryColor(row.category)}
-                    sx={sx.categoryChip}
-                  />
-                </TableCell>
-                <TableCell align="right" sx={sx.compactCell}>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      mb: 0,
-                      color: row.amount >= 0 ? green[600] : 'text.primary',
-                      fontWeight: row.amount >= 0 ? 600 : 400,
-                      fontSize: '0.875rem',
-                    }}
-                  >
-                    {row.amount >= 0 ? '+' : ''}€{Math.abs(row.amount).toFixed(2)}
-                  </Typography>
-                  {row.taxDeductible && (
-                    <Typography
-                      variant="caption"
-                      sx={{ color: 'text.secondary', display: 'block', fontSize: '0.7rem' }}
-                    >
-                      Tax deductible
-                    </Typography>
-                  )}
-                </TableCell>
-                <TableCell align="center" sx={sx.compactCell}>
-                  <IconButton size="small" onClick={handleMenuClick}>
-                    <MoreVertIcon fontSize="small" />
-                  </IconButton>
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              filteredTransactions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                <TableRow key={row.id} hover sx={sx.tableRow}>
+                  <TableCell sx={sx.compactCell}>
+                    <Typography variant="body2" sx={{ fontSize: '0.875rem', mb: 0 }}>
+                      {highlightText(row.date, searchQuery)}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={sx.compactCell}>
+                    <Box sx={sx.descriptionCell}>
+                      {getStatusIcon(row.status)}
+                      <Typography variant="body2" sx={{ ml: 1, fontSize: '0.875rem', mb: 0 }}>
+                        {highlightText(row.description, searchQuery)}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  <TableCell sx={sx.compactCell}>
+                    <Chip
+                      label={highlightText(row.category, searchQuery)}
+                      size="small"
+                      color={getCategoryColor(row.category)}
+                      sx={sx.categoryChip}
+                    />
+                  </TableCell>
+                  <TableCell align="right" sx={sx.compactCell}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        mb: 0,
+                        color: row.amount >= 0 ? green[600] : 'text.primary',
+                        fontWeight: row.amount >= 0 ? 600 : 400,
+                        fontSize: '0.875rem',
+                      }}
+                    >
+                      {row.amount >= 0 ? '+' : ''}€{Math.abs(row.amount).toFixed(2)}
+                    </Typography>
+                    {row.taxDeductible && (
+                      <Typography
+                        variant="caption"
+                        sx={{ color: 'text.secondary', display: 'block', fontSize: '0.7rem' }}
+                      >
+                        Tax deductible
+                      </Typography>
+                    )}
+                  </TableCell>
+                  <TableCell align="center" sx={sx.compactCell}>
+                    <IconButton size="small" onClick={handleMenuClick}>
+                      <MoreVertIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </TableContainer>

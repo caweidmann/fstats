@@ -137,21 +137,6 @@ const Component = () => {
         <Grid size={12}>
           <TransactionsTable selectedCategory={null} />
         </Grid>
-
-        {filteredFiles.map((file) => {
-          const rowCount = file.parserId ? file.parsedContentRows.length : file.rawParseResult?.data.length
-          const columnCount = file.parserId
-            ? AVAILABLE_PARSERS[file.parserId].expectedHeaders.length
-            : file.rawParseResult?.data[0]?.length
-
-          return (
-            <Grid key={file.id} size={12}>
-              <Card>
-                <CardHeader title={file.file.name} subheader={`${rowCount} rows, ${columnCount} columns`} />
-              </Card>
-            </Grid>
-          )
-        })}
       </Grid>
     </PageWrapper>
   )
