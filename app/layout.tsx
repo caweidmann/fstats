@@ -7,7 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
-import { ChartProvider, LanguageProvider, Layout, ThemeProvider } from '@/components'
+import { ChartProvider, LanguageProvider, Layout, QueryProvider, ThemeProvider } from '@/components'
 import { StorageProvider } from '@/context/Storage'
 
 const SEO_TITLE = `fstats - Analyse bank statements privately`
@@ -48,16 +48,18 @@ const Component = ({ children }: LayoutProps) => {
         {process.env.NODE_ENV === 'production' ? <Analytics /> : null}
 
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          <ThemeProvider>
-            <InitColorSchemeScript attribute="class" />
-            <LanguageProvider>
-              <StorageProvider>
-                <ChartProvider>
-                  <Layout>{children}</Layout>
-                </ChartProvider>
-              </StorageProvider>
-            </LanguageProvider>
-          </ThemeProvider>
+          <QueryProvider>
+            <ThemeProvider>
+              <InitColorSchemeScript attribute="class" />
+              <LanguageProvider>
+                <StorageProvider>
+                  <ChartProvider>
+                    <Layout>{children}</Layout>
+                  </ChartProvider>
+                </StorageProvider>
+              </LanguageProvider>
+            </ThemeProvider>
+          </QueryProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
