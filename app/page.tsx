@@ -40,15 +40,33 @@ const Page = () => {
           accounts, no tracking.
         </Typography>
 
-        <Button
-          variant="contained"
-          size="large"
-          sx={sx.ctaButton}
-          onMouseEnter={() => router.prefetch(ROUTES.DATA)}
-          onClick={() => router.push(ROUTES.DATA)}
-        >
-          Get started
-        </Button>
+        <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row' }}>
+          <Button
+            variant="contained"
+            size="large"
+            sx={sx.ctaButton}
+            onMouseEnter={() => router.prefetch(ROUTES.DATA)}
+            onClick={() => router.push(ROUTES.DATA)}
+          >
+            Get started
+          </Button>
+
+          <Button
+            variant="outlined"
+            size="large"
+            sx={{
+              ...sx.ctaButton,
+              borderWidth: 2,
+              '&:hover': {
+                borderWidth: 2,
+              },
+            }}
+            onMouseEnter={() => router.prefetch(`${ROUTES.STATS}?demo=true`)}
+            onClick={() => router.push(`${ROUTES.STATS}?demo=true`)}
+          >
+            View demo
+          </Button>
+        </Box>
       </Box>
 
       <Grid container spacing={isMobile ? 2 : 3} sx={sx.trustSection}>
@@ -88,15 +106,24 @@ const Page = () => {
           ))}
         </Grid>
 
-        <Button
-          variant="contained"
-          size="large"
-          sx={sx.ctaButton}
-          onMouseEnter={() => router.prefetch(ROUTES.DATA)}
-          onClick={() => router.push(ROUTES.DATA)}
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            flexDirection: isMobile ? 'column' : 'row',
+            justifyContent: 'center',
+          }}
         >
-          Get started now
-        </Button>
+          <Button
+            variant="contained"
+            size="large"
+            sx={sx.ctaButton}
+            onMouseEnter={() => router.prefetch(ROUTES.DATA)}
+            onClick={() => router.push(ROUTES.DATA)}
+          >
+            Get started now
+          </Button>
+        </Box>
       </Box>
 
       <Box sx={sx.banksSection}>

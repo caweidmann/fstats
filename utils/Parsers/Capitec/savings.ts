@@ -60,7 +60,7 @@ export const CapitecSavings: Parser = {
           formatFrom: 'yyyy-MM-dd HH:SS',
         }),
         description,
-        value: moneyIn ? Big(moneyIn) : moneyOut ? Big(moneyOut).times(-1) : fee ? Big(fee).times(-1) : Big(0),
+        value: moneyIn ? Big(moneyIn) : moneyOut ? Big(moneyOut) : fee ? Big(fee) : Big(0),
       }
 
       return data

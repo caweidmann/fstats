@@ -33,15 +33,37 @@ const Component = () => {
         >
           Upload a CSV file and then come back to view your stats.
         </Typography>
-        <Button
-          variant="contained"
-          size="large"
-          sx={{ minWidth: 200, py: 1.5, px: 5, fontSize: 17, fontWeight: 600, borderRadius: 100 }}
-          onMouseEnter={() => router.prefetch(ROUTES.DATA)}
-          onClick={() => router.push(ROUTES.DATA)}
-        >
-          Upload files
-        </Button>
+        <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', justifyContent: 'center' }}>
+          <Button
+            variant="contained"
+            size="large"
+            sx={{ minWidth: 200, py: 1.5, px: 5, fontSize: 17, fontWeight: 600, borderRadius: 100 }}
+            onMouseEnter={() => router.prefetch(ROUTES.DATA)}
+            onClick={() => router.push(ROUTES.DATA)}
+          >
+            Upload files
+          </Button>
+          <Button
+            variant="outlined"
+            size="large"
+            sx={{
+              minWidth: 200,
+              py: 1.5,
+              px: 5,
+              fontSize: 17,
+              fontWeight: 600,
+              borderRadius: 100,
+              borderWidth: 2,
+              '&:hover': {
+                borderWidth: 2,
+              },
+            }}
+            onMouseEnter={() => router.prefetch(`${ROUTES.STATS}?demo=true`)}
+            onClick={() => router.push(`${ROUTES.STATS}?demo=true`)}
+          >
+            View demo
+          </Button>
+        </Box>
       </Grid>
     </PageWrapper>
   )

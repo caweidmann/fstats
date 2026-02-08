@@ -3,6 +3,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { StatsFile } from '@/types'
+import { useFileHelper } from '@/hooks'
 
 import {
   addFile,
@@ -97,6 +98,7 @@ export const useMutateUpdateFiles = () => {
 
 export const useMutateRemoveFile = () => {
   const queryClient = useQueryClient()
+  const { setSelectedFileIds } = useFileHelper()
 
   return useMutation({
     mutationFn: (id: string) => {
@@ -105,12 +107,14 @@ export const useMutateRemoveFile = () => {
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: statsFileKey.all })
       queryClient.removeQueries({ queryKey: statsFileKey.detail(id) })
+      setSelectedFileIds((prev) => prev.filter((fileId) => fileId !== id))
     },
   })
 }
 
 export const useMutateRemoveFiles = () => {
   const queryClient = useQueryClient()
+  const { setSelectedFileIds } = useFileHelper()
 
   return useMutation({
     mutationFn: (ids: string[]) => {
@@ -121,12 +125,14 @@ export const useMutateRemoveFiles = () => {
       ids.forEach((id) => {
         queryClient.removeQueries({ queryKey: statsFileKey.detail(id) })
       })
+      setSelectedFileIds((prev) => prev.filter((fileId) => !ids.includes(fileId)))
     },
   })
 }
 
 export const useMutateRemoveAllFiles = () => {
   const queryClient = useQueryClient()
+  const { setSelectedFileIds } = useFileHelper()
 
   return useMutation({
     mutationFn: () => {
@@ -135,6 +141,7 @@ export const useMutateRemoveAllFiles = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: statsFileKey.all })
       queryClient.removeQueries({ queryKey: statsFileKey.all })
+      setSelectedFileIds([])
     },
   })
 }

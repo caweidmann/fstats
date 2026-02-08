@@ -135,7 +135,7 @@ const Component = () => {
                   </Button>
                 ) : null}
 
-                {!isParsing && unknownFiles.length ? (
+                {!isParsing && unknownFiles.length && unknownFiles.length !== selectableFiles.length ? (
                   <Button
                     size="small"
                     color="secondary"
