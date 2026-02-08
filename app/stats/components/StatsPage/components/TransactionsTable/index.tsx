@@ -28,123 +28,39 @@ import { blue, green, orange, red } from '@mui/material/colors'
 import { useTheme } from '@mui/material/styles'
 import { useMemo, useState } from 'react'
 
+import type { ParsedContentRow } from '@/types'
+import { useIsMobile } from '@/hooks'
+
+import { DEMO_TRANSACTIONS, type TransactionRow } from '../../demo-data'
 import { ui } from './styled'
 
-type TransactionRow = {
-  id: string
-  date: string
-  description: string
-  amount: number
-  category: string
-  status: 'verified' | 'needs-review' | 'categorized'
-  taxDeductible: boolean
-}
-
-// Dummy data matching German freelancer tax categories
-const DUMMY_TRANSACTIONS: TransactionRow[] = [
-  {
-    id: '1',
-    date: '30/10/2025',
-    description: 'Adobe Creative Cloud Subscription',
-    amount: -59.99,
-    category: 'Other Operating Expenses',
-    status: 'verified',
-    taxDeductible: true,
-  },
-  {
-    id: '2',
-    date: '28/10/2025',
-    description: 'Client Payment - Website Design',
-    amount: 2500.0,
-    category: 'Revenue',
-    status: 'verified',
-    taxDeductible: false,
-  },
-  {
-    id: '3',
-    date: '25/10/2025',
-    description: 'Office Rent - October',
-    amount: -850.0,
-    category: 'Office & Rent',
-    status: 'needs-review',
-    taxDeductible: true,
-  },
-  {
-    id: '4',
-    date: '22/10/2025',
-    description: 'AWS Cloud Services',
-    amount: -145.32,
-    category: 'Software & Subscriptions',
-    status: 'verified',
-    taxDeductible: true,
-  },
-  {
-    id: '5',
-    date: '20/10/2025',
-    description: 'Office Supplies - Staples',
-    amount: -87.45,
-    category: 'Office Supplies',
-    status: 'categorized',
-    taxDeductible: true,
-  },
-  {
-    id: '6',
-    date: '18/10/2025',
-    description: 'Client Payment - Logo Design',
-    amount: 1200.0,
-    category: 'Revenue',
-    status: 'verified',
-    taxDeductible: false,
-  },
-  {
-    id: '7',
-    date: '15/10/2025',
-    description: 'Telekom Internet - Monthly',
-    amount: -49.99,
-    category: 'Utilities & Internet',
-    status: 'verified',
-    taxDeductible: true,
-  },
-  {
-    id: '8',
-    date: '12/10/2025',
-    description: 'Freelancer Marketplace Fee',
-    amount: -125.0,
-    category: 'Professional Fees',
-    status: 'needs-review',
-    taxDeductible: true,
-  },
-  {
-    id: '9',
-    date: '10/10/2025',
-    description: 'Business Travel - Train Ticket',
-    amount: -89.0,
-    category: 'Travel Expenses',
-    status: 'verified',
-    taxDeductible: true,
-  },
-  {
-    id: '10',
-    date: '08/10/2025',
-    description: 'Client Payment - Consulting',
-    amount: 3500.0,
-    category: 'Revenue',
-    status: 'verified',
-    taxDeductible: false,
-  },
-]
-
 type TransactionsTableProps = {
+  isDemoMode: boolean
+  transactions: ParsedContentRow[]
   selectedCategory?: string | null
 }
 
-const Component = ({ selectedCategory = null }: TransactionsTableProps) => {
+const Component = ({ isDemoMode, transactions, selectedCategory = null }: TransactionsTableProps) => {
   const theme = useTheme()
-  const sx = ui(theme)
+  const isMobile = useIsMobile()
+  const sx = ui(theme, isMobile)
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [searchQuery, setSearchQuery] = useState('')
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+  // Convert real transactions to display format
+  const realTransactions: TransactionRow[] = transactions.map((t, index) => ({
+    id: `${index}`,
+    date: t.date,
+    description: t.description,
+    amount: t.value.toNumber(),
+    category: t.value.gt(0) ? 'Revenue' : 'Expense',
+    status: 'verified' as const,
+    taxDeductible: t.value.lt(0),
+  }))
+
+  const displayTransactions = isDemoMode ? DEMO_TRANSACTIONS : realTransactions
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage)
@@ -201,7 +117,7 @@ const Component = ({ selectedCategory = null }: TransactionsTableProps) => {
   }
 
   const filteredTransactions = useMemo(() => {
-    let filtered = DUMMY_TRANSACTIONS
+    let filtered = displayTransactions
 
     // Filter by category if selected
     if (selectedCategory) {
@@ -219,7 +135,7 @@ const Component = ({ selectedCategory = null }: TransactionsTableProps) => {
     }
 
     return filtered
-  }, [searchQuery, selectedCategory])
+  }, [searchQuery, selectedCategory, displayTransactions])
 
   return (
     <Card sx={{ borderRadius: 2, p: 3 }}>
@@ -240,25 +156,27 @@ const Component = ({ selectedCategory = null }: TransactionsTableProps) => {
         />
       </Box>
 
-      <TableContainer component={Paper} elevation={0}>
-        <Table size="small">
+      <TableContainer component={Paper} elevation={0} sx={{ overflowX: 'auto' }}>
+        <Table size="small" sx={{ minWidth: isMobile ? 'auto' : 650 }}>
           <TableHead>
             <TableRow>
               <TableCell sx={sx.tableHeader}>Date</TableCell>
               <TableCell sx={sx.tableHeader}>Description</TableCell>
-              <TableCell sx={sx.tableHeader}>Category</TableCell>
+              {!isMobile && <TableCell sx={sx.tableHeader}>Category</TableCell>}
               <TableCell sx={sx.tableHeader} align="right">
                 Amount
               </TableCell>
-              <TableCell sx={sx.tableHeader} align="center">
-                Actions
-              </TableCell>
+              {!isMobile && (
+                <TableCell sx={sx.tableHeader} align="center">
+                  Actions
+                </TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredTransactions.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} sx={{ textAlign: 'center', py: 6 }}>
+                <TableCell colSpan={isMobile ? 3 : 5} sx={{ textAlign: 'center', py: 6 }}>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 0 }}>
                     No transactions found
                   </Typography>
@@ -268,26 +186,50 @@ const Component = ({ selectedCategory = null }: TransactionsTableProps) => {
               filteredTransactions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                 <TableRow key={row.id} hover sx={sx.tableRow}>
                   <TableCell sx={sx.compactCell}>
-                    <Typography variant="body2" sx={{ fontSize: '0.875rem', mb: 0 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontSize: isMobile ? '0.75rem' : '0.875rem', mb: 0, whiteSpace: 'nowrap' }}
+                    >
                       {highlightText(row.date, searchQuery)}
                     </Typography>
                   </TableCell>
                   <TableCell sx={sx.compactCell}>
                     <Box sx={sx.descriptionCell}>
-                      {getStatusIcon(row.status)}
-                      <Typography variant="body2" sx={{ ml: 1, fontSize: '0.875rem', mb: 0 }}>
+                      {!isMobile && getStatusIcon(row.status)}
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          ml: isMobile ? 0 : 1,
+                          fontSize: isMobile ? '0.75rem' : '0.875rem',
+                          mb: 0,
+                          maxWidth: isMobile ? 150 : 'none',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: isMobile ? 'nowrap' : 'normal',
+                        }}
+                      >
                         {highlightText(row.description, searchQuery)}
                       </Typography>
                     </Box>
+                    {isMobile && (
+                      <Chip
+                        label={row.category}
+                        size="small"
+                        color={getCategoryColor(row.category)}
+                        sx={{ ...sx.categoryChip, mt: 0.5 }}
+                      />
+                    )}
                   </TableCell>
-                  <TableCell sx={sx.compactCell}>
-                    <Chip
-                      label={highlightText(row.category, searchQuery)}
-                      size="small"
-                      color={getCategoryColor(row.category)}
-                      sx={sx.categoryChip}
-                    />
-                  </TableCell>
+                  {!isMobile && (
+                    <TableCell sx={sx.compactCell}>
+                      <Chip
+                        label={highlightText(row.category, searchQuery)}
+                        size="small"
+                        color={getCategoryColor(row.category)}
+                        sx={sx.categoryChip}
+                      />
+                    </TableCell>
+                  )}
                   <TableCell align="right" sx={sx.compactCell}>
                     <Typography
                       variant="body2"
@@ -295,12 +237,13 @@ const Component = ({ selectedCategory = null }: TransactionsTableProps) => {
                         mb: 0,
                         color: row.amount >= 0 ? green[600] : 'text.primary',
                         fontWeight: row.amount >= 0 ? 600 : 400,
-                        fontSize: '0.875rem',
+                        fontSize: isMobile ? '0.75rem' : '0.875rem',
+                        whiteSpace: 'nowrap',
                       }}
                     >
                       {row.amount >= 0 ? '+' : ''}€{Math.abs(row.amount).toFixed(2)}
                     </Typography>
-                    {row.taxDeductible && (
+                    {row.taxDeductible && !isMobile && (
                       <Typography
                         variant="caption"
                         sx={{ color: 'text.secondary', display: 'block', fontSize: '0.7rem' }}
@@ -309,11 +252,13 @@ const Component = ({ selectedCategory = null }: TransactionsTableProps) => {
                       </Typography>
                     )}
                   </TableCell>
-                  <TableCell align="center" sx={sx.compactCell}>
-                    <IconButton size="small" onClick={handleMenuClick}>
-                      <MoreVertIcon fontSize="small" />
-                    </IconButton>
-                  </TableCell>
+                  {!isMobile && (
+                    <TableCell align="center" sx={sx.compactCell}>
+                      <IconButton size="small" onClick={handleMenuClick}>
+                        <MoreVertIcon fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             )}

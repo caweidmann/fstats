@@ -3,7 +3,7 @@ import type { Theme } from '@mui/material/styles'
 
 import { ColorMode } from '@/types-enums'
 
-export const ui = (theme: Theme) => {
+export const ui = (theme: Theme, isMobile: boolean) => {
   return {
     searchContainer: {
       mt: 1,
@@ -18,9 +18,10 @@ export const ui = (theme: Theme) => {
 
     tableHeader: {
       fontWeight: 600,
-      fontSize: '0.8125rem',
+      fontSize: isMobile ? '0.75rem' : '0.8125rem',
       color: 'text.secondary',
-      py: 1.5,
+      py: isMobile ? 1 : 1.5,
+      px: isMobile ? 1 : 2,
     },
 
     tableRow: {
@@ -30,19 +31,21 @@ export const ui = (theme: Theme) => {
     },
 
     compactCell: {
-      py: 1,
+      py: isMobile ? 0.75 : 1,
+      px: isMobile ? 1 : 2,
     },
 
     descriptionCell: {
       display: 'flex',
-      alignItems: 'center',
+      flexDirection: isMobile ? 'column' : 'row',
+      alignItems: isMobile ? 'flex-start' : 'center',
     },
 
     categoryChip: {
       borderRadius: 1.5,
       fontWeight: 500,
-      fontSize: '0.7rem',
-      height: 22,
+      fontSize: isMobile ? '0.6rem' : '0.7rem',
+      height: isMobile ? 18 : 22,
     },
 
     highlight: {

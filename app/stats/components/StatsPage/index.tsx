@@ -1,141 +1,123 @@
 'use client'
 
-import { Box, Card, CardHeader, Grid, Typography } from '@mui/material'
-import { green, red } from '@mui/material/colors'
-import { useTheme } from '@mui/material/styles'
-import type { ChartData, ChartDataset, ScriptableContext } from 'chart.js'
+import { Box, Button, Grid, Typography } from '@mui/material'
 import { parse } from 'date-fns'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 
-import { Currency } from '@/types-enums'
-import { BarChart, PageWrapper } from '@/components'
+import { ROUTES } from '@/common'
+import { PageWrapper } from '@/components'
 import { Select } from '@/components/FormFieldsControlled'
-import { useFileHelper, useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
-import { getGradient } from '@/utils/Misc'
-import { AVAILABLE_PARSERS } from '@/utils/Parsers'
+import { useFileHelper, useIsMobile } from '@/hooks'
 
-import { getBankSelectOptions, getChartOptions } from './actions'
-import { ProfitLoss, TaxOptimizationInsights, TransactionsTable } from './components'
+import { getBankSelectOptions } from './actions'
+import { ProfitLoss, TaxOptimizationInsights, TransactionChart, TransactionsTable } from './components'
 
 type LocalForm = {
   selectedId: string
 }
 
 const Component = () => {
-  const { locale } = useUserPreferences()
   const isMobile = useIsMobile()
-  const isDarkMode = useIsDarkMode()
-  const theme = useTheme()
   const { selectedFiles } = useFileHelper()
-  const bankOptions = getBankSelectOptions(selectedFiles)
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const isDemoMode = searchParams.get('demo') === 'true'
+
+  const bankOptions = isDemoMode ? [] : getBankSelectOptions(selectedFiles)
   const defaultValues: LocalForm = {
-    selectedId: bankOptions[0].value,
+    selectedId: bankOptions[0]?.value || 'all',
   }
   const localForm = useForm<LocalForm>({ defaultValues })
   const selectedBankId = localForm.watch('selectedId')
-  const filteredFiles =
-    selectedBankId === 'all'
+  const filteredFiles = isDemoMode
+    ? []
+    : selectedBankId === 'all'
       ? selectedFiles
       : selectedBankId === 'unknown'
         ? selectedFiles.filter((file) => !file.parserId)
         : selectedFiles.filter((file) => file.parserId === selectedBankId)
 
-  const allRows = filteredFiles
-    .flatMap((file) => file.parsedContentRows)
-    .sort((a, b) => {
-      const dateA = parse(a.date, 'dd/MM/yyyy', new Date()).getTime()
-      const dateB = parse(b.date, 'dd/MM/yyyy', new Date()).getTime()
-      return dateA - dateB
-    })
-
-  const calculateBarThickness = () => {
-    const transactionCount = allRows.length
-    const baseWidth = isMobile ? 300 : 800
-    const calculatedThickness = Math.floor(baseWidth / transactionCount)
-
-    const minThickness = isMobile ? 2 : 3
-    const maxThickness = isMobile ? 15 : 25
-
-    return Math.max(minThickness, Math.min(maxThickness, calculatedThickness))
-  }
-
-  const dataset: ChartDataset<'bar'> = {
-    type: 'bar',
-    label: 'Transactions',
-    data: allRows.map((row) => row.value.toNumber()),
-    backgroundColor: (context) => {
-      const value = context.parsed?.y ?? 0
-      const isPositive = value >= 0
-
-      return getGradient({
-        context: context as ScriptableContext<'line' | 'bar'>,
-        colors: {
-          start: isPositive ? green[100] : red[200],
-          end: isPositive ? green[600] : red[900],
-        },
-        direction: 'vertical',
-      })
-    },
-    borderRadius: (context) => {
-      const value = context.parsed?.y ?? 0
-      const isPositive = value >= 0
-
-      return isPositive
-        ? { topLeft: 100, topRight: 100, bottomLeft: 0, bottomRight: 0 }
-        : { topLeft: 0, topRight: 0, bottomLeft: 100, bottomRight: 100 }
-    },
-    barThickness: calculateBarThickness(),
-    order: 2,
-  }
-
-  const chartData: ChartData = {
-    labels: allRows.map((row) => row.date),
-    datasets: [dataset],
-  }
-
-  const chartOptions = getChartOptions({
-    theme,
-    isDarkMode,
-    averageLabel: '',
-    averageValue: 0,
-    currency: Currency.EUR,
-    locale,
-  })
+  const allRows = isDemoMode
+    ? []
+    : filteredFiles
+        .flatMap((file) => file.parsedContentRows)
+        .sort((a, b) => {
+          const dateA = parse(a.date, 'dd/MM/yyyy', new Date()).getTime()
+          const dateB = parse(b.date, 'dd/MM/yyyy', new Date()).getTime()
+          return dateA - dateB
+        })
 
   return (
     <PageWrapper>
+      {isDemoMode && (
+        <Box
+          sx={{
+            backgroundColor: '#000',
+            color: '#fff',
+            py: 1.5,
+            px: 3,
+            mb: 3,
+            borderRadius: 2,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: isMobile ? 1.5 : 0,
+          }}
+        >
+          <Typography variant="body2" sx={{ fontWeight: 500, mb: 0 }}>
+            You are viewing demo data
+          </Typography>
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{
+              color: '#fff',
+              borderColor: '#fff',
+              '&:hover': {
+                borderColor: '#fff',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              },
+            }}
+            onClick={() => router.push(ROUTES.DATA)}
+          >
+            Upload your data
+          </Button>
+        </Box>
+      )}
+
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, sm: 2 }}>
-          <Select<LocalForm, LocalForm['selectedId']>
-            control={localForm.control}
-            name="selectedId"
-            options={bankOptions}
-            fullWidth
-            sx={{ borderRadius: 1.5 }}
-          />
-        </Grid>
+        {!isDemoMode && (
+          <Grid size={{ xs: 12, sm: 2 }}>
+            <Select<LocalForm, LocalForm['selectedId']>
+              control={localForm.control}
+              name="selectedId"
+              options={bankOptions}
+              fullWidth
+              sx={{ borderRadius: 1.5 }}
+            />
+          </Grid>
+        )}
         {/* <Grid size={2}>Date range</Grid> */}
         {/* <Grid size={2}>Display currency</Grid> */}
         {/* <Grid size={2}>Compress x-axis</Grid> */}
         {/* <Grid size={2}>Combine datasets</Grid> */}
 
         <Grid size={12}>
-          <ProfitLoss />
+          <ProfitLoss isDemoMode={isDemoMode} transactions={allRows} />
         </Grid>
 
         <Grid size={12}>
-          <Card sx={{ height: 300, px: 3, pt: 4, pb: 3, borderRadius: 2 }}>
-            {/* @ts-expect-error Type '"line"' is not assignable to type '"bar"'. */}
-            <BarChart type="bar" data={chartData} options={chartOptions} />
-          </Card>
+          <TransactionChart isDemoMode={isDemoMode} transactions={allRows} />
         </Grid>
 
         <Grid size={12}>
-          <TaxOptimizationInsights />
+          <TaxOptimizationInsights isDemoMode={isDemoMode} />
         </Grid>
 
         <Grid size={12}>
-          <TransactionsTable selectedCategory={null} />
+          <TransactionsTable isDemoMode={isDemoMode} transactions={allRows} selectedCategory={null} />
         </Grid>
       </Grid>
     </PageWrapper>
