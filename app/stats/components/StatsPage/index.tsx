@@ -15,7 +15,7 @@ import { getGradient } from '@/utils/Misc'
 import { AVAILABLE_PARSERS } from '@/utils/Parsers'
 
 import { getBankSelectOptions, getChartOptions } from './actions'
-import { ProfitLoss, TaxOptimizationInsights } from './components'
+import { ProfitLoss, TaxOptimizationInsights, TransactionsTable } from './components'
 
 type LocalForm = {
   selectedId: string
@@ -132,6 +132,10 @@ const Component = () => {
 
         <Grid size={12}>
           <TaxOptimizationInsights />
+        </Grid>
+
+        <Grid size={12}>
+          <TransactionsTable selectedCategory={null} />
         </Grid>
 
         {filteredFiles.map((file) => {
