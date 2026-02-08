@@ -4,6 +4,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import type { ReactNode } from 'react'
 
+import { CONFIG } from '@/common'
 import { getQueryClient } from '@/lib/tanstack-query'
 
 type QueryProviderProps = {
@@ -16,7 +17,7 @@ const Component = ({ children }: QueryProviderProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {CONFIG.TAN_STACK_QUERY_DEVTOOLS ? <ReactQueryDevtools initialIsOpen={false} /> : null}
     </QueryClientProvider>
   )
 }
