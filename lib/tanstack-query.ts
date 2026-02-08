@@ -7,10 +7,13 @@ const makeQueryClient = () => {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 60 * 1000, // 1 minute
-        refetchOnWindowFocus: false, // Disable for offline-first app (no server to sync with)
-        refetchOnReconnect: false, // Disable (data is local)
-        retry: 1, // Limit retries for IndexedDB operations
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        refetchInterval: false,
+        retry: false,
+        staleTime: Infinity,
+        gcTime: 1000 * 60 * 60, // 60 minutes
       },
       dehydrate: {
         // Include pending queries in dehydration for SSR
