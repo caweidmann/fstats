@@ -6,6 +6,20 @@ import type {} from '@mui/material/themeCssVarsAugmentation'
 
 import type { Big as TypeBig } from 'big.js'
 
+export const zNonEmptyString = z.string().trim().nonempty({ error: 'ERRORS:REQUIRED' })
+/**
+ * The NonEmptyString ensure that there is a string value after being trimmed.
+ */
+export type NonEmptyString = z.infer<typeof zNonEmptyString>
+
+// -------------------------------------------------------
+
+export const zIdString = zNonEmptyString
+/**
+ * The IdString is a short-hand/proxy for readability purposes only.
+ */
+export type IdString = z.infer<typeof zIdString>
+
 export const zDateRange = z.object({
   /** Start date of the interval */
   start: z.date(),

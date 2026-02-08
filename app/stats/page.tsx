@@ -1,16 +1,14 @@
 'use client'
 
 import { PageWrapper } from '@/components'
-import { useStorage } from '@/context/Storage'
 import { useFileHelper } from '@/hooks'
 
 import { EmptyStatsPage, StatsPage } from './components'
 
 const Page = () => {
-  const { isLoading } = useStorage()
-  const { selectedFiles } = useFileHelper()
+  const { selectedFiles, isLoadingFiles } = useFileHelper()
 
-  if (isLoading) {
+  if (isLoadingFiles) {
     return <PageWrapper />
   }
 

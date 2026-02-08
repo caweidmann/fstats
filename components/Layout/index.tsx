@@ -2,7 +2,7 @@
 
 import { Container } from '@mui/material'
 import type { ReactNode } from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { LAYOUT } from '@/common'
 
@@ -15,15 +15,6 @@ type LayoutProps = {
 
 const Component = ({ children }: LayoutProps) => {
   const [open, setOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return null
-  }
 
   return (
     <>

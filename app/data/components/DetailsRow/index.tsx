@@ -2,10 +2,12 @@
 
 import { DeleteOutlined, ErrorOutlined } from '@mui/icons-material'
 import { Box, Checkbox, CircularProgress, IconButton, Stack, Tooltip, Typography } from '@mui/material'
+import { useLocalStorage } from 'usehooks-ts'
 
 import { StatsFile } from '@/types'
+import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
-import { useStorage } from '@/context/Storage'
+import { useMutateRemoveFile } from '@/m-stats-file/service'
 import { useUserPreferences } from '@/hooks'
 import { toDisplayDate } from '@/utils/Date'
 import { formatFileSize } from '@/utils/File'
@@ -20,7 +22,8 @@ type DetailsRowProps = {
 const Component = ({ file }: DetailsRowProps) => {
   const sx = ui()
   const { locale } = useUserPreferences()
-  const { selectedFileIds, setSelectedFileIds, removeFiles } = useStorage()
+  const { mutate: removeFile } = useMutateRemoveFile()
+  const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[]>(MISC.LS_SELECTED_FILE_IDS_KEY, [])
   const isSelected = selectedFileIds.includes(file.id)
 
   const toggleFileSelection = (fileId: string) => {
@@ -30,7 +33,7 @@ const Component = ({ file }: DetailsRowProps) => {
   return (
     <Box
       key={file.id}
-      sx={sx.fileCard(!!file.error, file.status === 'parsing')}
+      sx={sx.fileCard(!!file.error, file.status === StatsFileStatus.PARSING)}
       onClick={file.error ? undefined : () => toggleFileSelection(file.id)}
     >
       <Stack direction="row" alignItems="center" spacing={1}>
@@ -65,7 +68,7 @@ const Component = ({ file }: DetailsRowProps) => {
               {formatFileSize(file.file.size)}
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              Uploaded {toDisplayDate(new Date(file.uploaded), locale, { formatTo: 'd MMM yyyy, HH:mm:ss' })}
+              Uploaded {toDisplayDate(new Date(file.created), locale, { formatTo: 'd MMM yyyy, HH:mm:ss' })}
             </Typography>
 
             {file.error ? (
@@ -82,11 +85,17 @@ const Component = ({ file }: DetailsRowProps) => {
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          {file.status === 'parsing' ? <CircularProgress size={14} /> : null}
-          {file.status === 'parsed' || file.error ? <BankChip file={file} /> : null}
+          {file.status === StatsFileStatus.PARSING ? <CircularProgress size={14} /> : null}
+          {file.status === StatsFileStatus.PARSED || file.error ? <BankChip file={file} /> : null}
 
           <Tooltip title="Remove file">
-            <IconButton color={file.error ? 'error' : 'secondary'} onClick={() => removeFiles([file.id])}>
+            <IconButton
+              color={file.error ? 'error' : 'secondary'}
+              onClick={(event) => {
+                event.stopPropagation()
+                removeFile(file.id)
+              }}
+            >
               <DeleteOutlined sx={{ fontSize: 20 }} />
             </IconButton>
           </Tooltip>

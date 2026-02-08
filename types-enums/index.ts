@@ -33,6 +33,14 @@ export const ParserId = {
 
 export type ParserId = (typeof ParserId)[keyof typeof ParserId]
 
+export const StatsFileStatus = {
+  PARSING: 'parsing',
+  PARSED: 'parsed',
+  ERROR: 'error',
+} as const
+
+export type StatsFileStatus = (typeof StatsFileStatus)[keyof typeof StatsFileStatus]
+
 /**
  * The user's chosen date format which applies across the app.
  */
