@@ -1,22 +1,21 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
 
-import { MISC } from '@/common'
-import { i18n, initTranslations } from '@/lib/i18n'
-
-initTranslations()
+import { initTranslations } from '@/lib/i18n'
 
 type LanguageProviderProps = {
   children: ReactNode
 }
 
 const Component = ({ children }: LanguageProviderProps) => {
+  const isInitialized = useRef(false)
+
   useEffect(() => {
-    const savedLanguage = localStorage.getItem(MISC.LS_I18N_LOCALE_KEY)
-    if (savedLanguage) {
-      i18n.changeLanguage(savedLanguage)
+    if (!isInitialized.current) {
+      initTranslations()
+      isInitialized.current = true
     }
   }, [])
 

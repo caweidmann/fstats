@@ -3,9 +3,9 @@
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
+import { StatsFileStatus } from '@/types-enums'
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
-import { useStorage } from '@/context/Storage'
 import { useFileHelper } from '@/hooks'
 
 import { AddFolderButton, FileDropZone, Summary } from './components'
@@ -14,10 +14,9 @@ import { ui } from './styled'
 const Page = () => {
   const sx = ui()
   const router = useRouter()
-  const { isLoading, files } = useStorage()
-  const { selectedFiles } = useFileHelper()
+  const { files, isLoadingFiles, selectedFiles } = useFileHelper()
 
-  if (isLoading) {
+  if (isLoadingFiles) {
     return <PageWrapper />
   }
 
@@ -52,7 +51,7 @@ const Page = () => {
                 onClick={() => router.push(ROUTES.STATS)}
                 sx={sx.ctaButton}
                 disabled={!selectedFiles.length}
-                loading={selectedFiles.some((file) => file.status === 'parsing')}
+                loading={selectedFiles.some((file) => file.status === StatsFileStatus.PARSING)}
               >
                 Continue with {selectedFiles.length} {selectedFiles.length === 1 ? 'file' : 'files'}
               </Button>

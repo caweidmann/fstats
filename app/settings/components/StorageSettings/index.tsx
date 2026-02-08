@@ -4,7 +4,7 @@ import { DeleteOutlined, FolderOutlined, StorageRounded } from '@mui/icons-mater
 import { Box, Button, Card, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 
-import { useStorage } from '@/context/Storage'
+import { useFiles, useMutateRemoveAllFiles } from '@/m-stats-file/service'
 import { formatFileSize } from '@/utils/File'
 
 import { calculateStorageSize } from './actions'
@@ -12,8 +12,9 @@ import { ui } from './styled'
 
 const Component = () => {
   const sx = ui()
-  const { files, removeAllFiles } = useStorage()
-  const [storageSize, setStorageSize] = useState<string>('')
+  const { data: files = [], isLoading: isLoadingFiles } = useFiles()
+  const { mutate: removeAllFiles, isPending: isRemoving } = useMutateRemoveAllFiles()
+  const [storageSize, setStorageSize] = useState<string>(formatFileSize(0))
   const [isCalculating, setIsCalculating] = useState(true)
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const Component = () => {
         const size = await calculateStorageSize()
         setStorageSize(formatFileSize(size))
       } catch {
-        setStorageSize('Error')
+        setStorageSize('Failed to calculate')
       } finally {
         setIsCalculating(false)
       }
@@ -45,7 +46,7 @@ const Component = () => {
         <Box sx={sx.statItem}>
           <FolderOutlined sx={sx.statIcon} />
           <Box>
-            <Typography sx={sx.statValue}>{fileCount}</Typography>
+            <Typography sx={sx.statValue(isLoadingFiles)}>{fileCount}</Typography>
             <Typography variant="caption" sx={sx.statLabel}>
               {fileCount === 1 ? 'File' : 'Files'}
             </Typography>
@@ -55,7 +56,7 @@ const Component = () => {
         <Box sx={sx.statItem}>
           <StorageRounded sx={sx.statIcon} />
           <Box>
-            <Typography sx={sx.statValue}>{isCalculating ? '' : storageSize}</Typography>
+            <Typography sx={sx.statValue(isLoadingFiles || isCalculating)}>{storageSize}</Typography>
             <Typography variant="caption" sx={sx.statLabel}>
               Storage used
             </Typography>
@@ -69,6 +70,7 @@ const Component = () => {
         startIcon={<DeleteOutlined />}
         onClick={() => removeAllFiles()}
         disabled={!hasFiles}
+        loading={isRemoving}
       >
         Clear all data
       </Button>

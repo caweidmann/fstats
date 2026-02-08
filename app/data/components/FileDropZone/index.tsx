@@ -3,16 +3,15 @@
 import { CloudUploadOutlined } from '@mui/icons-material'
 import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { formatISO } from 'date-fns'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { FileRejection, FileWithPath } from 'react-dropzone'
 
 import { StatsFile } from '@/types'
-import { ParserId } from '@/types-enums'
+import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
-import { useStorage } from '@/context/Storage'
-import { useIsDarkMode, useIsMobile } from '@/hooks'
+import { createStatsFile, useMutateAddFiles, useMutateUpdateFiles } from '@/m-stats-file/service'
+import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
 import { parseFiles } from '@/utils/FileParser'
 
 import { ui } from './styled'
@@ -22,39 +21,36 @@ const Component = () => {
   const isDarkMode = useIsDarkMode()
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
-  const { addFiles, updateFile } = useStorage()
+  const { mutateAsync: addFiles } = useMutateAddFiles()
+  const { mutateAsync: updateFiles } = useMutateUpdateFiles()
+  const { setSelectedFileIds } = useFileHelper()
 
-  const onDrop = useCallback(async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
-    const newFiles: StatsFile[] = []
+  const onDrop = useCallback(
+    async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
+      const newFiles: StatsFile[] = []
 
-    acceptedFiles.map((file) => {
-      newFiles.push({
-        id: crypto.randomUUID(),
-        uploaded: formatISO(new Date()),
-        file,
-        status: 'parsing',
-        parserId: null,
-        parsedContentRows: [],
+      acceptedFiles.forEach((file) => {
+        newFiles.push(createStatsFile(file))
       })
-    })
 
-    fileRejections.map(({ file, errors }) => {
-      newFiles.push({
-        id: crypto.randomUUID(),
-        uploaded: formatISO(new Date()),
-        file,
-        status: 'error',
-        parserId: null,
-        parsedContentRows: [],
-        error: errors.map((e) => e.message).join(', '),
+      fileRejections.forEach(({ file, errors }) => {
+        newFiles.push({
+          ...createStatsFile(file),
+          status: StatsFileStatus.ERROR,
+          error: errors.map((e) => e.message).join(', '),
+        })
       })
-    })
 
-    await addFiles(newFiles)
-    const parsedFiles = await parseFiles(newFiles.filter((file) => file.status === 'parsing'))
-    const promises = parsedFiles.map((file) => updateFile(file.id, file))
-    await Promise.all(promises)
-  }, [])
+      const addedFiles = await addFiles(newFiles)
+      setSelectedFileIds((prev) => [
+        ...prev,
+        ...addedFiles.filter((file) => file.status !== StatsFileStatus.ERROR).map((file) => file.id),
+      ])
+      const parsedFiles = await parseFiles(addedFiles.filter((file) => file.status === StatsFileStatus.PARSING))
+      await updateFiles(parsedFiles.map((file) => ({ id: file.id, updates: file })))
+    },
+    [addFiles, updateFiles],
+  )
 
   const dropzone = useDropzone({
     onDrop,

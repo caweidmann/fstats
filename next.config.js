@@ -20,6 +20,14 @@ const nextConfig = {
       transform: '@mui/icons-material/{{member}}',
     },
   },
+  webpack: (config) => {
+    // Ignore _data directory during builds
+    config.module.rules.push({
+      test: /\.(tsx|ts|js|jsx)$/,
+      exclude: /_data/,
+    })
+    return config
+  },
 }
 
 module.exports = withSerwist(nextConfig)
