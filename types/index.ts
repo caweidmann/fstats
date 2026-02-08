@@ -1,5 +1,6 @@
 export * from './global'
 export * from './lib/papaparse'
 export * from './parser'
+export * from './services/parsed-content-row'
 export * from './services/stats-file'
 export * from './utils'
