@@ -6,13 +6,12 @@ import { useTheme } from '@mui/material/styles'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { FileRejection, FileWithPath } from 'react-dropzone'
-import { useLocalStorage } from 'usehooks-ts'
 
 import { StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
 import { createStatsFile, useMutateAddFiles, useMutateUpdateFiles } from '@/m-stats-file/service'
-import { useIsDarkMode, useIsMobile } from '@/hooks'
+import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
 import { parseFiles } from '@/utils/FileParser'
 
 import { ui } from './styled'
@@ -24,7 +23,7 @@ const Component = () => {
   const sx = ui(theme, isMobile, isDarkMode)
   const { mutateAsync: addFiles } = useMutateAddFiles()
   const { mutateAsync: updateFiles } = useMutateUpdateFiles()
-  const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[]>(MISC.LS_SELECTED_FILE_IDS_KEY, [])
+  const { setSelectedFileIds } = useFileHelper()
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
@@ -43,7 +42,10 @@ const Component = () => {
       })
 
       const addedFiles = await addFiles(newFiles)
-      setSelectedFileIds((prev) => [...prev, ...addedFiles.map((file) => file.id)])
+      setSelectedFileIds((prev) => [
+        ...prev,
+        ...addedFiles.filter((file) => file.status !== StatsFileStatus.ERROR).map((file) => file.id),
+      ])
       const parsedFiles = await parseFiles(addedFiles.filter((file) => file.status === StatsFileStatus.PARSING))
       await updateFiles(parsedFiles.map((file) => ({ id: file.id, updates: file })))
     },

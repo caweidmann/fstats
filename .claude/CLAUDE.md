@@ -32,8 +32,7 @@ pnpm lint
 
 - **`/app`** - Next.js App Router pages and layouts (Routes: `/`, `/data`, `/stats`, `/settings`)
 - **`/components`** - Reusable UI components and provider components (StorageProvider, QueryProvider, ThemeProvider, LanguageProvider, ChartProvider)
-- **`/m-stats-file`** - Stats file management module (api/, service/, core/)
-- **`/m-user`** - User preferences module (m-user/, m-user-api/, m-user-service/, m-user-utility/)
+- **`/m-stats-file`** - Stats file management module (api/, service/)
 - **`/types`** - TypeScript type definitions (global.ts, parser.ts, services/, lib/)
 - **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, ParserId, DateFormat, WeekStartsOn, StatsFileStatus)
 - **`/utils`** - Domain-organized utilities (Date/, File/, FileParser/, Parsers/, Features/, LocalStorage/, Logger/, Misc/)
@@ -45,24 +44,24 @@ pnpm lint
 
 ### Modular Architecture (Feature Modules)
 
-Complex features are organized into self-contained modules with a three-layer structure:
+Complex features are organized into self-contained modules with a two-layer structure:
 
 ```
 m-{feature-name}/
 ├── api/              # Layer 1: Data Access
 │   ├── queries.ts    # CRUD operations (getFiles, addFile, etc.)
-│   └── helper.ts     # Data transformation (At Rest ↔ In Memory)
-├── service/          # Layer 2: Service Layer
-│   ├── hooks.ts      # TanStack Query hooks (useFiles, useMutateAddFile)
-│   └── keys.ts       # Query key factory
-└── core/             # Layer 3: Business Logic
-    └── *.ts          # Pure functions, calculations, validators
+│   ├── helper.ts     # Data transformation (At Rest ↔ In Memory)
+│   └── index.ts      # Public API exports
+└── service/          # Layer 2: Service Layer
+    ├── hooks.ts      # TanStack Query hooks (useFiles, useMutateAddFile)
+    ├── keys.ts       # Query key factory
+    ├── helper.ts     # Service-level helper functions
+    └── index.ts      # Public service exports
 ```
 
 **Layer Responsibilities**:
 1. **API Layer** - LocalForage/API operations, data transformation, pure async functions (no React hooks)
-2. **Service Layer** - React Query hooks, cache management, optimistic updates
-3. **Core Layer** - Pure business logic, no side effects, easily testable
+2. **Service Layer** - React Query hooks, cache management, optimistic updates, service-level business logic
 
 **Importing Rules**:
 ```typescript
@@ -115,24 +114,30 @@ Enforced via Prettier plugin:
 2. `@/types` and `@/types-enums`
 3. `@/common`
 4. `@/components`
-5. `@/context`
+5. `@/m-*` (feature modules)
 6. `@/hooks`
 7. `@/styles`
 8. `@/utils`
 9. `@/lib`
-10. Relative imports (`./` or `../`)
+10. `@/public`
+11. Relative imports (`./` or `../`)
 
 ## Adding a New Bank Parser
+
+**Currently Implemented Parsers**: CAPITEC (Savings), COMDIRECT (Giro)
+
+To add a new bank parser:
 
 1. **Add ParserId** to `types-enums/index.ts`:
 ```typescript
 export const ParserId = {
   CAPITEC: 'capitec__savings',
-  FNB_CREDIT: 'fnb__credit_card', // New
+  COMDIRECT_GIRO: 'comdirect__giro',
+  NEW_BANK: 'new_bank__account_type', // New
 } as const
 ```
 
-2. **Create parser** `utils/Parsers/FNB/credit-card.ts`:
+2. **Create parser** `utils/Parsers/NewBank/account-type.ts`:
 ```typescript
 import type { ParsedContentRow, Parser } from '@/types'
 import { ParserId } from '@/types-enums'
@@ -140,21 +145,21 @@ import { isEqual } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 import { toDisplayDate } from '../../Date'
 
-export const FnbCreditCard: Parser = {
-  id: ParserId.FNB_CREDIT,
-  bankName: 'FNB',
-  accountType: 'Credit Card',
+export const NewBankAccountType: Parser = {
+  id: ParserId.NEW_BANK,
+  bankName: 'New Bank',
+  accountType: 'Account Type',
   expectedHeaderRowIndex: 0,
   expectedHeaders: ['Date', 'Description', 'Amount', 'Balance'],
 
   detect: (input) => {
-    return isEqual(input.data[FnbCreditCard.expectedHeaderRowIndex], FnbCreditCard.expectedHeaders)
+    return isEqual(input.data[NewBankAccountType.expectedHeaderRowIndex], NewBankAccountType.expectedHeaders)
   },
 
   parse: (input, locale) => {
     const rowsToParse = input.data
-      .slice(FnbCreditCard.expectedHeaderRowIndex + 1)
-      .filter((row) => row.length === FnbCreditCard.expectedHeaders.length)
+      .slice(NewBankAccountType.expectedHeaderRowIndex + 1)
+      .filter((row) => row.length === NewBankAccountType.expectedHeaders.length)
 
     return rowsToParse.map((row) => {
       const [date, description, amount] = row
@@ -168,11 +173,19 @@ export const FnbCreditCard: Parser = {
 }
 ```
 
-3. **Export** from `utils/Parsers/FNB/index.ts` and register in `utils/Parsers/index.ts`:
+3. **Export** from `utils/Parsers/NewBank/index.ts`:
 ```typescript
+export { NewBankAccountType } from './account-type'
+```
+
+4. **Register** in `utils/Parsers/index.ts`:
+```typescript
+import { NewBankAccountType } from './NewBank'
+
 export const AVAILABLE_PARSERS = {
   [ParserId.CAPITEC]: CapitecSavings,
-  [ParserId.FNB_CREDIT]: FnbCreditCard, // Register
+  [ParserId.COMDIRECT_GIRO]: ComdirectGiro,
+  [ParserId.NEW_BANK]: NewBankAccountType, // Register
 } satisfies Record<ParserId, Parser>
 ```
 
@@ -448,7 +461,7 @@ import { useLocalStorage } from 'usehooks-ts'
 
 ### Where to Put New Code
 
-1. **New feature with data persistence?** → Create `/m-{feature}/` with api/service/core
+1. **New feature with data persistence?** → Create `/m-{feature}/` with api/service layers
 2. **Reusable UI component?** → Add to `/components/ComponentName/`
 3. **Utility function used 3+ times?** → Add to `/utils/DomainName/`
 4. **Composition of service hooks?** → Add to `/hooks/useHookName.ts`
@@ -464,8 +477,8 @@ import { useLocalStorage } from 'usehooks-ts'
 ```
 Need to fetch/store data?
 ├─ Yes → Use TanStack Query
-│   ├─ Simple CRUD → Use m-stats-file hooks
-│   └─ New feature → Create m-{feature}/ module
+│   ├─ File-related CRUD → Use m-stats-file hooks
+│   └─ New feature → Create m-{feature}/ module with api/service layers
 └─ No → Is it used 3+ times?
     ├─ Yes → Move to /utils or /hooks
     └─ No → Keep in component's actions.ts
