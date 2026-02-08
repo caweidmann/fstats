@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardHeader, Grid } from '@mui/material'
+import { Box, Card, CardHeader, Grid, Typography } from '@mui/material'
 import { green, red } from '@mui/material/colors'
 import { useTheme } from '@mui/material/styles'
 import type { ChartData, ChartDataset, ScriptableContext } from 'chart.js'
@@ -15,6 +15,7 @@ import { getGradient } from '@/utils/Misc'
 import { AVAILABLE_PARSERS } from '@/utils/Parsers'
 
 import { getBankSelectOptions, getChartOptions } from './actions'
+import { ProfitLoss } from './components'
 
 type LocalForm = {
   selectedId: string
@@ -103,7 +104,7 @@ const Component = () => {
 
   return (
     <PageWrapper>
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         <Grid size={{ xs: 12, sm: 2 }}>
           <Select<LocalForm, LocalForm['selectedId']>
             control={localForm.control}
@@ -118,7 +119,11 @@ const Component = () => {
         {/* <Grid size={2}>Combine datasets</Grid> */}
 
         <Grid size={12}>
-          <Card sx={{ height: 300, px: 3, pt: 4, pb: 2 }}>
+          <ProfitLoss />
+        </Grid>
+
+        <Grid size={12}>
+          <Card sx={{ height: 300, px: 3, pt: 4, pb: 3, borderRadius: 2 }}>
             {/* @ts-expect-error Type '"line"' is not assignable to type '"bar"'. */}
             <BarChart type="bar" data={chartData} options={chartOptions} />
           </Card>
