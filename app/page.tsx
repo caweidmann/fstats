@@ -106,7 +106,14 @@ const Page = () => {
           ))}
         </Grid>
 
-        <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            flexDirection: isMobile ? 'column' : 'row',
+            justifyContent: 'center',
+          }}
+        >
           <Button
             variant="contained"
             size="large"
@@ -115,22 +122,6 @@ const Page = () => {
             onClick={() => router.push(ROUTES.DATA)}
           >
             Get started now
-          </Button>
-
-          <Button
-            variant="outlined"
-            size="large"
-            sx={{
-              ...sx.ctaButton,
-              borderWidth: 2,
-              '&:hover': {
-                borderWidth: 2,
-              },
-            }}
-            onMouseEnter={() => router.prefetch(`${ROUTES.STATS}?demo=true`)}
-            onClick={() => router.push(`${ROUTES.STATS}?demo=true`)}
-          >
-            View demo
           </Button>
         </Box>
       </Box>
