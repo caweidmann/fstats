@@ -1,35 +1,50 @@
 import { z } from 'zod'
 
-import { zDateTimeString, zIdString } from '../global'
+import { StatsFileStatus } from '@/types-enums'
+
+import { zDateTimeString, zIdString, zNonEmptyString } from '../global'
 import type { _KeysCheck } from '../key-check'
 import { _zKeysCheck } from '../key-check'
 import { zPPRawParseResult } from '../lib/papaparse'
-import { zRDFileWithPath } from '../lib/react-dropzone'
+import { zRDZFileWithPath } from '../lib/react-dropzone'
 import { zParserId } from '../parser'
 import { zParsedContentRow, zParsedContentRowAtRest } from './parsed-content-row'
 
+export const zStatsFileStatus = z.enum([
+  StatsFileStatus.PARSING,
+  StatsFileStatus.PARSED,
+  StatsFileStatus.ERROR,
+] as const)
+
 export const zStatsFile = z.object({
-  id: zIdString,
-  file: zRDFileWithPath,
-  uploaded: zDateTimeString,
-  status: z.enum(['parsing', 'parsed', 'error']),
+  created: z.union([z.literal(''), zDateTimeString]),
+  modified: z.union([z.literal(''), zDateTimeString]),
+  id: z.union([z.literal(''), zIdString]),
+  file: zRDZFileWithPath,
+  status: zStatsFileStatus,
   parserId: zParserId.nullable(),
   parsedContentRows: z.array(zParsedContentRow),
-  rawParseResult: zPPRawParseResult.optional(),
+  rawParseResult: zPPRawParseResult.nullable(),
   error: z.string().optional(),
 })
 
 export type StatsFile = z.infer<typeof zStatsFile>
 
+export const zSyncableStatsFile = z.object({
+  ...zStatsFile.shape,
+  created: zDateTimeString,
+  modified: zDateTimeString,
+  id: zNonEmptyString,
+})
+
+export type SyncableStatsFile = z.infer<typeof zSyncableStatsFile>
+
 export const zStatsFileAtRest = z.object({
-  id: zIdString,
-  file: zRDFileWithPath,
-  uploaded: zDateTimeString,
-  status: z.enum(['parsing', 'parsed', 'error']),
-  parserId: zParserId.nullable(),
+  ...zStatsFile.shape,
+  created: zDateTimeString,
+  modified: zDateTimeString,
+  id: zNonEmptyString,
   parsedContentRows: z.array(zParsedContentRowAtRest),
-  rawParseResult: zPPRawParseResult.optional(),
-  error: z.string().optional(),
 })
 
 export type StatsFileAtRest = z.infer<typeof zStatsFileAtRest>

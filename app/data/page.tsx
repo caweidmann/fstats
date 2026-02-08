@@ -2,10 +2,12 @@
 
 import { Box, Button, Grid, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
+import { useLocalStorage } from 'usehooks-ts'
 
-import { ROUTES } from '@/common'
+import { StatsFileStatus } from '@/types-enums'
+import { MISC, ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
-import { useStorage } from '@/context/Storage'
+import { useFiles } from '@/m-stats-file/service'
 import { useFileHelper } from '@/hooks'
 
 import { AddFolderButton, FileDropZone, Summary } from './components'
@@ -14,10 +16,12 @@ import { ui } from './styled'
 const Page = () => {
   const sx = ui()
   const router = useRouter()
-  const { isLoading, files } = useStorage()
-  const { selectedFiles } = useFileHelper()
+  const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[]>(MISC.LS_SELECTED_FILE_IDS_KEY, [])
+  const { data: files = [], isLoading: isLoadingFiles } = useFiles()
+  const { selectedFiles } = useFileHelper(files, selectedFileIds)
+  console.log('isLoadingFiles', { isLoadingFiles, files })
 
-  if (isLoading) {
+  if (isLoadingFiles) {
     return <PageWrapper />
   }
 
@@ -52,7 +56,7 @@ const Page = () => {
                 onClick={() => router.push(ROUTES.STATS)}
                 sx={sx.ctaButton}
                 disabled={!selectedFiles.length}
-                loading={selectedFiles.some((file) => file.status === 'parsing')}
+                loading={selectedFiles.some((file) => file.status === StatsFileStatus.PARSING)}
               >
                 Continue with {selectedFiles.length} {selectedFiles.length === 1 ? 'file' : 'files'}
               </Button>

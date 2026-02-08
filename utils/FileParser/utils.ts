@@ -1,11 +1,14 @@
 import { parse } from 'papaparse'
 
 import type { Parser, PPRawParseResult, StatsFile } from '@/types'
+import { StatsFileStatus } from '@/types-enums'
 
 import { getLocalUserPreferences } from '../LocalStorage'
+import { sleep } from '../Misc'
 import { AVAILABLE_PARSERS } from '../Parsers'
 
 export const parseFiles = async (files: StatsFile[]): Promise<StatsFile[]> => {
+  await sleep(1000)
   const parsedFiles = await Promise.all(files.map(parseFile))
   return parsedFiles
 }
@@ -42,7 +45,7 @@ export const parseFile = async (file: StatsFile): Promise<StatsFile> => {
 
   return {
     ...file,
-    status: 'parsed',
+    status: StatsFileStatus.PARSED,
     rawParseResult,
     parsedContentRows,
     parserId,

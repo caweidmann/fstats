@@ -12,8 +12,11 @@ import {
 import { Box, Button, Chip, CircularProgress, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
+import { useLocalStorage } from 'usehooks-ts'
 
-import { useStorage } from '@/context/Storage'
+import { StatsFileStatus } from '@/types-enums'
+import { MISC } from '@/common'
+import { useFiles, useMutateRemoveAllFiles, useMutateRemoveFiles } from '@/m-stats-file/service'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
 import { getParserName } from '@/utils/Misc'
 
@@ -26,13 +29,19 @@ const Component = () => {
   const theme = useTheme()
   const sx = ui(theme, isMobile, isDarkMode)
   const [expanded, setExpanded] = useState(false)
-  const { files, removeAllFiles, removeFiles, setSelectedFileIds } = useStorage()
-  const { selectedFiles, selectableFiles, errorFiles, unknownFiles } = useFileHelper()
-  const parserIds = Array.from(new Set(selectedFiles.map((file) => file.parserId)))
+  const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[]>(MISC.LS_SELECTED_FILE_IDS_KEY, [])
+  const { mutate: removeAllFiles, isPending: isRemovingAllFiles } = useMutateRemoveAllFiles()
+  const { mutate: removeFiles, isPending: isRemovingFiles } = useMutateRemoveFiles()
+  const { data: files = [], isLoading: isLoadingFiles } = useFiles()
+  const { selectedFiles, selectableFiles, errorFiles, unknownFiles } = useFileHelper(files, selectedFileIds)
+  const parserIds = Array.from(
+    new Set(selectedFiles.filter((file) => file.status === StatsFileStatus.PARSED).map((file) => file.parserId)),
+  )
   const typesFound = parserIds
     .map((parserId) => (parserId ? getParserName(parserId).short : 'Unknown'))
     .sort((a: string, b: string) => a.localeCompare(b))
     .join(', ')
+  const isParsing = files.some((file) => file.status === StatsFileStatus.PARSING)
 
   const toggleSelectAll = () => {
     if (selectedFiles.length === selectableFiles.length) {
@@ -42,12 +51,12 @@ const Component = () => {
     }
   }
 
-  const removeInvalidFiles = async () => {
-    await removeFiles(errorFiles.map((file) => file.id))
+  const removeInvalidFiles = () => {
+    removeFiles(errorFiles.map((file) => file.id))
   }
 
-  const removeUnkownFiles = async () => {
-    await removeFiles(unknownFiles.map((file) => file.id))
+  const removeUnkownFiles = () => {
+    removeFiles(unknownFiles.map((file) => file.id))
   }
 
   if (!files.length) {
@@ -70,12 +79,12 @@ const Component = () => {
           </Stack>
 
           <Stack direction="row" spacing={1} alignItems="center" sx={{ gap: 1 }}>
-            {files.some((file) => file.status === 'parsed') ? (
+            {files.some((file) => file.status === StatsFileStatus.PARSED) ? (
               <Typography variant="body2" color="text.secondary">
                 {typesFound}
               </Typography>
             ) : null}
-            {files.some((file) => file.status === 'parsing') ? <CircularProgress size={20} /> : null}
+            {isParsing ? <CircularProgress size={20} /> : null}
 
             {errorFiles.length ? (
               <Chip
@@ -114,32 +123,42 @@ const Component = () => {
               >
                 {selectedFiles.length === selectableFiles.length ? 'Deselect all' : 'Select all'}
               </Button>
+
               <Box sx={{ display: 'flex', gap: 1 }}>
-                {errorFiles.length ? (
+                {!isParsing && errorFiles.length ? (
                   <Button
                     size="small"
                     color="error"
                     startIcon={<DeleteOutlined />}
                     onClick={() => removeInvalidFiles()}
-                    disabled={!errorFiles.length}
+                    disabled={isLoadingFiles || isParsing || !errorFiles.length}
+                    loading={isRemovingFiles}
                   >
                     Remove invalid
                   </Button>
                 ) : null}
 
-                {unknownFiles.length ? (
+                {!isParsing && unknownFiles.length ? (
                   <Button
                     size="small"
                     color="secondary"
                     startIcon={<DeleteOutlined />}
                     onClick={() => removeUnkownFiles()}
-                    disabled={!unknownFiles.length}
+                    disabled={isLoadingFiles || isParsing || !unknownFiles.length}
+                    loading={isRemovingFiles}
                   >
                     Remove unknown
                   </Button>
                 ) : null}
 
-                <Button size="small" color="primary" startIcon={<DeleteOutlined />} onClick={() => removeAllFiles()}>
+                <Button
+                  size="small"
+                  color="primary"
+                  startIcon={<DeleteOutlined />}
+                  onClick={() => removeAllFiles()}
+                  disabled={isLoadingFiles || isParsing}
+                  loading={isRemovingAllFiles}
+                >
                   Remove all
                 </Button>
               </Box>

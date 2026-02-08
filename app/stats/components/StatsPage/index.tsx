@@ -6,10 +6,13 @@ import { useTheme } from '@mui/material/styles'
 import type { ChartData, ChartDataset, ScriptableContext } from 'chart.js'
 import { parse } from 'date-fns'
 import { useForm } from 'react-hook-form'
+import { useLocalStorage } from 'usehooks-ts'
 
 import { Currency } from '@/types-enums'
+import { MISC } from '@/common'
 import { BarChart, PageWrapper } from '@/components'
 import { Select } from '@/components/FormFieldsControlled'
+import { useFiles } from '@/m-stats-file/service'
 import { useFileHelper, useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
 import { getGradient } from '@/utils/Misc'
 import { AVAILABLE_PARSERS } from '@/utils/Parsers'
@@ -25,7 +28,9 @@ const Component = () => {
   const isMobile = useIsMobile()
   const isDarkMode = useIsDarkMode()
   const theme = useTheme()
-  const { selectedFiles } = useFileHelper()
+  const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[]>(MISC.LS_SELECTED_FILE_IDS_KEY, [])
+  const { data: files = [], isLoading: isLoadingFiles } = useFiles()
+  const { selectedFiles } = useFileHelper(files, selectedFileIds)
   const bankOptions = getBankSelectOptions(selectedFiles)
   const defaultValues: LocalForm = {
     selectedId: bankOptions[0].value,

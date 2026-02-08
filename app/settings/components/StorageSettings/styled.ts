@@ -20,11 +20,12 @@ export const ui = () => {
       color: 'text.secondary',
     },
 
-    statValue: {
+    statValue: (isLoading: boolean) => ({
       fontWeight: 600,
       color: 'text.primary',
       mr: 1,
-    },
+      opacity: isLoading ? 0.3 : 1,
+    }),
 
     statLabel: {
       color: 'text.secondary',

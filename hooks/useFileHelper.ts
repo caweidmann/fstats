@@ -1,10 +1,8 @@
 'use client'
 
-import { useStorage } from '@/context/Storage'
+import type { StatsFile } from '@/types'
 
-export const useFileHelper = () => {
-  const { files, selectedFileIds } = useStorage()
-
+export const useFileHelper = (files: StatsFile[], selectedFileIds: string[]) => {
   const selectedFiles = files.filter((file) => selectedFileIds.includes(file.id))
   const selectableFiles = files.filter((file) => !file.error)
   const errorFiles = files.filter((file) => file.error)

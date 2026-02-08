@@ -1,13 +1,5 @@
 import { ColorMode, DateFormat, UserLocale } from '@/types-enums'
 
-import packageJson from '../package.json'
-
-export const CONFIG = {
-  APP_VERSION: packageJson.version,
-  ENABLE_CONSOLE_LOGGING: process.env.NODE_ENV === 'development',
-  TAN_STACK_QUERY_DEVTOOLS: false,
-} as const
-
 export const MISC = {
   CENTER_DOT: '·',
   CENTER_DOT_XL: '•',

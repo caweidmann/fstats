@@ -1,3 +1,6 @@
+/**
+ * Prefix all types with "PP" = papaparse
+ */
 import type { ParseResult as PPParseResult } from 'papaparse'
 import { z } from 'zod'
 
