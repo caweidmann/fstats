@@ -11,7 +11,14 @@ import { Select } from '@/components/FormFieldsControlled'
 import { useFileHelper, useIsMobile } from '@/hooks'
 
 import { getBankSelectOptions } from './actions'
-import { ProfitLoss, TaxOptimizationInsights, TransactionChart, TransactionsTable } from './components'
+import {
+  CategoryBreakdown,
+  ProfitLoss,
+  ProfitLossSheet,
+  TaxOptimizationInsights,
+  TransactionChart,
+  TransactionsTable,
+} from './components'
 
 type LocalForm = {
   selectedId: string
@@ -110,6 +117,14 @@ const Component = () => {
 
         <Grid size={12}>
           <TransactionChart isDemoMode={isDemoMode} transactions={allRows} />
+        </Grid>
+
+        <Grid size={12}>
+          <CategoryBreakdown isDemoMode={isDemoMode} transactions={allRows} />
+        </Grid>
+
+        <Grid size={12}>
+          <ProfitLossSheet isDemoMode={isDemoMode} transactions={allRows} />
         </Grid>
 
         <Grid size={12}>

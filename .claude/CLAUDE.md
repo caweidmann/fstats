@@ -8,7 +8,7 @@ fstats is a privacy-focused CSV bank statement parser built with Next.js 16. All
 
 ## Development Commands
 
-**Package Manager**: This project uses `pnpm` (version 10.28.2). Always use `pnpm`, never `npm` or `yarn`.
+**Package Manager**: This project uses `pnpm`, never use `npm` or `yarn`.
 
 ```bash
 # Development (uses Turbopack)

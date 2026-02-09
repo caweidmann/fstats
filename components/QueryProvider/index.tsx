@@ -17,7 +17,7 @@ const Component = ({ children }: QueryProviderProps) => {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
-      {CONFIG.TAN_STACK_QUERY_DEVTOOLS ? <ReactQueryDevtools initialIsOpen={false} /> : null}
+      {CONFIG.ENABLE_TANSTACK_QUERY_DEVTOOLS ? <ReactQueryDevtools initialIsOpen={false} /> : null}
     </QueryClientProvider>
   )
 }
