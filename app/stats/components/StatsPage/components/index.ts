@@ -1,5 +1,5 @@
 export { default as CategoryBreakdown } from './CategoryBreakdown'
-export { default as ProfitLoss } from './ProfitLoss'
+export { default as ProfitLossCard } from './ProfitLossCard'
 export { default as ProfitLossSheet } from './ProfitLossSheet'
 export { default as TaxOptimizationInsights } from './TaxOptimizationInsights'
 export { default as TransactionChart } from './TransactionChart'

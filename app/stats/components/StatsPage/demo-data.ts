@@ -3,6 +3,8 @@ import type { ChartData, ChartDataset } from 'chart.js'
 
 import { getGradient } from '@/utils/Misc'
 
+import { calculateBarThickness } from './actions'
+
 export type ProfitLossData = {
   totalIncome: number
   totalExpenses: number
@@ -489,21 +491,14 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
 ]
 
 type GetDemoChartDataParams = {
+  isDemoMode: boolean
+  transactions: any[]
   isMobile: boolean
   isDarkMode: boolean
 }
 
-export const getDemoChartData = ({ isMobile }: GetDemoChartDataParams): ChartData => {
-  const calculateBarThickness = () => {
-    const transactionCount = DEMO_TRANSACTIONS.length
-    const baseWidth = isMobile ? 300 : 800
-    const calculatedThickness = Math.floor(baseWidth / transactionCount)
-
-    const minThickness = isMobile ? 2 : 3
-    const maxThickness = isMobile ? 4 : 18
-
-    return Math.max(minThickness, Math.min(maxThickness, calculatedThickness))
-  }
+export const getDemoChartData = ({ isDemoMode, isMobile, transactions }: GetDemoChartDataParams): ChartData => {
+  const barThickness = calculateBarThickness(isDemoMode, transactions, isMobile)
 
   const dataset: ChartDataset<'bar'> = {
     type: 'bar',
@@ -530,7 +525,7 @@ export const getDemoChartData = ({ isMobile }: GetDemoChartDataParams): ChartDat
         ? { topLeft: 100, topRight: 100, bottomLeft: 0, bottomRight: 0 }
         : { topLeft: 0, topRight: 0, bottomLeft: 100, bottomRight: 100 }
     },
-    barThickness: calculateBarThickness(),
+    barThickness,
     order: 2,
   }
 

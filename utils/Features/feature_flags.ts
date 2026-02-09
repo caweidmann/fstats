@@ -1,7 +1,7 @@
 import type { FeatureFlags } from '@/types'
 
 export const FEATURES: FeatureFlags = {
-  wip: false,
+  wip: process.env.NODE_ENV === 'development',
 }
 
 export const ALL_FEATURES: FeatureFlags = {
