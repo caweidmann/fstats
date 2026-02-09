@@ -1,3 +1,4 @@
+export { default as CategoryBreakdown } from './CategoryBreakdown'
 export { default as ProfitLoss } from './ProfitLoss'
 export { default as ProfitLossSheet } from './ProfitLossSheet'
 export { default as TaxOptimizationInsights } from './TaxOptimizationInsights'
