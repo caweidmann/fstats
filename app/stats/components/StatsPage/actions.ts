@@ -5,6 +5,17 @@ import type { BankSelectOption, StatsFile } from '@/types'
 import { Currency, ParserId, UserLocale } from '@/types-enums'
 import { AVAILABLE_PARSERS } from '@/utils/Parsers'
 
+export const calculateBarThickness = (isDemoMode: boolean, transactions: any[], isMobile: boolean) => {
+  const transactionCount = isDemoMode ? 44 : transactions.length
+  const baseWidth = isMobile ? 300 : 400
+  const calculatedThickness = Math.floor(baseWidth / transactionCount)
+
+  const minThickness = isMobile ? 2 : 3
+  const maxThickness = isMobile ? 10 : 15
+
+  return Math.max(minThickness, Math.min(maxThickness, calculatedThickness))
+}
+
 export const getBankSelectOptions = (selectedFiles: StatsFile[]): BankSelectOption[] => {
   const bankIds = Array.from(
     new Set(selectedFiles.map((file) => file.parserId).filter((id): id is ParserId => id !== null)),

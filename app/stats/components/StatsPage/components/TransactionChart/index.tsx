@@ -11,7 +11,7 @@ import { BarChart } from '@/components'
 import { useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
 import { getGradient } from '@/utils/Misc'
 
-import { getChartOptions } from '../../actions'
+import { calculateBarThickness, getChartOptions } from '../../actions'
 import { getDemoChartData } from '../../demo-data'
 import { ui } from './styled'
 
@@ -26,17 +26,7 @@ const Component = ({ isDemoMode, transactions }: ComponentProps) => {
   const isDarkMode = useIsDarkMode()
   const theme = useTheme()
   const sx = ui()
-
-  const calculateBarThickness = () => {
-    const transactionCount = transactions.length
-    const baseWidth = isMobile ? 300 : 800
-    const calculatedThickness = Math.floor(baseWidth / transactionCount)
-
-    const minThickness = isMobile ? 2 : 3
-    const maxThickness = isMobile ? 15 : 25
-
-    return Math.max(minThickness, Math.min(maxThickness, calculatedThickness))
-  }
+  const barThickness = calculateBarThickness(isDemoMode, transactions, isMobile)
 
   const dataset: ChartDataset<'bar'> = {
     type: 'bar',
@@ -63,12 +53,12 @@ const Component = ({ isDemoMode, transactions }: ComponentProps) => {
         ? { topLeft: 100, topRight: 100, bottomLeft: 0, bottomRight: 0 }
         : { topLeft: 0, topRight: 0, bottomLeft: 100, bottomRight: 100 }
     },
-    barThickness: calculateBarThickness(),
+    barThickness,
     order: 2,
   }
 
   const chartData: ChartData = isDemoMode
-    ? getDemoChartData({ isMobile, isDarkMode })
+    ? getDemoChartData({ isDemoMode, isMobile, isDarkMode, transactions })
     : {
         labels: transactions.map((row) => row.date),
         datasets: [dataset],
