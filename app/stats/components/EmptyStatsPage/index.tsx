@@ -33,7 +33,16 @@ const Component = () => {
         >
           Upload a CSV file and then come back to view your stats.
         </Typography>
-        <Box sx={{ display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row', justifyContent: 'center' }}>
+
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            flexDirection: isMobile ? 'column' : 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <Button
             variant="contained"
             size="large"
@@ -43,6 +52,7 @@ const Component = () => {
           >
             Upload files
           </Button>
+
           <Button
             variant="outlined"
             size="large"

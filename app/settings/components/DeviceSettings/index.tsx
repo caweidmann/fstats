@@ -4,9 +4,10 @@ import { InfoOutlined } from '@mui/icons-material'
 import { Box, Card, FormControlLabel, Switch, Typography } from '@mui/material'
 import type { ChangeEvent } from 'react'
 
-import { useUserPreferences } from '@/hooks'
+import { useIsMobile, useUserPreferences } from '@/hooks'
 
 const Component = () => {
+  const isMobile = useIsMobile()
   const { persistData, set } = useUserPreferences()
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +33,7 @@ const Component = () => {
         />
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1.25 : 0.5 }}>
         <InfoOutlined color={persistData ? 'warning' : 'secondary'} sx={{ fontSize: 16 }} />
         <Typography variant="caption" color={persistData ? 'warning' : 'text.secondary'}>
           {persistData
