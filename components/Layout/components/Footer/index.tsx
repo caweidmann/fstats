@@ -20,8 +20,7 @@ const Component = () => {
       <Container component="footer" maxWidth={LAYOUT.CONTAINER_MAX_WIDTH}>
         <Box sx={sx.footer}>
           <Typography color="primary" sx={{ fontSize: 13 }}>
-            © 2025 fstats. {isMobile ? <br /> : null}
-            {t('MISC.ALL_RIGHTS_RESERVED')}
+            © 2025 fstats. {t('MISC.ALL_RIGHTS_RESERVED')}
           </Typography>
         </Box>
       </Container>

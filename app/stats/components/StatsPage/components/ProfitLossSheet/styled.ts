@@ -1,0 +1,121 @@
+export const ui = () => ({
+  container: {
+    backgroundColor: 'background.paper',
+    borderRadius: 2,
+    overflow: 'hidden',
+    border: '1px solid',
+    borderColor: 'divider',
+    boxShadow: 'none',
+  },
+  header: {
+    p: 3,
+    borderBottom: '2px solid',
+    borderColor: 'divider',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap' as const,
+    gap: 2,
+  },
+  titleSection: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: 0.5,
+  },
+  tableContainer: {
+    overflowX: 'auto' as const,
+    width: '100%',
+  },
+  table: {
+    minWidth: 800,
+    borderCollapse: 'collapse' as const,
+    '& .MuiTableCell-root': {
+      borderBottom: '1px solid',
+      borderColor: 'divider',
+      fontSize: '0.875rem',
+      borderLeft: 'none',
+      borderRight: 'none',
+    },
+  },
+  headerCell: {
+    fontWeight: 700,
+    backgroundColor: 'grey.100',
+    textAlign: 'right' as const,
+    py: 2,
+    borderBottom: '2px solid',
+    borderColor: 'grey.400',
+    '&:first-of-type': {
+      textAlign: 'left' as const,
+      position: 'sticky' as const,
+      left: 0,
+      backgroundColor: 'grey.100',
+      zIndex: 1,
+    },
+  },
+  sectionHeaderRow: {
+    '& .MuiTableCell-root': {
+      fontWeight: 700,
+      py: 1.5,
+      backgroundColor: 'transparent',
+      fontSize: '0.9rem',
+      borderTop: '2px solid',
+      borderTopColor: 'divider',
+      borderBottom: '1px solid',
+      borderBottomColor: 'divider',
+    },
+  },
+  categoryRow: (isSubItem: boolean) => ({
+    '& .MuiTableCell-root': {
+      py: 1,
+      pl: isSubItem ? 4 : 2,
+      backgroundColor: 'transparent',
+      borderBottom: '1px solid',
+      borderBottomColor: 'divider',
+    },
+    '&:hover': {
+      '& .MuiTableCell-root': {
+        backgroundColor: 'grey.50',
+      },
+    },
+  }),
+  totalRow: {
+    '& .MuiTableCell-root': {
+      fontWeight: 700,
+      py: 1.5,
+      backgroundColor: 'grey.100',
+      borderTop: '2px solid',
+      borderTopColor: 'grey.400',
+      borderBottom: '2px solid',
+      borderBottomColor: 'grey.400',
+    },
+  },
+  netProfitRow: {
+    '& .MuiTableCell-root': {
+      fontWeight: 700,
+      py: 2.5,
+      backgroundColor: 'primary.main',
+      color: 'primary.contrastText',
+      fontSize: '1rem',
+      borderTop: '3px solid',
+      borderTopColor: 'primary.dark',
+      borderBottom: 'none',
+    },
+  },
+  nameCell: {
+    position: 'sticky' as const,
+    left: 0,
+    zIndex: 1,
+    textAlign: 'left' as const,
+  },
+  amountCell: {
+    textAlign: 'right' as const,
+    fontVariantNumeric: 'tabular-nums',
+  },
+  toggleButton: {
+    cursor: 'pointer',
+    userSelect: 'none' as const,
+    display: 'flex',
+    alignItems: 'center',
+    gap: 0.5,
+  },
+})

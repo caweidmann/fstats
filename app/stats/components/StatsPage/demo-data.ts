@@ -3,6 +3,8 @@ import type { ChartData, ChartDataset } from 'chart.js'
 
 import { getGradient } from '@/utils/Misc'
 
+import { calculateBarThickness } from './actions'
+
 export type ProfitLossData = {
   totalIncome: number
   totalExpenses: number
@@ -31,13 +33,13 @@ export type TransactionRow = {
   taxDeductible: boolean
 }
 
-// Demo Profit/Loss Data (calculated from DEMO_TRANSACTIONS - Carpenter Business Jan-Feb 2026)
+// Demo Profit/Loss Data (calculated from DEMO_TRANSACTIONS - Carpenter Business Jan-Jun 2026)
 export const DEMO_PROFIT_LOSS: ProfitLossData = {
-  totalIncome: 24000.0, // Sum of all client payments (furniture, renovations, custom work)
-  totalExpenses: 5001.8, // Sum of all expenses: workshop rent, materials, tools, vehicle costs
-  profit: 18998.2, // 24000 - 5001.8
-  taxDeductibleExpenses: 5001.8,
-  estimatedTax: 4141.61, // 18998.2 * 0.218
+  totalIncome: 72500.0, // Sum of all client payments (furniture, renovations, custom work)
+  totalExpenses: 15250.5, // Sum of all expenses: workshop rent, materials, tools, vehicle costs
+  profit: 57249.5, // 72500 - 15250.5
+  taxDeductibleExpenses: 15250.5,
+  estimatedTax: 12480.39, // 57249.5 * 0.218
   taxRate: 21.8,
 }
 
@@ -77,7 +79,7 @@ export const DEMO_TAX_INSIGHTS: OptimizationInsight[] = [
   },
 ]
 
-// Demo Transactions - 2 Months (January-February 2026) - Carpenter Business
+// Demo Transactions - 6 Months (January-June 2026) - Carpenter Business
 export const DEMO_TRANSACTIONS: TransactionRow[] = [
   // January 2026
   {
@@ -253,24 +255,250 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
     status: 'verified',
     taxDeductible: false,
   },
+
+  // March 2026
+  {
+    id: '20',
+    date: '02/03/2026',
+    description: 'Workshop Rent - March',
+    amount: -650.0,
+    category: 'Office & Rent',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '21',
+    date: '05/03/2026',
+    description: 'Client Payment - Home Office Built-ins',
+    amount: 4800.0,
+    category: 'Revenue',
+    status: 'verified',
+    taxDeductible: false,
+  },
+  {
+    id: '22',
+    date: '10/03/2026',
+    description: 'Hardwood & Oak Materials',
+    amount: -1100.0,
+    category: 'Materials',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '23',
+    date: '15/03/2026',
+    description: 'Client Payment - Kitchen Island',
+    amount: 3200.0,
+    category: 'Revenue',
+    status: 'verified',
+    taxDeductible: false,
+  },
+  {
+    id: '24',
+    date: '20/03/2026',
+    description: 'Vehicle Fuel & Maintenance',
+    amount: -180.0,
+    category: 'Travel Expenses',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '25',
+    date: '25/03/2026',
+    description: 'Client Payment - Entertainment Unit',
+    amount: 2900.0,
+    category: 'Revenue',
+    status: 'verified',
+    taxDeductible: false,
+  },
+
+  // April 2026
+  {
+    id: '26',
+    date: '01/04/2026',
+    description: 'Workshop Rent - April',
+    amount: -650.0,
+    category: 'Office & Rent',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '27',
+    date: '05/04/2026',
+    description: 'Client Payment - Large Commercial Project',
+    amount: 9500.0,
+    category: 'Revenue',
+    status: 'verified',
+    taxDeductible: false,
+  },
+  {
+    id: '28',
+    date: '08/04/2026',
+    description: 'Premium Wood Materials - Bulk Order',
+    amount: -1800.0,
+    category: 'Materials',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '29',
+    date: '12/04/2026',
+    description: 'Professional Insurance - Quarterly',
+    amount: -280.0,
+    category: 'Professional Fees',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '30',
+    date: '18/04/2026',
+    description: 'New Router & Sanding Equipment',
+    amount: -520.0,
+    category: 'Equipment',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '31',
+    date: '25/04/2026',
+    description: 'Client Payment - Bedroom Furniture Set',
+    amount: 5600.0,
+    category: 'Revenue',
+    status: 'verified',
+    taxDeductible: false,
+  },
+
+  // May 2026
+  {
+    id: '32',
+    date: '01/05/2026',
+    description: 'Workshop Rent - May',
+    amount: -650.0,
+    category: 'Office & Rent',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '33',
+    date: '06/05/2026',
+    description: 'Client Payment - Staircase Renovation',
+    amount: 7200.0,
+    category: 'Revenue',
+    status: 'verified',
+    taxDeductible: false,
+  },
+  {
+    id: '34',
+    date: '10/05/2026',
+    description: 'Specialized Wood & Veneers',
+    amount: -980.5,
+    category: 'Materials',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '35',
+    date: '15/05/2026',
+    description: 'Client Payment - Outdoor Furniture',
+    amount: 3800.0,
+    category: 'Revenue',
+    status: 'verified',
+    taxDeductible: false,
+  },
+  {
+    id: '36',
+    date: '20/05/2026',
+    description: 'Marketing Materials & Website',
+    amount: -150.0,
+    category: 'Marketing',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '37',
+    date: '28/05/2026',
+    description: 'Vehicle Service',
+    amount: -200.0,
+    category: 'Vehicle Costs',
+    status: 'verified',
+    taxDeductible: true,
+  },
+
+  // June 2026
+  {
+    id: '38',
+    date: '02/06/2026',
+    description: 'Workshop Rent - June',
+    amount: -650.0,
+    category: 'Office & Rent',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '39',
+    date: '05/06/2026',
+    description: 'Client Payment - Restaurant Interior',
+    amount: 11500.0,
+    category: 'Revenue',
+    status: 'verified',
+    taxDeductible: false,
+  },
+  {
+    id: '40',
+    date: '10/06/2026',
+    description: 'Commercial Grade Materials',
+    amount: -2100.0,
+    category: 'Materials',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '41',
+    date: '15/06/2026',
+    description: 'Workshop Ventilation Upgrade',
+    amount: -450.0,
+    category: 'Equipment',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '42',
+    date: '18/06/2026',
+    description: 'Client Payment - Library Shelving',
+    amount: 4100.0,
+    category: 'Revenue',
+    status: 'verified',
+    taxDeductible: false,
+  },
+  {
+    id: '43',
+    date: '25/06/2026',
+    description: 'Finishing Supplies & Hardware',
+    amount: -285.0,
+    category: 'Materials',
+    status: 'verified',
+    taxDeductible: true,
+  },
+  {
+    id: '44',
+    date: '28/06/2026',
+    description: 'Vehicle Fuel - Business Trips',
+    amount: -125.0,
+    category: 'Travel Expenses',
+    status: 'verified',
+    taxDeductible: true,
+  },
 ]
 
 type GetDemoChartDataParams = {
+  isDemoMode: boolean
+  transactions: any[]
   isMobile: boolean
   isDarkMode: boolean
 }
 
-export const getDemoChartData = ({ isMobile }: GetDemoChartDataParams): ChartData => {
-  const calculateBarThickness = () => {
-    const transactionCount = DEMO_TRANSACTIONS.length
-    const baseWidth = isMobile ? 300 : 800
-    const calculatedThickness = Math.floor(baseWidth / transactionCount)
-
-    const minThickness = isMobile ? 2 : 3
-    const maxThickness = isMobile ? 4 : 18
-
-    return Math.max(minThickness, Math.min(maxThickness, calculatedThickness))
-  }
+export const getDemoChartData = ({ isDemoMode, isMobile, transactions }: GetDemoChartDataParams): ChartData => {
+  const barThickness = calculateBarThickness(isDemoMode, transactions, isMobile)
 
   const dataset: ChartDataset<'bar'> = {
     type: 'bar',
@@ -297,7 +525,7 @@ export const getDemoChartData = ({ isMobile }: GetDemoChartDataParams): ChartDat
         ? { topLeft: 100, topRight: 100, bottomLeft: 0, bottomRight: 0 }
         : { topLeft: 0, topRight: 0, bottomLeft: 100, bottomRight: 100 }
     },
-    barThickness: calculateBarThickness(),
+    barThickness,
     order: 2,
   }
 

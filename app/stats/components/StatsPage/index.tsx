@@ -9,9 +9,17 @@ import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { Select } from '@/components/FormFieldsControlled'
 import { useFileHelper, useIsMobile } from '@/hooks'
+import { isFeatureEnabled } from '@/utils/Features'
 
 import { getBankSelectOptions } from './actions'
-import { ProfitLoss, TaxOptimizationInsights, TransactionChart, TransactionsTable } from './components'
+import {
+  CategoryBreakdown,
+  ProfitLossCard,
+  ProfitLossSheet,
+  TaxOptimizationInsights,
+  TransactionChart,
+  TransactionsTable,
+} from './components'
 
 type LocalForm = {
   selectedId: string
@@ -23,6 +31,7 @@ const Component = () => {
   const searchParams = useSearchParams()
   const router = useRouter()
   const isDemoMode = searchParams.get('demo') === 'true'
+  const isWip = isFeatureEnabled('wip')
 
   const bankOptions = isDemoMode ? [] : getBankSelectOptions(selectedFiles)
   const defaultValues: LocalForm = {
@@ -105,12 +114,24 @@ const Component = () => {
         {/* <Grid size={2}>Combine datasets</Grid> */}
 
         <Grid size={12}>
-          <ProfitLoss isDemoMode={isDemoMode} transactions={allRows} />
+          <ProfitLossCard isDemoMode={isDemoMode} transactions={allRows} />
         </Grid>
 
         <Grid size={12}>
           <TransactionChart isDemoMode={isDemoMode} transactions={allRows} />
         </Grid>
+
+        {isWip ? (
+          <Grid size={12}>
+            <CategoryBreakdown isDemoMode={isDemoMode} transactions={allRows} />
+          </Grid>
+        ) : null}
+
+        {isWip ? (
+          <Grid size={12}>
+            <ProfitLossSheet isDemoMode={isDemoMode} transactions={allRows} />
+          </Grid>
+        ) : null}
 
         <Grid size={12}>
           <TaxOptimizationInsights isDemoMode={isDemoMode} />

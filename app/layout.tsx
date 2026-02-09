@@ -7,6 +7,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
+import { CONFIG } from '@/common'
 import { ChartProvider, LanguageProvider, Layout, QueryProvider, StorageProvider, ThemeProvider } from '@/components'
 
 const SEO_TITLE = `fstats - Analyse bank statements privately`
@@ -43,8 +44,8 @@ const Component = ({ children }: LayoutProps) => {
         <meta name="theme-color" content="#2a2e36" media="(prefers-color-scheme: dark)" />
       </head>
       <body>
-        {process.env.NODE_ENV === 'production' ? <SpeedInsights /> : null}
-        {process.env.NODE_ENV === 'production' ? <Analytics /> : null}
+        {process.env.NODE_ENV === 'production' && CONFIG.ENABLE_SPEED_INSIGHTS ? <SpeedInsights /> : null}
+        {process.env.NODE_ENV === 'production' && CONFIG.ENABLE_ANALYTICS ? <Analytics /> : null}
 
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <StorageProvider>
