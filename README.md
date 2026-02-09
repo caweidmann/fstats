@@ -1,6 +1,6 @@
 # fstats
 
-Simple CSV parser
+Bank statement parser
 
 
 ## Environments

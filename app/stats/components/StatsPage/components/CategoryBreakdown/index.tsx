@@ -3,6 +3,7 @@
 import { Box, Card, LinearProgress, Typography } from '@mui/material'
 
 import type { ParsedContentRow } from '@/types'
+import { Big } from '@/lib/w-big'
 
 import { DEMO_TRANSACTIONS } from '../../demo-data'
 import { getCategoryBreakdownData } from './actions'
@@ -17,7 +18,7 @@ const Component = ({ isDemoMode, transactions }: ComponentProps) => {
   const sx = ui()
 
   const categoryData = isDemoMode
-    ? getCategoryBreakdownData(DEMO_TRANSACTIONS.map((t) => ({ ...t, value: { toNumber: () => t.amount } })))
+    ? getCategoryBreakdownData(DEMO_TRANSACTIONS.map((t) => ({ ...t, value: Big(t.amount) })))
     : getCategoryBreakdownData(transactions)
 
   const hasData = categoryData.length > 0
@@ -47,11 +48,7 @@ const Component = ({ isDemoMode, transactions }: ComponentProps) => {
                   </Typography>
                 </Box>
               </Box>
-              <LinearProgress
-                variant="determinate"
-                value={category.percentage}
-                sx={sx.progressBar(category.color)}
-              />
+              <LinearProgress variant="determinate" value={category.percentage} sx={sx.progressBar(category.color)} />
             </Box>
           ))}
         </Box>

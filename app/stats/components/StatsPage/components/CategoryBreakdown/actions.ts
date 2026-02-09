@@ -3,7 +3,6 @@ import type { ParsedContentRow } from '@/types'
 type TransactionWithCategory = ParsedContentRow & {
   category?: string
   amount?: number
-  value: { toNumber: () => number }
 }
 
 type CategoryBreakdown = {
