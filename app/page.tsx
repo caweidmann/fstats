@@ -106,24 +106,15 @@ const Page = () => {
           ))}
         </Grid>
 
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 2,
-            flexDirection: isMobile ? 'column' : 'row',
-            justifyContent: 'center',
-          }}
+        <Button
+          variant="contained"
+          size="large"
+          sx={sx.ctaButton}
+          onMouseEnter={() => router.prefetch(ROUTES.DATA)}
+          onClick={() => router.push(ROUTES.DATA)}
         >
-          <Button
-            variant="contained"
-            size="large"
-            sx={sx.ctaButton}
-            onMouseEnter={() => router.prefetch(ROUTES.DATA)}
-            onClick={() => router.push(ROUTES.DATA)}
-          >
-            Get started now
-          </Button>
-        </Box>
+          Get started now
+        </Button>
       </Box>
 
       <Box sx={sx.banksSection}>
