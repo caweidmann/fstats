@@ -2,8 +2,8 @@ import type { StatsFile, StatsFileAtRest } from '@/types'
 import { zSyncableStatsFile } from '@/types'
 import { Big } from '@/lib/w-big'
 
-export const syncStatsFile = (fileToSync: StatsFile): StatsFileAtRest => {
-  const res = zSyncableStatsFile.safeParse(fileToSync)
+export const syncStatsFile = (dataToSync: StatsFile): StatsFileAtRest => {
+  const res = zSyncableStatsFile.safeParse(dataToSync)
 
   if (!res.success) {
     const errors = res.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`).join(', ')
@@ -16,10 +16,10 @@ export const syncStatsFile = (fileToSync: StatsFile): StatsFileAtRest => {
   }
 }
 
-export const parseStatsFile = (fileToParse: StatsFileAtRest): StatsFile => {
+export const parseStatsFile = (dataToParse: StatsFileAtRest): StatsFile => {
   const res: StatsFile = {
-    ...fileToParse,
-    parsedContentRows: fileToParse.parsedContentRows.map((row) => ({ ...row, value: Big(row.value) })),
+    ...dataToParse,
+    parsedContentRows: dataToParse.parsedContentRows.map((row) => ({ ...row, value: Big(row.value) })),
   }
   return res
 }
