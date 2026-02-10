@@ -1,20 +1,13 @@
 import { z } from 'zod'
 
-import { StatsFileStatus } from '@/types-enums'
+import { zParserId, zStatsFileStatus } from '@/types-enums'
 
 import { zDateTimeString, zIdString, zNonEmptyString } from '../global'
 import type { _KeysCheck } from '../key-check'
 import { _zKeysCheck } from '../key-check'
 import { zPPRawParseResult } from '../lib/papaparse'
 import { zRDZFileWithPath } from '../lib/react-dropzone'
-import { zParserId } from '../parser'
 import { zParsedContentRow, zParsedContentRowAtRest } from './parsed-content-row'
-
-export const zStatsFileStatus = z.enum([
-  StatsFileStatus.PARSING,
-  StatsFileStatus.PARSED,
-  StatsFileStatus.ERROR,
-] as const)
 
 export const zStatsFile = z.object({
   created: z.union([z.literal(''), zDateTimeString]),

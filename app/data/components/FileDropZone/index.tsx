@@ -10,7 +10,7 @@ import type { FileRejection, FileWithPath } from 'react-dropzone'
 import { StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
-import { createStatsFile, useMutateAddFiles, useMutateUpdateFiles } from '@/m-stats-file/service'
+import { getStatsFileDefaults, useMutateAddFiles, useMutateUpdateFiles } from '@/m-stats-file/service'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
 import { parseFiles } from '@/utils/FileParser'
 
@@ -30,12 +30,12 @@ const Component = () => {
       const newFiles: StatsFile[] = []
 
       acceptedFiles.forEach((file) => {
-        newFiles.push(createStatsFile(file))
+        newFiles.push(getStatsFileDefaults(file))
       })
 
       fileRejections.forEach(({ file, errors }) => {
         newFiles.push({
-          ...createStatsFile(file),
+          ...getStatsFileDefaults(file),
           status: StatsFileStatus.ERROR,
           error: errors.map((e) => e.message).join(', '),
         })

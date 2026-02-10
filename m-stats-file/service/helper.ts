@@ -2,7 +2,7 @@ import { StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { RDZFileWithPath } from '@/types/lib/react-dropzone'
 
-export const createStatsFile = (file: RDZFileWithPath): StatsFile => ({
+export const getStatsFileDefaults = (file: RDZFileWithPath): StatsFile => ({
   created: '',
   modified: '',
   id: '',
