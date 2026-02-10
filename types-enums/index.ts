@@ -48,7 +48,7 @@ export const ParserId = {
 
 export const zParserId = z.enum([ParserId.CAPITEC, ParserId.COMDIRECT_GIRO] as const)
 
-export type ParserId = z.infer<typeof zUserLocale>
+export type ParserId = z.infer<typeof zParserId>
 
 // -------------------------------------------------------
 
