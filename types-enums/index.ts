@@ -1,3 +1,7 @@
+import { z } from 'zod'
+
+// -------------------------------------------------------
+
 /**
  * The color mode which is currently applied in the app.
  */
@@ -7,7 +11,11 @@ export const ColorMode = {
   DARK: 'dark',
 } as const
 
-export type ColorMode = (typeof ColorMode)[keyof typeof ColorMode]
+export const zColorMode = z.enum([ColorMode.SYSTEM, ColorMode.LIGHT, ColorMode.DARK] as const)
+
+export type ColorMode = z.infer<typeof zColorMode>
+
+// -------------------------------------------------------
 
 /**
  * The user's chosen locale, under the hood determines the language across the app.
@@ -17,8 +25,15 @@ export const UserLocale = {
   DE: 'de',
 } as const
 
-export type UserLocale = (typeof UserLocale)[keyof typeof UserLocale]
+export const zUserLocale = z.enum([UserLocale.EN, UserLocale.DE] as const)
 
+export type UserLocale = z.infer<typeof zUserLocale>
+
+// -------------------------------------------------------
+
+/**
+ * Unique identifier for a parser, ensures CSV files get parsed with the correct parser.
+ */
 export const ParserId = {
   // South African Banks
   CAPITEC: 'capitec__savings',
@@ -31,15 +46,30 @@ export const ParserId = {
   // ING_GIRO_WB: 'ing__giro_with_balance',
 } as const
 
-export type ParserId = (typeof ParserId)[keyof typeof ParserId]
+export const zParserId = z.enum([ParserId.CAPITEC, ParserId.COMDIRECT_GIRO] as const)
 
+export type ParserId = z.infer<typeof zUserLocale>
+
+// -------------------------------------------------------
+
+/**
+ * The status of a file, usually goes directly to "parsing" and when parsed to "parsed".
+ */
 export const StatsFileStatus = {
   PARSING: 'parsing',
   PARSED: 'parsed',
   ERROR: 'error',
 } as const
 
-export type StatsFileStatus = (typeof StatsFileStatus)[keyof typeof StatsFileStatus]
+export const zStatsFileStatus = z.enum([
+  StatsFileStatus.PARSING,
+  StatsFileStatus.PARSED,
+  StatsFileStatus.ERROR,
+] as const)
+
+export type StatsFileStatus = z.infer<typeof zStatsFileStatus>
+
+// -------------------------------------------------------
 
 /**
  * The user's chosen date format which applies across the app.
@@ -58,7 +88,23 @@ export const DateFormat = {
   YMD: 'yyyyMMdd',
 } as const
 
-export type DateFormat = (typeof DateFormat)[keyof typeof DateFormat]
+export const zDateFormat = z.enum([
+  DateFormat.DMY_LONG,
+  DateFormat.DMY_SHORT,
+  DateFormat.MDY_LONG,
+  DateFormat.MDY_SHORT,
+  DateFormat.DMY_SLASH,
+  DateFormat.DMY_DOT,
+  DateFormat.DMY_DASH,
+  DateFormat.YMD_SLASH,
+  DateFormat.YMD_DOT,
+  DateFormat.YMD_DASH,
+  DateFormat.YMD,
+] as const)
+
+export type DateFormat = z.infer<typeof zDateFormat>
+
+// -------------------------------------------------------
 
 /**
  * The user's chosen preference which determines on what day the week starts.
@@ -71,21 +117,69 @@ export const WeekStartsOn = {
   MONDAY: 'MONDAY',
 } as const
 
-export type WeekStartsOn = (typeof WeekStartsOn)[keyof typeof WeekStartsOn]
+export const zWeekStartsOn = z.enum([WeekStartsOn.SUNDAY, WeekStartsOn.MONDAY] as const)
+
+export type WeekStartsOn = z.infer<typeof zWeekStartsOn>
+
+// -------------------------------------------------------
+
+/**
+ * The WeekStartsOnValue can only be a number between 0 - 6 and in our case we only use Sunday or Monday,
+ * i.e. 0 or 1.
+ */
+export const WeekStartsOnValue = {
+  SUNDAY: 0,
+  MONDAY: 1,
+} as const
+
+export const zWeekStartsOnValue = z.union([z.literal(WeekStartsOnValue.SUNDAY), z.literal(WeekStartsOnValue.MONDAY)])
+
+export type WeekStartsOnValue = z.infer<typeof zWeekStartsOnValue>
+
+// -------------------------------------------------------
 
 /**
  * The user's chosen display currency preference.
  */
-export enum Currency {
-  USD = 'USD',
-  EUR = 'EUR',
-  GBP = 'GBP',
-  CHF = 'CHF',
-  SEK = 'SEK',
-  BTC = 'BTC',
-  CNY = 'CNY',
-  RUB = 'RUB',
-  JPY = 'JPY',
-  INR = 'INR',
-  ZAR = 'ZAR',
+export const Currency = {
+  USD: 'USD',
+  EUR: 'EUR',
+  GBP: 'GBP',
+  CHF: 'CHF',
+  SEK: 'SEK',
+  BTC: 'BTC',
+  CNY: 'CNY',
+  RUB: 'RUB',
+  JPY: 'JPY',
+  INR: 'INR',
+  ZAR: 'ZAR',
 }
+
+export const zCurrency = z.enum([
+  Currency.USD,
+  Currency.EUR,
+  Currency.GBP,
+  Currency.CHF,
+  Currency.SEK,
+  Currency.BTC,
+  Currency.CNY,
+  Currency.RUB,
+  Currency.JPY,
+  Currency.INR,
+  Currency.ZAR,
+] as const)
+
+export type Currency = z.infer<typeof zCurrency>
+
+// -------------------------------------------------------
+
+export const SortOrder = {
+  ASC: 'asc',
+  DESC: 'desc',
+} as const
+
+export const zSortOrder = z.enum([SortOrder.ASC, SortOrder.DESC] as const)
+
+export type SortOrder = z.infer<typeof zSortOrder>
+
+// -------------------------------------------------------
