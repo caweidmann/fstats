@@ -4,7 +4,7 @@ import { Box, List } from '@mui/material'
 
 import { UserLocale } from '@/types-enums'
 import { SwipeableDrawerSubheader } from '@/components'
-import { useMutateUpdateUser } from '@/m-user/service'
+import { useUserPreferences } from '@/hooks'
 import { useTranslation } from '@/lib/i18n'
 
 import { LanguageDrawerListItem } from './components'
@@ -20,12 +20,12 @@ export const getLanguageSelectOptions = () => {
 
 const Component = ({ onOptionSelected, onClose }: LanguageDrawerProps) => {
   const { t, i18n } = useTranslation()
-  const { mutate: updateUser, isPending: isSaving } = useMutateUpdateUser()
+  const { setLocale } = useUserPreferences()
   const selectOptions = getLanguageSelectOptions()
 
   const onClick = (locale: UserLocale) => {
     i18n.changeLanguage(locale)
-    updateUser({ locale })
+    setLocale(locale)
     onOptionSelected()
   }
 

@@ -3,13 +3,14 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { User } from '@/types'
+import { MISC } from '@/common'
 
 import { addUser, getUser, removeUser, updateUser } from '../api'
-import { USER_KEY, userKey } from './keys'
+import { userKey } from './keys'
 
 export const useRawUser = () => {
   return useQuery({
-    queryKey: userKey.detail(USER_KEY),
+    queryKey: userKey.detail(MISC.USER_KEY),
     queryFn: () => {
       return getUser()
     },
@@ -35,7 +36,7 @@ export const useMutateAddUser = () => {
       return addUser(data)
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(userKey.detail(USER_KEY), data)
+      queryClient.setQueryData(userKey.detail(MISC.USER_KEY), data)
     },
   })
 }
@@ -48,7 +49,7 @@ export const useMutateUpdateUser = () => {
       return updateUser(updates)
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(userKey.detail(USER_KEY), data)
+      queryClient.setQueryData(userKey.detail(MISC.USER_KEY), data)
     },
   })
 }
@@ -61,7 +62,7 @@ export const useMutateRemoveUser = () => {
       return removeUser()
     },
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: userKey.detail(USER_KEY) })
+      queryClient.removeQueries({ queryKey: userKey.detail(MISC.USER_KEY) })
     },
   })
 }

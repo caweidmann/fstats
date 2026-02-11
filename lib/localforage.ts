@@ -32,7 +32,6 @@ export const initStorage = async () => {
 
   if (!user.persistData && !sessionStorage.getItem(MISC.SS_SESSION_KEY)) {
     await db.filesStore.clear()
-    await db.userStore.clear()
     localStorage.removeItem(MISC.LS_SELECTED_FILE_IDS_KEY)
   }
 

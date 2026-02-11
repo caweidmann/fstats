@@ -4,7 +4,7 @@ import { MISC } from '@/common'
 import { getQueryClient } from '@/lib/tanstack-query'
 
 import { addUser, getUser } from '../api'
-import { USER_KEY, userKey } from './keys'
+import { userKey } from './keys'
 
 export const getUserDefaults = (): User => ({
   created: '',
@@ -36,7 +36,7 @@ export const ensureUserExists = async (): Promise<User> => {
     })
   }
 
-  queryClient.setQueryData(userKey.detail(USER_KEY), user)
+  queryClient.setQueryData(userKey.detail(MISC.USER_KEY), user)
 
   return user
 }
