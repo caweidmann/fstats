@@ -1,7 +1,7 @@
 import localforage from 'localforage'
 
 import { MISC } from '@/common'
-import { getLocalUserPreferences } from '@/utils/LocalStorage'
+import { ensureUserExists } from '@/m-user/service'
 
 const baseConfig = {
   name: 'fstats',
@@ -28,9 +28,9 @@ export const initStorage = async () => {
     description: 'User store',
   })
 
-  const { persistData } = getLocalUserPreferences()
+  const user = await ensureUserExists()
 
-  if (!persistData && !sessionStorage.getItem(MISC.SS_SESSION_KEY)) {
+  if (!user.persistData && !sessionStorage.getItem(MISC.SS_SESSION_KEY)) {
     await db.filesStore.clear()
     await db.userStore.clear()
     localStorage.removeItem(MISC.LS_SELECTED_FILE_IDS_KEY)

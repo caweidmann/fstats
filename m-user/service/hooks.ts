@@ -4,25 +4,27 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { User } from '@/types'
 
-import { addUser, getUser, getUsers, removeUser, updateUser } from '../api'
-import { userKey } from './keys'
+import { addUser, getUser, removeUser, updateUser } from '../api'
+import { USER_KEY, userKey } from './keys'
 
-export const useUser = (id: string) => {
+export const useRawUser = () => {
   return useQuery({
-    queryKey: userKey.detail(id),
+    queryKey: userKey.detail(USER_KEY),
     queryFn: () => {
-      return getUser(id)
+      return getUser()
     },
+    staleTime: Infinity,
   })
 }
 
-export const useUsers = () => {
-  return useQuery({
-    queryKey: userKey.all,
-    queryFn: () => {
-      return getUsers()
-    },
-  })
+export const useUser = () => {
+  const { data: user, ...rest } = useRawUser()
+
+  if (!user) {
+    throw new Error('User must exist. Ensure user is initialised before using useUser.')
+  }
+
+  return { data: user, ...rest }
 }
 
 export const useMutateAddUser = () => {
@@ -33,8 +35,7 @@ export const useMutateAddUser = () => {
       return addUser(data)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: userKey.all })
-      queryClient.setQueryData(userKey.detail(data.id), data)
+      queryClient.setQueryData(userKey.detail(USER_KEY), data)
     },
   })
 }
@@ -43,12 +44,11 @@ export const useMutateUpdateUser = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, updates }: { id: string; updates: Partial<User> }) => {
-      return updateUser(id, updates)
+    mutationFn: (updates: Partial<User>) => {
+      return updateUser(updates)
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: userKey.all })
-      queryClient.setQueryData(userKey.detail(data.id), data)
+      queryClient.setQueryData(userKey.detail(USER_KEY), data)
     },
   })
 }
@@ -57,13 +57,11 @@ export const useMutateRemoveUser = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (id: string) => {
-      return removeUser(id)
+    mutationFn: () => {
+      return removeUser()
     },
-    onSuccess: (_, id) => {
-      queryClient.invalidateQueries({ queryKey: userKey.all })
-      queryClient.removeQueries({ queryKey: userKey.detail(id) })
-      // setSelectedUserIds((prev) => prev.filter((dataId) => dataId !== id))
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: userKey.detail(USER_KEY) })
     },
   })
 }

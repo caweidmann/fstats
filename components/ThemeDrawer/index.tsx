@@ -5,6 +5,7 @@ import { useColorScheme } from '@mui/material/styles'
 
 import { ColorMode } from '@/types-enums'
 import { SwipeableDrawerSubheader } from '@/components'
+import { useMutateUpdateUser } from '@/m-user/service'
 import { useUserPreferences } from '@/hooks'
 import { useTranslation } from '@/lib/i18n'
 
@@ -23,11 +24,11 @@ const Component = ({ onOptionSelected, onClose }: ThemeDrawerProps) => {
   const { t } = useTranslation()
   const { setMode } = useColorScheme()
   const selectOptions = getThemeSelectOptions()
-  const { set } = useUserPreferences()
+  const { mutate: updateUser, isPending: isSaving } = useMutateUpdateUser()
 
   const onClick = (mode: ColorMode) => {
     setMode(mode)
-    set('colorMode', mode)
+    updateUser({ colorMode: mode })
     onOptionSelected()
   }
 

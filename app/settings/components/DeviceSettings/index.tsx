@@ -4,14 +4,16 @@ import { InfoOutlined } from '@mui/icons-material'
 import { Box, Card, FormControlLabel, Switch, Typography } from '@mui/material'
 import type { ChangeEvent } from 'react'
 
+import { useMutateUpdateUser } from '@/m-user/service'
 import { useIsMobile, useUserPreferences } from '@/hooks'
 
 const Component = () => {
   const isMobile = useIsMobile()
-  const { persistData, set } = useUserPreferences()
+  const { persistData } = useUserPreferences()
+  const { mutate: updateUser, isPending: isSaving } = useMutateUpdateUser()
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    set('persistData', event.target.checked)
+    updateUser({ persistData: event.target.checked })
   }
 
   return (
@@ -20,7 +22,7 @@ const Component = () => {
         Device settings
       </Typography>
 
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 2, display: 'flex', gap: 0.5, alignItems: 'center' }}>
         <FormControlLabel
           control={<Switch checked={persistData} onChange={onChange} />}
           label={

@@ -1,19 +1,14 @@
 import type { Locale } from 'date-fns'
 import type { Dispatch, SetStateAction } from 'react'
 
-import { ColorMode, ParserId, UserLocale } from '@/types-enums'
+import { ParserId, UserLocale } from '@/types-enums'
 
 import type { SelectOptionWithType } from './global'
 import type { PPRawParseResult } from './lib/papaparse'
 import type { ParsedContentRow } from './services/parsed-content-row'
 import type { StatsFile } from './services/stats-file'
 
-export type UserPreferences = {
-  locale: UserLocale
-  colorMode: ColorMode
-  persistData: boolean
-}
-
+// TODO: Double check this logic
 export type StorageContextState = {
   isLoading: boolean
   files: StatsFile[]

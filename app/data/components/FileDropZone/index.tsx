@@ -11,7 +11,7 @@ import { StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
 import { getStatsFileDefaults, useMutateAddFiles, useMutateUpdateFiles } from '@/m-stats-file/service'
-import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
+import { useFileHelper, useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
 import { parseFiles } from '@/utils/FileParser'
 
 import { ui } from './styled'
@@ -24,6 +24,7 @@ const Component = () => {
   const { mutateAsync: addFiles } = useMutateAddFiles()
   const { mutateAsync: updateFiles } = useMutateUpdateFiles()
   const { setSelectedFileIds } = useFileHelper()
+  const { locale } = useUserPreferences()
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
@@ -46,7 +47,10 @@ const Component = () => {
         ...prev,
         ...addedFiles.filter((file) => file.status !== StatsFileStatus.ERROR).map((file) => file.id),
       ])
-      const parsedFiles = await parseFiles(addedFiles.filter((file) => file.status === StatsFileStatus.PARSING))
+      const parsedFiles = await parseFiles(
+        addedFiles.filter((file) => file.status === StatsFileStatus.PARSING),
+        locale,
+      )
       await updateFiles(parsedFiles.map((file) => ({ id: file.id, updates: file })))
     },
     [addFiles, updateFiles, setSelectedFileIds],
