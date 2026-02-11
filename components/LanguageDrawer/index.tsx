@@ -20,12 +20,12 @@ export const getLanguageSelectOptions = () => {
 
 const Component = ({ onOptionSelected, onClose }: LanguageDrawerProps) => {
   const { t, i18n } = useTranslation()
-  const { set } = useUserPreferences()
+  const { setLocale } = useUserPreferences()
   const selectOptions = getLanguageSelectOptions()
 
   const onClick = (locale: UserLocale) => {
     i18n.changeLanguage(locale)
-    set('locale', locale)
+    setLocale(locale)
     onOptionSelected()
   }
 

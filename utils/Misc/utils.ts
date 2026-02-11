@@ -4,8 +4,7 @@ import type { ScriptableContext } from 'chart.js'
 import type { GradientColors, GradientDirection } from '@/types'
 import { ParserId } from '@/types-enums'
 import { MISC } from '@/common'
-
-import { AVAILABLE_PARSERS } from '../Parsers'
+import { AVAILABLE_PARSERS } from '@/parsers'
 
 export const sleep = (ms: number) => {
   return new Promise((resolve) => {

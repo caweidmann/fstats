@@ -8,10 +8,10 @@ import { useIsMobile, useUserPreferences } from '@/hooks'
 
 const Component = () => {
   const isMobile = useIsMobile()
-  const { persistData, set } = useUserPreferences()
+  const { persistData, setPersistData } = useUserPreferences()
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    set('persistData', event.target.checked)
+    setPersistData(event.target.checked)
   }
 
   return (
@@ -20,7 +20,7 @@ const Component = () => {
         Device settings
       </Typography>
 
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 2, display: 'flex', gap: 0.5, alignItems: 'center' }}>
         <FormControlLabel
           control={<Switch checked={persistData} onChange={onChange} />}
           label={

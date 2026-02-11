@@ -10,8 +10,8 @@ import type { FileRejection, FileWithPath } from 'react-dropzone'
 import { StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
-import { createStatsFile, useMutateAddFiles, useMutateUpdateFiles } from '@/m-stats-file/service'
-import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
+import { getStatsFileDefaults, useMutateAddFiles, useMutateUpdateFiles } from '@/m-stats-file/service'
+import { useFileHelper, useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
 import { parseFiles } from '@/utils/FileParser'
 
 import { ui } from './styled'
@@ -24,18 +24,19 @@ const Component = () => {
   const { mutateAsync: addFiles } = useMutateAddFiles()
   const { mutateAsync: updateFiles } = useMutateUpdateFiles()
   const { setSelectedFileIds } = useFileHelper()
+  const { locale } = useUserPreferences()
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
       const newFiles: StatsFile[] = []
 
       acceptedFiles.forEach((file) => {
-        newFiles.push(createStatsFile(file))
+        newFiles.push(getStatsFileDefaults(file))
       })
 
       fileRejections.forEach(({ file, errors }) => {
         newFiles.push({
-          ...createStatsFile(file),
+          ...getStatsFileDefaults(file),
           status: StatsFileStatus.ERROR,
           error: errors.map((e) => e.message).join(', '),
         })
@@ -46,10 +47,13 @@ const Component = () => {
         ...prev,
         ...addedFiles.filter((file) => file.status !== StatsFileStatus.ERROR).map((file) => file.id),
       ])
-      const parsedFiles = await parseFiles(addedFiles.filter((file) => file.status === StatsFileStatus.PARSING))
+      const parsedFiles = await parseFiles(
+        addedFiles.filter((file) => file.status === StatsFileStatus.PARSING),
+        locale,
+      )
       await updateFiles(parsedFiles.map((file) => ({ id: file.id, updates: file })))
     },
-    [addFiles, updateFiles, setSelectedFileIds],
+    [addFiles, updateFiles, setSelectedFileIds, locale],
   )
 
   const dropzone = useDropzone({

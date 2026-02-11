@@ -1,36 +1,23 @@
-import { useLocalStorage } from 'usehooks-ts'
-
 import type { UserPreferences } from '@/types'
 import { ColorMode, UserLocale } from '@/types-enums'
-import { MISC } from '@/common'
+import { useMutateUpdateUser, useUser } from '@/m-user/service'
 
-type SetUserPreference = <K extends keyof UserPreferences>(key: K, value: UserPreferences[K]) => void
-
-export const useUserPreferences = (): UserPreferences & { set: SetUserPreference } => {
-  const [locale, setLocale] = useLocalStorage<UserLocale>(MISC.LS_LOCALE_KEY, MISC.DEFAULT_LOCALE)
-  const [colorMode, setColorMode] = useLocalStorage<ColorMode>(MISC.LS_COLOR_MODE_KEY, MISC.DEFAULT_COLOR_MODE)
-  const [persistData, setPersistData] = useLocalStorage<boolean>(MISC.LS_PERSIST_DATA_KEY, MISC.DEFAULT_PERSIST_DATA)
-
-  const set: SetUserPreference = (key, value) => {
-    switch (key) {
-      case 'locale':
-        setLocale(value as UserLocale)
-        break
-      case 'colorMode':
-        setColorMode(value as ColorMode)
-        break
-      case 'persistData':
-        setPersistData(value as boolean)
-        break
-      default:
-        throw new Error(`Invalid user preference key: ${key}`)
-    }
-  }
+export const useUserPreferences = (): UserPreferences & {
+  setLocale: (locale: UserLocale) => void
+  setColorMode: (colorMode: ColorMode) => void
+  setPersistData: (persistData: boolean) => void
+  isSaving: boolean
+} => {
+  const { data: user } = useUser()
+  const { mutate: updateUser, isPending: isSaving } = useMutateUpdateUser()
 
   return {
-    locale,
-    colorMode,
-    persistData,
-    set,
+    locale: user.locale,
+    colorMode: user.colorMode,
+    persistData: user.persistData,
+    setLocale: (locale) => updateUser({ locale }),
+    setColorMode: (colorMode) => updateUser({ colorMode }),
+    setPersistData: (persistData) => updateUser({ persistData }),
+    isSaving,
   }
 }

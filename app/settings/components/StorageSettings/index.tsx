@@ -13,7 +13,7 @@ import { ui } from './styled'
 const Component = () => {
   const sx = ui()
   const { data: files = [], isLoading: isLoadingFiles } = useFiles()
-  const { mutate: removeAllFiles, isPending: isRemoving } = useMutateRemoveAllFiles()
+  const { mutate: removeAllFiles, isPending: isRemovingFiles } = useMutateRemoveAllFiles()
   const [storageSize, setStorageSize] = useState<string>(formatFileSize(0))
   const [isCalculating, setIsCalculating] = useState(true)
 
@@ -70,7 +70,7 @@ const Component = () => {
         startIcon={<DeleteOutlined />}
         onClick={() => removeAllFiles()}
         disabled={!hasFiles}
-        loading={isRemoving}
+        loading={isRemovingFiles}
       >
         Clear all data
       </Button>

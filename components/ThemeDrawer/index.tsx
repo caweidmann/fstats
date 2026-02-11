@@ -23,11 +23,11 @@ const Component = ({ onOptionSelected, onClose }: ThemeDrawerProps) => {
   const { t } = useTranslation()
   const { setMode } = useColorScheme()
   const selectOptions = getThemeSelectOptions()
-  const { set } = useUserPreferences()
+  const { setColorMode } = useUserPreferences()
 
   const onClick = (mode: ColorMode) => {
     setMode(mode)
-    set('colorMode', mode)
+    setColorMode(mode)
     onOptionSelected()
   }
 
