@@ -19,6 +19,7 @@
     "@/hooks",
     "@/styles",
     "@/utils",
+    "@/parsers",
     "@/lib",
     "@/public",
     "",

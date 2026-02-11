@@ -3,7 +3,7 @@ import type { ChartOptions } from 'chart.js'
 
 import type { BankSelectOption, StatsFile } from '@/types'
 import { Currency, ParserId, UserLocale } from '@/types-enums'
-import { AVAILABLE_PARSERS } from '@/utils/Parsers'
+import { AVAILABLE_PARSERS } from '@/parsers'
 
 export const calculateBarThickness = (isDemoMode: boolean, transactions: any[], isMobile: boolean) => {
   const transactionCount = isDemoMode ? 44 : transactions.length

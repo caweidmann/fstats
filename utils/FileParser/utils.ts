@@ -2,9 +2,9 @@ import { parse } from 'papaparse'
 
 import type { Parser, PPRawParseResult, StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
+import { AVAILABLE_PARSERS } from '@/parsers'
 
 import { getLocalUserPreferences } from '../LocalStorage'
-import { AVAILABLE_PARSERS } from '../Parsers'
 
 export const parseFiles = async (files: StatsFile[]): Promise<StatsFile[]> => {
   const parsedFiles = await Promise.all(files.map(parseFile))
