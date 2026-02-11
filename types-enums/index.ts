@@ -153,7 +153,7 @@ export const Currency = {
   JPY: 'JPY',
   INR: 'INR',
   ZAR: 'ZAR',
-}
+} as const
 
 export const zCurrency = z.enum([
   Currency.USD,
