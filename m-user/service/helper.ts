@@ -1,4 +1,5 @@
 import type { User } from '@/types'
+import { ColorMode, UserLocale } from '@/types-enums'
 import { MISC } from '@/common'
 import { getQueryClient } from '@/lib/tanstack-query'
 
@@ -23,7 +24,16 @@ export const ensureUserExists = async (): Promise<User> => {
   let user = await getUser()
 
   if (!user) {
-    user = await addUser(getUserDefaults())
+    const newUser = getUserDefaults()
+    user = await addUser({
+      ...newUser,
+      locale: localStorage.getItem(MISC.LS_I18N_LOCALE_KEY)
+        ? (localStorage.getItem(MISC.LS_I18N_LOCALE_KEY) as UserLocale)
+        : newUser.locale,
+      colorMode: localStorage.getItem(MISC.LS_MUI_COLOR_MODE_KEY)
+        ? (localStorage.getItem(MISC.LS_MUI_COLOR_MODE_KEY) as ColorMode)
+        : newUser.colorMode,
+    })
   }
 
   queryClient.setQueryData(userKey.detail(USER_KEY), user)
