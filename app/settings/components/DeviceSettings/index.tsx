@@ -4,16 +4,14 @@ import { InfoOutlined } from '@mui/icons-material'
 import { Box, Card, FormControlLabel, Switch, Typography } from '@mui/material'
 import type { ChangeEvent } from 'react'
 
-import { useMutateUpdateUser } from '@/m-user/service'
 import { useIsMobile, useUserPreferences } from '@/hooks'
 
 const Component = () => {
   const isMobile = useIsMobile()
-  const { persistData } = useUserPreferences()
-  const { mutate: updateUser, isPending: isSaving } = useMutateUpdateUser()
+  const { persistData, setPersistData } = useUserPreferences()
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    updateUser({ persistData: event.target.checked })
+    setPersistData(event.target.checked)
   }
 
   return (
