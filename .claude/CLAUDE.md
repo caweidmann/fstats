@@ -33,9 +33,11 @@ pnpm lint
 - **`/app`** - Next.js App Router pages and layouts (Routes: `/`, `/data`, `/stats`, `/settings`)
 - **`/components`** - Reusable UI components and provider components (StorageProvider, QueryProvider, ThemeProvider, LanguageProvider, ChartProvider)
 - **`/m-stats-file`** - Stats file management module (api/, service/)
-- **`/types`** - TypeScript type definitions (global.ts, parser.ts, services/, lib/)
-- **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, ParserId, DateFormat, WeekStartsOn, StatsFileStatus)
-- **`/utils`** - Domain-organized utilities (Date/, File/, FileParser/, Parsers/, Features/, LocalStorage/, Logger/, Misc/)
+- **`/m-user`** - User preferences management module (api/, service/)
+- **`/types`** - TypeScript type definitions (global.ts, utils.ts, services/, lib/)
+- **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, ParserId, DateFormat, WeekStartsOn, StatsFileStatus, Currency, SortOrder)
+- **`/utils`** - Domain-organized utilities (Date/, File/, FileParser/, Features/, LocalStorage/, Logger/, Misc/)
+- **`/parsers`** - Bank-specific CSV parsers (Capitec/, Comdirect/)
 - **`/lib`** - Third-party library configs (i18n.ts, localforage.ts, tanstack-query.ts, chartjs.ts, w-big.ts, w-lodash.ts)
 - **`/common`** - App-wide constants (misc.ts, routes.ts, config.ts)
 - **`/hooks`** - Custom React hooks (useIsDarkMode, useIsMobile, useUserPreferences, useFileHelper, useDarkModeMetaTagUpdater)
@@ -83,14 +85,14 @@ Component → Service Hook → API Layer → LocalForage → IndexedDB
 ```
 
 **State Management**:
-- **TanStack Query** - Async/server state (files from IndexedDB) with caching and automatic refetching
-- **LocalStorage** - User preferences (via `usehooks-ts` `useLocalStorage`)
-- **React Context** - NOT used (replaced by TanStack Query + providers)
+- **TanStack Query** - Async/server state (files and user preferences from IndexedDB) with caching and automatic refetching
+- **LocalStorage** - Minimal ephemeral state (e.g., selected file IDs for current session)
+- **React Context** - NOT used for data state (replaced by TanStack Query + providers)
 
 **Provider Hierarchy** (app/layout.tsx):
 ```tsx
-<StorageProvider>              {/* Initializes LocalForage */}
-  <QueryProvider>              {/* TanStack Query client */}
+<QueryProvider>                {/* TanStack Query client */}
+  <StorageProvider>            {/* Initializes LocalForage */}
     <ThemeProvider>            {/* MUI theme + color mode */}
       <LanguageProvider>       {/* i18next */}
         <ChartProvider>        {/* Chart.js config */}
@@ -98,8 +100,8 @@ Component → Service Hook → API Layer → LocalForage → IndexedDB
         </ChartProvider>
       </LanguageProvider>
     </ThemeProvider>
-  </QueryProvider>
-</StorageProvider>
+  </StorageProvider>
+</QueryProvider>
 ```
 
 **Data Transformation** (At Rest ↔ In Memory):
@@ -137,7 +139,7 @@ export const ParserId = {
 } as const
 ```
 
-2. **Create parser** `utils/Parsers/NewBank/account-type.ts`:
+2. **Create parser** `parsers/NewBank/account-type.ts`:
 ```typescript
 import type { ParsedContentRow, Parser } from '@/types'
 import { ParserId } from '@/types-enums'
@@ -173,12 +175,12 @@ export const NewBankAccountType: Parser = {
 }
 ```
 
-3. **Export** from `utils/Parsers/NewBank/index.ts`:
+3. **Export** from `parsers/NewBank/index.ts`:
 ```typescript
 export { NewBankAccountType } from './account-type'
 ```
 
-4. **Register** in `utils/Parsers/index.ts`:
+4. **Register** in `parsers/index.ts`:
 ```typescript
 import { NewBankAccountType } from './NewBank'
 
@@ -222,15 +224,24 @@ const Component = () => {
 }
 ```
 
-**Available Mutations**: `useMutateAddFile`, `useMutateAddFiles`, `useMutateUpdateFile`, `useMutateUpdateFiles`, `useMutateRemoveFile`, `useMutateRemoveFiles`, `useMutateRemoveAllFiles`
+**Available Stats File Mutations**: `useMutateAddFile`, `useMutateAddFiles`, `useMutateUpdateFile`, `useMutateUpdateFiles`, `useMutateRemoveFile`, `useMutateRemoveFiles`, `useMutateRemoveAllFiles`
+
+**Available User Mutations**: `useMutateAddUser`, `useMutateUpdateUser`, `useMutateRemoveUser`
 
 ### Cache Management
 
 TanStack Query automatically invalidates cache after mutations. Query keys:
 ```typescript
+// Stats file keys
 export const statsFileKey = {
   all: ['stats-file'] as const,
   detail: (id: string) => ['stats-file', id] as const,
+}
+
+// User keys
+export const userKey = {
+  all: ['user'] as const,
+  detail: (id: string) => ['user', id] as const,
 }
 ```
 
@@ -336,7 +347,7 @@ export default Page
 3. **Utility Hooks** (`/hooks/*.ts`) - Simple reusable hooks
 
 ```typescript
-// Composition hook
+// Composition hook example: useFileHelper
 import { useLocalStorage } from 'usehooks-ts'
 import { MISC } from '@/common'
 import { useFiles } from '@/m-stats-file/service'
@@ -349,6 +360,26 @@ export const useFileHelper = () => {
     files,
     selectedFiles: files.filter(f => selectedFileIds.includes(f.id)),
     errorFiles: files.filter(f => f.error),
+  }
+}
+
+// Composition hook example: useUserPreferences
+import type { UserPreferences } from '@/types'
+import { ColorMode, UserLocale } from '@/types-enums'
+import { useMutateUpdateUser, useUser } from '@/m-user/service'
+
+export const useUserPreferences = () => {
+  const { data: user } = useUser()
+  const { mutate: updateUser, isPending: isSaving } = useMutateUpdateUser()
+
+  return {
+    locale: user.locale,
+    colorMode: user.colorMode,
+    persistData: user.persistData,
+    setLocale: (locale: UserLocale) => updateUser({ locale }),
+    setColorMode: (colorMode: ColorMode) => updateUser({ colorMode }),
+    setPersistData: (persistData: boolean) => updateUser({ persistData }),
+    isSaving,
   }
 }
 ```
@@ -379,13 +410,31 @@ const Component = () => {
 
 ### User Preferences Pattern
 
+User preferences are managed through the `m-user` module using TanStack Query:
+
 ```typescript
-import { useLocalStorage } from 'usehooks-ts'
-import { MISC } from '@/common'
+import { useUserPreferences } from '@/hooks'
 
 const Component = () => {
-  const [colorMode, setColorMode] = useLocalStorage(MISC.LS_COLOR_MODE_KEY, 'system')
-  return <Settings colorMode={colorMode} onColorModeChange={setColorMode} />
+  const { colorMode, setColorMode, isSaving } = useUserPreferences()
+
+  return (
+    <Settings
+      colorMode={colorMode}
+      onColorModeChange={setColorMode}
+      disabled={isSaving}
+    />
+  )
+}
+```
+
+For direct access to user data:
+```typescript
+import { useUser } from '@/m-user/service'
+
+const Component = () => {
+  const { data: user } = useUser()
+  return <div>Locale: {user.locale}</div>
 }
 ```
 
@@ -441,22 +490,22 @@ const { mutate: addFile } = useMutateAddFile() // Auto-invalidates cache
 import type { StatsFile, ParsedContentRow } from '@/types'
 import { ParserId, StatsFileStatus } from '@/types-enums'
 
-// Service hooks
+// Service hooks - Stats Files
 import { useFiles, useMutateAddFile } from '@/m-stats-file/service'
+
+// Service hooks - User
+import { useUser, useMutateUpdateUser } from '@/m-user/service'
 
 // Composition hooks
 import { useFileHelper, useIsDarkMode, useUserPreferences } from '@/hooks'
 
 // Utils
 import { formatDate, toDisplayDate } from '@/utils/Date'
-import { AVAILABLE_PARSERS } from '@/utils/Parsers'
+import { AVAILABLE_PARSERS } from '@/parsers'
 import { Big } from '@/lib/w-big'
 
 // Constants
 import { MISC, ROUTES, CONFIG } from '@/common'
-
-// User preferences
-import { useLocalStorage } from 'usehooks-ts'
 ```
 
 ### Where to Put New Code
@@ -469,8 +518,9 @@ import { useLocalStorage } from 'usehooks-ts'
 6. **Styling?** → Add to component's `styled.ts`
 7. **Type definition?** → Add to `/types/` or `/types-enums/`
 8. **Constant?** → Add to `/common/`
-9. **Bank parser?** → Add to `/utils/Parsers/BankName/`
+9. **Bank parser?** → Add to `/parsers/BankName/`
 10. **Provider?** → Add to `/components/{Name}Provider/`
+11. **User preference?** → Use `m-user` module hooks
 
 ### Decision Tree
 
@@ -478,6 +528,7 @@ import { useLocalStorage } from 'usehooks-ts'
 Need to fetch/store data?
 ├─ Yes → Use TanStack Query
 │   ├─ File-related CRUD → Use m-stats-file hooks
+│   ├─ User preferences → Use m-user hooks
 │   └─ New feature → Create m-{feature}/ module with api/service layers
 └─ No → Is it used 3+ times?
     ├─ Yes → Move to /utils or /hooks
