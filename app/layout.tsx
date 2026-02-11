@@ -48,8 +48,8 @@ const Component = ({ children }: LayoutProps) => {
         {process.env.NODE_ENV === 'production' && CONFIG.ENABLE_ANALYTICS ? <Analytics /> : null}
 
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          <StorageProvider>
-            <QueryProvider>
+          <QueryProvider>
+            <StorageProvider>
               <ThemeProvider>
                 <InitColorSchemeScript attribute="class" />
                 <LanguageProvider>
@@ -58,8 +58,8 @@ const Component = ({ children }: LayoutProps) => {
                   </ChartProvider>
                 </LanguageProvider>
               </ThemeProvider>
-            </QueryProvider>
-          </StorageProvider>
+            </StorageProvider>
+          </QueryProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

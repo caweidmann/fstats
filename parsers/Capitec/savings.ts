@@ -1,9 +1,8 @@
 import type { ParsedContentRow, Parser } from '@/types'
 import { ParserId } from '@/types-enums'
+import { toDisplayDate } from '@/utils/Date'
 import { isEqual } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
-
-import { toDisplayDate } from '../../Date'
 
 export const CapitecSavings: Parser = {
   id: ParserId.CAPITEC,

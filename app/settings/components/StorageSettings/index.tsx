@@ -5,15 +5,20 @@ import { Box, Button, Card, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 import { useFiles, useMutateRemoveAllFiles } from '@/m-stats-file/service'
+import { useMutateRemoveUser, useUser } from '@/m-user/service'
+import { isFeatureEnabled } from '@/utils/Features'
 import { formatFileSize } from '@/utils/File'
 
 import { calculateStorageSize } from './actions'
 import { ui } from './styled'
 
 const Component = () => {
+  const isWip = isFeatureEnabled('wip')
   const sx = ui()
   const { data: files = [], isLoading: isLoadingFiles } = useFiles()
-  const { mutate: removeAllFiles, isPending: isRemoving } = useMutateRemoveAllFiles()
+  const { mutate: removeAllFiles, isPending: isRemovingFiles } = useMutateRemoveAllFiles()
+  const { data: user } = useUser()
+  const { mutate: removeUser, isPending: isRemovingUser } = useMutateRemoveUser()
   const [storageSize, setStorageSize] = useState<string>(formatFileSize(0))
   const [isCalculating, setIsCalculating] = useState(true)
 
@@ -70,10 +75,24 @@ const Component = () => {
         startIcon={<DeleteOutlined />}
         onClick={() => removeAllFiles()}
         disabled={!hasFiles}
-        loading={isRemoving}
+        loading={isRemovingFiles}
       >
         Clear all data
       </Button>
+
+      {isWip ? (
+        <Button
+          color="error"
+          variant="outlined"
+          startIcon={<DeleteOutlined />}
+          onClick={() => removeUser()}
+          disabled={!user}
+          loading={isRemovingUser}
+          sx={{ ml: 2 }}
+        >
+          Remove user
+        </Button>
+      ) : null}
     </Card>
   )
 }

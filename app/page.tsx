@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useIsDarkMode, useIsMobile } from '@/hooks'
-import { AVAILABLE_PARSERS } from '@/utils/Parsers'
+import { AVAILABLE_PARSERS } from '@/parsers'
 
 import { CARD_ITEMS, STEPS } from './actions'
 import { ui } from './styled'

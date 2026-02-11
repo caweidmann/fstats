@@ -1,7 +1,7 @@
 import localforage from 'localforage'
 
 import { MISC } from '@/common'
-import { getLocalUserPreferences } from '@/utils/LocalStorage'
+import { ensureUserExists } from '@/m-user/service'
 
 const baseConfig = {
   name: 'fstats',
@@ -9,6 +9,7 @@ const baseConfig = {
 }
 
 let filesStore: LocalForage | null = null
+let userStore: LocalForage | null = null
 
 export const initStorage = async () => {
   if (filesStore) {
@@ -21,10 +22,17 @@ export const initStorage = async () => {
     description: 'Uploaded files store',
   })
 
-  const { persistData } = getLocalUserPreferences()
+  userStore = localforage.createInstance({
+    ...baseConfig,
+    storeName: 'fstats__user',
+    description: 'User store',
+  })
 
-  if (!persistData && !sessionStorage.getItem(MISC.SS_SESSION_KEY)) {
+  const user = await ensureUserExists()
+
+  if (!user.persistData && !sessionStorage.getItem(MISC.SS_SESSION_KEY)) {
     await db.filesStore.clear()
+    await db.userStore.clear()
     localStorage.removeItem(MISC.LS_SELECTED_FILE_IDS_KEY)
   }
 
@@ -37,5 +45,11 @@ export const db = {
       throw new Error('DB not initialised! Call initStorage() first.')
     }
     return filesStore
+  },
+  get userStore() {
+    if (!userStore) {
+      throw new Error('DB not initialised! Call initStorage() first.')
+    }
+    return userStore
   },
 }
