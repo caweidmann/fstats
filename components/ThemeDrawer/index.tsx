@@ -6,7 +6,6 @@ import { useColorScheme } from '@mui/material/styles'
 import { ColorMode } from '@/types-enums'
 import { SwipeableDrawerSubheader } from '@/components'
 import { useMutateUpdateUser } from '@/m-user/service'
-import { useUserPreferences } from '@/hooks'
 import { useTranslation } from '@/lib/i18n'
 
 import { ThemeDrawerListItem } from './components'

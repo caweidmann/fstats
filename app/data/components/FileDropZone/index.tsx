@@ -53,7 +53,7 @@ const Component = () => {
       )
       await updateFiles(parsedFiles.map((file) => ({ id: file.id, updates: file })))
     },
-    [addFiles, updateFiles, setSelectedFileIds],
+    [addFiles, updateFiles, setSelectedFileIds, locale],
   )
 
   const dropzone = useDropzone({
