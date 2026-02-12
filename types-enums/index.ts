@@ -46,7 +46,15 @@ export const ParserId = {
   // ING_GIRO_WB: 'ing__giro_with_balance',
 } as const
 
-export const zParserId = z.enum([ParserId.CAPITEC, ParserId.COMDIRECT_GIRO, ParserId.COMDIRECT_VISA] as const)
+export const zParserId = z.enum([
+  ParserId.CAPITEC,
+  // ParserId.FNB,
+  ParserId.COMDIRECT_GIRO,
+  ParserId.COMDIRECT_VISA,
+  // ParserId.COMDIRECT_COMBINED,
+  // ParserId.ING_GIRO,
+  // ParserId.ING_GIRO_WB,
+] as const)
 
 export type ParserId = z.infer<typeof zParserId>
 
