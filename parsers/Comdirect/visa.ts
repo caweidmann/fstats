@@ -4,47 +4,50 @@ import { toDisplayDate } from '@/utils/Date'
 import { detectMatch, parseGermanNumber } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
-export const ComdirectGiro: Parser = {
-  id: ParserId.COMDIRECT_GIRO,
+export const ComdirectVisa: Parser = {
+  id: ParserId.COMDIRECT_VISA,
 
   bankName: 'Comdirect',
 
-  accountType: 'Giro',
+  accountType: 'Visa',
 
   expectedHeaderRowIndex: 1,
 
   expectedHeaders: [
     // Headers
     'Buchungstag',
-    'Wertstellung (Valuta)',
+    'Umsatztag',
     'Vorgang',
+    'Referenz',
     'Buchungstext',
     'Umsatz in EUR',
     '',
   ],
 
   detect: (input) => {
-    return detectMatch(input, ComdirectGiro)
+    return detectMatch(input, ComdirectVisa)
   },
 
   parse: (input, locale, formatTo) => {
+    console.log('rowsToParse', input.data)
     const rowsToParse = input.data
-      .slice(ComdirectGiro.expectedHeaderRowIndex + 1)
-      .filter((row) => row.length === ComdirectGiro.expectedHeaders.length)
+      .slice(ComdirectVisa.expectedHeaderRowIndex + 1)
+      .filter((row) => row.length === ComdirectVisa.expectedHeaders.length)
 
     return rowsToParse.map((row) => {
       const [
         // Headers
         buchungstag,
-        wertstellung,
+        umsatztag,
         vorgang,
+        referenz,
         buchungstext,
         umsatzInEur,
         _empty,
       ] = row
 
       const data: ParsedContentRow = {
-        date: toDisplayDate(wertstellung.trim(), locale, { formatTo, formatFrom: 'dd.MM.yyyy' }),
+        date: toDisplayDate(umsatztag.trim(), locale, { formatTo, formatFrom: 'dd.MM.yyyy' }),
         description: buchungstext.trim(),
         value: Big(parseGermanNumber(umsatzInEur.trim()) || 0),
       }

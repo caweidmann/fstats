@@ -1,5 +1,7 @@
 export { default as BarChart } from './BarChart'
 export { default as ChartProvider } from './ChartProvider'
+export { default as DateFormatDrawer } from './DateFormatDrawer'
+export { default as DateFormatSwitcher } from './DateFormatSwitcher'
 export { default as LanguageDrawer } from './LanguageDrawer'
 export { default as LanguageProvider } from './LanguageProvider'
 export { default as LanguageSwitcher } from './LanguageSwitcher'

@@ -4,10 +4,11 @@ import { Button, IconButton, Tooltip, Typography } from '@mui/material'
 import { useColorScheme } from '@mui/material/styles'
 import { useState } from 'react'
 
-import { SwipeableDrawer, ThemeDrawer } from '@/components'
 import { useIsMobile } from '@/hooks'
 import { useTranslation } from '@/lib/i18n'
 
+import SwipeableDrawer from '../SwipeableDrawer'
+import ThemeDrawer from '../ThemeDrawer'
 import { getActiveIcon, getActiveLabel } from './actions'
 
 type ThemeSwitcherProps = {
@@ -18,14 +19,14 @@ const Component = ({ showLabel = false }: ThemeSwitcherProps) => {
   const isMobile = useIsMobile()
   const { t } = useTranslation()
   const { mode } = useColorScheme()
-  const [themeDrawer, setThemeDrawer] = useState(false)
+  const [open, setOpen] = useState(false)
 
   const onOpen = () => {
-    setThemeDrawer(true)
+    setOpen(true)
   }
 
   const onClose = () => {
-    setThemeDrawer(false)
+    setOpen(false)
   }
 
   return (
@@ -53,7 +54,7 @@ const Component = ({ showLabel = false }: ThemeSwitcherProps) => {
         )}
       </Tooltip>
 
-      <SwipeableDrawer anchor="bottom" open={themeDrawer} onClose={onClose} onOpen={onOpen}>
+      <SwipeableDrawer anchor="bottom" open={open} onClose={onClose} onOpen={onOpen}>
         <ThemeDrawer onOptionSelected={onClose} onClose={onClose} />
       </SwipeableDrawer>
     </>

@@ -2,6 +2,7 @@ import type { Theme } from '@mui/material/styles'
 import type { ScriptableContext } from 'chart.js'
 
 import type { GradientColors, GradientDirection } from '@/types'
+import { Parser, PPRawParseResult } from '@/types'
 import { ParserId } from '@/types-enums'
 import { MISC } from '@/common'
 import { AVAILABLE_PARSERS } from '@/parsers'
@@ -13,7 +14,20 @@ export const sleep = (ms: number) => {
 }
 
 export const isEqual = (array1: string[], array2: string[]) => {
-  return array1.length === array2.length && array1.every((value, index) => value === array2[index])
+  return array1.length === array2.length && array1.every((value, index) => value.trim() === array2[index].trim())
+}
+
+export const detectMatch = (input: PPRawParseResult, parser: Parser) => {
+  const dataRows = input.data.slice(parser.expectedHeaderRowIndex + 1)
+
+  if (!dataRows.length) {
+    return false
+  }
+
+  const headersMatch = isEqual(input.data[parser.expectedHeaderRowIndex], parser.expectedHeaders)
+  const rowsValid = dataRows.every((row) => row.length === parser.expectedHeaders.length)
+
+  return headersMatch && rowsValid
 }
 
 export const getParserName = (value: ParserId): { short: string; long: string } => {

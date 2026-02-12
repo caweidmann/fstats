@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles'
 import type { Theme } from '@mui/material/styles'
 
 import { ColorMode } from '@/types-enums'
-import { LAYOUT, MISC } from '@/common'
+import { MISC } from '@/common'
 
 export const sxHideScrollbar = {
   overflow: 'auto',
@@ -14,7 +14,7 @@ export const sxHideScrollbar = {
   },
 } as const
 
-export const PULLER_WRAPPER_HEIGHT = '24px'
+export const PULLER_WRAPPER_HEIGHT = 24
 
 export const PullerWrapper = styled('div')(({ theme }) => {
   return {
@@ -24,6 +24,11 @@ export const PullerWrapper = styled('div')(({ theme }) => {
     top: 0,
     left: 0,
     zIndex: 10,
+    background: `rgba(255, 255, 255, ${MISC.GLASS_EFFECT})`,
+    [theme.getColorSchemeSelector(ColorMode.DARK)]: {
+      background: `rgba(42, 46, 54, ${MISC.GLASS_EFFECT})`,
+    },
+    backdropFilter: 'blur(10px)',
   }
 })
 

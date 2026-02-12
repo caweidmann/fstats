@@ -4,7 +4,7 @@ import { Box, List } from '@mui/material'
 import { usePathname } from 'next/navigation'
 
 import { ROUTES } from '@/common'
-import { SwipeableDrawerSubheader } from '@/components'
+import SwipeableDrawerSubheader from '../../../SwipeableDrawerSubheader'
 import { useIsMobile } from '@/hooks'
 import { useTranslation } from '@/lib/i18n'
 

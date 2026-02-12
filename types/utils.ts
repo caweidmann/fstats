@@ -1,6 +1,6 @@
 import type { Locale } from 'date-fns'
 
-import { ParserId, UserLocale } from '@/types-enums'
+import { DateFormat, ParserId, UserLocale } from '@/types-enums'
 
 import type { SelectOptionWithType } from './global'
 import type { PPRawParseResult } from './lib/papaparse'
@@ -17,7 +17,7 @@ export type Parser = {
   expectedHeaderRowIndex: number
   expectedHeaders: string[]
   detect: (input: PPRawParseResult) => boolean
-  parse: (input: PPRawParseResult, locale: UserLocale) => ParsedContentRow[]
+  parse: (input: PPRawParseResult, locale: UserLocale, dateFormat: DateFormat) => ParsedContentRow[]
 }
 
 export type BankSelectOption = SelectOptionWithType<ParserId | 'all' | 'unknown'>

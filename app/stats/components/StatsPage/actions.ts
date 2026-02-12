@@ -3,7 +3,7 @@ import type { ChartOptions } from 'chart.js'
 
 import type { BankSelectOption, StatsFile } from '@/types'
 import { Currency, ParserId, UserLocale } from '@/types-enums'
-import { AVAILABLE_PARSERS } from '@/parsers'
+import { getParserName } from '@/utils/Misc'
 
 export const calculateBarThickness = (isDemoMode: boolean, transactions: any[], isMobile: boolean) => {
   const transactionCount = isDemoMode ? 44 : transactions.length
@@ -24,7 +24,7 @@ export const getBankSelectOptions = (selectedFiles: StatsFile[]): BankSelectOpti
 
   const options: BankSelectOption[] = [
     ...bankIds.map((id) => ({
-      label: AVAILABLE_PARSERS[id].bankName,
+      label: getParserName(id).long,
       value: id,
     })),
   ]

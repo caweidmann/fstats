@@ -24,7 +24,7 @@ const Component = () => {
   const { mutateAsync: addFiles } = useMutateAddFiles()
   const { mutateAsync: updateFiles } = useMutateUpdateFiles()
   const { setSelectedFileIds } = useFileHelper()
-  const { locale } = useUserPreferences()
+  const { locale, dateFormat } = useUserPreferences()
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
@@ -50,6 +50,7 @@ const Component = () => {
       const parsedFiles = await parseFiles(
         addedFiles.filter((file) => file.status === StatsFileStatus.PARSING),
         locale,
+        dateFormat,
       )
       await updateFiles(parsedFiles.map((file) => ({ id: file.id, updates: file })))
     },

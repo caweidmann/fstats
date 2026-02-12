@@ -122,8 +122,8 @@ const Page = () => {
           Supported banks
         </Typography>
         <Box sx={sx.bankGrid}>
-          {Object.values(AVAILABLE_PARSERS).map((parser) => (
-            <Chip key={parser.id} label={parser.bankName} sx={sx.bankChip} />
+          {Array.from(new Set(Object.values(AVAILABLE_PARSERS).map((parser) => parser.bankName))).map((bankName) => (
+            <Chip key={bankName} label={bankName} sx={sx.bankChip} />
           ))}
         </Box>
       </Box>
