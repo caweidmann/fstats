@@ -13,28 +13,43 @@ export const ComdirectVisa: Parser = {
 
   expectedHeaderRowIndex: 1,
 
-  expectedHeaders: ['Buchungstag', 'Umsatztag', 'Vorgang', 'Referenz', 'Buchungstext', 'Umsatz in EUR', ''],
+  expectedHeaders: [
+    // Headers
+    'Buchungstag',
+    'Umsatztag',
+    'Vorgang',
+    'Referenz',
+    'Buchungstext',
+    'Umsatz in EUR',
+    '',
+  ],
 
   detect: (input) => {
     return isEqual(input.data[ComdirectVisa.expectedHeaderRowIndex], ComdirectVisa.expectedHeaders)
   },
 
-  parse: (input, locale, dateFormat) => {
+  parse: (input, locale, formatTo) => {
     console.log('rowsToParse', input.data)
     const rowsToParse = input.data
       .slice(ComdirectVisa.expectedHeaderRowIndex + 1)
       .filter((row) => row.length === ComdirectVisa.expectedHeaders.length)
 
     return rowsToParse.map((row) => {
-      const [buchungstag, umsatztag, vorgang, referenz, buchungstext, umsatzInEur, _empty] = row
+      const [
+        // Headers
+        buchungstag,
+        umsatztag,
+        vorgang,
+        referenz,
+        buchungstext,
+        umsatzInEur,
+        _empty,
+      ] = row
 
       const data: ParsedContentRow = {
-        date: toDisplayDate(umsatztag, locale, {
-          formatTo: dateFormat,
-          formatFrom: 'dd.MM.yyyy',
-        }),
-        description: buchungstext,
-        value: Big(parseGermanNumber(umsatzInEur) || 0),
+        date: toDisplayDate(umsatztag.trim(), locale, { formatTo, formatFrom: 'dd.MM.yyyy' }),
+        description: buchungstext.trim(),
+        value: Big(parseGermanNumber(umsatzInEur.trim()) || 0),
       }
 
       return data

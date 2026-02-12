@@ -13,7 +13,7 @@ export const sleep = (ms: number) => {
 }
 
 export const isEqual = (array1: string[], array2: string[]) => {
-  return array1.length === array2.length && array1.every((value, index) => value === array2[index])
+  return array1.length === array2.length && array1.every((value, index) => value.trim() === array2[index].trim())
 }
 
 export const getParserName = (value: ParserId): { short: string; long: string } => {

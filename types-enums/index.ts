@@ -37,7 +37,7 @@ export type UserLocale = z.infer<typeof zUserLocale>
 export const ParserId = {
   // South African Banks
   CAPITEC: 'capitec__savings',
-  // FNB: 'fnb__credit_card',
+  FNB: 'fnb__credit_card',
   // German Banks
   COMDIRECT_GIRO: 'comdirect__giro',
   COMDIRECT_VISA: 'comdirect__visa',
@@ -48,7 +48,7 @@ export const ParserId = {
 
 export const zParserId = z.enum([
   ParserId.CAPITEC,
-  // ParserId.FNB,
+  ParserId.FNB,
   ParserId.COMDIRECT_GIRO,
   ParserId.COMDIRECT_VISA,
   // ParserId.COMDIRECT_COMBINED,

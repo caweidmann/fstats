@@ -14,6 +14,7 @@ export const CapitecSavings: Parser = {
   expectedHeaderRowIndex: 0,
 
   expectedHeaders: [
+    // Headers
     'Nr',
     'Account',
     'Posting Date',
@@ -32,13 +33,14 @@ export const CapitecSavings: Parser = {
     return isEqual(input.data[CapitecSavings.expectedHeaderRowIndex], CapitecSavings.expectedHeaders)
   },
 
-  parse: (input, locale, dateFormat) => {
+  parse: (input, locale, formatTo) => {
     const rowsToParse = input.data
       .slice(CapitecSavings.expectedHeaderRowIndex + 1)
       .filter((row) => row.length === CapitecSavings.expectedHeaders.length)
 
     return rowsToParse.map((row) => {
       const [
+        // Headers
         nr,
         account,
         postingDate,
@@ -53,13 +55,14 @@ export const CapitecSavings: Parser = {
         balance,
       ] = row
 
+      const valIn = moneyIn.trim()
+      const valOut = moneyOut.trim()
+      const valFee = fee.trim()
+
       const data: ParsedContentRow = {
-        date: toDisplayDate(transactionDate, locale, {
-          formatTo: dateFormat,
-          formatFrom: 'yyyy-MM-dd HH:SS',
-        }),
-        description,
-        value: moneyIn ? Big(moneyIn) : moneyOut ? Big(moneyOut) : fee ? Big(fee) : Big(0),
+        date: toDisplayDate(transactionDate.trim(), locale, { formatTo, formatFrom: 'yyyy-MM-dd HH:SS' }),
+        description: description.trim(),
+        value: valIn ? Big(valIn) : valOut ? Big(valOut) : valFee ? Big(valFee) : Big(0),
       }
 
       return data
