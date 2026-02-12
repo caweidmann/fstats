@@ -40,13 +40,13 @@ export const ParserId = {
   // FNB: 'fnb__credit_card',
   // German Banks
   COMDIRECT_GIRO: 'comdirect__giro',
-  // COMDIRECT_VISA: 'comdirect__visa',
+  COMDIRECT_VISA: 'comdirect__visa',
   // COMDIRECT_COMBINED: 'comdirect__combined',
   // ING_GIRO: 'ing__giro',
   // ING_GIRO_WB: 'ing__giro_with_balance',
 } as const
 
-export const zParserId = z.enum([ParserId.CAPITEC, ParserId.COMDIRECT_GIRO] as const)
+export const zParserId = z.enum([ParserId.CAPITEC, ParserId.COMDIRECT_GIRO, ParserId.COMDIRECT_VISA] as const)
 
 export type ParserId = z.infer<typeof zParserId>
 
