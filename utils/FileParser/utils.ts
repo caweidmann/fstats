@@ -1,15 +1,19 @@
 import { parse } from 'papaparse'
 
 import type { Parser, PPRawParseResult, StatsFile } from '@/types'
-import { StatsFileStatus, UserLocale } from '@/types-enums'
+import { DateFormat, StatsFileStatus, UserLocale } from '@/types-enums'
 import { AVAILABLE_PARSERS } from '@/parsers'
 
-export const parseFiles = async (files: StatsFile[], locale: UserLocale): Promise<StatsFile[]> => {
-  const parsedFiles = await Promise.all(files.map((file) => parseFile(file, locale)))
+export const parseFiles = async (
+  files: StatsFile[],
+  locale: UserLocale,
+  dateFormat: DateFormat,
+): Promise<StatsFile[]> => {
+  const parsedFiles = await Promise.all(files.map((file) => parseFile(file, locale, dateFormat)))
   return parsedFiles
 }
 
-export const parseFile = async (file: StatsFile, locale: UserLocale): Promise<StatsFile> => {
+export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat: DateFormat): Promise<StatsFile> => {
   const rawParseResult = await parseRaw(file.file)
   let parserId: StatsFile['parserId'] = null
   let parsedContentRows: StatsFile['parsedContentRows'] = []
@@ -29,7 +33,7 @@ export const parseFile = async (file: StatsFile, locale: UserLocale): Promise<St
   if (matchedParser) {
     try {
       parserId = matchedParser.id
-      parsedContentRows = matchedParser.parse(rawParseResult, locale)
+      parsedContentRows = matchedParser.parse(rawParseResult, locale, dateFormat)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err)
       console.error(`Parsing failed with ${matchedParser.id}: ${errorMessage}`)

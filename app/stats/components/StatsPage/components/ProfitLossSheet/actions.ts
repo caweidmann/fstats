@@ -1,6 +1,7 @@
 import { format, parse, startOfMonth, startOfQuarter } from 'date-fns'
 
 import type { ParsedContentRow } from '@/types'
+import { DateFormat } from '@/types-enums'
 
 import type { TransactionRow } from '../../demo-data'
 import type { PeriodType, PLCategory, PLData, PLSection } from './types'
@@ -17,9 +18,8 @@ const CATEGORY_MAPPING: Record<string, { section: string; lineItem: string; pare
   Marketing: { section: 'Operating Expenses', lineItem: 'Marketing & Advertising' },
 }
 
-const getPeriodKey = (date: string, periodType: PeriodType): string => {
-  // Parse date from dd/MM/yyyy format
-  const parsedDate = parse(date, 'dd/MM/yyyy', new Date())
+const getPeriodKey = (date: string, periodType: PeriodType, dateFormat: DateFormat): string => {
+  const parsedDate = parse(date, dateFormat, new Date())
 
   if (periodType === 'monthly') {
     return format(startOfMonth(parsedDate), 'MMM yyyy').toUpperCase()
@@ -35,13 +35,14 @@ const getPeriodKey = (date: string, periodType: PeriodType): string => {
 export const transformDemoTransactions = (
   transactions: TransactionRow[],
   periodType: PeriodType,
+  dateFormat: DateFormat,
 ): PLData => {
   // Group transactions by period and category
   const periodMap = new Map<string, Map<string, number>>()
   const allPeriods = new Set<string>()
 
   transactions.forEach((tx) => {
-    const periodKey = getPeriodKey(tx.date, periodType)
+    const periodKey = getPeriodKey(tx.date, periodType, dateFormat)
     allPeriods.add(periodKey)
 
     if (!periodMap.has(periodKey)) {
@@ -198,13 +199,14 @@ export const transformDemoTransactions = (
 export const transformRealTransactions = (
   transactions: ParsedContentRow[],
   periodType: PeriodType,
+  dateFormat: DateFormat,
 ): PLData => {
   // Group transactions by period
   const periodMap = new Map<string, { income: number; expenses: number }>()
   const allPeriods = new Set<string>()
 
   transactions.forEach((tx) => {
-    const periodKey = getPeriodKey(tx.date, periodType)
+    const periodKey = getPeriodKey(tx.date, periodType, dateFormat)
     allPeriods.add(periodKey)
 
     if (!periodMap.has(periodKey)) {

@@ -32,7 +32,7 @@ export const CapitecSavings: Parser = {
     return isEqual(input.data[CapitecSavings.expectedHeaderRowIndex], CapitecSavings.expectedHeaders)
   },
 
-  parse: (input, locale) => {
+  parse: (input, locale, dateFormat) => {
     const rowsToParse = input.data
       .slice(CapitecSavings.expectedHeaderRowIndex + 1)
       .filter((row) => row.length === CapitecSavings.expectedHeaders.length)
@@ -55,7 +55,7 @@ export const CapitecSavings: Parser = {
 
       const data: ParsedContentRow = {
         date: toDisplayDate(transactionDate, locale, {
-          formatTo: 'dd/MM/yyyy',
+          formatTo: dateFormat,
           formatFrom: 'yyyy-MM-dd HH:SS',
         }),
         description,

@@ -19,7 +19,7 @@ export const ComdirectVisa: Parser = {
     return isEqual(input.data[ComdirectVisa.expectedHeaderRowIndex], ComdirectVisa.expectedHeaders)
   },
 
-  parse: (input, locale) => {
+  parse: (input, locale, dateFormat) => {
     console.log('rowsToParse', input.data)
     const rowsToParse = input.data
       .slice(ComdirectVisa.expectedHeaderRowIndex + 1)
@@ -30,7 +30,7 @@ export const ComdirectVisa: Parser = {
 
       const data: ParsedContentRow = {
         date: toDisplayDate(umsatztag, locale, {
-          formatTo: 'dd/MM/yyyy',
+          formatTo: dateFormat,
           formatFrom: 'dd.MM.yyyy',
         }),
         description: buchungstext,

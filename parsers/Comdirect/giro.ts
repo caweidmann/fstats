@@ -19,7 +19,7 @@ export const ComdirectGiro: Parser = {
     return isEqual(input.data[ComdirectGiro.expectedHeaderRowIndex], ComdirectGiro.expectedHeaders)
   },
 
-  parse: (input, locale) => {
+  parse: (input, locale, dateFormat) => {
     const rowsToParse = input.data
       .slice(ComdirectGiro.expectedHeaderRowIndex + 1)
       .filter((row) => row.length === ComdirectGiro.expectedHeaders.length)
@@ -29,7 +29,7 @@ export const ComdirectGiro: Parser = {
 
       const data: ParsedContentRow = {
         date: toDisplayDate(wertstellung, locale, {
-          formatTo: 'dd/MM/yyyy',
+          formatTo: dateFormat,
           formatFrom: 'dd.MM.yyyy',
         }),
         description: buchungstext,
