@@ -1,8 +1,7 @@
 import type { Theme } from '@mui/material/styles'
 import type { ScriptableContext } from 'chart.js'
 
-import type { GradientColors, GradientDirection } from '@/types'
-import { Parser, PPRawParseResult } from '@/types'
+import type { GradientColors, GradientDirection, Parser, PPRawParseResult } from '@/types'
 import { ParserId } from '@/types-enums'
 import { MISC } from '@/common'
 import { AVAILABLE_PARSERS } from '@/parsers'

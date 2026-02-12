@@ -29,7 +29,6 @@ export const ComdirectVisa: Parser = {
   },
 
   parse: (input, locale, formatTo) => {
-    console.log('rowsToParse', input.data)
     const rowsToParse = input.data
       .slice(ComdirectVisa.expectedHeaderRowIndex + 1)
       .filter((row) => row.length === ComdirectVisa.expectedHeaders.length)
