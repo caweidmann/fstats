@@ -1,7 +1,7 @@
 import type { ParsedContentRow, Parser } from '@/types'
 import { ParserId } from '@/types-enums'
 import { toDisplayDate } from '@/utils/Date'
-import { isEqual, parseGermanNumber } from '@/utils/Misc'
+import { detectMatch, parseGermanNumber } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
 export const ComdirectGiro: Parser = {
@@ -24,7 +24,7 @@ export const ComdirectGiro: Parser = {
   ],
 
   detect: (input) => {
-    return isEqual(input.data[ComdirectGiro.expectedHeaderRowIndex], ComdirectGiro.expectedHeaders)
+    return detectMatch(input, ComdirectGiro)
   },
 
   parse: (input, locale, formatTo) => {

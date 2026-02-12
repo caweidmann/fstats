@@ -1,7 +1,7 @@
 import type { ParsedContentRow, Parser } from '@/types'
 import { ParserId } from '@/types-enums'
 import { toDisplayDate } from '@/utils/Date'
-import { isEqual } from '@/utils/Misc'
+import { detectMatch } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
 export const CapitecSavings: Parser = {
@@ -30,7 +30,7 @@ export const CapitecSavings: Parser = {
   ],
 
   detect: (input) => {
-    return isEqual(input.data[CapitecSavings.expectedHeaderRowIndex], CapitecSavings.expectedHeaders)
+    return detectMatch(input, CapitecSavings)
   },
 
   parse: (input, locale, formatTo) => {

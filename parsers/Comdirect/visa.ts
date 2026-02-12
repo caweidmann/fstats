@@ -1,7 +1,7 @@
 import type { ParsedContentRow, Parser } from '@/types'
 import { ParserId } from '@/types-enums'
 import { toDisplayDate } from '@/utils/Date'
-import { isEqual, parseGermanNumber } from '@/utils/Misc'
+import { detectMatch, parseGermanNumber } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
 export const ComdirectVisa: Parser = {
@@ -25,7 +25,7 @@ export const ComdirectVisa: Parser = {
   ],
 
   detect: (input) => {
-    return isEqual(input.data[ComdirectVisa.expectedHeaderRowIndex], ComdirectVisa.expectedHeaders)
+    return detectMatch(input, ComdirectVisa)
   },
 
   parse: (input, locale, formatTo) => {

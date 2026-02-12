@@ -1,7 +1,7 @@
 import type { ParsedContentRow, Parser } from '@/types'
 import { ParserId } from '@/types-enums'
 import { toDisplayDate } from '@/utils/Date'
-import { isEqual } from '@/utils/Misc'
+import { detectMatch } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
 export const FnbCreditCard: Parser = {
@@ -22,8 +22,7 @@ export const FnbCreditCard: Parser = {
   ],
 
   detect: (input) => {
-    console.log('input', input)
-    return isEqual(input.data[FnbCreditCard.expectedHeaderRowIndex], FnbCreditCard.expectedHeaders)
+    return detectMatch(input, FnbCreditCard)
   },
 
   parse: (input, locale, formatTo) => {
