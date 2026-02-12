@@ -44,6 +44,8 @@ export const ParserId = {
   // COMDIRECT_COMBINED: 'comdirect__combined',
   ING_GIRO: 'ing__giro',
   ING_GIRO_WB: 'ing__giro_with_balance',
+  // UK Banks
+  LLOYDS_CURRENT: 'lloyds__current',
 } as const
 
 export const zParserId = z.enum([
@@ -56,6 +58,8 @@ export const zParserId = z.enum([
   // ParserId.COMDIRECT_COMBINED,
   ParserId.ING_GIRO,
   ParserId.ING_GIRO_WB,
+  // UK Banks
+  ParserId.LLOYDS_CURRENT,
 ] as const)
 
 export type ParserId = z.infer<typeof zParserId>

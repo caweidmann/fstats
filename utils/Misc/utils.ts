@@ -18,11 +18,16 @@ export const isEqual = (array1: string[], array2: string[]) => {
 }
 
 export const detectMatch = (input: PPRawParseResult, parser: Parser) => {
+  const dataRows = input.data.slice(parser.expectedHeaderRowIndex + 1)
+
+  if (!dataRows.length) {
+    return false
+  }
+
   const headersMatch = isEqual(input.data[parser.expectedHeaderRowIndex], parser.expectedHeaders)
-  const dataRowsMatch = input.data
-    .slice(parser.expectedHeaderRowIndex + 1)
-    .every((row) => row.length === parser.expectedHeaders.length)
-  return headersMatch && dataRowsMatch
+  const rowsValid = dataRows.every((row) => row.length === parser.expectedHeaders.length)
+
+  return headersMatch && rowsValid
 }
 
 export const getParserName = (value: ParserId): { short: string; long: string } => {

@@ -6,6 +6,7 @@ import { ComdirectGiro, ComdirectVisa } from './Comdirect'
 import { FnbCreditCard } from './FNB'
 import { checkUniqueParserIds } from './helper'
 import { IngGiro, IngGiroWb } from './ING'
+import { LloydsCurrent } from './Lloyds'
 
 export const AVAILABLE_PARSERS = {
   [ParserId.CAPITEC]: CapitecSavings,
@@ -14,6 +15,7 @@ export const AVAILABLE_PARSERS = {
   [ParserId.COMDIRECT_VISA]: ComdirectVisa,
   [ParserId.ING_GIRO]: IngGiro,
   [ParserId.ING_GIRO_WB]: IngGiroWb,
+  [ParserId.LLOYDS_CURRENT]: LloydsCurrent,
 } satisfies Record<ParserId, Parser>
 
 checkUniqueParserIds(AVAILABLE_PARSERS)
