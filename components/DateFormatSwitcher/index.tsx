@@ -1,26 +1,25 @@
 'use client'
 
-import { Translate } from '@mui/icons-material'
+import { DateRangeOutlined } from '@mui/icons-material'
 import { Button, IconButton, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
 
-import { UserLocale } from '@/types-enums'
-import { useIsMobile } from '@/hooks'
+import { useIsMobile, useUserPreferences } from '@/hooks'
+import { toDisplayDate } from '@/utils/Date'
 import { useTranslation } from '@/lib/i18n'
 
-import LanguageDrawer from '../LanguageDrawer'
+import DateFormatDrawer from '../DateFormatDrawer'
 import SwipeableDrawer from '../SwipeableDrawer'
 
-type LanguageSwitcherProps = {
+type DateFormatSwitcherProps = {
   showLabel?: boolean
 }
 
-const Component = ({ showLabel = false }: LanguageSwitcherProps) => {
+const Component = ({ showLabel = false }: DateFormatSwitcherProps) => {
   const isMobile = useIsMobile()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
-  const selectedLocale = i18n.language === UserLocale.DE ? UserLocale.DE.toUpperCase() : UserLocale.EN.toUpperCase()
-  const activeLabel = t(`COMPONENTS.LANGUAGE_SWITCHER.LOCALE_${selectedLocale}_LANGUAGE_${selectedLocale}`)
+  const { locale, dateFormat } = useUserPreferences()
 
   const onOpen = () => {
     setOpen(true)
@@ -32,7 +31,7 @@ const Component = ({ showLabel = false }: LanguageSwitcherProps) => {
 
   return (
     <>
-      <Tooltip title={t('COMPONENTS.LANGUAGE_SWITCHER.CHANGE_LANGUAGE')}>
+      <Tooltip title={t('COMPONENTS.DATE_FORMAT_SWITCHER.CHANGE_DATE_FORMAT')}>
         {showLabel ? (
           <Button
             size={isMobile ? 'large' : 'small'}
@@ -44,19 +43,21 @@ const Component = ({ showLabel = false }: LanguageSwitcherProps) => {
               py: 1,
               borderRadius: 1.5,
             }}
-            startIcon={<Translate color="secondary" sx={{ fontSize: 18 }} />}
+            startIcon={<DateRangeOutlined color="secondary" sx={{ fontSize: 18 }} />}
           >
-            <Typography sx={{ fontSize: 14, lineHeight: 1.2 }}>{activeLabel}</Typography>
+            <Typography sx={{ fontSize: 14, lineHeight: 1.2 }}>
+              {toDisplayDate(new Date(), locale, { formatTo: dateFormat })}
+            </Typography>
           </Button>
         ) : (
           <IconButton size={isMobile ? 'large' : 'medium'} color="secondary" onClick={onOpen}>
-            <Translate color="secondary" sx={{ fontSize: 18 }} />
+            <DateRangeOutlined color="secondary" sx={{ fontSize: 18 }} />
           </IconButton>
         )}
       </Tooltip>
 
       <SwipeableDrawer anchor="bottom" open={open} onClose={onClose} onOpen={onOpen}>
-        <LanguageDrawer onOptionSelected={onClose} onClose={onClose} />
+        <DateFormatDrawer onOptionSelected={onClose} onClose={onClose} />
       </SwipeableDrawer>
     </>
   )

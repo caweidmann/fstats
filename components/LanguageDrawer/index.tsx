@@ -3,7 +3,7 @@
 import { Box, List } from '@mui/material'
 
 import { UserLocale } from '@/types-enums'
-import { SwipeableDrawerSubheader } from '@/components'
+import SwipeableDrawerSubheader from '../SwipeableDrawerSubheader'
 import { useUserPreferences } from '@/hooks'
 import { useTranslation } from '@/lib/i18n'
 

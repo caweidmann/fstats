@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { LAYOUT, ROUTES } from '@/common'
-import { LanguageSwitcher, ThemeSwitcher } from '@/components'
+import LanguageSwitcher from '../../../LanguageSwitcher'
+import ThemeSwitcher from '../../../ThemeSwitcher'
 import { useIsDarkMode, useIsMobile } from '@/hooks'
 import { useTranslation } from '@/lib/i18n'
 

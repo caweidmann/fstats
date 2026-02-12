@@ -12,10 +12,6 @@ let filesStore: LocalForage | null = null
 let userStore: LocalForage | null = null
 
 export const initStorage = async () => {
-  if (filesStore) {
-    return
-  }
-
   filesStore = localforage.createInstance({
     ...baseConfig,
     storeName: 'fstats__files',

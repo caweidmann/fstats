@@ -4,10 +4,10 @@ import { Box, List } from '@mui/material'
 import { useColorScheme } from '@mui/material/styles'
 
 import { ColorMode } from '@/types-enums'
-import { SwipeableDrawerSubheader } from '@/components'
 import { useUserPreferences } from '@/hooks'
 import { useTranslation } from '@/lib/i18n'
 
+import SwipeableDrawerSubheader from '../SwipeableDrawerSubheader'
 import { ThemeDrawerListItem } from './components'
 
 type ThemeDrawerProps = {

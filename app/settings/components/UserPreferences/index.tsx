@@ -1,6 +1,6 @@
 import { Box, Card, Typography } from '@mui/material'
 
-import { LanguageSwitcher, ThemeSwitcher } from '@/components'
+import { DateFormatSwitcher, LanguageSwitcher, ThemeSwitcher } from '@/components'
 import { isFeatureEnabled } from '@/utils/Features'
 
 const Component = () => {
@@ -27,6 +27,20 @@ const Component = () => {
           <LanguageSwitcher showLabel />
         </Box>
       ) : null}
+
+      {/* <Box sx={{ mt: 3 }}>
+        <Typography component="div" sx={{ fontSize: 14, mb: 1 }}>
+          Currency
+        </Typography>
+        <LanguageSwitcher showLabel />
+      </Box> */}
+
+      <Box sx={{ mt: 3 }}>
+        <Typography component="div" sx={{ fontSize: 14, mb: 1 }}>
+          Date Format
+        </Typography>
+        <DateFormatSwitcher showLabel />
+      </Box>
     </Card>
   )
 }
