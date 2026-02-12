@@ -37,7 +37,7 @@ const Component = ({ isDemoMode, transactions }: ComponentProps) => {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['Income']))
 
   const plData = isDemoMode
-    ? transformDemoTransactions(DEMO_TRANSACTIONS as TransactionRow[], periodType, dateFormat)
+    ? transformDemoTransactions(DEMO_TRANSACTIONS as TransactionRow[], periodType, 'dd/MM/yyyy')
     : transformRealTransactions(transactions, periodType, dateFormat)
 
   const formatCurrency = (amount: number) => {
