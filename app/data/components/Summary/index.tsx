@@ -34,10 +34,13 @@ const Component = () => {
   const parserIds = Array.from(
     new Set(selectedFiles.filter((file) => file.status === StatsFileStatus.PARSED).map((file) => file.parserId)),
   )
-  const typesFound = parserIds
-    .map((parserId) => (parserId ? getParserName(parserId).short : 'Unknown'))
-    .sort((a: string, b: string) => a.localeCompare(b))
-    .join(', ')
+  const typesFound = Array.from(
+    new Set(
+      parserIds
+        .map((parserId) => (parserId ? getParserName(parserId).short : 'Unknown'))
+        .sort((a: string, b: string) => a.localeCompare(b)),
+    ),
+  ).join(', ')
   const isParsing = files.some((file) => file.status === StatsFileStatus.PARSING)
 
   const toggleSelectAll = () => {
