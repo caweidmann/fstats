@@ -32,7 +32,6 @@ const Component = () => {
   const router = useRouter()
   const isDemoMode = searchParams.get('demo') === 'true'
   const isWip = isFeatureEnabled('wip')
-
   const bankOptions = isDemoMode ? [] : getBankSelectOptions(selectedFiles)
   const defaultValues: LocalForm = {
     selectedId: bankOptions[0]?.value || 'all',
