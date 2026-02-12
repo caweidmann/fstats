@@ -1,0 +1,61 @@
+import type { ParsedContentRow, Parser } from '@/types'
+import { ParserId } from '@/types-enums'
+import { toDisplayDate } from '@/utils/Date'
+import { detectMatch, parseGermanNumber } from '@/utils/Misc'
+import { Big } from '@/lib/w-big'
+
+export const IngGiroWb: Parser = {
+  id: ParserId.ING_GIRO_WB,
+
+  bankName: 'ING',
+
+  accountType: 'Giro', // with account balance
+
+  expectedHeaderRowIndex: 9,
+
+  expectedHeaders: [
+    // Headers
+    'Buchung',
+    'Wertstellungsdatum',
+    'Auftraggeber/Empf�nger',
+    'Buchungstext',
+    'Verwendungszweck',
+    'Saldo',
+    'W�hrung',
+    'Betrag',
+    'W�hrung',
+  ],
+
+  detect: (input) => {
+    return detectMatch(input, IngGiroWb)
+  },
+
+  parse: (input, locale, formatTo) => {
+    const rowsToParse = input.data
+      .slice(IngGiroWb.expectedHeaderRowIndex + 1)
+      .filter((row) => row.length === IngGiroWb.expectedHeaders.length)
+
+    return rowsToParse.map((row) => {
+      const [
+        // Headers
+        buchung,
+        wertstellungsdatum,
+        auftraggeberEmpfaenger,
+        buchungstext,
+        verwendungszweck,
+        saldo,
+        waehrung1,
+        betrag,
+        waehrung2,
+      ] = row
+
+      const data: ParsedContentRow = {
+        date: toDisplayDate(wertstellungsdatum.trim(), locale, { formatTo, formatFrom: 'dd.MM.yyyy' }),
+        description: verwendungszweck.trim(),
+        value: Big(parseGermanNumber(betrag.trim()) || 0),
+      }
+
+      return data
+    })
+  },
+}

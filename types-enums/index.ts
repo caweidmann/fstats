@@ -42,18 +42,20 @@ export const ParserId = {
   COMDIRECT_GIRO: 'comdirect__giro',
   COMDIRECT_VISA: 'comdirect__visa',
   // COMDIRECT_COMBINED: 'comdirect__combined',
-  // ING_GIRO: 'ing__giro',
-  // ING_GIRO_WB: 'ing__giro_with_balance',
+  ING_GIRO: 'ing__giro',
+  ING_GIRO_WB: 'ing__giro_with_balance',
 } as const
 
 export const zParserId = z.enum([
+  // South African Banks
   ParserId.CAPITEC,
   ParserId.FNB,
+  // German Banks
   ParserId.COMDIRECT_GIRO,
   ParserId.COMDIRECT_VISA,
   // ParserId.COMDIRECT_COMBINED,
-  // ParserId.ING_GIRO,
-  // ParserId.ING_GIRO_WB,
+  ParserId.ING_GIRO,
+  ParserId.ING_GIRO_WB,
 ] as const)
 
 export type ParserId = z.infer<typeof zParserId>
