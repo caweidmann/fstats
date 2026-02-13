@@ -1,6 +1,6 @@
 import type { ParsedContentRow, Parser } from '@/types'
-import { ParserId } from '@/types-enums'
-import { toDisplayDate } from '@/utils/Date'
+import { Currency, ParserId } from '@/types-enums'
+import { toSystemDate } from '@/utils/Date'
 import { detectMatch } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
@@ -10,6 +10,8 @@ export const CapitecSavings: Parser = {
   bankName: 'Capitec',
 
   accountType: 'Savings',
+
+  currency: Currency.ZAR,
 
   expectedHeaderRowIndex: 0,
 
@@ -60,9 +62,10 @@ export const CapitecSavings: Parser = {
       const valFee = fee.trim()
 
       const data: ParsedContentRow = {
-        date: toDisplayDate(transactionDate.trim(), locale, { formatTo, formatFrom: 'yyyy-MM-dd HH:SS' }),
+        date: toSystemDate(transactionDate.trim(), { formatFrom: 'yyyy-MM-dd HH:SS' }),
         description: description.trim(),
         value: valIn ? Big(valIn) : valOut ? Big(valOut) : valFee ? Big(valFee) : Big(0),
+        currency: CapitecSavings.currency,
       }
 
       return data

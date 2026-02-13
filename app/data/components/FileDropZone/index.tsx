@@ -43,16 +43,16 @@ const Component = () => {
       })
 
       const addedFiles = await addFiles(newFiles)
-      setSelectedFileIds((prev) => [
-        ...prev,
-        ...addedFiles.filter((file) => file.status !== StatsFileStatus.ERROR).map((file) => file.id),
-      ])
       const parsedFiles = await parseFiles(
         addedFiles.filter((file) => file.status === StatsFileStatus.PARSING),
         locale,
         dateFormat,
       )
       await updateFiles(parsedFiles.map((file) => ({ id: file.id, updates: file })))
+      setSelectedFileIds((prev) => [
+        ...prev,
+        ...parsedFiles.filter((file) => file.status !== StatsFileStatus.ERROR).map((file) => file.id),
+      ])
     },
     [addFiles, updateFiles, setSelectedFileIds, locale],
   )

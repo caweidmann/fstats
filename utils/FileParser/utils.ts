@@ -1,6 +1,6 @@
 import { parse } from 'papaparse'
 
-import type { Parser, PPRawParseResult, StatsFile } from '@/types'
+import { zSyncableStatsFile, type Parser, type PPRawParseResult, type StatsFile } from '@/types'
 import { DateFormat, StatsFileStatus, UserLocale } from '@/types-enums'
 import { AVAILABLE_PARSERS } from '@/parsers'
 
@@ -26,7 +26,16 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
         break
       }
     } catch (err) {
-      console.error(`Error detecting with ${parser.id}:`, err)
+      const errMsg = err instanceof Error ? err.message : String(err)
+      console.error(`Error detecting with ${parser.id}:`, errMsg)
+      return {
+        ...file,
+        rawParseResult,
+        parsedContentRows,
+        parserId,
+        status: StatsFileStatus.ERROR,
+        error: `Parse "${parser.id}" failed during detection phase`,
+      }
     }
   }
 
@@ -35,17 +44,43 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
       parserId = matchedParser.id
       parsedContentRows = matchedParser.parse(rawParseResult, locale, dateFormat)
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : String(err)
-      console.error(`Parsing failed with ${matchedParser.id}: ${errorMessage}`)
+      const errMsg = err instanceof Error ? err.message : String(err)
+      console.error(`Parsing failed with ${matchedParser.id}:`, errMsg)
+      return {
+        ...file,
+        rawParseResult,
+        parsedContentRows,
+        parserId,
+        status: StatsFileStatus.ERROR,
+        error: `Parse "${matchedParser.id}" failed`,
+      }
+    }
+  }
+
+  const dataToSync: StatsFile = {
+    ...file,
+    rawParseResult,
+    parsedContentRows,
+    parserId,
+  }
+
+  const res = zSyncableStatsFile.safeParse(dataToSync)
+
+  if (!res.success) {
+    const errors = res.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`).join(', ')
+    console.error(`Validation failed for parser "${parserId}":`, errors)
+    return {
+      ...file,
+      rawParseResult,
+      parserId,
+      status: StatsFileStatus.ERROR,
+      error: `Parse "${parserId}" failed during validation`,
     }
   }
 
   return {
-    ...file,
+    ...dataToSync,
     status: StatsFileStatus.PARSED,
-    rawParseResult,
-    parsedContentRows,
-    parserId,
   }
 }
 

@@ -1,6 +1,6 @@
 import type { ParsedContentRow, Parser } from '@/types'
-import { ParserId } from '@/types-enums'
-import { toDisplayDate } from '@/utils/Date'
+import { Currency, ParserId } from '@/types-enums'
+import { toSystemDate } from '@/utils/Date'
 import { detectMatch, parseGermanNumber } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
@@ -10,6 +10,8 @@ export const IngGiroWb: Parser = {
   bankName: 'ING',
 
   accountType: 'Giro', // with account balance
+
+  currency: Currency.EUR,
 
   expectedHeaderRowIndex: 9,
 
@@ -50,9 +52,10 @@ export const IngGiroWb: Parser = {
       ] = row
 
       const data: ParsedContentRow = {
-        date: toDisplayDate(wertstellungsdatum.trim(), locale, { formatTo, formatFrom: 'dd.MM.yyyy' }),
+        date: toSystemDate(wertstellungsdatum.trim(), { formatFrom: 'dd.MM.yyyy' }),
         description: verwendungszweck.trim(),
         value: Big(parseGermanNumber(betrag.trim()) || 0),
+        currency: IngGiroWb.currency,
       }
 
       return data

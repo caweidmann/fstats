@@ -1,5 +1,6 @@
 import type { StatsFile, StatsFileAtRest } from '@/types'
 import { zSyncableStatsFile } from '@/types'
+import { Currency } from '@/types-enums'
 import { Big } from '@/lib/w-big'
 
 export const syncStatsFile = (dataToSync: StatsFile): StatsFileAtRest => {
@@ -12,14 +13,21 @@ export const syncStatsFile = (dataToSync: StatsFile): StatsFileAtRest => {
 
   return {
     ...res.data,
-    parsedContentRows: res.data.parsedContentRows.map((row) => ({ ...row, value: row.value.toString() })),
+    parsedContentRows: res.data.parsedContentRows.map((row) => ({
+      ...row,
+      value: row.value.toString(),
+    })),
   }
 }
 
 export const parseStatsFile = (dataToParse: StatsFileAtRest): StatsFile => {
   const res: StatsFile = {
     ...dataToParse,
-    parsedContentRows: dataToParse.parsedContentRows.map((row) => ({ ...row, value: Big(row.value) })),
+    parsedContentRows: dataToParse.parsedContentRows.map((row) => ({
+      ...row,
+      value: Big(row.value),
+      currency: row.currency as Currency,
+    })),
   }
   return res
 }

@@ -111,7 +111,7 @@ const Component = () => {
               <Button
                 size="small"
                 startIcon={
-                  selectedFiles.length === selectableFiles.length ? (
+                  selectableFiles.length && selectedFiles.length === selectableFiles.length ? (
                     <CheckBoxOutlined />
                   ) : !selectedFiles.length ? (
                     <CheckBoxOutlineBlankOutlined />
@@ -120,8 +120,11 @@ const Component = () => {
                   )
                 }
                 onClick={() => toggleSelectAll()}
+                disabled={isLoadingFiles || isParsing || !selectableFiles.length}
               >
-                {selectedFiles.length === selectableFiles.length ? 'Deselect all' : 'Select all'}
+                {selectableFiles.length && selectedFiles.length === selectableFiles.length
+                  ? 'Deselect all'
+                  : 'Select all'}
               </Button>
 
               <Box sx={{ display: 'flex', gap: 1 }}>
