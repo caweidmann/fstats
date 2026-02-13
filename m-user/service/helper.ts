@@ -3,7 +3,7 @@ import { ColorMode, UserLocale } from '@/types-enums'
 import { MISC } from '@/common'
 import { getQueryClient } from '@/lib/tanstack-query'
 
-import { addUser, getUser } from '../api'
+import { addUser, getUser, updateUser } from '../api'
 import { userKey } from './keys'
 
 export const getUserDefaults = (): User => ({
@@ -13,6 +13,7 @@ export const getUserDefaults = (): User => ({
   locale: MISC.DEFAULT_LOCALE,
   colorMode: MISC.DEFAULT_COLOR_MODE,
   persistData: MISC.DEFAULT_PERSIST_DATA,
+  dateFormat: MISC.DEFAULT_DATE_FORMAT,
 })
 
 /**
@@ -23,7 +24,12 @@ export const ensureUserExists = async (): Promise<User> => {
   const queryClient = getQueryClient()
   let user = await getUser()
 
-  if (!user) {
+  if (user) {
+    // Run migrations
+    if (!user.dateFormat) {
+      user = await updateUser({ dateFormat: MISC.DEFAULT_DATE_FORMAT })
+    }
+  } else {
     const newUser = getUserDefaults()
     user = await addUser({
       ...newUser,

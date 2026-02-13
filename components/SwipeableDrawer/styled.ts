@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles'
 import type { Theme } from '@mui/material/styles'
 
 import { ColorMode } from '@/types-enums'
-import { LAYOUT, MISC } from '@/common'
+import { MISC } from '@/common'
 
 export const sxHideScrollbar = {
   overflow: 'auto',
@@ -14,27 +14,23 @@ export const sxHideScrollbar = {
   },
 } as const
 
-export const PULLER_WRAPPER_HEIGHT = '24px'
+const PULLER_WRAPPER_HEIGHT = 24
+const PULLER_WIDTH = 30
 
 export const PullerWrapper = styled('div')(({ theme }) => {
   return {
-    width: '100%',
     height: PULLER_WRAPPER_HEIGHT,
-    position: 'sticky',
-    top: 0,
-    left: 0,
-    zIndex: 10,
   }
 })
 
 export const Puller = styled('div')(({ theme }) => ({
-  width: '30px',
-  height: '4px',
+  width: PULLER_WIDTH,
+  height: 4,
   backgroundColor: grey[400],
-  borderRadius: '2px',
+  borderRadius: 2,
   position: 'relative',
-  top: '8px',
-  left: 'calc(50% - 15px)',
+  top: 8,
+  left: `calc(50% - ${PULLER_WIDTH / 2}px)`,
   [theme.getColorSchemeSelector(ColorMode.DARK)]: {
     backgroundColor: theme.vars.palette.secondary.dark,
   },
@@ -72,5 +68,17 @@ export const ui = (anchor: 'left' | 'bottom', theme: Theme, isMobile = false) =>
         zIndex: theme.zIndex.drawer + 1,
       }
     },
+
+    subheaderWrapper: (fixedHeader: boolean) => ({
+      position: 'sticky',
+      top: 0,
+      zIndex: 1,
+      background: fixedHeader ? `rgba(255, 255, 255, 0.9)` : 'transparent',
+      [theme.getColorSchemeSelector(ColorMode.DARK)]: {
+        background: fixedHeader ? `rgba(42, 46, 54, 0.9)` : 'transparent',
+      },
+      backdropFilter: fixedHeader ? 'blur(10px)' : 'none',
+      borderBottom: fixedHeader ? `1px solid ${theme.vars.palette.divider}` : 'none',
+    }),
   }
 }

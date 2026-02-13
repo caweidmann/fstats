@@ -1,8 +1,8 @@
 export const ui = () => {
   return {
-    fileCard: (isError: boolean, isParsing: boolean) => ({
+    fileCard: (isError: boolean, isUnknown: boolean, isParsing: boolean) => ({
       py: 0.5,
-      cursor: isError ? 'default' : 'pointer',
+      cursor: isError || isUnknown ? 'default' : 'pointer',
       borderRadius: 1.25,
       opacity: isParsing ? 0.6 : 1,
       WebkitTapHighlightColor: 'transparent',

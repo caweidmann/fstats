@@ -12,3 +12,11 @@ export const getStatsFileDefaults = (file: RDZFileWithPath): StatsFile => ({
   parsedContentRows: [],
   rawParseResult: null,
 })
+
+export const isError = (file: StatsFile) => {
+  return file.status === StatsFileStatus.ERROR
+}
+
+export const isUnknown = (file: StatsFile) => {
+  return file.status !== StatsFileStatus.ERROR && !file.parserId
+}

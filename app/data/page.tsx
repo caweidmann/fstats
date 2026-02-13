@@ -8,8 +8,10 @@ import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useFileHelper } from '@/hooks'
 
-import { AddFolderButton, FileDropZone, Summary } from './components'
+import { AddFolderButton, FileDropZone, ParseButton, Summary } from './components'
 import { ui } from './styled'
+
+const showParseButton = process.env.NODE_ENV === 'development'
 
 const Page = () => {
   const sx = ui()
@@ -35,6 +37,7 @@ const Page = () => {
 
         <Grid size={12}>
           <AddFolderButton />
+          {showParseButton ? <ParseButton /> : null}
         </Grid>
 
         <Grid size={12}>

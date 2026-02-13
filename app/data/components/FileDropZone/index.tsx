@@ -10,7 +10,13 @@ import type { FileRejection, FileWithPath } from 'react-dropzone'
 import { StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
-import { getStatsFileDefaults, useMutateAddFiles, useMutateUpdateFiles } from '@/m-stats-file/service'
+import {
+  getStatsFileDefaults,
+  isError,
+  isUnknown,
+  useMutateAddFiles,
+  useMutateUpdateFiles,
+} from '@/m-stats-file/service'
 import { useFileHelper, useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
 import { parseFiles } from '@/utils/FileParser'
 
@@ -24,7 +30,7 @@ const Component = () => {
   const { mutateAsync: addFiles } = useMutateAddFiles()
   const { mutateAsync: updateFiles } = useMutateUpdateFiles()
   const { setSelectedFileIds } = useFileHelper()
-  const { locale } = useUserPreferences()
+  const { locale, dateFormat } = useUserPreferences()
 
   const onDrop = useCallback(
     async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
@@ -43,15 +49,16 @@ const Component = () => {
       })
 
       const addedFiles = await addFiles(newFiles)
-      setSelectedFileIds((prev) => [
-        ...prev,
-        ...addedFiles.filter((file) => file.status !== StatsFileStatus.ERROR).map((file) => file.id),
-      ])
       const parsedFiles = await parseFiles(
         addedFiles.filter((file) => file.status === StatsFileStatus.PARSING),
         locale,
+        dateFormat,
       )
       await updateFiles(parsedFiles.map((file) => ({ id: file.id, updates: file })))
+      setSelectedFileIds((prev) => [
+        ...prev,
+        ...parsedFiles.filter((file) => !isError(file) && !isUnknown(file)).map((file) => file.id),
+      ])
     },
     [addFiles, updateFiles, setSelectedFileIds, locale],
   )

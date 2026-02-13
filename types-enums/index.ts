@@ -37,16 +37,30 @@ export type UserLocale = z.infer<typeof zUserLocale>
 export const ParserId = {
   // South African Banks
   CAPITEC: 'capitec__savings',
-  // FNB: 'fnb__credit_card',
+  FNB: 'fnb__credit_card',
   // German Banks
   COMDIRECT_GIRO: 'comdirect__giro',
-  // COMDIRECT_VISA: 'comdirect__visa',
+  COMDIRECT_VISA: 'comdirect__visa',
   // COMDIRECT_COMBINED: 'comdirect__combined',
-  // ING_GIRO: 'ing__giro',
-  // ING_GIRO_WB: 'ing__giro_with_balance',
+  ING_GIRO: 'ing__giro',
+  ING_GIRO_WB: 'ing__giro_with_balance',
+  // UK Banks
+  LLOYDS_CURRENT: 'lloyds__current',
 } as const
 
-export const zParserId = z.enum([ParserId.CAPITEC, ParserId.COMDIRECT_GIRO] as const)
+export const zParserId = z.enum([
+  // South African Banks
+  ParserId.CAPITEC,
+  ParserId.FNB,
+  // German Banks
+  ParserId.COMDIRECT_GIRO,
+  ParserId.COMDIRECT_VISA,
+  // ParserId.COMDIRECT_COMBINED,
+  ParserId.ING_GIRO,
+  ParserId.ING_GIRO_WB,
+  // UK Banks
+  ParserId.LLOYDS_CURRENT,
+] as const)
 
 export type ParserId = z.infer<typeof zParserId>
 
@@ -153,7 +167,7 @@ export const Currency = {
   JPY: 'JPY',
   INR: 'INR',
   ZAR: 'ZAR',
-}
+} as const
 
 export const zCurrency = z.enum([
   Currency.USD,

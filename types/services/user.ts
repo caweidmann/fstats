@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { zColorMode, zUserLocale } from '@/types-enums'
+import { zColorMode, zDateFormat, zUserLocale } from '@/types-enums'
 
 import { zDateTimeString, zIdString, zNonEmptyString } from '../global'
 import type { _KeysCheck } from '../key-check'
@@ -10,6 +10,7 @@ export const zUserPreferences = z.object({
   locale: zUserLocale,
   colorMode: zColorMode,
   persistData: z.boolean(),
+  dateFormat: zDateFormat,
 })
 
 export type UserPreferences = z.infer<typeof zUserPreferences>

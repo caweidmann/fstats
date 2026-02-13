@@ -5,9 +5,11 @@ import { Button, IconButton, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
 
 import { UserLocale } from '@/types-enums'
-import { LanguageDrawer, SwipeableDrawer } from '@/components'
 import { useIsMobile } from '@/hooks'
 import { useTranslation } from '@/lib/i18n'
+
+import LanguageDrawer from '../LanguageDrawer'
+import SwipeableDrawer from '../SwipeableDrawer'
 
 type LanguageSwitcherProps = {
   showLabel?: boolean
@@ -16,16 +18,16 @@ type LanguageSwitcherProps = {
 const Component = ({ showLabel = false }: LanguageSwitcherProps) => {
   const isMobile = useIsMobile()
   const { t, i18n } = useTranslation()
-  const [languageDrawer, setLanguageDrawer] = useState(false)
+  const [open, setOpen] = useState(false)
   const selectedLocale = i18n.language === UserLocale.DE ? UserLocale.DE.toUpperCase() : UserLocale.EN.toUpperCase()
   const activeLabel = t(`COMPONENTS.LANGUAGE_SWITCHER.LOCALE_${selectedLocale}_LANGUAGE_${selectedLocale}`)
 
   const onOpen = () => {
-    setLanguageDrawer(true)
+    setOpen(true)
   }
 
   const onClose = () => {
-    setLanguageDrawer(false)
+    setOpen(false)
   }
 
   return (
@@ -53,8 +55,14 @@ const Component = ({ showLabel = false }: LanguageSwitcherProps) => {
         )}
       </Tooltip>
 
-      <SwipeableDrawer anchor="bottom" open={languageDrawer} onClose={onClose} onOpen={onOpen}>
-        <LanguageDrawer onOptionSelected={onClose} onClose={onClose} />
+      <SwipeableDrawer
+        title={t('COMPONENTS.LANGUAGE_SWITCHER.CHANGE_LANGUAGE')}
+        anchor="bottom"
+        open={open}
+        onClose={onClose}
+        onOpen={onOpen}
+      >
+        <LanguageDrawer onOptionSelected={onClose} />
       </SwipeableDrawer>
     </>
   )

@@ -18,6 +18,7 @@ import {
 import { Fragment, useState } from 'react'
 
 import type { ParsedContentRow } from '@/types'
+import { useUserPreferences } from '@/hooks'
 
 import { DEMO_TRANSACTIONS, type TransactionRow } from '../../demo-data'
 import { transformDemoTransactions, transformRealTransactions } from './actions'
@@ -30,13 +31,14 @@ type ComponentProps = {
 }
 
 const Component = ({ isDemoMode, transactions }: ComponentProps) => {
+  const { dateFormat } = useUserPreferences()
   const sx = ui()
   const [periodType, setPeriodType] = useState<PeriodType>('monthly')
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['Income']))
 
   const plData = isDemoMode
-    ? transformDemoTransactions(DEMO_TRANSACTIONS as TransactionRow[], periodType)
-    : transformRealTransactions(transactions, periodType)
+    ? transformDemoTransactions(DEMO_TRANSACTIONS as TransactionRow[], periodType, 'dd/MM/yyyy')
+    : transformRealTransactions(transactions, periodType, dateFormat)
 
   const formatCurrency = (amount: number) => {
     const formatted = Math.abs(amount).toLocaleString('en-US', {
