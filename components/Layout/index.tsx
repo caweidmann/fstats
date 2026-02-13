@@ -5,6 +5,8 @@ import type { ReactNode } from 'react'
 import { useState } from 'react'
 
 import { LAYOUT } from '@/common'
+import { useIsMobile } from '@/hooks'
+import { useTranslation } from '@/lib/i18n'
 
 import SwipeableDrawer from '../SwipeableDrawer'
 import { Footer, Header, MenuDrawer } from './components'
@@ -14,7 +16,17 @@ type LayoutProps = {
 }
 
 const Component = ({ children }: LayoutProps) => {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
+  const isMobile = useIsMobile()
+
+  const onOpen = () => {
+    setOpen(true)
+  }
+
+  const onClose = () => {
+    setOpen(false)
+  }
 
   return (
     <>
@@ -24,8 +36,16 @@ const Component = ({ children }: LayoutProps) => {
 
       <Footer />
 
-      <SwipeableDrawer anchor="left" open={open} onClose={() => setOpen(false)} onOpen={() => setOpen(true)} mainMenu>
-        <MenuDrawer onClose={() => setOpen(false)} />
+      <SwipeableDrawer
+        title={t('DATA_DISPLAY.MENU')}
+        anchor="left"
+        open={open}
+        onClose={onClose}
+        onOpen={onOpen}
+        mainMenu
+        headerSx={{ mt: isMobile ? 1 : 2, py: 2, px: 4 }}
+      >
+        <MenuDrawer onClose={onClose} />
       </SwipeableDrawer>
     </>
   )

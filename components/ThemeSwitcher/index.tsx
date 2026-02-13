@@ -54,8 +54,14 @@ const Component = ({ showLabel = false }: ThemeSwitcherProps) => {
         )}
       </Tooltip>
 
-      <SwipeableDrawer anchor="bottom" open={open} onClose={onClose} onOpen={onOpen}>
-        <ThemeDrawer onOptionSelected={onClose} onClose={onClose} />
+      <SwipeableDrawer
+        title={t('COMPONENTS.THEME_SWITCHER.CHOOSE_THEME')}
+        anchor="bottom"
+        open={open}
+        onClose={onClose}
+        onOpen={onOpen}
+      >
+        <ThemeDrawer onOptionSelected={onClose} />
       </SwipeableDrawer>
     </>
   )

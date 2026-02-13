@@ -56,8 +56,15 @@ const Component = ({ showLabel = false }: DateFormatSwitcherProps) => {
         )}
       </Tooltip>
 
-      <SwipeableDrawer anchor="bottom" open={open} onClose={onClose} onOpen={onOpen}>
-        <DateFormatDrawer onOptionSelected={onClose} onClose={onClose} />
+      <SwipeableDrawer
+        title={t('COMPONENTS.DATE_FORMAT_SWITCHER.CHANGE_DATE_FORMAT')}
+        anchor="bottom"
+        open={open}
+        onClose={onClose}
+        onOpen={onOpen}
+        fixedHeader
+      >
+        <DateFormatDrawer onOptionSelected={onClose} />
       </SwipeableDrawer>
     </>
   )
