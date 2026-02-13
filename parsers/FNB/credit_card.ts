@@ -1,6 +1,6 @@
 import type { ParsedContentRow, Parser } from '@/types'
-import { ParserId } from '@/types-enums'
-import { toDisplayDate } from '@/utils/Date'
+import { Currency, ParserId } from '@/types-enums'
+import { toSystemDate } from '@/utils/Date'
 import { detectMatch } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
@@ -10,6 +10,8 @@ export const FnbCreditCard: Parser = {
   bankName: 'FNB',
 
   accountType: 'Credit Card',
+
+  currency: Currency.ZAR,
 
   expectedHeaderRowIndex: 4,
 
@@ -40,9 +42,10 @@ export const FnbCreditCard: Parser = {
       ] = row
 
       const data: ParsedContentRow = {
-        date: toDisplayDate(date.trim(), locale, { formatTo, formatFrom: 'yyyy/MM/dd' }),
+        date: toSystemDate(date.trim(), { formatFrom: 'yyyy/MM/dd' }),
         description: description.trim(),
         value: Big(amount.trim()),
+        currency: FnbCreditCard.currency,
       }
 
       return data

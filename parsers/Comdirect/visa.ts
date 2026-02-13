@@ -1,6 +1,6 @@
 import type { ParsedContentRow, Parser } from '@/types'
-import { ParserId } from '@/types-enums'
-import { toDisplayDate } from '@/utils/Date'
+import { Currency, ParserId } from '@/types-enums'
+import { toSystemDate } from '@/utils/Date'
 import { detectMatch, parseGermanNumber } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
@@ -10,6 +10,8 @@ export const ComdirectVisa: Parser = {
   bankName: 'Comdirect',
 
   accountType: 'Visa',
+
+  currency: Currency.EUR,
 
   expectedHeaderRowIndex: 1,
 
@@ -29,7 +31,6 @@ export const ComdirectVisa: Parser = {
   },
 
   parse: (input, locale, formatTo) => {
-    console.log('rowsToParse', input.data)
     const rowsToParse = input.data
       .slice(ComdirectVisa.expectedHeaderRowIndex + 1)
       .filter((row) => row.length === ComdirectVisa.expectedHeaders.length)
@@ -47,9 +48,10 @@ export const ComdirectVisa: Parser = {
       ] = row
 
       const data: ParsedContentRow = {
-        date: toDisplayDate(umsatztag.trim(), locale, { formatTo, formatFrom: 'dd.MM.yyyy' }),
+        date: toSystemDate(umsatztag.trim(), { formatFrom: 'dd.MM.yyyy' }),
         description: buchungstext.trim(),
         value: Big(parseGermanNumber(umsatzInEur.trim()) || 0),
+        currency: ComdirectVisa.currency,
       }
 
       return data

@@ -84,7 +84,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   // January 2026
   {
     id: '1',
-    date: '05/01/2026',
+    date: '2026-01-05',
     description: 'Workshop Rent - January',
     amount: -650.0,
     category: 'Office & Rent',
@@ -93,7 +93,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '2',
-    date: '08/01/2026',
+    date: '2026-01-08',
     description: 'Client Payment - Custom Kitchen Cabinets',
     amount: 4200.0,
     category: 'Revenue',
@@ -102,7 +102,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '3',
-    date: '10/01/2026',
+    date: '2026-01-10',
     description: 'Wood & Materials - Supplier',
     amount: -850.0,
     category: 'Materials',
@@ -111,7 +111,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '4',
-    date: '12/01/2026',
+    date: '2026-01-12',
     description: 'Professional Insurance - Quarterly',
     amount: -280.0,
     category: 'Professional Fees',
@@ -120,7 +120,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '5',
-    date: '15/01/2026',
+    date: '2026-01-15',
     description: 'Power Tools - Makita Drill Set',
     amount: -320.0,
     category: 'Equipment',
@@ -129,7 +129,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '6',
-    date: '18/01/2026',
+    date: '2026-01-18',
     description: 'Client Payment - Wooden Dining Table',
     amount: 2800.0,
     category: 'Revenue',
@@ -138,7 +138,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '7',
-    date: '22/01/2026',
+    date: '2026-01-22',
     description: 'Vehicle Fuel - Business Trips',
     amount: -95.5,
     category: 'Travel Expenses',
@@ -147,7 +147,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '8',
-    date: '25/01/2026',
+    date: '2026-01-25',
     description: 'Hardware & Fixings',
     amount: -145.8,
     category: 'Materials',
@@ -156,7 +156,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '9',
-    date: '28/01/2026',
+    date: '2026-01-28',
     description: 'Client Payment - Bookshelves Installation',
     amount: 1500.0,
     category: 'Revenue',
@@ -167,7 +167,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   // February 2026
   {
     id: '10',
-    date: '01/02/2026',
+    date: '2026-02-01',
     description: 'Workshop Rent - February',
     amount: -650.0,
     category: 'Office & Rent',
@@ -176,7 +176,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '11',
-    date: '05/02/2026',
+    date: '2026-02-05',
     description: 'Client Payment - Office Renovation',
     amount: 6500.0,
     category: 'Revenue',
@@ -185,7 +185,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '12',
-    date: '08/02/2026',
+    date: '2026-02-08',
     description: 'Timber & Plywood - Large Order',
     amount: -1250.0,
     category: 'Materials',
@@ -194,7 +194,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '13',
-    date: '12/02/2026',
+    date: '2026-02-12',
     description: 'Workshop Safety Equipment',
     amount: -180.0,
     category: 'Equipment',
@@ -203,7 +203,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '14',
-    date: '15/02/2026',
+    date: '2026-02-15',
     description: 'Vehicle Service & Maintenance',
     amount: -220.0,
     category: 'Vehicle Costs',
@@ -212,7 +212,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '15',
-    date: '18/02/2026',
+    date: '2026-02-18',
     description: 'Client Payment - Custom Wardrobe',
     amount: 3800.0,
     category: 'Revenue',
@@ -221,7 +221,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '16',
-    date: '20/02/2026',
+    date: '2026-02-20',
     description: 'Paint & Finishing Materials',
     amount: -165.5,
     category: 'Materials',
@@ -230,7 +230,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '17',
-    date: '22/02/2026',
+    date: '2026-02-22',
     description: 'Business Cards & Advertising',
     amount: -85.0,
     category: 'Marketing',
@@ -239,7 +239,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '18',
-    date: '25/02/2026',
+    date: '2026-02-25',
     description: 'Vehicle Fuel - Business Trips',
     amount: -110.0,
     category: 'Travel Expenses',
@@ -248,7 +248,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '19',
-    date: '28/02/2026',
+    date: '2026-02-28',
     description: 'Client Payment - Garden Deck Construction',
     amount: 5200.0,
     category: 'Revenue',
@@ -259,7 +259,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   // March 2026
   {
     id: '20',
-    date: '02/03/2026',
+    date: '2026-03-02',
     description: 'Workshop Rent - March',
     amount: -650.0,
     category: 'Office & Rent',
@@ -268,7 +268,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '21',
-    date: '05/03/2026',
+    date: '2026-03-05',
     description: 'Client Payment - Home Office Built-ins',
     amount: 4800.0,
     category: 'Revenue',
@@ -277,7 +277,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '22',
-    date: '10/03/2026',
+    date: '2026-03-10',
     description: 'Hardwood & Oak Materials',
     amount: -1100.0,
     category: 'Materials',
@@ -286,7 +286,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '23',
-    date: '15/03/2026',
+    date: '2026-03-15',
     description: 'Client Payment - Kitchen Island',
     amount: 3200.0,
     category: 'Revenue',
@@ -295,7 +295,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '24',
-    date: '20/03/2026',
+    date: '2026-03-20',
     description: 'Vehicle Fuel & Maintenance',
     amount: -180.0,
     category: 'Travel Expenses',
@@ -304,7 +304,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '25',
-    date: '25/03/2026',
+    date: '2026-03-25',
     description: 'Client Payment - Entertainment Unit',
     amount: 2900.0,
     category: 'Revenue',
@@ -315,7 +315,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   // April 2026
   {
     id: '26',
-    date: '01/04/2026',
+    date: '2026-04-01',
     description: 'Workshop Rent - April',
     amount: -650.0,
     category: 'Office & Rent',
@@ -324,7 +324,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '27',
-    date: '05/04/2026',
+    date: '2026-04-05',
     description: 'Client Payment - Large Commercial Project',
     amount: 9500.0,
     category: 'Revenue',
@@ -333,7 +333,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '28',
-    date: '08/04/2026',
+    date: '2026-04-08',
     description: 'Premium Wood Materials - Bulk Order',
     amount: -1800.0,
     category: 'Materials',
@@ -342,7 +342,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '29',
-    date: '12/04/2026',
+    date: '2026-04-12',
     description: 'Professional Insurance - Quarterly',
     amount: -280.0,
     category: 'Professional Fees',
@@ -351,7 +351,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '30',
-    date: '18/04/2026',
+    date: '2026-04-18',
     description: 'New Router & Sanding Equipment',
     amount: -520.0,
     category: 'Equipment',
@@ -360,7 +360,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '31',
-    date: '25/04/2026',
+    date: '2026-04-25',
     description: 'Client Payment - Bedroom Furniture Set',
     amount: 5600.0,
     category: 'Revenue',
@@ -371,7 +371,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   // May 2026
   {
     id: '32',
-    date: '01/05/2026',
+    date: '2026-05-01',
     description: 'Workshop Rent - May',
     amount: -650.0,
     category: 'Office & Rent',
@@ -380,7 +380,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '33',
-    date: '06/05/2026',
+    date: '2026-05-06',
     description: 'Client Payment - Staircase Renovation',
     amount: 7200.0,
     category: 'Revenue',
@@ -389,7 +389,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '34',
-    date: '10/05/2026',
+    date: '2026-05-10',
     description: 'Specialized Wood & Veneers',
     amount: -980.5,
     category: 'Materials',
@@ -398,7 +398,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '35',
-    date: '15/05/2026',
+    date: '2026-05-15',
     description: 'Client Payment - Outdoor Furniture',
     amount: 3800.0,
     category: 'Revenue',
@@ -407,7 +407,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '36',
-    date: '20/05/2026',
+    date: '2026-05-20',
     description: 'Marketing Materials & Website',
     amount: -150.0,
     category: 'Marketing',
@@ -416,7 +416,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '37',
-    date: '28/05/2026',
+    date: '2026-05-28',
     description: 'Vehicle Service',
     amount: -200.0,
     category: 'Vehicle Costs',
@@ -427,7 +427,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   // June 2026
   {
     id: '38',
-    date: '02/06/2026',
+    date: '2026-06-02',
     description: 'Workshop Rent - June',
     amount: -650.0,
     category: 'Office & Rent',
@@ -436,7 +436,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '39',
-    date: '05/06/2026',
+    date: '2026-06-05',
     description: 'Client Payment - Restaurant Interior',
     amount: 11500.0,
     category: 'Revenue',
@@ -445,7 +445,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '40',
-    date: '10/06/2026',
+    date: '2026-06-10',
     description: 'Commercial Grade Materials',
     amount: -2100.0,
     category: 'Materials',
@@ -454,7 +454,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '41',
-    date: '15/06/2026',
+    date: '2026-06-15',
     description: 'Workshop Ventilation Upgrade',
     amount: -450.0,
     category: 'Equipment',
@@ -463,7 +463,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '42',
-    date: '18/06/2026',
+    date: '2026-06-18',
     description: 'Client Payment - Library Shelving',
     amount: 4100.0,
     category: 'Revenue',
@@ -472,7 +472,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '43',
-    date: '25/06/2026',
+    date: '2026-06-25',
     description: 'Finishing Supplies & Hardware',
     amount: -285.0,
     category: 'Materials',
@@ -481,7 +481,7 @@ export const DEMO_TRANSACTIONS: TransactionRow[] = [
   },
   {
     id: '44',
-    date: '28/06/2026',
+    date: '2026-06-28',
     description: 'Vehicle Fuel - Business Trips',
     amount: -125.0,
     category: 'Travel Expenses',

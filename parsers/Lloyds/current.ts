@@ -1,7 +1,7 @@
 import type { ParsedContentRow, Parser } from '@/types'
-import { ParserId } from '@/types-enums'
-import { toDisplayDate } from '@/utils/Date'
-import { detectMatch, parseGermanNumber } from '@/utils/Misc'
+import { Currency, ParserId } from '@/types-enums'
+import { toSystemDate } from '@/utils/Date'
+import { detectMatch } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
 export const LloydsCurrent: Parser = {
@@ -10,6 +10,8 @@ export const LloydsCurrent: Parser = {
   bankName: 'Lloyds',
 
   accountType: 'Current Account',
+
+  currency: Currency.GBP,
 
   expectedHeaderRowIndex: 0,
 
@@ -51,9 +53,10 @@ export const LloydsCurrent: Parser = {
       const valOut = debitAmount.trim()
 
       const data: ParsedContentRow = {
-        date: toDisplayDate(transactionDate.trim(), locale, { formatTo, formatFrom: 'dd/MM/yyyy' }),
+        date: toSystemDate(transactionDate.trim(), { formatFrom: 'dd/MM/yyyy' }),
         description: transactionDescription.trim(),
         value: valIn ? Big(valIn) : valOut ? Big(valOut).times(-1) : Big(0),
+        currency: LloydsCurrent.currency,
       }
 
       return data

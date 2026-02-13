@@ -1,4 +1,4 @@
-import { Parser } from '@/types'
+import type { Parser } from '@/types'
 import { ParserId } from '@/types-enums'
 
 export const checkUniqueParserIds = (parsers: Record<ParserId, Parser>) => {

@@ -30,7 +30,7 @@ const Component = ({ title, onClose }: SwipeableDrawerSubheaderProps) => {
         [theme.getColorSchemeSelector(ColorMode.DARK)]: {
           background: `rgba(42, 46, 54, ${MISC.GLASS_EFFECT})`,
         },
-        backdropFilter: 'blur(20px)',
+        backdropFilter: 'blur(10px)',
         mb: 1,
       }}
     >

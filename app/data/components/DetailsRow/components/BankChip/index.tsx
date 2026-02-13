@@ -5,6 +5,7 @@ import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
 import type { StatsFile } from '@/types'
+import { isError, isUnknown } from '@/m-stats-file/service'
 import { getParserName } from '@/utils/Misc'
 
 import { ui } from './styled'
@@ -14,11 +15,12 @@ type BankChipProps = {
 }
 
 const Component = ({ file }: BankChipProps) => {
-  const isUnknown = !file.parserId
   const theme = useTheme()
   const sx = ui(theme)
+  const isErrorFile = isError(file)
+  const isUnknownFile = isUnknown(file)
 
-  if (file.error) {
+  if (isErrorFile) {
     return (
       <Box sx={sx.chip(true)}>
         <ErrorOutlineOutlined sx={{ fontSize: 14, color: 'error.main' }} />
@@ -31,11 +33,11 @@ const Component = ({ file }: BankChipProps) => {
   }
 
   return (
-    <Box sx={sx.chip(false)}>
-      {isUnknown ? <HelpOutlineOutlined color="secondary" sx={{ fontSize: 14 }} /> : null}
+    <Box sx={sx.chip(isUnknownFile)}>
+      {isUnknownFile ? <HelpOutlineOutlined color="warning" sx={{ fontSize: 14 }} /> : null}
 
-      <Typography variant="caption" sx={{ ...sx.label, color: 'text.secondary' }}>
-        {file.parserId ? getParserName(file.parserId).long : 'Unknown format'}
+      <Typography variant="caption" sx={{ ...sx.label, color: isUnknownFile ? 'warning.main' : 'text.secondary' }}>
+        {getParserName(file.parserId).long}
       </Typography>
     </Box>
   )

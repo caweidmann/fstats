@@ -1,8 +1,7 @@
 import type { Theme } from '@mui/material/styles'
 import type { ScriptableContext } from 'chart.js'
 
-import type { GradientColors, GradientDirection } from '@/types'
-import { Parser, PPRawParseResult } from '@/types'
+import type { GradientColors, GradientDirection, Parser, PPRawParseResult } from '@/types'
 import { ParserId } from '@/types-enums'
 import { MISC } from '@/common'
 import { AVAILABLE_PARSERS } from '@/parsers'
@@ -30,11 +29,12 @@ export const detectMatch = (input: PPRawParseResult, parser: Parser) => {
   return headersMatch && rowsValid
 }
 
-export const getParserName = (value: ParserId): { short: string; long: string } => {
+export const getParserName = (value: ParserId | null): { short: string; long: string; alt: string } => {
   if (!value) {
     return {
-      short: 'Unknown',
-      long: 'Unknown format',
+      short: 'Unsupported',
+      long: 'Unsupported format',
+      alt: 'Unsupported format',
     }
   }
 
@@ -44,14 +44,16 @@ export const getParserName = (value: ParserId): { short: string; long: string } 
     return {
       short: parser.bankName,
       long: `${parser.bankName} ${MISC.CENTER_DOT} ${parser.accountType}`,
+      alt: `${parser.bankName} / ${parser.accountType}`,
     }
   }
 
-  console.warn(`Unsupported parser ID: ${value}`)
+  console.warn(`Invalid parser ID: ${value}`)
 
   return {
-    short: 'Unsupported',
-    long: 'Unsupported format',
+    short: 'Invalid',
+    long: 'Invalid parser',
+    alt: 'Invalid parser',
   }
 }
 
