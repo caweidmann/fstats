@@ -36,9 +36,7 @@ const Component = () => {
   )
   const typesFound = Array.from(
     new Set(
-      parserIds
-        .map((parserId) => (parserId ? getParserName(parserId).short : 'Unknown'))
-        .sort((a: string, b: string) => a.localeCompare(b)),
+      parserIds.map((parserId) => getParserName(parserId).short).sort((a: string, b: string) => a.localeCompare(b)),
     ),
   ).join(', ')
   const isParsing = files.some((file) => file.status === StatsFileStatus.PARSING)
@@ -89,9 +87,19 @@ const Component = () => {
             {errorFiles.length ? (
               <Chip
                 icon={<ErrorOutlined sx={{ fontSize: 16 }} />}
-                label={`${errorFiles.length} invalid`}
+                label={`${errorFiles.length} Invalid file${errorFiles.length > 1 ? 's' : ''}`}
                 size="small"
                 color="error"
+                variant="outlined"
+              />
+            ) : null}
+
+            {unknownFiles.length ? (
+              <Chip
+                icon={<ErrorOutlined sx={{ fontSize: 16 }} />}
+                label={`${unknownFiles.length} Unsupported format`}
+                size="small"
+                color="warning"
                 variant="outlined"
               />
             ) : null}
@@ -128,7 +136,7 @@ const Component = () => {
               </Button>
 
               <Box sx={{ display: 'flex', gap: 1 }}>
-                {!isParsing && errorFiles.length ? (
+                {!isParsing && errorFiles.length && errorFiles.length !== files.length ? (
                   <Button
                     size="small"
                     color="error"
@@ -141,16 +149,16 @@ const Component = () => {
                   </Button>
                 ) : null}
 
-                {!isParsing && unknownFiles.length && unknownFiles.length !== selectableFiles.length ? (
+                {!isParsing && unknownFiles.length && unknownFiles.length !== files.length ? (
                   <Button
                     size="small"
-                    color="secondary"
+                    color="warning"
                     startIcon={<DeleteOutlined />}
                     onClick={() => removeUnknownFiles()}
                     disabled={isLoadingFiles || isParsing || !unknownFiles.length}
                     loading={isRemovingFiles}
                   >
-                    Remove unknown
+                    Remove unsupported
                   </Button>
                 ) : null}
 

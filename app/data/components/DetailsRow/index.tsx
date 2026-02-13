@@ -1,13 +1,13 @@
 'use client'
 
-import { DeleteOutlined, ErrorOutlined } from '@mui/icons-material'
+import { DeleteOutlined, ErrorOutlined, WarningOutlined } from '@mui/icons-material'
 import { Box, Checkbox, CircularProgress, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 import { useLocalStorage } from 'usehooks-ts'
 
 import { StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
-import { useMutateRemoveFile } from '@/m-stats-file/service'
+import { isError, isUnknown, useMutateRemoveFile } from '@/m-stats-file/service'
 import { useUserPreferences } from '@/hooks'
 import { toDisplayDate } from '@/utils/Date'
 import { formatFileSize } from '@/utils/File'
@@ -25,6 +25,8 @@ const Component = ({ file }: DetailsRowProps) => {
   const { mutate: removeFile } = useMutateRemoveFile()
   const [selectedFileIds, setSelectedFileIds] = useLocalStorage<string[]>(MISC.LS_SELECTED_FILE_IDS_KEY, [])
   const isSelected = selectedFileIds.includes(file.id)
+  const isErrorFile = isError(file)
+  const isUnknownFile = isUnknown(file)
 
   const toggleFileSelection = (fileId: string) => {
     setSelectedFileIds((prev) => (prev.includes(fileId) ? prev.filter((id) => id !== fileId) : [...prev, fileId]))
@@ -33,13 +35,17 @@ const Component = ({ file }: DetailsRowProps) => {
   return (
     <Box
       key={file.id}
-      sx={sx.fileCard(!!file.error, file.status === StatsFileStatus.PARSING)}
-      onClick={file.error ? undefined : () => toggleFileSelection(file.id)}
+      sx={sx.fileCard(isErrorFile, isUnknownFile, file.status === StatsFileStatus.PARSING)}
+      onClick={isErrorFile || isUnknownFile ? undefined : () => toggleFileSelection(file.id)}
     >
       <Stack direction="row" alignItems="center" spacing={1}>
-        {file.error ? (
+        {isErrorFile ? (
           <Box sx={{ width: 28, display: 'flex', justifyContent: 'center' }}>
             <ErrorOutlined sx={{ color: 'error.main', fontSize: 18 }} />
+          </Box>
+        ) : isUnknownFile ? (
+          <Box sx={{ width: 28, display: 'flex', justifyContent: 'center' }}>
+            <WarningOutlined sx={{ color: 'warning.main', fontSize: 18 }} />
           </Box>
         ) : (
           <Checkbox
@@ -55,7 +61,7 @@ const Component = ({ file }: DetailsRowProps) => {
           <Stack direction="row" alignItems="center" spacing={1}>
             <Typography
               variant="body2"
-              color={file.error ? 'error' : 'text.primary'}
+              color={isErrorFile ? 'error' : isUnknownFile ? 'warning' : 'text.primary'}
               fontWeight="medium"
               sx={sx.fileName}
             >
@@ -71,7 +77,7 @@ const Component = ({ file }: DetailsRowProps) => {
               Uploaded {toDisplayDate(new Date(file.created), locale, { formatTo: 'd MMM yyyy, HH:mm:ss' })}
             </Typography>
 
-            {file.error ? (
+            {isErrorFile ? (
               <>
                 <Typography variant="caption" color="text.secondary">
                   {MISC.CENTER_DOT}
@@ -86,11 +92,11 @@ const Component = ({ file }: DetailsRowProps) => {
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
           {file.status === StatsFileStatus.PARSING ? <CircularProgress size={14} /> : null}
-          {file.status === StatsFileStatus.PARSED || file.error ? <BankChip file={file} /> : null}
+          {file.status === StatsFileStatus.PARSED || isErrorFile ? <BankChip file={file} /> : null}
 
           <Tooltip title="Remove file">
             <IconButton
-              color={file.error ? 'error' : 'secondary'}
+              color={isErrorFile ? 'error' : isUnknownFile ? 'warning' : 'secondary'}
               onClick={(event) => {
                 event.stopPropagation()
                 removeFile(file.id)

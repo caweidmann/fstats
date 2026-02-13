@@ -10,7 +10,13 @@ import type { FileRejection, FileWithPath } from 'react-dropzone'
 import { StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
-import { getStatsFileDefaults, useMutateAddFiles, useMutateUpdateFiles } from '@/m-stats-file/service'
+import {
+  getStatsFileDefaults,
+  isError,
+  isUnknown,
+  useMutateAddFiles,
+  useMutateUpdateFiles,
+} from '@/m-stats-file/service'
 import { useFileHelper, useIsDarkMode, useIsMobile, useUserPreferences } from '@/hooks'
 import { parseFiles } from '@/utils/FileParser'
 
@@ -51,7 +57,7 @@ const Component = () => {
       await updateFiles(parsedFiles.map((file) => ({ id: file.id, updates: file })))
       setSelectedFileIds((prev) => [
         ...prev,
-        ...parsedFiles.filter((file) => file.status !== StatsFileStatus.ERROR).map((file) => file.id),
+        ...parsedFiles.filter((file) => !isError(file) && !isUnknown(file)).map((file) => file.id),
       ])
     },
     [addFiles, updateFiles, setSelectedFileIds, locale],

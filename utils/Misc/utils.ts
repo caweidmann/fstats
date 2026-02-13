@@ -29,12 +29,12 @@ export const detectMatch = (input: PPRawParseResult, parser: Parser) => {
   return headersMatch && rowsValid
 }
 
-export const getParserName = (value: ParserId): { short: string; long: string; alt: string } => {
+export const getParserName = (value: ParserId | null): { short: string; long: string; alt: string } => {
   if (!value) {
     return {
-      short: 'Unknown',
-      long: 'Unknown format',
-      alt: 'Unknown format',
+      short: 'Unsupported',
+      long: 'Unsupported format',
+      alt: 'Unsupported format',
     }
   }
 
@@ -48,12 +48,12 @@ export const getParserName = (value: ParserId): { short: string; long: string; a
     }
   }
 
-  console.warn(`Unsupported parser ID: ${value}`)
+  console.warn(`Invalid parser ID: ${value}`)
 
   return {
-    short: 'Unsupported',
-    long: 'Unsupported format',
-    alt: 'Unsupported format',
+    short: 'Invalid',
+    long: 'Invalid parser',
+    alt: 'Invalid parser',
   }
 }
 
