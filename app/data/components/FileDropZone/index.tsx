@@ -60,7 +60,7 @@ const Component = () => {
         ...parsedFiles.filter((file) => !isError(file) && !isUnknown(file)).map((file) => file.id),
       ])
     },
-    [addFiles, updateFiles, setSelectedFileIds, locale],
+    [addFiles, updateFiles, setSelectedFileIds, locale, dateFormat],
   )
 
   const dropzone = useDropzone({
