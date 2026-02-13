@@ -55,8 +55,14 @@ const Component = ({ showLabel = false }: LanguageSwitcherProps) => {
         )}
       </Tooltip>
 
-      <SwipeableDrawer anchor="bottom" open={open} onClose={onClose} onOpen={onOpen}>
-        <LanguageDrawer onOptionSelected={onClose} onClose={onClose} />
+      <SwipeableDrawer
+        title={t('COMPONENTS.LANGUAGE_SWITCHER.CHANGE_LANGUAGE')}
+        anchor="bottom"
+        open={open}
+        onClose={onClose}
+        onOpen={onOpen}
+      >
+        <LanguageDrawer onOptionSelected={onClose} />
       </SwipeableDrawer>
     </>
   )

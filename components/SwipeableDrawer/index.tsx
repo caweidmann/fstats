@@ -7,9 +7,11 @@ import type { ReactNode } from 'react'
 
 import { useIsMobile } from '@/hooks'
 
+import { SwipeableDrawerSubheader } from './components'
 import { Puller, PullerWrapper, ui } from './styled'
 
 type SwipeableDrawerProps = {
+  title?: ReactNode
   anchor: 'left' | 'bottom'
   open: boolean
   onClose: VoidFunction
@@ -18,9 +20,12 @@ type SwipeableDrawerProps = {
   children: ReactNode
   drawerSx?: SxProps<Theme>
   paperSx?: SxProps<Theme>
+  headerSx?: SxProps<Theme>
+  fixedHeader?: boolean
 }
 
 const Component = ({
+  title,
   anchor = 'bottom',
   open,
   onClose,
@@ -29,6 +34,8 @@ const Component = ({
   children,
   drawerSx = {},
   paperSx = {},
+  headerSx = {},
+  fixedHeader = false,
 }: SwipeableDrawerProps) => {
   const theme = useTheme()
   const isMobile = useIsMobile()
@@ -53,11 +60,14 @@ const Component = ({
       }}
     >
       <Box role="presentation">
-        {isMobile && isBottomDrawer ? (
-          <PullerWrapper>
-            <Puller />
-          </PullerWrapper>
-        ) : null}
+        <Box sx={sx.subheaderWrapper(fixedHeader)}>
+          {isMobile && isBottomDrawer ? (
+            <PullerWrapper>
+              <Puller />
+            </PullerWrapper>
+          ) : null}
+          <SwipeableDrawerSubheader title={title} onClose={onClose} sx={headerSx} />
+        </Box>
         {children}
       </Box>
     </SwipeableDrawer>
