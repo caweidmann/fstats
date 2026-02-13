@@ -18,7 +18,6 @@ module.exports = [
       'no-param-reassign': 'warn',
       'react/display-name': 'off',
       'react/function-component-definition': [2, { namedComponents: ['arrow-function'] }],
-      'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
       'react/jsx-props-no-spreading': 'off',
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
