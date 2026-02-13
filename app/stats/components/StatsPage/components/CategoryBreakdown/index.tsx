@@ -18,7 +18,7 @@ const Component = ({ isDemoMode, transactions }: ComponentProps) => {
   const sx = ui()
 
   const categoryData = isDemoMode
-    ? getCategoryBreakdownData(DEMO_TRANSACTIONS.map((t) => ({ ...t, value: Big(t.amount) })))
+    ? getCategoryBreakdownData(DEMO_TRANSACTIONS.map((t) => ({ ...t, value: Big(t.amount), currency: 'EUR' })))
     : getCategoryBreakdownData(transactions)
 
   const hasData = categoryData.length > 0

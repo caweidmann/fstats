@@ -2,6 +2,7 @@ import { format, parse, startOfMonth, startOfQuarter } from 'date-fns'
 
 import type { ParsedContentRow } from '@/types'
 import { DateFormat } from '@/types-enums'
+import { MISC } from '@/common'
 
 import type { TransactionRow } from '../../demo-data'
 import type { PeriodType, PLCategory, PLData, PLSection } from './types'
@@ -19,7 +20,7 @@ const CATEGORY_MAPPING: Record<string, { section: string; lineItem: string; pare
 }
 
 const getPeriodKey = (date: string, periodType: PeriodType, dateFormat: DateFormat): string => {
-  const parsedDate = parse(date, dateFormat, new Date())
+  const parsedDate = parse(date, MISC.SYSTEM_DATE_FORMAT, new Date())
 
   if (periodType === 'monthly') {
     return format(startOfMonth(parsedDate), 'MMM yyyy').toUpperCase()
