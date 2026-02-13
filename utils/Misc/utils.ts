@@ -29,11 +29,12 @@ export const detectMatch = (input: PPRawParseResult, parser: Parser) => {
   return headersMatch && rowsValid
 }
 
-export const getParserName = (value: ParserId): { short: string; long: string } => {
+export const getParserName = (value: ParserId): { short: string; long: string; alt: string } => {
   if (!value) {
     return {
       short: 'Unknown',
       long: 'Unknown format',
+      alt: 'Unknown format',
     }
   }
 
@@ -43,6 +44,7 @@ export const getParserName = (value: ParserId): { short: string; long: string } 
     return {
       short: parser.bankName,
       long: `${parser.bankName} ${MISC.CENTER_DOT} ${parser.accountType}`,
+      alt: `${parser.bankName} / ${parser.accountType}`,
     }
   }
 
@@ -51,6 +53,7 @@ export const getParserName = (value: ParserId): { short: string; long: string } 
   return {
     short: 'Unsupported',
     long: 'Unsupported format',
+    alt: 'Unsupported format',
   }
 }
 

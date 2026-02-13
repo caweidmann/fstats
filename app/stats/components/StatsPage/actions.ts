@@ -24,7 +24,7 @@ export const getBankSelectOptions = (selectedFiles: StatsFile[]): BankSelectOpti
 
   const options: BankSelectOption[] = [
     ...bankIds.map((id) => ({
-      label: getParserName(id).long,
+      label: getParserName(id).alt,
       value: id,
     })),
   ]
