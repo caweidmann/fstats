@@ -7,11 +7,13 @@ import { StatsFileStatus } from '@/types-enums'
 import { ROUTES } from '@/common'
 import { PageWrapper } from '@/components'
 import { useFileHelper } from '@/hooks'
+import { isFeatureEnabled } from '@/utils/Features'
 
-import { AddFolderButton, FileDropZone, Summary } from './components'
+import { AddFolderButton, FileDropZone, ParseButton, Summary } from './components'
 import { ui } from './styled'
 
 const Page = () => {
+  const isWip = isFeatureEnabled('wip')
   const sx = ui()
   const router = useRouter()
   const { files, isLoadingFiles, selectedFiles } = useFileHelper()
@@ -35,6 +37,7 @@ const Page = () => {
 
         <Grid size={12}>
           <AddFolderButton />
+          {isWip ? <ParseButton /> : null}
         </Grid>
 
         <Grid size={12}>
