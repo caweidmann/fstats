@@ -10,6 +10,7 @@ import type { ParsedContentRow, StatsPageForm } from '@/types'
 import { Currency } from '@/types-enums'
 import { useIsDarkMode, useUserPreferences } from '@/hooks'
 import { toFixedLocale, toFixedLocaleCurrency } from '@/utils/Number'
+import { getProfitLossColors, getStats } from '@/utils/Stats'
 import { getParserCurrency } from '@/parsers'
 import { Big } from '@/lib/w-big'
 
@@ -34,39 +35,27 @@ const Component = ({ transactions }: ProfitLossSummaryProps) => {
           ? transactions[0].currency
           : Currency.USD // FIXME: This is just hacked, need to do better currency handling here
         : Currency.USD
-  const totalIncome = transactions.reduce((acc, transaction) => {
-    const value = Big(transaction.value)
-    return acc.plus(value.gt(0) ? value : Big(0))
-  }, Big(0))
-  const totalExpenses = transactions.reduce((acc, transaction) => {
-    const value = Big(transaction.value)
-    return acc.plus(value.lt(0) ? value.abs() : Big(0))
-  }, Big(0))
-  const profit = totalIncome.minus(totalExpenses)
-  const expenseRatio = totalIncome.gt(0) ? totalExpenses.div(totalIncome).times(100) : Big(0)
+  const { totalIncome, totalExpense, profit, expenseRatio } = getStats(transactions)
   const totalIncomeDisplay = toFixedLocaleCurrency(totalIncome.toString(), currency, locale)
-  const totalExpensesDisplay = toFixedLocaleCurrency(totalExpenses.toString(), currency, locale)
+  const totalExpenseDisplay = toFixedLocaleCurrency(totalExpense.toString(), currency, locale)
   const profitDisplay = toFixedLocaleCurrency(profit.toString(), currency, locale)
   const expenseRatioDisplay = toFixedLocale(expenseRatio.toString(), 1, locale, { trimTrailingZeros: true })
-  const profitColor = profit.gte(0)
-    ? isDarkMode
-      ? 'rgba(76, 175, 80, 0.08)'
-      : green[50]
-    : isDarkMode
-      ? 'rgba(244, 67, 54, 0.08)'
-      : red[50]
+  const { incomeTextColor, expensesTextColor, profitTextColor, profitBgColor } = getProfitLossColors(
+    Big(profit).gte(0),
+    isDarkMode,
+  )
 
   return (
     <Grid container spacing={2}>
       <Grid size={{ xs: 12, md: 4 }}>
         <Box sx={sx.statCard('transparent')}>
           <Box sx={sx.statHeader}>
-            <TrendingUp color="primary" sx={{ fontSize: 20 }} />
+            <TrendingUp sx={{ color: incomeTextColor, fontSize: 20 }} />
             <Typography variant="caption" sx={{ color: 'text.secondary', ml: 1 }}>
               Total Income
             </Typography>
           </Box>
-          <Typography color="primary" variant="h4" sx={{ fontWeight: 600, mt: 1 }}>
+          <Typography color="primary" variant="h4" sx={{ color: incomeTextColor, fontWeight: 600, mt: 1 }}>
             {totalIncomeDisplay}
           </Typography>
           <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
@@ -78,13 +67,13 @@ const Component = ({ transactions }: ProfitLossSummaryProps) => {
       <Grid size={{ xs: 12, md: 4 }}>
         <Box sx={sx.statCard('transparent')}>
           <Box sx={sx.statHeader}>
-            <TrendingDown sx={{ color: isDarkMode ? red[300] : red[600], fontSize: 20 }} />
+            <TrendingDown sx={{ color: expensesTextColor, fontSize: 20 }} />
             <Typography variant="caption" sx={{ color: 'text.secondary', ml: 1 }}>
               Total Expenses
             </Typography>
           </Box>
-          <Typography variant="h4" sx={{ color: isDarkMode ? red[400] : red[700], fontWeight: 600, mt: 1 }}>
-            {totalExpensesDisplay}
+          <Typography variant="h4" sx={{ color: expensesTextColor, fontWeight: 600, mt: 1 }}>
+            {totalExpenseDisplay}
           </Typography>
           <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
             {expenseRatioDisplay}% of income
@@ -93,14 +82,14 @@ const Component = ({ transactions }: ProfitLossSummaryProps) => {
       </Grid>
 
       <Grid size={{ xs: 12, md: 4 }}>
-        <Box sx={sx.statCard(profitColor, false)}>
+        <Box sx={sx.statCard(profitBgColor, false)}>
           <Box sx={sx.statHeader}>
-            <AccountBalance color={profit.gte(0) ? 'success' : 'error'} sx={{ fontSize: 20 }} />
+            <AccountBalance sx={{ color: profitTextColor, fontSize: 20 }} />
             <Typography variant="caption" sx={{ color: 'text.secondary', ml: 1 }}>
               Net Profit
             </Typography>
           </Box>
-          <Typography variant="h4" color={profit.gte(0) ? 'success' : 'error'} sx={{ fontWeight: 600, mt: 1 }}>
+          <Typography variant="h4" sx={{ color: profitTextColor, fontWeight: 600, mt: 1 }}>
             {profitDisplay}
           </Typography>
           <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
