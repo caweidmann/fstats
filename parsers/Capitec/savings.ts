@@ -2,7 +2,6 @@ import type { ParsedContentRow, Parser } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
 import { detectMatch } from '@/utils/Misc'
-import { Big } from '@/lib/w-big'
 
 export const CapitecSavings: Parser = {
   id: ParserId.CAPITEC,
@@ -64,7 +63,7 @@ export const CapitecSavings: Parser = {
       const data: ParsedContentRow = {
         date: toSystemDate(transactionDate.trim(), { formatFrom: 'yyyy-MM-dd HH:SS' }),
         description: description.trim(),
-        value: valIn ? Big(valIn) : valOut ? Big(valOut) : valFee ? Big(valFee) : Big(0),
+        value: valIn ? valIn : valOut ? valOut : valFee ? valFee : '0',
         currency: CapitecSavings.currency,
       }
 

@@ -55,7 +55,7 @@ export const LloydsCurrent: Parser = {
       const data: ParsedContentRow = {
         date: toSystemDate(transactionDate.trim(), { formatFrom: 'dd/MM/yyyy' }),
         description: transactionDescription.trim(),
-        value: valIn ? Big(valIn) : valOut ? Big(valOut).times(-1) : Big(0),
+        value: valIn ? valIn : valOut ? Big(valOut).times(-1).toString() : '0',
         currency: LloydsCurrent.currency,
       }
 

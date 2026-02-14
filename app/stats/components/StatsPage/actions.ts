@@ -2,6 +2,7 @@ import type { BankSelectOption, StatsFile } from '@/types'
 import { ParserId } from '@/types-enums'
 import { getParserName } from '@/utils/Misc'
 import { getParserCurrency } from '@/parsers'
+import { isEqual, uniqWith } from '@/lib/w-lodash'
 
 export const getBankSelectOptions = (selectedFiles: StatsFile[]): BankSelectOption[] => {
   const banks = selectedFiles
@@ -10,9 +11,8 @@ export const getBankSelectOptions = (selectedFiles: StatsFile[]): BankSelectOpti
       parserId: file.parserId,
       currency: file.parserId ? getParserCurrency(file.parserId) : null,
     }))
-  const uniqueBanks = Array.from(new Set(banks))
+  const uniqueBanks = uniqWith(banks, isEqual)
   const bankIds = uniqueBanks.map((bank) => bank.parserId) as ParserId[]
-
   const options: BankSelectOption[] = [
     ...bankIds.map((id) => ({
       label: getParserName(id).alt,

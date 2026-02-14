@@ -2,7 +2,6 @@ import type { ParsedContentRow, Parser } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
 import { detectMatch, parseGermanNumber } from '@/utils/Misc'
-import { Big } from '@/lib/w-big'
 
 export const ComdirectVisa: Parser = {
   id: ParserId.COMDIRECT_VISA,
@@ -50,7 +49,7 @@ export const ComdirectVisa: Parser = {
       const data: ParsedContentRow = {
         date: toSystemDate(umsatztag.trim(), { formatFrom: 'dd.MM.yyyy' }),
         description: buchungstext.trim(),
-        value: Big(parseGermanNumber(umsatzInEur.trim()) || 0),
+        value: parseGermanNumber(umsatzInEur.trim()),
         currency: ComdirectVisa.currency,
       }
 

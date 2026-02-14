@@ -76,6 +76,15 @@ export type SelectOptionWithType<T> = z.infer<ReturnType<typeof zSelectOptionWit
 
 // -------------------------------------------------------
 
+export const zNumberString = z.string().nonempty({ error: 'ERRORS:REQUIRED' })
+/**
+ * The NumberString must be a string representation of a number,
+ * i.e. '0' and never '', as using `Big('')` would fail.
+ */
+export type NumberString = z.infer<typeof zNumberString>
+
+// -------------------------------------------------------
+
 /**
  * Proxy for Big type.
  */

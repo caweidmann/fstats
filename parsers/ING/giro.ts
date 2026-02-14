@@ -2,7 +2,6 @@ import type { ParsedContentRow, Parser } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
 import { detectMatch, parseGermanNumber } from '@/utils/Misc'
-import { Big } from '@/lib/w-big'
 
 export const IngGiro: Parser = {
   id: ParserId.ING_GIRO,
@@ -50,7 +49,7 @@ export const IngGiro: Parser = {
       const data: ParsedContentRow = {
         date: toSystemDate(wertstellungsdatum.trim(), { formatFrom: 'dd.MM.yyyy' }),
         description: verwendungszweck.trim(),
-        value: Big(parseGermanNumber(betrag.trim()) || 0),
+        value: parseGermanNumber(betrag.trim()),
         currency: IngGiro.currency,
       }
 

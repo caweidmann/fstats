@@ -15,7 +15,6 @@ const Component = () => {
         color: '#fff',
         py: 1.5,
         px: 3,
-        mb: 3,
         borderRadius: 2,
         display: 'flex',
         justifyContent: 'space-between',
