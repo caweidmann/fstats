@@ -1,6 +1,2 @@
-export { default as CategoryBreakdown } from './CategoryBreakdown'
-export { default as ProfitLossCard } from './ProfitLossCard'
-export { default as ProfitLossSheet } from './ProfitLossSheet'
-export { default as TaxOptimizationInsights } from './TaxOptimizationInsights'
-export { default as TransactionChart } from './TransactionChart'
-export { default as TransactionsTable } from './TransactionsTable'
+export { default as BankSelector } from './BankSelector'
+export { default as DemoBanner } from './DemoBanner'

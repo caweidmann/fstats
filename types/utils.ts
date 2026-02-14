@@ -21,4 +21,9 @@ export type Parser = {
   parse: (input: PPRawParseResult, locale: UserLocale, dateFormat: DateFormat) => ParsedContentRow[]
 }
 
+// TODO: Remove "unknown"
 export type BankSelectOption = SelectOptionWithType<ParserId | 'all' | 'unknown'>
+
+export type StatsPageForm = {
+  selectedId: BankSelectOption['value'] | ''
+}
