@@ -11,7 +11,8 @@ import { isFeatureEnabled } from '@/utils/Features'
 import { isEqual, uniqWith } from '@/lib/w-lodash'
 
 import { getBankSelectOptions } from './actions'
-import { BankSelector, DemoBanner, ProfitLossSummary } from './components'
+import { BankSelector, DemoBanner, ProfitLossSummary, TransactionsTable } from './components'
+import { DEMO_TRANSACTIONS } from './demo-data'
 
 const Component = () => {
   const isWip = isFeatureEnabled('wip')
@@ -31,7 +32,7 @@ const Component = () => {
     selectedId && selectedId !== 'all' && selectedId !== 'unknown'
       ? selectedFiles.filter((file) => file.parserId === selectedId)
       : selectedFiles
-  const allTransactions = filesForSelectedId.flatMap((file) => file.parsedContentRows)
+  const allTransactions = isDemoMode ? DEMO_TRANSACTIONS : filesForSelectedId.flatMap((file) => file.parsedContentRows)
   const transactions = uniqWith(allTransactions, isEqual)
 
   return (
@@ -67,6 +68,10 @@ const Component = () => {
 
           <Grid size={12}>
             <ProfitLossSummary transactions={transactions} />
+          </Grid>
+
+          <Grid size={12}>
+            <TransactionsTable transactions={transactions} />
           </Grid>
         </Grid>
       </PageWrapper>
