@@ -2,7 +2,6 @@
 
 import { AccountBalance, TrendingDown, TrendingUp } from '@mui/icons-material'
 import { Box, Grid, Typography } from '@mui/material'
-import { green, red } from '@mui/material/colors'
 import { useTheme } from '@mui/material/styles'
 import { useFormContext } from 'react-hook-form'
 
@@ -36,10 +35,10 @@ const Component = ({ transactions }: ProfitLossSummaryProps) => {
           : Currency.USD // FIXME: This is just hacked, need to do better currency handling here
         : Currency.USD
   const { totalIncome, totalExpense, profit, expenseRatio } = getStats(transactions)
-  const totalIncomeDisplay = toFixedLocaleCurrency(totalIncome.toString(), currency, locale)
-  const totalExpenseDisplay = toFixedLocaleCurrency(totalExpense.toString(), currency, locale)
-  const profitDisplay = toFixedLocaleCurrency(profit.toString(), currency, locale)
-  const expenseRatioDisplay = toFixedLocale(expenseRatio.toString(), 1, locale, { trimTrailingZeros: true })
+  const totalIncomeDisplay = toFixedLocaleCurrency(totalIncome, currency, locale)
+  const totalExpenseDisplay = toFixedLocaleCurrency(totalExpense, currency, locale)
+  const profitDisplay = toFixedLocaleCurrency(profit, currency, locale)
+  const expenseRatioDisplay = toFixedLocale(expenseRatio, 1, locale, { trimTrailingZeros: true })
   const { incomeTextColor, expensesTextColor, profitTextColor, profitBgColor } = getProfitLossColors(
     Big(profit).gte(0),
     isDarkMode,
