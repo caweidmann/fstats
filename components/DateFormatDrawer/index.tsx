@@ -22,7 +22,7 @@ const Component = ({ onOptionSelected }: DateFormatDrawerProps) => {
   }
 
   return (
-    <List sx={{ pt: 0 }}>
+    <List>
       {selectOptions.map((option) => (
         <DateFormatDrawerListItem
           key={option.value}
