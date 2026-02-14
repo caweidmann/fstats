@@ -1,11 +1,17 @@
 import type { BankSelectOption, StatsFile } from '@/types'
 import { ParserId } from '@/types-enums'
 import { getParserName } from '@/utils/Misc'
+import { getParserCurrency } from '@/parsers'
 
 export const getBankSelectOptions = (selectedFiles: StatsFile[]): BankSelectOption[] => {
-  const bankIds = Array.from(
-    new Set(selectedFiles.map((file) => file.parserId).filter((id): id is ParserId => id !== null)),
-  )
+  const banks = selectedFiles
+    .filter((file) => file.parserId !== null)
+    .map((file) => ({
+      parserId: file.parserId,
+      currency: file.parserId ? getParserCurrency(file.parserId) : null,
+    }))
+  const uniqueBanks = Array.from(new Set(banks))
+  const bankIds = uniqueBanks.map((bank) => bank.parserId) as ParserId[]
 
   const options: BankSelectOption[] = [
     ...bankIds.map((id) => ({
@@ -14,13 +20,19 @@ export const getBankSelectOptions = (selectedFiles: StatsFile[]): BankSelectOpti
     })),
   ]
 
-  // TODO: Add back when we have currency conversion logic in app
-  // if (bankIds.length > 1) {
-  //   options.unshift({
-  //     label: 'All / Combined',
-  //     value: 'all',
-  //   })
-  // }
+  options.sort((a, b) => a.value.localeCompare(b.value))
+
+  // Only add "All / Combined" when uniqueBanks have exactly the same currency
+  // TODO: Once we have currency conversion logic "All" should always be available
+  if (uniqueBanks.length > 1) {
+    const allSameCurrency = uniqueBanks.every((bank) => bank.currency === uniqueBanks[0].currency)
+    if (allSameCurrency) {
+      options.unshift({
+        label: 'All accounts',
+        value: 'all',
+      })
+    }
+  }
 
   return options
 }

@@ -19,3 +19,7 @@ export const AVAILABLE_PARSERS = {
 } satisfies Record<ParserId, Parser>
 
 checkUniqueParserIds(AVAILABLE_PARSERS)
+
+export const getParserCurrency = (parserId: ParserId) => {
+  return AVAILABLE_PARSERS[parserId].currency
+}
