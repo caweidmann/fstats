@@ -44,21 +44,9 @@ const Component = ({ transactions }: ProfitLossSummaryProps) => {
   }, Big(0))
   const profit = totalIncome.minus(totalExpenses)
   const expenseRatio = totalIncome.gt(0) ? totalExpenses.div(totalIncome).times(100) : Big(0)
-  const totalIncomeDisplay = toFixedLocaleCurrency(totalIncome.toString(), currency, locale, {
-    rawValue: totalIncome.toString(),
-    isFractional: false,
-    currencyFormat: 'symbol',
-  })
-  const totalExpensesDisplay = toFixedLocaleCurrency(totalExpenses.toString(), currency, locale, {
-    rawValue: totalExpenses.toString(),
-    isFractional: false,
-    currencyFormat: 'symbol',
-  })
-  const profitDisplay = toFixedLocaleCurrency(profit.toString(), currency, locale, {
-    rawValue: profit.toString(),
-    isFractional: false,
-    currencyFormat: 'symbol',
-  })
+  const totalIncomeDisplay = toFixedLocaleCurrency(totalIncome.toString(), currency, locale)
+  const totalExpensesDisplay = toFixedLocaleCurrency(totalExpenses.toString(), currency, locale)
+  const profitDisplay = toFixedLocaleCurrency(profit.toString(), currency, locale)
   const expenseRatioDisplay = toFixedLocale(expenseRatio.toString(), 1, locale, { trimTrailingZeros: true })
   const profitColor = profit.gte(0)
     ? isDarkMode

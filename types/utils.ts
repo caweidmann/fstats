@@ -48,8 +48,8 @@ export type FixedLocaleOptions = {
 }
 
 export type FixedLocaleCurrencyOptions = {
-  rawValue: NumberString
-  isFractional: boolean
+  rawValue?: NumberString
+  isFractional?: boolean
   currencyFormat?: CurrencyFormat
   trimTrailingZeros?: boolean
 }

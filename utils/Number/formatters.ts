@@ -69,7 +69,17 @@ export const toFixedLocaleCurrency = (
   value: NumberString,
   currency: Currency,
   locale: UserLocale,
-  { rawValue, isFractional, currencyFormat, trimTrailingZeros }: FixedLocaleCurrencyOptions,
+  {
+    rawValue = value,
+    isFractional = false,
+    currencyFormat = 'symbol',
+    trimTrailingZeros = false,
+  }: FixedLocaleCurrencyOptions = {
+    rawValue: value,
+    isFractional: false,
+    currencyFormat: 'symbol',
+    trimTrailingZeros: false,
+  },
 ): string => {
   let itemDecimals = getDecimals(rawValue)
   const currencyDecimals = getMaxDecimalsForCurrency(currency)
