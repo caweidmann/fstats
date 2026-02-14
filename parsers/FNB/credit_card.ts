@@ -2,6 +2,7 @@ import type { ParsedContentRow, Parser } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
 import { detectMatch } from '@/utils/Misc'
+import { Big } from '@/lib/w-big'
 
 export const FnbCreditCard: Parser = {
   id: ParserId.FNB,
@@ -40,11 +41,14 @@ export const FnbCreditCard: Parser = {
         description,
       ] = row
 
+      const value = amount.trim()
+
       const data: ParsedContentRow = {
         date: toSystemDate(date.trim(), { formatFrom: 'yyyy/MM/dd' }),
         description: description.trim(),
-        value: amount.trim(),
+        value,
         currency: FnbCreditCard.currency,
+        category: Big(value).gte(0) ? 'income' : 'expense', // FIXME: Add cats parser
       }
 
       return data

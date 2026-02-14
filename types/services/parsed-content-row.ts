@@ -11,6 +11,7 @@ export const zParsedContentRow = z.object({
   description: z.string(),
   value: zNumberString,
   currency: zCurrency,
+  category: z.string(), // FIXME: type to porper cats
 })
 
 export type ParsedContentRow = z.infer<typeof zParsedContentRow>

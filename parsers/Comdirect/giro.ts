@@ -3,6 +3,7 @@ import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
 import { detectMatch } from '@/utils/Misc'
 import { parseGermanNumber } from '@/utils/Number'
+import { Big } from '@/lib/w-big'
 
 export const ComdirectGiro: Parser = {
   id: ParserId.COMDIRECT_GIRO,
@@ -45,11 +46,14 @@ export const ComdirectGiro: Parser = {
         _empty,
       ] = row
 
+      const value = parseGermanNumber(umsatzInEur.trim())
+
       const data: ParsedContentRow = {
         date: toSystemDate(wertstellung.trim(), { formatFrom: 'dd.MM.yyyy' }),
         description: buchungstext.trim(),
-        value: parseGermanNumber(umsatzInEur.trim()),
+        value,
         currency: ComdirectGiro.currency,
+        category: Big(value).gte(0) ? 'income' : 'expense', // FIXME: Add cats parser
       }
 
       return data
