@@ -55,7 +55,7 @@ export const ComdirectVisa: Parser = {
         description: buchungstext.trim(),
         value,
         currency: ComdirectVisa.currency,
-        category: Big(value).gte(0) ? 'income' : 'expense', // FIXME: Add cats parser
+        category: Big(value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
       }
 
       return data

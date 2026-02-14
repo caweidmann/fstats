@@ -59,7 +59,7 @@ export const IngGiroWb: Parser = {
         description: verwendungszweck.trim(),
         value,
         currency: IngGiroWb.currency,
-        category: Big(value).gte(0) ? 'income' : 'expense', // FIXME: Add cats parser
+        category: Big(value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
       }
 
       return data

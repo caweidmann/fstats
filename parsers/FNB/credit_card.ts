@@ -48,7 +48,7 @@ export const FnbCreditCard: Parser = {
         description: description.trim(),
         value,
         currency: FnbCreditCard.currency,
-        category: Big(value).gte(0) ? 'income' : 'expense', // FIXME: Add cats parser
+        category: Big(value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
       }
 
       return data
