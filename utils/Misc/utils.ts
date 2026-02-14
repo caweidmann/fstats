@@ -57,10 +57,6 @@ export const getParserName = (value: ParserId | null): { short: string; long: st
   }
 }
 
-export const parseGermanNumber = (numberString: string): string => {
-  return numberString.replace(/\./g, '').replace(/,/g, '.')
-}
-
 export const getDefaultGradientColors = (theme: Theme, isDarkMode: boolean): GradientColors => {
   const startColor = isDarkMode ? theme.palette.background.default : '#f4f4f4'
   const endColor = isDarkMode ? theme.palette.primary.dark : theme.palette.secondary.light

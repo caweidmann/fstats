@@ -91,7 +91,7 @@ export const getChartOptions = ({
         //     if (context.parsed.y !== null) {
         //       const value = context.parsed.y.toString()
         //       return `${context.dataset.label || ''}: ${toFixedLocaleCurrency(value, currency, locale, {
-        //         rawItemPrice: value,
+        //         rawValue: value,
         //         isFractional: false,
         //         currencyFormat: 'symbol',
         //       })}`
@@ -145,7 +145,7 @@ export const getChartOptions = ({
         // ticks: {
         //   callback(value) {
         //     return toFixedLocaleCurrency(value.toString(), currency, locale, {
-        //       rawItemPrice: value.toString(),
+        //       rawValue: value.toString(),
         //       isFractional: false,
         //       currencyFormat: 'symbol',
         //       trimTrailingZeros: true,

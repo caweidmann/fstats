@@ -8,8 +8,8 @@ import { useFormContext } from 'react-hook-form'
 
 import type { ParsedContentRow, StatsPageForm } from '@/types'
 import { Currency } from '@/types-enums'
-import { useIsDarkMode } from '@/hooks'
-import { getCurrencySymbol } from '@/utils/Currency'
+import { useIsDarkMode, useUserPreferences } from '@/hooks'
+import { toFixedLocale, toFixedLocaleCurrency } from '@/utils/Number'
 import { getParserCurrency } from '@/parsers'
 import { Big } from '@/lib/w-big'
 
@@ -20,6 +20,7 @@ type ProfitLossSummaryProps = {
 }
 
 const Component = ({ transactions }: ProfitLossSummaryProps) => {
+  const { locale } = useUserPreferences()
   const isDarkMode = useIsDarkMode()
   const theme = useTheme()
   const sx = ui(theme)
@@ -33,7 +34,6 @@ const Component = ({ transactions }: ProfitLossSummaryProps) => {
           ? transactions[0].currency
           : Currency.USD // FIXME: This is just hacked, need to do better currency handling here
         : Currency.USD
-  const currencySymbol = getCurrencySymbol(currency)
   const totalIncome = transactions.reduce((acc, transaction) => {
     const value = Big(transaction.value)
     return acc.plus(value.gt(0) ? value : Big(0))
@@ -44,10 +44,22 @@ const Component = ({ transactions }: ProfitLossSummaryProps) => {
   }, Big(0))
   const profit = totalIncome.minus(totalExpenses)
   const expenseRatio = totalIncome.gt(0) ? totalExpenses.div(totalIncome).times(100) : Big(0)
-  const totalIncomeDisplay = `${currencySymbol}${totalIncome.toString()}`
-  const totalExpensesDisplay = `${currencySymbol}${totalExpenses.toString()}`
-  const profitDisplay = `${currencySymbol}${profit.toString()}`
-  const expenseRatioDisplay = `${expenseRatio.toFixed(1)}%`
+  const totalIncomeDisplay = toFixedLocaleCurrency(totalIncome.toString(), currency, locale, {
+    rawValue: totalIncome.toString(),
+    isFractional: false,
+    currencyFormat: 'symbol',
+  })
+  const totalExpensesDisplay = toFixedLocaleCurrency(totalExpenses.toString(), currency, locale, {
+    rawValue: totalExpenses.toString(),
+    isFractional: false,
+    currencyFormat: 'symbol',
+  })
+  const profitDisplay = toFixedLocaleCurrency(profit.toString(), currency, locale, {
+    rawValue: profit.toString(),
+    isFractional: false,
+    currencyFormat: 'symbol',
+  })
+  const expenseRatioDisplay = toFixedLocale(expenseRatio.toString(), 1, locale, { trimTrailingZeros: true })
   const profitColor = profit.gte(0)
     ? isDarkMode
       ? 'rgba(76, 175, 80, 0.08)'

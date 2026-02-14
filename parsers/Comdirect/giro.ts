@@ -1,7 +1,8 @@
 import type { ParsedContentRow, Parser } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
-import { detectMatch, parseGermanNumber } from '@/utils/Misc'
+import { detectMatch } from '@/utils/Misc'
+import { parseGermanNumber } from '@/utils/Number'
 
 export const ComdirectGiro: Parser = {
   id: ParserId.COMDIRECT_GIRO,
