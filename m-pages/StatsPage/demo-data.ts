@@ -310,3 +310,47 @@ export const DEMO_TRANSACTIONS: ParsedContentRow[] = [
     category: 'Travel Expenses',
   },
 ]
+
+export type OptimizationInsight = {
+  category: string
+  currentSpend: number
+  potentialIncrease: number
+  taxSavings: number
+  description: string
+  priority: 'high' | 'medium' | 'low'
+}
+
+export const DEMO_TAX_INSIGHTS: OptimizationInsight[] = [
+  {
+    category: 'Vehicle & Transport',
+    currentSpend: 425.5,
+    potentialIncrease: 2400,
+    taxSavings: 430.4,
+    description: 'Track all business mileage and vehicle expenses. Full deduction available for business use.',
+    priority: 'high',
+  },
+  {
+    category: 'Professional Training',
+    currentSpend: 0,
+    potentialIncrease: 800,
+    taxSavings: 174.4,
+    description: 'Safety certifications and carpentry courses are fully deductible professional development.',
+    priority: 'high',
+  },
+  {
+    category: 'Tool & Equipment',
+    currentSpend: 500,
+    potentialIncrease: 2000,
+    taxSavings: 327.0,
+    description: 'Additional power tools and equipment purchases can significantly reduce your tax burden.',
+    priority: 'medium',
+  },
+  {
+    category: 'Workshop Improvements',
+    currentSpend: 0,
+    potentialIncrease: 1500,
+    taxSavings: 327.0,
+    description: 'Upgrades to workshop lighting, ventilation and/or storage solutions are deductible.',
+    priority: 'medium',
+  },
+]
