@@ -1,13 +1,13 @@
 'use client'
 
 import { Grid } from '@mui/material'
+import { isEqual, uniqWith } from 'lodash'
 import { useSearchParams } from 'next/navigation'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import type { StatsPageForm } from '@/types'
 import { PageWrapper } from '@/components'
 import { useFileHelper } from '@/hooks'
-import { isEqual, uniqWith } from '@/lib/w-lodash'
 
 import { getBankSelectOptions } from './actions'
 import { BankSelector, DemoBanner, ProfitLossSummary, TransactionInfo, TransactionsTable } from './components'
