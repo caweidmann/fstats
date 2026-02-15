@@ -10,6 +10,11 @@ export type DateFnsLocale = Locale
 
 export type FeatureFlags = Record<string, boolean>
 
+export type Size = {
+  width?: number
+  height?: number
+}
+
 export type Parser = {
   id: ParserId
   bankName: string
