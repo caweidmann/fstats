@@ -31,14 +31,15 @@ pnpm lint
 ### Directory Structure
 
 - **`/app`** - Next.js App Router pages and layouts (Routes: `/`, `/data`, `/stats`, `/settings`)
-- **`/components`** - Reusable UI components and provider components (StorageProvider, QueryProvider, ThemeProvider, LanguageProvider, ChartProvider)
+- **`/components`** - Reusable UI components (BarChart, ConfirmDialog, DateFormatDrawer, DateFormatSwitcher, DoughnutChart, FormFieldsControlled, LanguageDrawer, LanguageSwitcher, Layout, LineChart, PageWrapper, RadioButton, SwipeableDrawer, ThemeDrawer, ThemeSwitcher) and provider components (StorageProvider, QueryProvider, ThemeProvider, LanguageProvider, ChartProvider)
 - **`/m-stats-file`** - Stats file management module (api/, service/)
 - **`/m-user`** - User preferences management module (api/, service/)
 - **`/m-pages`** - Page-level components module (DataPage/, EmptyStatsPage/, HomePage/, SettingsPage/, StatsPage/)
-- **`/types`** - TypeScript type definitions (global.ts, utils.ts, services/, lib/)
-- **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, ParserId, DateFormat, WeekStartsOn, StatsFileStatus, Currency, SortOrder)
-- **`/utils`** - Domain-organized utilities (Currency/, Date/, File/, FileParser/, Features/, LocalStorage/, Logger/, Misc/, Number/, Stats/)
-- **`/parsers`** - Bank-specific CSV parsers (Capitec/, Comdirect/, FNB/, ING/, Lloyds/)
+  - StatsPage has sub-components: BankSelector, DemoBanner, ProfitLossSummary, TaxInsights, TransactionChart, TransactionInfo, TransactionsTable
+- **`/types`** - TypeScript type definitions (global.ts, utils.ts, key-check.ts, services/, lib/)
+- **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, ParserId, DateFormat, WeekStartsOn, WeekStartsOnValue, StatsFileStatus, Currency, SortOrder)
+- **`/utils`** - Domain-organized utilities (Chart/, Currency/, Date/, Features/, File/, FileParser/, LocalStorage/, Logger/, Misc/, Number/, Stats/)
+- **`/parsers`** - Bank-specific CSV parsers (Capitec/, Comdirect/, FNB/, ING/, Lloyds/) with shared helper.ts
 - **`/lib`** - Third-party library configs (i18n.ts, localforage.ts, tanstack-query.ts, chartjs.ts, w-big.ts)
 - **`/common`** - App-wide constants (misc.ts, routes.ts, config.ts)
 - **`/hooks`** - Custom React hooks (useIsDarkMode, useIsMobile, useUserPreferences, useFileHelper, useDarkModeMetaTagUpdater)
@@ -92,17 +93,19 @@ Component → Service Hook → API Layer → LocalForage → IndexedDB
 
 **Provider Hierarchy** (app/layout.tsx):
 ```tsx
-<QueryProvider>                {/* TanStack Query client */}
-  <StorageProvider>            {/* Initializes LocalForage */}
-    <ThemeProvider>            {/* MUI theme + color mode */}
-      <LanguageProvider>       {/* i18next */}
-        <ChartProvider>        {/* Chart.js config */}
-          <Layout>{children}</Layout>
-        </ChartProvider>
-      </LanguageProvider>
-    </ThemeProvider>
-  </StorageProvider>
-</QueryProvider>
+<AppRouterCacheProvider>       {/* MUI Emotion cache */}
+  <QueryProvider>                {/* TanStack Query client */}
+    <StorageProvider>            {/* Initializes LocalForage */}
+      <ThemeProvider>            {/* MUI theme + color mode */}
+        <LanguageProvider>       {/* i18next */}
+          <ChartProvider>        {/* Chart.js config */}
+            <Layout>{children}</Layout>
+          </ChartProvider>
+        </LanguageProvider>
+      </ThemeProvider>
+    </StorageProvider>
+  </QueryProvider>
+</AppRouterCacheProvider>
 ```
 
 **Data Transformation** (At Rest ↔ In Memory):
@@ -274,8 +277,9 @@ export const userKey = {
 - **UI**: MUI v7 with Emotion
 - **Data Fetching**: @tanstack/react-query v5
 - **CSV Parsing**: PapaParse
-- **Charts**: Chart.js with react-chartjs-2
-- **Forms**: react-hook-form with zod
+- **Charts**: Chart.js with react-chartjs-2, chartjs-plugin-annotation
+- **Validation**: zod v4 (uses `z.iso.datetime()`, `z.iso.date()` syntax)
+- **Forms**: react-hook-form
 - **File Upload**: react-dropzone
 - **Number Precision**: big.js | **Date**: date-fns v4
 - **i18n**: next-i18next, i18next, react-i18next
@@ -297,6 +301,7 @@ DirectoryName/
 ├── utils.ts           # Implementation
 ├── actions.ts(x)      # Component-specific logic (COMMON)
 ├── styled.ts          # MUI styles (COMMON)
+├── demo-data.ts       # Demo/sample data (when applicable)
 ├── components/        # Sub-components when needed
 └── [domain].ts        # Optional domain-specific files
 ```
@@ -523,6 +528,8 @@ import { useFileHelper, useIsDarkMode, useUserPreferences } from '@/hooks'
 
 // Utils
 import { formatDate, toDisplayDate } from '@/utils/Date'
+import { getStats, getProfitLossColors } from '@/utils/Stats'
+import { getGradient } from '@/utils/Chart'
 import { AVAILABLE_PARSERS } from '@/parsers'
 import { Big } from '@/lib/w-big'
 

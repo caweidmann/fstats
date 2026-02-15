@@ -1,7 +1,4 @@
-import type { Theme } from '@mui/material/styles'
-import type { ScriptableContext } from 'chart.js'
-
-import type { GradientColors, GradientDirection, Parser, PPRawParseResult } from '@/types'
+import type { Parser, PPRawParseResult } from '@/types'
 import { ParserId } from '@/types-enums'
 import { MISC } from '@/common'
 import { AVAILABLE_PARSERS } from '@/parsers'
@@ -55,48 +52,4 @@ export const getParserName = (value: ParserId | null): { short: string; long: st
     long: 'Invalid parser',
     alt: 'Invalid parser',
   }
-}
-
-export const getDefaultGradientColors = (theme: Theme, isDarkMode: boolean): GradientColors => {
-  const startColor = isDarkMode ? theme.palette.background.default : '#f4f4f4'
-  const endColor = isDarkMode ? theme.palette.primary.dark : theme.palette.secondary.light
-
-  return {
-    start: startColor,
-    end: endColor,
-  }
-}
-
-export const getGradient = ({
-  context,
-  colors,
-  direction = 'horizontal',
-  reverse = false,
-}: {
-  context: ScriptableContext<'line' | 'bar'>
-  colors: GradientColors
-  direction?: GradientDirection
-  reverse?: boolean
-}): CanvasGradient | 'currentcolor' => {
-  const { chart } = context
-  const { ctx, chartArea } = chart
-
-  if (!chartArea) {
-    return 'currentcolor'
-  }
-
-  const hStart = reverse ? chartArea.right : chartArea.left
-  const hEnd = reverse ? chartArea.left : chartArea.right
-  const vStart = reverse ? chartArea.top : chartArea.bottom
-  const vEnd = reverse ? chartArea.bottom : chartArea.top
-
-  const gradient =
-    direction === 'horizontal'
-      ? ctx.createLinearGradient(hStart, 0, hEnd, 0)
-      : ctx.createLinearGradient(0, vStart, 0, vEnd)
-
-  gradient.addColorStop(0, colors.start)
-  gradient.addColorStop(1, colors.end)
-
-  return gradient
 }

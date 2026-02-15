@@ -10,7 +10,15 @@ import { PageWrapper } from '@/components'
 import { useFileHelper } from '@/hooks'
 
 import { getBankSelectOptions } from './actions'
-import { BankSelector, DemoBanner, ProfitLossSummary, TransactionInfo, TransactionsTable } from './components'
+import {
+  BankSelector,
+  DemoBanner,
+  ProfitLossSummary,
+  TaxInsights,
+  TransactionChart,
+  TransactionInfo,
+  TransactionsTable,
+} from './components'
 import { DEMO_TRANSACTIONS } from './demo-data'
 
 const Component = () => {
@@ -65,6 +73,14 @@ const Component = () => {
 
           <Grid size={12}>
             <ProfitLossSummary transactions={transactions} />
+          </Grid>
+
+          <Grid size={12}>
+            <TransactionChart transactions={transactions} />
+          </Grid>
+
+          <Grid size={12}>
+            <TaxInsights transactions={transactions} isDemoMode={isDemoMode} />
           </Grid>
 
           <Grid size={12}>
