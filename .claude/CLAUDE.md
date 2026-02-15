@@ -34,11 +34,12 @@ pnpm lint
 - **`/components`** - Reusable UI components and provider components (StorageProvider, QueryProvider, ThemeProvider, LanguageProvider, ChartProvider)
 - **`/m-stats-file`** - Stats file management module (api/, service/)
 - **`/m-user`** - User preferences management module (api/, service/)
+- **`/m-pages`** - Page-level components module (DataPage/, EmptyStatsPage/, HomePage/, SettingsPage/, StatsPage/)
 - **`/types`** - TypeScript type definitions (global.ts, utils.ts, services/, lib/)
 - **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, ParserId, DateFormat, WeekStartsOn, StatsFileStatus, Currency, SortOrder)
-- **`/utils`** - Domain-organized utilities (Date/, File/, FileParser/, Features/, LocalStorage/, Logger/, Misc/)
-- **`/parsers`** - Bank-specific CSV parsers (Capitec/, Comdirect/)
-- **`/lib`** - Third-party library configs (i18n.ts, localforage.ts, tanstack-query.ts, chartjs.ts, w-big.ts, w-lodash.ts)
+- **`/utils`** - Domain-organized utilities (Currency/, Date/, File/, FileParser/, Features/, LocalStorage/, Logger/, Misc/, Number/, Stats/)
+- **`/parsers`** - Bank-specific CSV parsers (Capitec/, Comdirect/, FNB/, ING/, Lloyds/)
+- **`/lib`** - Third-party library configs (i18n.ts, localforage.ts, tanstack-query.ts, chartjs.ts, w-big.ts)
 - **`/common`** - App-wide constants (misc.ts, routes.ts, config.ts)
 - **`/hooks`** - Custom React hooks (useIsDarkMode, useIsMobile, useUserPreferences, useFileHelper, useDarkModeMetaTagUpdater)
 - **`/styles`** - Global styles and MUI theme configuration
@@ -116,25 +117,35 @@ Enforced via Prettier plugin:
 2. `@/types` and `@/types-enums`
 3. `@/common`
 4. `@/components`
-5. `@/m-*` (feature modules)
-6. `@/hooks`
-7. `@/styles`
-8. `@/utils`
-9. `@/lib`
-10. `@/public`
-11. Relative imports (`./` or `../`)
+5. `@/context`
+6. `@/m-*` (feature modules)
+7. `@/hooks`
+8. `@/styles`
+9. `@/utils`
+10. `@/parsers`
+11. `@/lib`
+12. `@/public`
+13. Relative imports (`./` or `../`)
 
 ## Adding a New Bank Parser
 
-**Currently Implemented Parsers**: CAPITEC (Savings), COMDIRECT (Giro)
+**Currently Implemented Parsers**: CAPITEC (Savings), FNB (Credit Card), COMDIRECT (Giro, Visa), ING (Giro, Giro with Balance), LLOYDS (Current)
 
 To add a new bank parser:
 
 1. **Add ParserId** to `types-enums/index.ts`:
 ```typescript
 export const ParserId = {
+  // South African Banks
   CAPITEC: 'capitec__savings',
+  FNB: 'fnb__credit_card',
+  // German Banks
   COMDIRECT_GIRO: 'comdirect__giro',
+  COMDIRECT_VISA: 'comdirect__visa',
+  ING_GIRO: 'ing__giro',
+  ING_GIRO_WB: 'ing__giro_with_balance',
+  // UK Banks
+  LLOYDS_CURRENT: 'lloyds__current',
   NEW_BANK: 'new_bank__account_type', // New
 } as const
 ```
@@ -142,34 +153,40 @@ export const ParserId = {
 2. **Create parser** `parsers/NewBank/account-type.ts`:
 ```typescript
 import type { ParsedContentRow, Parser } from '@/types'
-import { ParserId } from '@/types-enums'
-import { isEqual } from '@/utils/Misc'
+import { Currency, ParserId } from '@/types-enums'
+import { toSystemDate } from '@/utils/Date'
+import { detectMatch } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
-import { toDisplayDate } from '../../Date'
 
 export const NewBankAccountType: Parser = {
   id: ParserId.NEW_BANK,
   bankName: 'New Bank',
   accountType: 'Account Type',
+  currency: Currency.EUR,
   expectedHeaderRowIndex: 0,
   expectedHeaders: ['Date', 'Description', 'Amount', 'Balance'],
 
   detect: (input) => {
-    return isEqual(input.data[NewBankAccountType.expectedHeaderRowIndex], NewBankAccountType.expectedHeaders)
+    return detectMatch(input, NewBankAccountType)
   },
 
-  parse: (input, locale) => {
+  parse: (input, locale, formatTo) => {
     const rowsToParse = input.data
       .slice(NewBankAccountType.expectedHeaderRowIndex + 1)
       .filter((row) => row.length === NewBankAccountType.expectedHeaders.length)
 
     return rowsToParse.map((row) => {
       const [date, description, amount] = row
-      return {
-        date: toDisplayDate(date, locale, { formatFrom: 'dd/MM/yyyy', formatTo: 'dd/MM/yyyy' }),
-        description,
-        value: Big(amount || 0),
+
+      const data: ParsedContentRow = {
+        date: toSystemDate(date.trim(), { formatFrom: 'dd/MM/yyyy' }),
+        description: description.trim(),
+        value: amount || '0',
+        currency: NewBankAccountType.currency,
+        category: Big(amount || 0).gte(0) ? 'Income' : 'Expense',
       }
+
+      return data
     })
   },
 }
@@ -186,7 +203,12 @@ import { NewBankAccountType } from './NewBank'
 
 export const AVAILABLE_PARSERS = {
   [ParserId.CAPITEC]: CapitecSavings,
+  [ParserId.FNB]: FnbCreditCard,
   [ParserId.COMDIRECT_GIRO]: ComdirectGiro,
+  [ParserId.COMDIRECT_VISA]: ComdirectVisa,
+  [ParserId.ING_GIRO]: IngGiro,
+  [ParserId.ING_GIRO_WB]: IngGiroWb,
+  [ParserId.LLOYDS_CURRENT]: LloydsCurrent,
   [ParserId.NEW_BANK]: NewBankAccountType, // Register
 } satisfies Record<ParserId, Parser>
 ```
@@ -258,7 +280,7 @@ export const userKey = {
 - **Number Precision**: big.js | **Date**: date-fns v4
 - **i18n**: next-i18next, i18next, react-i18next
 - **Storage**: localforage (IndexedDB)
-- **Utilities**: lodash, usehooks-ts
+- **Utilities**: lodash (imported directly, no wrapper), usehooks-ts
 - **PWA**: @serwist/next
 
 ## Code Organization Patterns

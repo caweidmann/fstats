@@ -3,9 +3,8 @@
 import { useSearchParams } from 'next/navigation'
 
 import { PageWrapper } from '@/components'
+import { EmptyStatsPage, StatsPage } from '@/m-pages'
 import { useFileHelper } from '@/hooks'
-
-import { EmptyStatsPage, StatsPage } from './components'
 
 const Page = () => {
   const { selectedFiles, isLoadingFiles } = useFileHelper()

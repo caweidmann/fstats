@@ -1,7 +1,8 @@
+import { sortBy } from 'lodash'
+
 import type { SelectOptionWithType } from '@/types'
 import { Currency } from '@/types-enums'
 import { i18n } from '@/lib/i18n'
-import { sortBy } from '@/lib/w-lodash'
 
 export const getCurrencySelectOptions = (): SelectOptionWithType<Currency>[] => {
   // @currency-updates

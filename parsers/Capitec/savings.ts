@@ -61,11 +61,14 @@ export const CapitecSavings: Parser = {
       const valOut = moneyOut.trim()
       const valFee = fee.trim()
 
+      const value = valIn ? valIn : valOut ? valOut : valFee ? valFee : '0'
+
       const data: ParsedContentRow = {
         date: toSystemDate(transactionDate.trim(), { formatFrom: 'yyyy-MM-dd HH:SS' }),
         description: description.trim(),
-        value: valIn ? Big(valIn) : valOut ? Big(valOut) : valFee ? Big(valFee) : Big(0),
+        value,
         currency: CapitecSavings.currency,
+        category: Big(value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
       }
 
       return data

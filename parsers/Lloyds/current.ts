@@ -52,11 +52,14 @@ export const LloydsCurrent: Parser = {
       const valIn = creditAmount.trim()
       const valOut = debitAmount.trim()
 
+      const value = valIn ? valIn : valOut ? Big(valOut).times(-1).toString() : '0'
+
       const data: ParsedContentRow = {
         date: toSystemDate(transactionDate.trim(), { formatFrom: 'dd/MM/yyyy' }),
         description: transactionDescription.trim(),
-        value: valIn ? Big(valIn) : valOut ? Big(valOut).times(-1) : Big(0),
+        value,
         currency: LloydsCurrent.currency,
+        category: Big(value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
       }
 
       return data

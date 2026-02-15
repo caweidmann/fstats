@@ -2,7 +2,7 @@ import type { Locale } from 'date-fns'
 
 import { Currency, DateFormat, ParserId, UserLocale } from '@/types-enums'
 
-import type { SelectOptionWithType } from './global'
+import type { NumberString, SelectOptionWithType } from './global'
 import type { PPRawParseResult } from './lib/papaparse'
 import type { ParsedContentRow } from './services/parsed-content-row'
 
@@ -21,4 +21,35 @@ export type Parser = {
   parse: (input: PPRawParseResult, locale: UserLocale, dateFormat: DateFormat) => ParsedContentRow[]
 }
 
+// TODO: Remove "unknown"
 export type BankSelectOption = SelectOptionWithType<ParserId | 'all' | 'unknown'>
+
+export type StatsPageForm = {
+  selectedId: BankSelectOption['value'] | ''
+}
+
+/**
+ * The currency format to use when formatting a currency, iso refers to "ISO 4217".
+ */
+export type CurrencyFormat = 'iso' | 'symbol'
+
+export type FixedLocaleAppendOption =
+  | string
+  | {
+      currency: Currency
+      format?: CurrencyFormat
+    }
+  | null
+
+export type FixedLocaleOptions = {
+  trimTrailingZeros?: boolean
+  append?: FixedLocaleAppendOption
+  prepend?: FixedLocaleAppendOption
+}
+
+export type FixedLocaleCurrencyOptions = {
+  rawValue?: NumberString
+  isFractional?: boolean
+  currencyFormat?: CurrencyFormat
+  trimTrailingZeros?: boolean
+}

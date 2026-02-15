@@ -1,7 +1,8 @@
 import type { ParsedContentRow, Parser } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
-import { detectMatch, parseGermanNumber } from '@/utils/Misc'
+import { detectMatch } from '@/utils/Misc'
+import { parseGermanNumber } from '@/utils/Number'
 import { Big } from '@/lib/w-big'
 
 export const IngGiroWb: Parser = {
@@ -51,11 +52,14 @@ export const IngGiroWb: Parser = {
         waehrung2,
       ] = row
 
+      const value = parseGermanNumber(betrag.trim())
+
       const data: ParsedContentRow = {
         date: toSystemDate(wertstellungsdatum.trim(), { formatFrom: 'dd.MM.yyyy' }),
         description: verwendungszweck.trim(),
-        value: Big(parseGermanNumber(betrag.trim()) || 0),
+        value,
         currency: IngGiroWb.currency,
+        category: Big(value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
       }
 
       return data

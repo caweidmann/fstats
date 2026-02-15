@@ -41,11 +41,14 @@ export const FnbCreditCard: Parser = {
         description,
       ] = row
 
+      const value = amount.trim()
+
       const data: ParsedContentRow = {
         date: toSystemDate(date.trim(), { formatFrom: 'yyyy/MM/dd' }),
         description: description.trim(),
-        value: Big(amount.trim()),
+        value,
         currency: FnbCreditCard.currency,
+        category: Big(value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
       }
 
       return data
