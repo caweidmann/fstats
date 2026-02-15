@@ -14,7 +14,7 @@ export const getBarThickness = ({
   transactions: ParsedContentRow[]
   chartWidth: number
 }) => {
-  const calculatedThickness = Math.floor(chartWidth / transactions.length) / 2
+  const calculatedThickness = Math.floor(chartWidth / transactions.length) / 3
   const minThickness = 1
   const maxThickness = 30
 
