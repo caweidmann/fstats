@@ -1,6 +1,6 @@
-import type { ParsedContentRow } from '@/types'
+import type { Transaction } from '@/types'
 
-export const DEMO_TRANSACTIONS: ParsedContentRow[] = [
+export const DEMO_TRANSACTIONS: Transaction[] = [
   {
     date: '2026-01-05',
     description: 'Workshop Rent - January',

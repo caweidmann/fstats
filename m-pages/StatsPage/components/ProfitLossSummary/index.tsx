@@ -5,7 +5,7 @@ import { Box, Grid, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useFormContext } from 'react-hook-form'
 
-import type { ParsedContentRow, StatsPageForm } from '@/types'
+import type { StatsPageForm, Transaction } from '@/types'
 import { Currency } from '@/types-enums'
 import { useIsDarkMode, useUserPreferences } from '@/hooks'
 import { toFixedLocale, toFixedLocaleCurrency } from '@/utils/Number'
@@ -16,7 +16,7 @@ import { Big } from '@/lib/w-big'
 import { ui } from './styled'
 
 type ProfitLossSummaryProps = {
-  transactions: ParsedContentRow[]
+  transactions: Transaction[]
 }
 
 const Component = ({ transactions }: ProfitLossSummaryProps) => {

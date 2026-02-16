@@ -1,4 +1,4 @@
-import type { ParsedContentRow, Parser } from '@/types'
+import type { Parser, Transaction } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
 import { detectMatch } from '@/utils/Misc'
@@ -54,7 +54,7 @@ export const LloydsCurrent: Parser = {
 
       const value = valIn ? valIn : valOut ? Big(valOut).times(-1).toString() : '0'
 
-      const data: ParsedContentRow = {
+      const data: Transaction = {
         date: toSystemDate(transactionDate.trim(), { formatFrom: 'dd/MM/yyyy' }),
         description: transactionDescription.trim(),
         value,

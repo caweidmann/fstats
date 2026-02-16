@@ -7,7 +7,7 @@ import type { RefObject } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useDebounceCallback, useResizeObserver } from 'usehooks-ts'
 
-import type { ParsedContentRow, Size, StatsPageForm } from '@/types'
+import type { Size, StatsPageForm, Transaction } from '@/types'
 import { Currency } from '@/types-enums'
 import { BarChart } from '@/components'
 import { useUserPreferences } from '@/hooks'
@@ -18,7 +18,7 @@ import { getBackgroundColour, getBarThickness, getBorderRadius, getChartOptions 
 import { ui } from './styled'
 
 type TransactionChartProps = {
-  transactions: ParsedContentRow[]
+  transactions: Transaction[]
 }
 
 const Component = ({ transactions }: TransactionChartProps) => {

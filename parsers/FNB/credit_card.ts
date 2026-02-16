@@ -1,4 +1,4 @@
-import type { ParsedContentRow, Parser } from '@/types'
+import type { Parser, Transaction } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
 import { detectMatch } from '@/utils/Misc'
@@ -43,7 +43,7 @@ export const FnbCreditCard: Parser = {
 
       const value = amount.trim()
 
-      const data: ParsedContentRow = {
+      const data: Transaction = {
         date: toSystemDate(date.trim(), { formatFrom: 'yyyy/MM/dd' }),
         description: description.trim(),
         value,

@@ -7,7 +7,7 @@ import type { _KeysCheck } from '../key-check'
 import { _zKeysCheck } from '../key-check'
 import { zPPRawParseResult } from '../lib/papaparse'
 import { zRDZFileWithPath } from '../lib/react-dropzone'
-import { zParsedContentRow, zParsedContentRowAtRest } from './parsed-content-row'
+import { zTransaction, zTransactionAtRest } from './parsed-content-row'
 
 export const zStatsFile = z.object({
   created: z.union([z.literal(''), zDateTimeString]),
@@ -17,8 +17,8 @@ export const zStatsFile = z.object({
   file: zRDZFileWithPath,
   status: zStatsFileStatus,
   parserId: zParserId.nullable(),
-  parsedContentRows: z.array(zParsedContentRow),
   rawParseResult: zPPRawParseResult.nullable(),
+  transactions: z.array(zTransaction),
   error: z.string().optional(),
 })
 
@@ -36,7 +36,7 @@ export type SyncableStatsFile = z.infer<typeof zSyncableStatsFile>
 export const zStatsFileAtRest = z.object({
   ...zSyncableStatsFile.shape,
   hash: zNonEmptyString,
-  parsedContentRows: z.array(zParsedContentRowAtRest),
+  transactions: z.array(zTransactionAtRest),
 })
 
 export type StatsFileAtRest = z.infer<typeof zStatsFileAtRest>

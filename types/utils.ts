@@ -4,7 +4,7 @@ import { Currency, DateFormat, ParserId, UserLocale } from '@/types-enums'
 
 import type { NumberString, SelectOptionWithType } from './global'
 import type { PPRawParseResult } from './lib/papaparse'
-import type { ParsedContentRow } from './services/parsed-content-row'
+import type { Transaction } from './services/parsed-content-row'
 
 export type DateFnsLocale = Locale
 
@@ -23,7 +23,7 @@ export type Parser = {
   expectedHeaderRowIndex: number
   expectedHeaders: string[]
   detect: (input: PPRawParseResult) => boolean
-  parse: (input: PPRawParseResult, locale: UserLocale, dateFormat: DateFormat) => ParsedContentRow[]
+  parse: (input: PPRawParseResult, locale: UserLocale, dateFormat: DateFormat) => Transaction[]
 }
 
 // TODO: Remove "unknown"

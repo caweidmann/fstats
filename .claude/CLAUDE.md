@@ -155,7 +155,7 @@ export const ParserId = {
 
 2. **Create parser** `parsers/NewBank/account-type.ts`:
 ```typescript
-import type { ParsedContentRow, Parser } from '@/types'
+import type { Transaction, Parser } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
 import { detectMatch } from '@/utils/Misc'
@@ -181,7 +181,7 @@ export const NewBankAccountType: Parser = {
     return rowsToParse.map((row) => {
       const [date, description, amount] = row
 
-      const data: ParsedContentRow = {
+      const data: Transaction = {
         date: toSystemDate(date.trim(), { formatFrom: 'dd/MM/yyyy' }),
         description: description.trim(),
         value: amount || '0',
@@ -514,7 +514,7 @@ const { mutate: addFile } = useMutateAddFile() // Auto-invalidates cache
 ### Common Imports
 ```typescript
 // Types
-import type { StatsFile, ParsedContentRow } from '@/types'
+import type { StatsFile, Transaction } from '@/types'
 import { ParserId, StatsFileStatus } from '@/types-enums'
 
 // Service hooks - Stats Files

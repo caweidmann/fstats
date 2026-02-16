@@ -2,11 +2,11 @@ import { green, red } from '@mui/material/colors'
 import stringify from 'fast-json-stable-stringify'
 import { memoize } from 'lodash'
 
-import type { NumberString, ParsedContentRow } from '@/types'
+import type { NumberString, Transaction } from '@/types'
 import { Big } from '@/lib/w-big'
 
 const _getStats = (
-  transactions: ParsedContentRow[],
+  transactions: Transaction[],
 ): {
   totalIncome: NumberString
   totalExpense: NumberString

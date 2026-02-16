@@ -1,4 +1,4 @@
-import type { ParsedContentRow, Parser } from '@/types'
+import type { Parser, Transaction } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
 import { detectMatch } from '@/utils/Misc'
@@ -54,7 +54,7 @@ export const IngGiroWb: Parser = {
 
       const value = parseGermanNumber(betrag.trim())
 
-      const data: ParsedContentRow = {
+      const data: Transaction = {
         date: toSystemDate(wertstellungsdatum.trim(), { formatFrom: 'dd.MM.yyyy' }),
         description: verwendungszweck.trim(),
         value,

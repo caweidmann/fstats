@@ -37,7 +37,7 @@ const Component = () => {
     selectedId && selectedId !== 'all' && selectedId !== 'unknown'
       ? selectedFiles.filter((file) => file.parserId === selectedId)
       : selectedFiles
-  const allTransactions = isDemoMode ? DEMO_TRANSACTIONS : filesForSelectedId.flatMap((file) => file.parsedContentRows)
+  const allTransactions = isDemoMode ? DEMO_TRANSACTIONS : filesForSelectedId.flatMap((file) => file.transactions)
   const transactions = uniqWith(allTransactions, isEqual)
 
   return (

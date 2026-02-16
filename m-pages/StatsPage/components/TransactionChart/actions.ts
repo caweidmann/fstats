@@ -1,19 +1,13 @@
 import { green, red } from '@mui/material/colors'
 import type { ChartOptions, ScriptableContext } from 'chart.js'
 
-import type { ParsedContentRow } from '@/types'
+import type { Transaction } from '@/types'
 import { Currency, UserLocale } from '@/types-enums'
 import { getGradient } from '@/utils/Chart'
 import { toFixedLocaleCurrency } from '@/utils/Number'
 import { Big } from '@/lib/w-big'
 
-export const getBarThickness = ({
-  transactions,
-  chartWidth,
-}: {
-  transactions: ParsedContentRow[]
-  chartWidth: number
-}) => {
+export const getBarThickness = ({ transactions, chartWidth }: { transactions: Transaction[]; chartWidth: number }) => {
   const calculatedThickness = Math.floor(chartWidth / transactions.length) / 3
   const minThickness = 1
   const maxThickness = 30

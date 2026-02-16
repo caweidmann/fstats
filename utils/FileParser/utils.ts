@@ -16,7 +16,7 @@ export const parseFiles = async (
 export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat: DateFormat): Promise<StatsFile> => {
   const rawParseResult = await parseRaw(file.file)
   let parserId: StatsFile['parserId'] = null
-  let parsedContentRows: StatsFile['parsedContentRows'] = []
+  let transactions: StatsFile['transactions'] = []
   let matchedParser: Parser | null = null
 
   for (const parser of Object.values(AVAILABLE_PARSERS)) {
@@ -31,7 +31,7 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
       return {
         ...file,
         rawParseResult,
-        parsedContentRows,
+        transactions,
         parserId,
         status: StatsFileStatus.ERROR,
         error: `Parse "${parser.id}" failed during detection phase`,
@@ -42,14 +42,14 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
   if (matchedParser) {
     try {
       parserId = matchedParser.id
-      parsedContentRows = matchedParser.parse(rawParseResult, locale, dateFormat)
+      transactions = matchedParser.parse(rawParseResult, locale, dateFormat)
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err)
       console.error(`Parsing failed with ${matchedParser.id}:`, errMsg)
       return {
         ...file,
         rawParseResult,
-        parsedContentRows,
+        transactions,
         parserId,
         status: StatsFileStatus.ERROR,
         error: `Parse "${matchedParser.id}" failed`,
@@ -60,7 +60,7 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
   const dataToSync: StatsFile = {
     ...file,
     rawParseResult,
-    parsedContentRows,
+    transactions,
     parserId,
   }
 

@@ -1,4 +1,4 @@
-import type { ParsedContentRow, Parser } from '@/types'
+import type { Parser, Transaction } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
 import { detectMatch } from '@/utils/Misc'
@@ -63,7 +63,7 @@ export const CapitecSavings: Parser = {
 
       const value = valIn ? valIn : valOut ? valOut : valFee ? valFee : '0'
 
-      const data: ParsedContentRow = {
+      const data: Transaction = {
         date: toSystemDate(transactionDate.trim(), { formatFrom: 'yyyy-MM-dd HH:SS' }),
         description: description.trim(),
         value,

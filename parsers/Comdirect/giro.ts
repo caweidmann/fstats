@@ -1,4 +1,4 @@
-import type { ParsedContentRow, Parser } from '@/types'
+import type { Parser, Transaction } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
 import { toSystemDate } from '@/utils/Date'
 import { detectMatch } from '@/utils/Misc'
@@ -48,7 +48,7 @@ export const ComdirectGiro: Parser = {
 
       const value = parseGermanNumber(umsatzInEur.trim())
 
-      const data: ParsedContentRow = {
+      const data: Transaction = {
         date: toSystemDate(wertstellung.trim(), { formatFrom: 'dd.MM.yyyy' }),
         description: buchungstext.trim(),
         value,

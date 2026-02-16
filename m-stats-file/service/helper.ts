@@ -10,7 +10,7 @@ export const getStatsFileDefaults = (file: RDZFileWithPath): StatsFile => ({
   file,
   status: StatsFileStatus.PARSING,
   parserId: null,
-  parsedContentRows: [],
+  transactions: [],
   rawParseResult: null,
 })
 
