@@ -158,16 +158,27 @@ export const NewBankAccountType = createParser({
   dateFormat: 'dd/MM/yyyy',
 
   // String shorthand for simple column lookups
-  dateGetter: 'date',
-
-  descriptionGetter: 'description',
-
-  valueGetter: 'amount',
+  getters: {
+    date: 'date',
+    description: 'description',
+    value: 'amount',
+  },
 
   // Use functions for complex logic:
-  // valueGetter: (row) => parseGermanNumber(row.get('amount')),
+  // getters: {
+  //   ...
+  //   value: (row) => parseGermanNumber(row.get('amount')),
+  // },
 })
 ```
+
+`getters` is the canonical parser API name. It groups how each normalized transaction field is extracted from a CSV row:
+
+- `date` → date source column/function
+- `description` → description source column/function
+- `value` → amount source column/function
+
+This naming keeps parser definitions compact while staying explicit for contributors.
 
 2. **Register** in `parsers/index.ts` — the key is the parser ID:
 ```typescript

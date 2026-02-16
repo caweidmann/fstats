@@ -24,9 +24,7 @@ export const createParser = <T extends ColDef>({
   headerRowIndex,
   columns,
   dateFormat,
-  dateGetter,
-  descriptionGetter,
-  valueGetter,
+  getters,
 }: CreateParserParams<T>): ParserConfig => {
   const keys = Object.keys(columns) as (keyof T)[]
   const headers = Object.values(columns)
@@ -35,9 +33,9 @@ export const createParser = <T extends ColDef>({
     get: (key) => row[keys.indexOf(key)].trim(),
   })
 
-  const getDate = resolveGetter(dateGetter)
-  const getDescription = resolveGetter(descriptionGetter)
-  const getValue = resolveGetter(valueGetter)
+  const getDate = resolveGetter(getters.date)
+  const getDescription = resolveGetter(getters.description)
+  const getValue = resolveGetter(getters.value)
 
   return {
     bankName,

@@ -23,11 +23,11 @@ export default createParser({
 
   dateFormat: 'dd.MM.yyyy',
 
-  dateGetter: 'wertstellungsdatum',
-
-  descriptionGetter: 'verwendungszweck',
-
-  valueGetter: (row) => {
-    return parseGermanNumber(row.get('betrag'))
+  getters: {
+    date: 'wertstellungsdatum',
+    description: 'verwendungszweck',
+    value: (row) => {
+      return parseGermanNumber(row.get('betrag'))
+    },
   },
 })

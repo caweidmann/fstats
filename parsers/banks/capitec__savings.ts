@@ -27,15 +27,15 @@ export default createParser({
 
   dateFormat: 'yyyy-MM-dd HH:mm',
 
-  dateGetter: 'transactionDate',
+  getters: {
+    date: 'transactionDate',
+    description: 'description',
+    value: (row) => {
+      const valIn = row.get('moneyIn')
+      const valOut = row.get('moneyOut')
+      const valFee = row.get('fee')
 
-  descriptionGetter: 'description',
-
-  valueGetter: (row) => {
-    const valIn = row.get('moneyIn')
-    const valOut = row.get('moneyOut')
-    const valFee = row.get('fee')
-
-    return valIn || valOut || valFee || '0'
+      return valIn || valOut || valFee || '0'
+    },
   },
 })

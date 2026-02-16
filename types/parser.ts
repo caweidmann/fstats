@@ -12,6 +12,12 @@ export type RowAccessor<T extends ColDef> = {
 
 export type RowValueGetter<T extends ColDef> = keyof T | ((row: RowAccessor<T>) => string)
 
+export type ParserGetters<T extends ColDef> = {
+  date: RowValueGetter<T>
+  description: RowValueGetter<T>
+  value: RowValueGetter<T>
+}
+
 export type CreateParserParams<T extends ColDef> = {
   bankName: string
   accountType: string
@@ -19,9 +25,7 @@ export type CreateParserParams<T extends ColDef> = {
   headerRowIndex: number
   columns: T
   dateFormat: string
-  dateGetter: RowValueGetter<T>
-  descriptionGetter: RowValueGetter<T>
-  valueGetter: RowValueGetter<T>
+  getters: ParserGetters<T>
 }
 
 export type ParserConfig = {

@@ -24,14 +24,14 @@ export default createParser({
 
   dateFormat: 'dd/MM/yyyy',
 
-  dateGetter: 'transactionDate',
+  getters: {
+    date: 'transactionDate',
+    description: 'transactionDescription',
+    value: (row) => {
+      const valIn = row.get('creditAmount')
+      const valOut = row.get('debitAmount')
 
-  descriptionGetter: 'transactionDescription',
-
-  valueGetter: (row) => {
-    const valIn = row.get('creditAmount')
-    const valOut = row.get('debitAmount')
-
-    return valIn ? valIn : valOut ? Big(valOut).times(-1).toString() : '0'
+      return valIn ? valIn : valOut ? Big(valOut).times(-1).toString() : '0'
+    },
   },
 })

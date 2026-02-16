@@ -23,11 +23,11 @@ export default createParser({
 
   dateFormat: 'dd.MM.yyyy',
 
-  dateGetter: 'umsatztag',
-
-  descriptionGetter: 'buchungstext',
-
-  valueGetter: (row) => {
-    return parseGermanNumber(row.get('umsatzInEur'))
+  getters: {
+    date: 'umsatztag',
+    description: 'buchungstext',
+    value: (row) => {
+      return parseGermanNumber(row.get('umsatzInEur'))
+    },
   },
 })

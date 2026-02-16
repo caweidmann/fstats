@@ -19,9 +19,9 @@ export default createParser({
 
   dateFormat: 'yyyy/MM/dd',
 
-  dateGetter: 'date',
-
-  descriptionGetter: 'description',
-
-  valueGetter: 'amount',
+  getters: {
+    date: 'date',
+    description: 'description',
+    value: 'amount',
+  },
 })
