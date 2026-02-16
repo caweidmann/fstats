@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import type { Parser } from '@/types'
+import { MISC } from '@/common'
 import { buildRegistry } from '@/utils/CsvParser'
 
 import capitec__savings from './banks/capitec__savings'
@@ -38,4 +39,32 @@ export const AVAILABLE_PARSERS = registry as Record<ParserId, Parser>
 
 export const getParserCurrency = (parserId: ParserId) => {
   return AVAILABLE_PARSERS[parserId].currency
+}
+
+export const getParserName = (value: ParserId | null): { short: string; long: string; alt: string } => {
+  if (!value) {
+    return {
+      short: 'Unsupported',
+      long: 'Unsupported format',
+      alt: 'Unsupported format',
+    }
+  }
+
+  const parser = AVAILABLE_PARSERS[value]
+
+  if (parser) {
+    return {
+      short: parser.bankName,
+      long: `${parser.bankName} ${MISC.CENTER_DOT} ${parser.accountType}`,
+      alt: `${parser.bankName} / ${parser.accountType}`,
+    }
+  }
+
+  console.warn(`Invalid parser ID: ${value}`)
+
+  return {
+    short: 'Invalid',
+    long: 'Invalid parser',
+    alt: 'Invalid parser',
+  }
 }

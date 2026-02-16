@@ -9,13 +9,9 @@ import type {
   Transaction,
 } from '@/types'
 import { toSystemDate } from '@/utils/Date'
-import { isEqual } from '@/utils/Misc'
 import { Big } from '@/lib/w-big'
 
-const resolveGetter = <T extends ColDef>(getter: RowValueGetter<T>): ((row: RowAccessor<T>) => string) => {
-  if (typeof getter === 'function') return getter
-  return (row) => row.get(getter)
-}
+import { isArrayEqual, resolveGetter } from './helper'
 
 export const createParser = <T extends ColDef>({
   bankName,
@@ -51,7 +47,7 @@ export const createParser = <T extends ColDef>({
         return false
       }
 
-      const headersMatch = isEqual(input.data[headerRowIndex], headers)
+      const headersMatch = isArrayEqual(input.data[headerRowIndex], headers)
       const rowsValid = dataRows.every((row) => row.length === headers.length)
 
       return headersMatch && rowsValid
@@ -82,10 +78,7 @@ export const buildRegistry = <T extends Record<string, ParserConfig>>(parserConf
   const registry = {} as { [K in keyof T]: Parser }
 
   Object.entries(parserConfigs).forEach(([id, config]) => {
-    registry[id as keyof T] = {
-      ...config,
-      id,
-    }
+    registry[id as keyof T] = { ...config, id }
   })
 
   return registry
