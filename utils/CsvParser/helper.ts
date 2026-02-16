@@ -1,7 +1,9 @@
 import type { ColDef, RowAccessor, RowValueGetter } from '@/types'
 
 export const resolveGetter = <T extends ColDef>(getter: RowValueGetter<T>): ((row: RowAccessor<T>) => string) => {
-  if (typeof getter === 'function') return getter
+  if (typeof getter === 'function') {
+    return getter
+  }
   return (row) => row.get(getter)
 }
 
