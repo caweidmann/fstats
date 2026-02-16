@@ -14,7 +14,6 @@ import {
   BankSelector,
   DemoBanner,
   ProfitLossSummary,
-  TaxInsights,
   TransactionChart,
   TransactionInfo,
   TransactionsTable,
@@ -77,10 +76,6 @@ const Component = () => {
 
           <Grid size={12}>
             <TransactionChart transactions={transactions} />
-          </Grid>
-
-          <Grid size={12}>
-            <TaxInsights transactions={transactions} isDemoMode={isDemoMode} />
           </Grid>
 
           <Grid size={12}>
