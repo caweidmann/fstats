@@ -1,8 +1,9 @@
-import { parse } from 'papaparse'
-
-import { zSyncableStatsFile, type Parser, type PPRawParseResult, type StatsFile } from '@/types'
+import { zSyncableStatsFile } from '@/types'
+import type { Parser, StatsFile, Transaction } from '@/types'
 import { DateFormat, StatsFileStatus, UserLocale } from '@/types-enums'
 import { AVAILABLE_PARSERS } from '@/parsers'
+
+import { parseRaw } from './helper'
 
 export const parseFiles = async (
   files: StatsFile[],
@@ -16,7 +17,7 @@ export const parseFiles = async (
 export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat: DateFormat): Promise<StatsFile> => {
   const parseResult = await parseRaw(file.file)
   let parserId: StatsFile['parserId'] = null
-  let transactions: StatsFile['transactions'] = []
+  let transactions: Transaction[] = []
   let matchedParser: Parser | null = null
 
   for (const parser of Object.values(AVAILABLE_PARSERS)) {
@@ -82,21 +83,4 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
     ...dataToSync,
     status: StatsFileStatus.PARSED,
   }
-}
-
-export const parseRaw = async (file: File): Promise<PPRawParseResult> => {
-  return new Promise((resolve, reject) => {
-    parse(file, {
-      header: false,
-      skipEmptyLines: 'greedy',
-      encoding: 'utf-8',
-      worker: true,
-      complete: (results) => {
-        resolve(results as PPRawParseResult)
-      },
-      error: (err) => {
-        reject(err)
-      },
-    })
-  })
 }
