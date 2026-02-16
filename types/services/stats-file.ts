@@ -13,6 +13,9 @@ export const zStatsFile = z.object({
   created: z.union([z.literal(''), zDateTimeString]),
   modified: z.union([z.literal(''), zDateTimeString]),
   id: z.union([z.literal(''), zIdString]),
+  /**
+   * This is a hash of all transactions, not the actual parse result.
+   */
   hash: z.union([z.literal(''), zNonEmptyString]),
   file: zRDZFileWithPath,
   status: zStatsFileStatus,
