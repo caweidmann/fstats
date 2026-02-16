@@ -1,10 +1,7 @@
-import type { Parser, Transaction } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
-import { toSystemDate } from '@/utils/Date'
-import { detectMatch } from '@/utils/Misc'
-import { Big } from '@/lib/w-big'
+import { createParser } from '@/utils/CsvParser'
 
-export const CapitecSavings: Parser = {
+export const CapitecSavings = createParser({
   id: ParserId.CAPITEC,
 
   bankName: 'Capitec',
@@ -13,65 +10,38 @@ export const CapitecSavings: Parser = {
 
   currency: Currency.ZAR,
 
-  expectedHeaderRowIndex: 0,
+  headerRowIndex: 0,
 
-  expectedHeaders: [
-    // Headers
-    'Nr',
-    'Account',
-    'Posting Date',
-    'Transaction Date',
-    'Description',
-    'Original Description',
-    'Parent Category',
-    'Category',
-    'Money In',
-    'Money Out',
-    'Fee',
-    'Balance',
-  ],
+  columns: {
+    nr: 'Nr',
+    account: 'Account',
+    postingDate: 'Posting Date',
+    transactionDate: 'Transaction Date',
+    description: 'Description',
+    originalDescription: 'Original Description',
+    parentCategory: 'Parent Category',
+    category: 'Category',
+    moneyIn: 'Money In',
+    moneyOut: 'Money Out',
+    fee: 'Fee',
+    balance: 'Balance',
+  } as const,
 
-  detect: (input) => {
-    return detectMatch(input, CapitecSavings)
+  dateFormat: 'yyyy-MM-dd HH:mm',
+
+  dateGetter: (row) => {
+    return row.get('transactionDate')
   },
 
-  parse: (input, locale, formatTo) => {
-    const rowsToParse = input.data
-      .slice(CapitecSavings.expectedHeaderRowIndex + 1)
-      .filter((row) => row.length === CapitecSavings.expectedHeaders.length)
-
-    return rowsToParse.map((row) => {
-      const [
-        // Headers
-        nr,
-        account,
-        postingDate,
-        transactionDate,
-        description,
-        originalDescription,
-        parentCategory,
-        category,
-        moneyIn,
-        moneyOut,
-        fee,
-        balance,
-      ] = row
-
-      const valIn = moneyIn.trim()
-      const valOut = moneyOut.trim()
-      const valFee = fee.trim()
-
-      const value = valIn ? valIn : valOut ? valOut : valFee ? valFee : '0'
-
-      const data: Transaction = {
-        date: toSystemDate(transactionDate.trim(), { formatFrom: 'yyyy-MM-dd HH:SS' }),
-        description: description.trim(),
-        value,
-        currency: CapitecSavings.currency,
-        category: Big(value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
-      }
-
-      return data
-    })
+  descriptionGetter: (row) => {
+    return row.get('description')
   },
-}
+
+  valueGetter: (row) => {
+    const valIn = row.get('moneyIn')
+    const valOut = row.get('moneyOut')
+    const valFee = row.get('fee')
+
+    return valIn || valOut || valFee || '0'
+  },
+})

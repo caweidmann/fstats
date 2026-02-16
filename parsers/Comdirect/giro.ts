@@ -1,11 +1,8 @@
-import type { Parser, Transaction } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
-import { toSystemDate } from '@/utils/Date'
-import { detectMatch } from '@/utils/Misc'
+import { createParser } from '@/utils/CsvParser'
 import { parseGermanNumber } from '@/utils/Number'
-import { Big } from '@/lib/w-big'
 
-export const ComdirectGiro: Parser = {
+export const ComdirectGiro = createParser({
   id: ParserId.COMDIRECT_GIRO,
 
   bankName: 'Comdirect',
@@ -14,49 +11,28 @@ export const ComdirectGiro: Parser = {
 
   currency: Currency.EUR,
 
-  expectedHeaderRowIndex: 1,
+  headerRowIndex: 1,
 
-  expectedHeaders: [
-    // Headers
-    'Buchungstag',
-    'Wertstellung (Valuta)',
-    'Vorgang',
-    'Buchungstext',
-    'Umsatz in EUR',
-    '',
-  ],
+  columns: {
+    buchungstag: 'Buchungstag',
+    wertstellung: 'Wertstellung (Valuta)',
+    vorgang: 'Vorgang',
+    buchungstext: 'Buchungstext',
+    umsatzInEur: 'Umsatz in EUR',
+    empty: '',
+  } as const,
 
-  detect: (input) => {
-    return detectMatch(input, ComdirectGiro)
+  dateFormat: 'dd.MM.yyyy',
+
+  dateGetter: (row) => {
+    return row.get('wertstellung')
   },
 
-  parse: (input, locale, formatTo) => {
-    const rowsToParse = input.data
-      .slice(ComdirectGiro.expectedHeaderRowIndex + 1)
-      .filter((row) => row.length === ComdirectGiro.expectedHeaders.length)
-
-    return rowsToParse.map((row) => {
-      const [
-        // Headers
-        buchungstag,
-        wertstellung,
-        vorgang,
-        buchungstext,
-        umsatzInEur,
-        _empty,
-      ] = row
-
-      const value = parseGermanNumber(umsatzInEur.trim())
-
-      const data: Transaction = {
-        date: toSystemDate(wertstellung.trim(), { formatFrom: 'dd.MM.yyyy' }),
-        description: buchungstext.trim(),
-        value,
-        currency: ComdirectGiro.currency,
-        category: Big(value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
-      }
-
-      return data
-    })
+  descriptionGetter: (row) => {
+    return row.get('buchungstext')
   },
-}
+
+  valueGetter: (row) => {
+    return parseGermanNumber(row.get('umsatzInEur'))
+  },
+})

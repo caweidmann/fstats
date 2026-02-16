@@ -1,11 +1,8 @@
-import type { Parser, Transaction } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
-import { toSystemDate } from '@/utils/Date'
-import { detectMatch } from '@/utils/Misc'
+import { createParser } from '@/utils/CsvParser'
 import { parseGermanNumber } from '@/utils/Number'
-import { Big } from '@/lib/w-big'
 
-export const IngGiroWb: Parser = {
+export const IngGiroWb = createParser({
   id: ParserId.ING_GIRO_WB,
 
   bankName: 'ING',
@@ -14,55 +11,31 @@ export const IngGiroWb: Parser = {
 
   currency: Currency.EUR,
 
-  expectedHeaderRowIndex: 9,
+  headerRowIndex: 9,
 
-  expectedHeaders: [
-    // Headers
-    'Buchung',
-    'Wertstellungsdatum',
-    'Auftraggeber/Empf�nger',
-    'Buchungstext',
-    'Verwendungszweck',
-    'Saldo',
-    'W�hrung',
-    'Betrag',
-    'W�hrung',
-  ],
+  columns: {
+    buchung: 'Buchung',
+    wertstellungsdatum: 'Wertstellungsdatum',
+    auftraggeberEmpfaenger: 'Auftraggeber/Empf�nger',
+    buchungstext: 'Buchungstext',
+    verwendungszweck: 'Verwendungszweck',
+    saldo: 'Saldo',
+    waehrung1: 'W�hrung',
+    betrag: 'Betrag',
+    waehrung2: 'W�hrung',
+  } as const,
 
-  detect: (input) => {
-    return detectMatch(input, IngGiroWb)
+  dateFormat: 'dd.MM.yyyy',
+
+  dateGetter: (row) => {
+    return row.get('wertstellungsdatum')
   },
 
-  parse: (input, locale, formatTo) => {
-    const rowsToParse = input.data
-      .slice(IngGiroWb.expectedHeaderRowIndex + 1)
-      .filter((row) => row.length === IngGiroWb.expectedHeaders.length)
-
-    return rowsToParse.map((row) => {
-      const [
-        // Headers
-        buchung,
-        wertstellungsdatum,
-        auftraggeberEmpfaenger,
-        buchungstext,
-        verwendungszweck,
-        saldo,
-        waehrung1,
-        betrag,
-        waehrung2,
-      ] = row
-
-      const value = parseGermanNumber(betrag.trim())
-
-      const data: Transaction = {
-        date: toSystemDate(wertstellungsdatum.trim(), { formatFrom: 'dd.MM.yyyy' }),
-        description: verwendungszweck.trim(),
-        value,
-        currency: IngGiroWb.currency,
-        category: Big(value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
-      }
-
-      return data
-    })
+  descriptionGetter: (row) => {
+    return row.get('verwendungszweck')
   },
-}
+
+  valueGetter: (row) => {
+    return parseGermanNumber(row.get('betrag'))
+  },
+})

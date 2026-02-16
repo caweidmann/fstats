@@ -1,10 +1,7 @@
-import type { Parser, Transaction } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
-import { toSystemDate } from '@/utils/Date'
-import { detectMatch } from '@/utils/Misc'
-import { Big } from '@/lib/w-big'
+import { createParser } from '@/utils/CsvParser'
 
-export const FnbCreditCard: Parser = {
+export const FnbCreditCard = createParser({
   id: ParserId.FNB,
 
   bankName: 'FNB',
@@ -13,45 +10,26 @@ export const FnbCreditCard: Parser = {
 
   currency: Currency.ZAR,
 
-  expectedHeaderRowIndex: 4,
+  headerRowIndex: 4,
 
-  expectedHeaders: [
-    // Headers
-    'Date',
-    'Amount',
-    'Balance',
-    'Description',
-  ],
+  columns: {
+    date: 'Date',
+    amount: 'Amount',
+    balance: 'Balance',
+    description: 'Description',
+  } as const,
 
-  detect: (input) => {
-    return detectMatch(input, FnbCreditCard)
+  dateFormat: 'yyyy/MM/dd',
+
+  dateGetter: (row) => {
+    return row.get('date')
   },
 
-  parse: (input, locale, formatTo) => {
-    const rowsToParse = input.data
-      .slice(FnbCreditCard.expectedHeaderRowIndex + 1)
-      .filter((row) => row.length === FnbCreditCard.expectedHeaders.length)
-
-    return rowsToParse.map((row) => {
-      const [
-        // Headers
-        date,
-        amount,
-        balance,
-        description,
-      ] = row
-
-      const value = amount.trim()
-
-      const data: Transaction = {
-        date: toSystemDate(date.trim(), { formatFrom: 'yyyy/MM/dd' }),
-        description: description.trim(),
-        value,
-        currency: FnbCreditCard.currency,
-        category: Big(value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
-      }
-
-      return data
-    })
+  descriptionGetter: (row) => {
+    return row.get('description')
   },
-}
+
+  valueGetter: (row) => {
+    return row.get('amount') || '0'
+  },
+})

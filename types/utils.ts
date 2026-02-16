@@ -1,10 +1,8 @@
 import type { Locale } from 'date-fns'
 
-import { Currency, DateFormat, ParserId, UserLocale } from '@/types-enums'
+import { Currency, ParserId } from '@/types-enums'
 
 import type { NumberString, SelectOptionWithType } from './global'
-import type { PPRawParseResult } from './lib/papaparse'
-import type { Transaction } from './services/transaction'
 
 export type DateFnsLocale = Locale
 
@@ -13,17 +11,6 @@ export type FeatureFlags = Record<string, boolean>
 export type Size = {
   width?: number
   height?: number
-}
-
-export type Parser = {
-  id: ParserId
-  bankName: string
-  accountType: string
-  currency: Currency
-  expectedHeaderRowIndex: number
-  expectedHeaders: string[]
-  detect: (input: PPRawParseResult) => boolean
-  parse: (input: PPRawParseResult, locale: UserLocale, dateFormat: DateFormat) => Transaction[]
 }
 
 // TODO: Remove "unknown"
