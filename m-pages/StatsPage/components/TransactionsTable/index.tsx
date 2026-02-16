@@ -23,7 +23,7 @@ import stringify from 'fast-json-stable-stringify'
 import { useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import type { ParsedContentRow, StatsPageForm } from '@/types'
+import type { StatsPageForm, Transaction } from '@/types'
 import { Currency } from '@/types-enums'
 import { useIsMobile, useUserPreferences } from '@/hooks'
 import { getCurrencySymbol, getMaxDecimalsForCurrency } from '@/utils/Currency'
@@ -36,7 +36,7 @@ import { getCategoryColor } from './actions'
 import { ui } from './styled'
 
 type TransactionsTableProps = {
-  transactions: ParsedContentRow[]
+  transactions: Transaction[]
 }
 
 const Component = ({ transactions }: TransactionsTableProps) => {

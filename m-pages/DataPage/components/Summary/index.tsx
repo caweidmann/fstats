@@ -16,7 +16,7 @@ import { useState } from 'react'
 import { StatsFileStatus } from '@/types-enums'
 import { useMutateRemoveAllFiles, useMutateRemoveFiles } from '@/m-stats-file/service'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
-import { getParserName } from '@/utils/Misc'
+import { getParserName } from '@/parsers'
 
 import DetailsRow from '../DetailsRow'
 import { ui } from './styled'

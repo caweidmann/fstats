@@ -4,7 +4,7 @@ import { DeleteOutlined, ErrorOutlined, WarningOutlined } from '@mui/icons-mater
 import { Box, Checkbox, CircularProgress, IconButton, Stack, Tooltip, Typography } from '@mui/material'
 import { useLocalStorage } from 'usehooks-ts'
 
-import { StatsFile } from '@/types'
+import type { StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
 import { isError, isUnknown, useMutateRemoveFile } from '@/m-stats-file/service'

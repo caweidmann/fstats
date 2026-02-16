@@ -1,7 +1,6 @@
 export { default as BankSelector } from './BankSelector'
 export { default as DemoBanner } from './DemoBanner'
 export { default as ProfitLossSummary } from './ProfitLossSummary'
-export { default as TaxInsights } from './TaxInsights'
 export { default as TransactionChart } from './TransactionChart'
 export { default as TransactionInfo } from './TransactionInfo'
 export { default as TransactionsTable } from './TransactionsTable'

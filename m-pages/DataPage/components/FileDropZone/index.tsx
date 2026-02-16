@@ -7,7 +7,7 @@ import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { FileRejection, FileWithPath } from 'react-dropzone'
 
-import { StatsFile } from '@/types'
+import type { StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
 import {

@@ -3,7 +3,7 @@ import { formatISO } from 'date-fns'
 import type { StatsFile, StatsFileAtRest } from '@/types'
 import { db } from '@/lib/localforage'
 
-import { parseStatsFile, syncStatsFile } from './helper'
+import { encryptTransactions, parseStatsFile, syncStatsFile } from './helper'
 
 export const getFile = async (id: string): Promise<StatsFile | null> => {
   if (!id) {
@@ -56,10 +56,15 @@ export const updateFile = async (id: string, updates: Partial<StatsFile>): Promi
   }
 
   const modified = formatISO(new Date())
-  const updatedFile: StatsFile = {
+  let updatedFile: StatsFile = {
     ...parseStatsFile(file),
     ...updates,
     modified,
+  }
+
+  updatedFile = {
+    ...updatedFile,
+    hash: await encryptTransactions(updatedFile.transactions),
   }
 
   await db.filesStore.setItem<StatsFileAtRest>(id, syncStatsFile(updatedFile))

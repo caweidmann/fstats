@@ -14,7 +14,6 @@ import {
   BankSelector,
   DemoBanner,
   ProfitLossSummary,
-  TaxInsights,
   TransactionChart,
   TransactionInfo,
   TransactionsTable,
@@ -38,7 +37,7 @@ const Component = () => {
     selectedId && selectedId !== 'all' && selectedId !== 'unknown'
       ? selectedFiles.filter((file) => file.parserId === selectedId)
       : selectedFiles
-  const allTransactions = isDemoMode ? DEMO_TRANSACTIONS : filesForSelectedId.flatMap((file) => file.parsedContentRows)
+  const allTransactions = isDemoMode ? DEMO_TRANSACTIONS : filesForSelectedId.flatMap((file) => file.transactions)
   const transactions = uniqWith(allTransactions, isEqual)
 
   return (
@@ -77,10 +76,6 @@ const Component = () => {
 
           <Grid size={12}>
             <TransactionChart transactions={transactions} />
-          </Grid>
-
-          <Grid size={12}>
-            <TaxInsights transactions={transactions} isDemoMode={isDemoMode} />
           </Grid>
 
           <Grid size={12}>

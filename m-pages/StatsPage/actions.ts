@@ -1,9 +1,7 @@
 import { isEqual, uniqWith } from 'lodash'
 
 import type { BankSelectOption, StatsFile } from '@/types'
-import { ParserId } from '@/types-enums'
-import { getParserName } from '@/utils/Misc'
-import { getParserCurrency } from '@/parsers'
+import { getParserCurrency, getParserName, ParserId } from '@/parsers'
 
 export const getBankSelectOptions = (selectedFiles: StatsFile[]): BankSelectOption[] => {
   const banks = selectedFiles

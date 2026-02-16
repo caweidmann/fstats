@@ -37,9 +37,9 @@ pnpm lint
 - **`/m-pages`** - Page-level components module (DataPage/, EmptyStatsPage/, HomePage/, SettingsPage/, StatsPage/)
   - StatsPage has sub-components: BankSelector, DemoBanner, ProfitLossSummary, TaxInsights, TransactionChart, TransactionInfo, TransactionsTable
 - **`/types`** - TypeScript type definitions (global.ts, utils.ts, key-check.ts, services/, lib/)
-- **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, ParserId, DateFormat, WeekStartsOn, WeekStartsOnValue, StatsFileStatus, Currency, SortOrder)
+- **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, DateFormat, WeekStartsOn, WeekStartsOnValue, StatsFileStatus, Currency, SortOrder)
 - **`/utils`** - Domain-organized utilities (Chart/, Currency/, Date/, Features/, File/, FileParser/, LocalStorage/, Logger/, Misc/, Number/, Stats/)
-- **`/parsers`** - Bank-specific CSV parsers (Capitec/, Comdirect/, FNB/, ING/, Lloyds/) with shared helper.ts
+- **`/parsers`** - Bank-specific CSV parsers (Capitec/, Comdirect/, FNB/, ING/, Lloyds/); registry is single source of truth for ParserId
 - **`/lib`** - Third-party library configs (i18n.ts, localforage.ts, tanstack-query.ts, chartjs.ts, w-big.ts)
 - **`/common`** - App-wide constants (misc.ts, routes.ts, config.ts)
 - **`/hooks`** - Custom React hooks (useIsDarkMode, useIsMobile, useUserPreferences, useFileHelper, useDarkModeMetaTagUpdater)
@@ -134,87 +134,63 @@ Enforced via Prettier plugin:
 
 **Currently Implemented Parsers**: CAPITEC (Savings), FNB (Credit Card), COMDIRECT (Giro, Visa), ING (Giro, Giro with Balance), LLOYDS (Current)
 
-To add a new bank parser:
+The `parsers/index.ts` registry is the single source of truth for parser IDs. `ParserId` type and `zParserId` are auto-derived from it. To add a new bank parser:
 
-1. **Add ParserId** to `types-enums/index.ts`:
+1. **Create parser config** `parsers/NewBank/account-type.ts` using the `createParser` factory:
 ```typescript
-export const ParserId = {
-  // South African Banks
-  CAPITEC: 'capitec__savings',
-  FNB: 'fnb__credit_card',
-  // German Banks
-  COMDIRECT_GIRO: 'comdirect__giro',
-  COMDIRECT_VISA: 'comdirect__visa',
-  ING_GIRO: 'ing__giro',
-  ING_GIRO_WB: 'ing__giro_with_balance',
-  // UK Banks
-  LLOYDS_CURRENT: 'lloyds__current',
-  NEW_BANK: 'new_bank__account_type', // New
-} as const
-```
+import { Currency } from '@/types-enums'
+import { createParser } from '@/utils/CsvParser'
 
-2. **Create parser** `parsers/NewBank/account-type.ts`:
-```typescript
-import type { ParsedContentRow, Parser } from '@/types'
-import { Currency, ParserId } from '@/types-enums'
-import { toSystemDate } from '@/utils/Date'
-import { detectMatch } from '@/utils/Misc'
-import { Big } from '@/lib/w-big'
-
-export const NewBankAccountType: Parser = {
-  id: ParserId.NEW_BANK,
+export const NewBankAccountType = createParser({
   bankName: 'New Bank',
+
   accountType: 'Account Type',
+
   currency: Currency.EUR,
-  expectedHeaderRowIndex: 0,
-  expectedHeaders: ['Date', 'Description', 'Amount', 'Balance'],
 
-  detect: (input) => {
-    return detectMatch(input, NewBankAccountType)
+  columns: {
+    date: 'Date',
+    description: 'Description',
+    amount: 'Amount',
+    balance: 'Balance',
+  } as const,
+
+  dateFormat: 'dd/MM/yyyy',
+
+  // String shorthand for simple column lookups
+  getters: {
+    date: 'date',
+    description: 'description',
+    value: 'amount',
   },
 
-  parse: (input, locale, formatTo) => {
-    const rowsToParse = input.data
-      .slice(NewBankAccountType.expectedHeaderRowIndex + 1)
-      .filter((row) => row.length === NewBankAccountType.expectedHeaders.length)
-
-    return rowsToParse.map((row) => {
-      const [date, description, amount] = row
-
-      const data: ParsedContentRow = {
-        date: toSystemDate(date.trim(), { formatFrom: 'dd/MM/yyyy' }),
-        description: description.trim(),
-        value: amount || '0',
-        currency: NewBankAccountType.currency,
-        category: Big(amount || 0).gte(0) ? 'Income' : 'Expense',
-      }
-
-      return data
-    })
-  },
-}
+  // Use functions for complex logic:
+  // getters: {
+  //   ...
+  //   value: (row) => parseGermanNumber(row.get('amount')),
+  // },
+})
 ```
 
-3. **Export** from `parsers/NewBank/index.ts`:
+`getters` is the canonical parser API name. It groups how each normalized transaction field is extracted from a CSV row:
+
+- `date` → date source column/function
+- `description` → description source column/function
+- `value` → amount source column/function
+
+This naming keeps parser definitions compact while staying explicit for contributors.
+
+2. **Register** in `parsers/index.ts` — the key is the parser ID:
 ```typescript
-export { NewBankAccountType } from './account-type'
+import { NewBankAccountType } from './NewBank/account-type'
+
+const REGISTRY = buildRegistry({
+  // ...existing parsers
+  'new_bank__account_type': NewBankAccountType,
+})
 ```
 
-4. **Register** in `parsers/index.ts`:
-```typescript
-import { NewBankAccountType } from './NewBank'
-
-export const AVAILABLE_PARSERS = {
-  [ParserId.CAPITEC]: CapitecSavings,
-  [ParserId.FNB]: FnbCreditCard,
-  [ParserId.COMDIRECT_GIRO]: ComdirectGiro,
-  [ParserId.COMDIRECT_VISA]: ComdirectVisa,
-  [ParserId.ING_GIRO]: IngGiro,
-  [ParserId.ING_GIRO_WB]: IngGiroWb,
-  [ParserId.LLOYDS_CURRENT]: LloydsCurrent,
-  [ParserId.NEW_BANK]: NewBankAccountType, // Register
-} satisfies Record<ParserId, Parser>
-```
+The `ParserId` type and const are auto-derived from the registry keys. Import from `@/types` (re-exported) or `@/parsers`. Use as a type (`ParserId`) or value (`ParserId.capitec__savings`).
 
 ## Working with TanStack Query
 
@@ -514,8 +490,9 @@ const { mutate: addFile } = useMutateAddFile() // Auto-invalidates cache
 ### Common Imports
 ```typescript
 // Types
-import type { StatsFile, ParsedContentRow } from '@/types'
-import { ParserId, StatsFileStatus } from '@/types-enums'
+import type { StatsFile, Transaction } from '@/types'
+import { ParserId } from '@/types'
+import { StatsFileStatus } from '@/types-enums'
 
 // Service hooks - Stats Files
 import { useFiles, useMutateAddFile } from '@/m-stats-file/service'

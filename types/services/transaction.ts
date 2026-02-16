@@ -6,7 +6,7 @@ import { zNumberString, zSystemDateString } from '../global'
 import type { _KeysCheck } from '../key-check'
 import { _zKeysCheck } from '../key-check'
 
-export const zParsedContentRow = z.object({
+export const zTransaction = z.object({
   date: zSystemDateString,
   description: z.string(),
   value: zNumberString,
@@ -14,15 +14,15 @@ export const zParsedContentRow = z.object({
   category: z.string(), // FIXME: type to porper cats
 })
 
-export type ParsedContentRow = z.infer<typeof zParsedContentRow>
+export type Transaction = z.infer<typeof zTransaction>
 
-export const zParsedContentRowAtRest = z.object({
-  ...zParsedContentRow.shape,
+export const zTransactionAtRest = z.object({
+  ...zTransaction.shape,
   currency: z.string(),
 })
 
-export type ParsedContentRowAtRest = z.infer<typeof zParsedContentRowAtRest>
+export type TransactionAtRest = z.infer<typeof zTransactionAtRest>
 
 // Safety checks
-const assertKeys: _KeysCheck<ParsedContentRow, ParsedContentRowAtRest> = true
-_zKeysCheck(zParsedContentRow, zParsedContentRowAtRest, assertKeys)
+const assertKeys: _KeysCheck<Transaction, TransactionAtRest> = true
+_zKeysCheck(zTransaction, zTransactionAtRest, assertKeys)
