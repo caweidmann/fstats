@@ -1,6 +1,7 @@
-import type { StatsFile, StatsFileAtRest } from '@/types'
+import type { ParsedContentRow, StatsFile, StatsFileAtRest } from '@/types'
 import { zSyncableStatsFile } from '@/types'
 import { Currency } from '@/types-enums'
+import { SHA256 } from '@/utils/Encryption'
 
 export const syncStatsFile = (dataToSync: StatsFile): StatsFileAtRest => {
   const res = zSyncableStatsFile.safeParse(dataToSync)
@@ -22,4 +23,11 @@ export const parseStatsFile = (dataToParse: StatsFileAtRest): StatsFile => {
     })),
   }
   return res
+}
+
+export const encryptParsedContentRows = async (rows: ParsedContentRow[]): Promise<string> => {
+  const rowString = rows.map((row) => Object.values(row).join('|')).join('__')
+  console.log('rowString', rowString)
+  const encryptedHash = await SHA256.encrypt(rowString)
+  return encryptedHash
 }

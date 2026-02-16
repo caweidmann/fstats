@@ -6,6 +6,7 @@ export const getStatsFileDefaults = (file: RDZFileWithPath): StatsFile => ({
   created: '',
   modified: '',
   id: '',
+  hash: '',
   file,
   status: StatsFileStatus.PARSING,
   parserId: null,

@@ -13,6 +13,7 @@ export const zStatsFile = z.object({
   created: z.union([z.literal(''), zDateTimeString]),
   modified: z.union([z.literal(''), zDateTimeString]),
   id: z.union([z.literal(''), zIdString]),
+  hash: z.union([z.literal(''), zNonEmptyString]),
   file: zRDZFileWithPath,
   status: zStatsFileStatus,
   parserId: zParserId.nullable(),
@@ -33,10 +34,8 @@ export const zSyncableStatsFile = z.object({
 export type SyncableStatsFile = z.infer<typeof zSyncableStatsFile>
 
 export const zStatsFileAtRest = z.object({
-  ...zStatsFile.shape,
-  created: zDateTimeString,
-  modified: zDateTimeString,
-  id: zNonEmptyString,
+  ...zSyncableStatsFile.shape,
+  hash: zNonEmptyString,
   parsedContentRows: z.array(zParsedContentRowAtRest),
 })
 
