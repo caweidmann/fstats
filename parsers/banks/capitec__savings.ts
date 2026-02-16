@@ -1,9 +1,7 @@
-import { Currency, ParserId } from '@/types-enums'
+import { Currency } from '@/types-enums'
 import { createParser } from '@/utils/CsvParser'
 
-export const CapitecSavings = createParser({
-  id: ParserId.CAPITEC,
-
+export default createParser({
   bankName: 'Capitec',
 
   accountType: 'Savings',
@@ -29,13 +27,9 @@ export const CapitecSavings = createParser({
 
   dateFormat: 'yyyy-MM-dd HH:mm',
 
-  dateGetter: (row) => {
-    return row.get('transactionDate')
-  },
+  dateGetter: 'transactionDate',
 
-  descriptionGetter: (row) => {
-    return row.get('description')
-  },
+  descriptionGetter: 'description',
 
   valueGetter: (row) => {
     const valIn = row.get('moneyIn')

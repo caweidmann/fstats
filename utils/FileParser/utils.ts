@@ -42,7 +42,7 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
 
   if (matchedParser) {
     try {
-      parserId = matchedParser.id
+      parserId = matchedParser.id as StatsFile['parserId']
       transactions = matchedParser.parse(parseResult, locale, dateFormat)
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err)

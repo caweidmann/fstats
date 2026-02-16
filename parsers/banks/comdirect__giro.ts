@@ -1,10 +1,8 @@
-import { Currency, ParserId } from '@/types-enums'
+import { Currency } from '@/types-enums'
 import { createParser } from '@/utils/CsvParser'
 import { parseGermanNumber } from '@/utils/Number'
 
-export const ComdirectGiro = createParser({
-  id: ParserId.COMDIRECT_GIRO,
-
+export default createParser({
   bankName: 'Comdirect',
 
   accountType: 'Giro',
@@ -24,13 +22,9 @@ export const ComdirectGiro = createParser({
 
   dateFormat: 'dd.MM.yyyy',
 
-  dateGetter: (row) => {
-    return row.get('wertstellung')
-  },
+  dateGetter: 'wertstellung',
 
-  descriptionGetter: (row) => {
-    return row.get('buchungstext')
-  },
+  descriptionGetter: 'buchungstext',
 
   valueGetter: (row) => {
     return parseGermanNumber(row.get('umsatzInEur'))

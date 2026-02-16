@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
-import { zParserId, zStatsFileStatus } from '@/types-enums'
+import { zStatsFileStatus } from '@/types-enums'
+import { zParserId } from '@/parsers'
 
 import { zDateTimeString, zIdString, zNonEmptyString } from '../global'
 import type { _KeysCheck } from '../key-check'

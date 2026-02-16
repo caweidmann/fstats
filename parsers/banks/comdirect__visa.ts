@@ -1,10 +1,8 @@
-import { Currency, ParserId } from '@/types-enums'
+import { Currency } from '@/types-enums'
 import { createParser } from '@/utils/CsvParser'
 import { parseGermanNumber } from '@/utils/Number'
 
-export const ComdirectVisa = createParser({
-  id: ParserId.COMDIRECT_VISA,
-
+export default createParser({
   bankName: 'Comdirect',
 
   accountType: 'Visa',
@@ -25,13 +23,9 @@ export const ComdirectVisa = createParser({
 
   dateFormat: 'dd.MM.yyyy',
 
-  dateGetter: (row) => {
-    return row.get('umsatztag')
-  },
+  dateGetter: 'umsatztag',
 
-  descriptionGetter: (row) => {
-    return row.get('buchungstext')
-  },
+  descriptionGetter: 'buchungstext',
 
   valueGetter: (row) => {
     return parseGermanNumber(row.get('umsatzInEur'))

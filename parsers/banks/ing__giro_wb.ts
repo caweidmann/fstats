@@ -1,17 +1,15 @@
-import { Currency, ParserId } from '@/types-enums'
+import { Currency } from '@/types-enums'
 import { createParser } from '@/utils/CsvParser'
 import { parseGermanNumber } from '@/utils/Number'
 
-export const IngGiro = createParser({
-  id: ParserId.ING_GIRO,
-
+export default createParser({
   bankName: 'ING',
 
-  accountType: 'Giro',
+  accountType: 'Giro', // with account balance
 
   currency: Currency.EUR,
 
-  headerRowIndex: 8,
+  headerRowIndex: 9,
 
   columns: {
     buchung: 'Buchung',
@@ -19,19 +17,17 @@ export const IngGiro = createParser({
     auftraggeberEmpfaenger: 'Auftraggeber/Empf�nger',
     buchungstext: 'Buchungstext',
     verwendungszweck: 'Verwendungszweck',
+    saldo: 'Saldo',
+    waehrung1: 'W�hrung',
     betrag: 'Betrag',
-    waehrung: 'W�hrung',
+    waehrung2: 'W�hrung',
   } as const,
 
   dateFormat: 'dd.MM.yyyy',
 
-  dateGetter: (row) => {
-    return row.get('wertstellungsdatum')
-  },
+  dateGetter: 'wertstellungsdatum',
 
-  descriptionGetter: (row) => {
-    return row.get('verwendungszweck')
-  },
+  descriptionGetter: 'verwendungszweck',
 
   valueGetter: (row) => {
     return parseGermanNumber(row.get('betrag'))

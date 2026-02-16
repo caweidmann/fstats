@@ -1,10 +1,8 @@
-import { Currency, ParserId } from '@/types-enums'
+import { Currency } from '@/types-enums'
 import { createParser } from '@/utils/CsvParser'
 import { Big } from '@/lib/w-big'
 
-export const LloydsCurrent = createParser({
-  id: ParserId.LLOYDS_CURRENT,
-
+export default createParser({
   bankName: 'Lloyds',
 
   accountType: 'Current Account',
@@ -26,13 +24,9 @@ export const LloydsCurrent = createParser({
 
   dateFormat: 'dd/MM/yyyy',
 
-  dateGetter: (row) => {
-    return row.get('transactionDate')
-  },
+  dateGetter: 'transactionDate',
 
-  descriptionGetter: (row) => {
-    return row.get('transactionDescription')
-  },
+  descriptionGetter: 'transactionDescription',
 
   valueGetter: (row) => {
     const valIn = row.get('creditAmount')

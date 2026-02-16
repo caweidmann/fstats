@@ -1,6 +1,5 @@
-import { ParserId } from '@/types-enums'
 import { MISC } from '@/common'
-import { AVAILABLE_PARSERS } from '@/parsers'
+import { AVAILABLE_PARSERS, ParserId } from '@/parsers'
 
 export const sleep = (ms: number) => {
   return new Promise((resolve) => {
