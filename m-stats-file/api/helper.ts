@@ -27,7 +27,6 @@ export const parseStatsFile = (dataToParse: StatsFileAtRest): StatsFile => {
 
 export const encryptTransactions = async (rows: Transaction[]): Promise<string> => {
   const rowString = rows.map((row) => Object.values(row).join('|')).join('__')
-  console.log('rowString', rowString)
   const encryptedHash = await SHA256.encrypt(rowString)
   return encryptedHash
 }
