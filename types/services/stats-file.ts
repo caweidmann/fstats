@@ -17,7 +17,7 @@ export const zStatsFile = z.object({
   file: zRDZFileWithPath,
   status: zStatsFileStatus,
   parserId: zParserId.nullable(),
-  rawParseResult: zPPRawParseResult.nullable(),
+  parseResult: zPPRawParseResult.nullable(),
   transactions: z.array(zTransaction),
   error: z.string().optional(),
 })

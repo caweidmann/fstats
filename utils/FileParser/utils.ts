@@ -14,14 +14,14 @@ export const parseFiles = async (
 }
 
 export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat: DateFormat): Promise<StatsFile> => {
-  const rawParseResult = await parseRaw(file.file)
+  const parseResult = await parseRaw(file.file)
   let parserId: StatsFile['parserId'] = null
   let transactions: StatsFile['transactions'] = []
   let matchedParser: Parser | null = null
 
   for (const parser of Object.values(AVAILABLE_PARSERS)) {
     try {
-      if (parser.detect(rawParseResult)) {
+      if (parser.detect(parseResult)) {
         matchedParser = parser
         break
       }
@@ -30,7 +30,7 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
       console.error(`Error detecting with ${parser.id}:`, errMsg)
       return {
         ...file,
-        rawParseResult,
+        parseResult,
         transactions,
         parserId,
         status: StatsFileStatus.ERROR,
@@ -42,13 +42,13 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
   if (matchedParser) {
     try {
       parserId = matchedParser.id
-      transactions = matchedParser.parse(rawParseResult, locale, dateFormat)
+      transactions = matchedParser.parse(parseResult, locale, dateFormat)
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err)
       console.error(`Parsing failed with ${matchedParser.id}:`, errMsg)
       return {
         ...file,
-        rawParseResult,
+        parseResult,
         transactions,
         parserId,
         status: StatsFileStatus.ERROR,
@@ -59,7 +59,7 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
 
   const dataToSync: StatsFile = {
     ...file,
-    rawParseResult,
+    parseResult,
     transactions,
     parserId,
   }
@@ -71,7 +71,7 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
     console.error(`Validation failed for parser "${parserId}":`, errors)
     return {
       ...file,
-      rawParseResult,
+      parseResult,
       parserId,
       status: StatsFileStatus.ERROR,
       error: `Parse "${parserId}" failed during validation`,

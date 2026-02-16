@@ -11,7 +11,7 @@ export const getStatsFileDefaults = (file: RDZFileWithPath): StatsFile => ({
   status: StatsFileStatus.PARSING,
   parserId: null,
   transactions: [],
-  rawParseResult: null,
+  parseResult: null,
 })
 
 export const isError = (file: StatsFile) => {
