@@ -1,4 +1,4 @@
-import { StatsFile } from '@/types'
+import type { StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { RDZFileWithPath } from '@/types/lib/react-dropzone'
 

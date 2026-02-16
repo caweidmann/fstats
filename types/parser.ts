@@ -1,6 +1,6 @@
-import type { Currency, DateFormat, UserLocale } from '@/types-enums'
+import { Currency, DateFormat, UserLocale } from '@/types-enums'
 
-import { IdString } from './global'
+import type { IdString } from './global'
 import type { PPRawParseResult } from './lib/papaparse'
 import type { Transaction } from './services/transaction'
 
