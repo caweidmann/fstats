@@ -7,7 +7,7 @@ import type { _KeysCheck } from '../key-check'
 import { _zKeysCheck } from '../key-check'
 import { zPPRawParseResult } from '../lib/papaparse'
 import { zRDZFileWithPath } from '../lib/react-dropzone'
-import { zTransaction, zTransactionAtRest } from './parsed-content-row'
+import { zTransaction, zTransactionAtRest } from './transaction'
 
 export const zStatsFile = z.object({
   created: z.union([z.literal(''), zDateTimeString]),
