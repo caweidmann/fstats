@@ -153,46 +153,43 @@ export const ParserId = {
 } as const
 ```
 
-2. **Create parser** `parsers/NewBank/account-type.ts`:
+2. **Create parser** `parsers/NewBank/account-type.ts` using the `createParser` factory:
 ```typescript
-import type { Transaction, Parser } from '@/types'
 import { Currency, ParserId } from '@/types-enums'
-import { toSystemDate } from '@/utils/Date'
-import { detectMatch } from '@/utils/Misc'
-import { Big } from '@/lib/w-big'
+import { createParser } from '@/utils/CsvParser'
 
-export const NewBankAccountType: Parser = {
+export const NewBankAccountType = createParser({
   id: ParserId.NEW_BANK,
+
   bankName: 'New Bank',
+
   accountType: 'Account Type',
+
   currency: Currency.EUR,
-  expectedHeaderRowIndex: 0,
-  expectedHeaders: ['Date', 'Description', 'Amount', 'Balance'],
 
-  detect: (input) => {
-    return detectMatch(input, NewBankAccountType)
+  headerRowIndex: 0,
+
+  columns: {
+    date: 'Date',
+    description: 'Description',
+    amount: 'Amount',
+    balance: 'Balance',
+  } as const,
+
+  dateFormat: 'dd/MM/yyyy',
+
+  dateGetter: (row) => {
+    return row.get('date')
   },
 
-  parse: (input, locale, formatTo) => {
-    const rowsToParse = input.data
-      .slice(NewBankAccountType.expectedHeaderRowIndex + 1)
-      .filter((row) => row.length === NewBankAccountType.expectedHeaders.length)
-
-    return rowsToParse.map((row) => {
-      const [date, description, amount] = row
-
-      const data: Transaction = {
-        date: toSystemDate(date.trim(), { formatFrom: 'dd/MM/yyyy' }),
-        description: description.trim(),
-        value: amount || '0',
-        currency: NewBankAccountType.currency,
-        category: Big(amount || 0).gte(0) ? 'Income' : 'Expense',
-      }
-
-      return data
-    })
+  descriptionGetter: (row) => {
+    return row.get('description')
   },
-}
+
+  valueGetter: (row) => {
+    return row.get('amount') || '0'
+  },
+})
 ```
 
 3. **Export** from `parsers/NewBank/index.ts`:
