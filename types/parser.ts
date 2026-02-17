@@ -34,6 +34,7 @@ export type ParserConfig = {
   currency: Currency
   headerRowIndex: number
   columns: ColDef
+  dateFormat: string
   detect: (input: PPRawParseResult) => boolean
   parse: (input: PPRawParseResult, locale: UserLocale, dateFormat: DateFormat) => Transaction[]
 }

@@ -2,12 +2,12 @@ import { z } from 'zod'
 
 import { zCurrency } from '@/types-enums'
 
-import { zNumberString, zSystemDateString } from '../global'
+import { zDateTimeString, zNumberString } from '../global'
 import type { _KeysCheck } from '../key-check'
 import { _zKeysCheck } from '../key-check'
 
 export const zTransaction = z.object({
-  date: zSystemDateString,
+  date: zDateTimeString,
   description: z.string(),
   value: zNumberString,
   currency: zCurrency,
