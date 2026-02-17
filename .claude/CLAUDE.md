@@ -24,24 +24,27 @@ pnpm start
 pnpm lint
 ```
 
-**Note**: There are currently no tests in this project (`pnpm test` will just echo a message).
+```bash
+# Testing (uses Vitest)
+pnpm test
+```
 
 ## Architecture
 
 ### Directory Structure
 
 - **`/app`** - Next.js App Router pages and layouts (Routes: `/`, `/data`, `/stats`, `/settings`)
-- **`/components`** - Reusable UI components (BarChart, ConfirmDialog, DateFormatDrawer, DateFormatSwitcher, DoughnutChart, FormFieldsControlled, LanguageDrawer, LanguageSwitcher, Layout, LineChart, PageWrapper, RadioButton, SwipeableDrawer, ThemeDrawer, ThemeSwitcher) and provider components (StorageProvider, QueryProvider, ThemeProvider, LanguageProvider, ChartProvider)
+- **`/components`** - Reusable UI components (BarChart, DateFormatDrawer, DateFormatSwitcher, FormFieldsControlled, LanguageDrawer, LanguageSwitcher, Layout, LineChart, PageWrapper, RadioButton, SwipeableDrawer, ThemeDrawer, ThemeSwitcher) and provider components (StorageProvider, QueryProvider, ThemeProvider, LanguageProvider, ChartProvider)
 - **`/m-stats-file`** - Stats file management module (api/, service/)
 - **`/m-user`** - User preferences management module (api/, service/)
 - **`/m-pages`** - Page-level components module (DataPage/, EmptyStatsPage/, HomePage/, SettingsPage/, StatsPage/)
-  - StatsPage has sub-components: BankSelector, DemoBanner, ProfitLossSummary, TaxInsights, TransactionChart, TransactionInfo, TransactionsTable
+  - StatsPage has sub-components: BankSelector, DemoBanner, ProfitLossSummary, TransactionChart, TransactionInfo, TransactionsTable
 - **`/types`** - TypeScript type definitions (global.ts, utils.ts, key-check.ts, services/, lib/)
 - **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, DateFormat, WeekStartsOn, WeekStartsOnValue, StatsFileStatus, Currency, SortOrder)
-- **`/utils`** - Domain-organized utilities (Chart/, Currency/, Date/, Features/, File/, FileParser/, LocalStorage/, Logger/, Misc/, Number/, Stats/)
-- **`/parsers`** - Bank-specific CSV parsers (Capitec/, Comdirect/, FNB/, ING/, Lloyds/); registry is single source of truth for ParserId
+- **`/utils`** - Domain-organized utilities (Chart/, CsvParser/, Currency/, Date/, Encryption/, Features/, File/, FileParser/, LocalStorage/, Logger/, Misc/, Number/, Stats/)
+- **`/parsers`** - Bank-specific CSV parsers in flat files under `banks/` (capitec__savings, comdirect__giro, comdirect__visa, fnb__credit_card, ing__giro, ing__giro_wb, lloyds__current); registry (`index.ts`) is single source of truth for ParserId
 - **`/lib`** - Third-party library configs (i18n.ts, localforage.ts, tanstack-query.ts, chartjs.ts, w-big.ts)
-- **`/common`** - App-wide constants (misc.ts, routes.ts, config.ts)
+- **`/common`** - App-wide constants (misc.ts, routes.ts, config.ts, layout.ts)
 - **`/hooks`** - Custom React hooks (useIsDarkMode, useIsMobile, useUserPreferences, useFileHelper, useDarkModeMetaTagUpdater)
 - **`/styles`** - Global styles and MUI theme configuration
 - **`/_data`** - Sample CSV files for testing (excluded from build)
@@ -136,12 +139,12 @@ Enforced via Prettier plugin:
 
 The `parsers/index.ts` registry is the single source of truth for parser IDs. `ParserId` type and `zParserId` are auto-derived from it. To add a new bank parser:
 
-1. **Create parser config** `parsers/NewBank/account-type.ts` using the `createParser` factory:
+1. **Create parser config** `parsers/banks/new_bank__account_type.ts` using the `createParser` factory:
 ```typescript
 import { Currency } from '@/types-enums'
 import { createParser } from '@/utils/CsvParser'
 
-export const NewBankAccountType = createParser({
+export default createParser({
   bankName: 'New Bank',
 
   accountType: 'Account Type',
@@ -182,11 +185,11 @@ This naming keeps parser definitions compact while staying explicit for contribu
 
 2. **Register** in `parsers/index.ts` — the key is the parser ID:
 ```typescript
-import { NewBankAccountType } from './NewBank/account-type'
+import new_bank__account_type from './banks/new_bank__account_type'
 
-const REGISTRY = buildRegistry({
+const registry = buildRegistry({
   // ...existing parsers
-  'new_bank__account_type': NewBankAccountType,
+  new_bank__account_type,
 })
 ```
 
@@ -261,6 +264,7 @@ export const userKey = {
 - **i18n**: next-i18next, i18next, react-i18next
 - **Storage**: localforage (IndexedDB)
 - **Utilities**: lodash (imported directly, no wrapper), usehooks-ts
+- **Testing**: Vitest
 - **PWA**: @serwist/next
 
 ## Code Organization Patterns
@@ -275,7 +279,7 @@ export const userKey = {
 DirectoryName/
 ├── index.ts(x)        # Public API: exports only
 ├── utils.ts           # Implementation
-├── actions.ts(x)      # Component-specific logic (COMMON)
+├── actions.ts         # Component-specific logic (COMMON)
 ├── styled.ts          # MUI styles (COMMON)
 ├── demo-data.ts       # Demo/sample data (when applicable)
 ├── components/        # Sub-components when needed
@@ -524,7 +528,7 @@ import { MISC, ROUTES, CONFIG } from '@/common'
 6. **Styling?** → Add to component's `styled.ts`
 7. **Type definition?** → Add to `/types/` or `/types-enums/`
 8. **Constant?** → Add to `/common/`
-9. **Bank parser?** → Add to `/parsers/BankName/`
+9. **Bank parser?** → Add to `/parsers/banks/`
 10. **Provider?** → Add to `/components/{Name}Provider/`
 11. **User preference?** → Use `m-user` module hooks
 
