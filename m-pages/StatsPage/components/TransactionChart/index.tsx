@@ -27,7 +27,7 @@ const Component = ({ transactions }: TransactionChartProps) => {
   const currency =
     selectedId && selectedId !== 'all' && selectedId !== 'unknown'
       ? getParserCurrency(selectedId)
-      : selectedId && selectedId == 'all'
+      : selectedId && selectedId === 'all'
         ? transactions.length
           ? transactions[0].currency
           : Currency.USD // FIXME: This is just hacked, need to do better currency handling here
