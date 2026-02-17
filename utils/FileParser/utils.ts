@@ -1,8 +1,9 @@
-import { parse } from 'papaparse'
-
-import { zSyncableStatsFile, type Parser, type PPRawParseResult, type StatsFile } from '@/types'
+import { zSyncableStatsFile } from '@/types'
+import type { Parser, StatsFile, Transaction } from '@/types'
 import { DateFormat, StatsFileStatus, UserLocale } from '@/types-enums'
 import { AVAILABLE_PARSERS } from '@/parsers'
+
+import { parseRaw } from './helper'
 
 export const parseFiles = async (
   files: StatsFile[],
@@ -14,14 +15,14 @@ export const parseFiles = async (
 }
 
 export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat: DateFormat): Promise<StatsFile> => {
-  const rawParseResult = await parseRaw(file.file)
+  const parseResult = await parseRaw(file.file)
   let parserId: StatsFile['parserId'] = null
-  let parsedContentRows: StatsFile['parsedContentRows'] = []
+  let transactions: Transaction[] = []
   let matchedParser: Parser | null = null
 
   for (const parser of Object.values(AVAILABLE_PARSERS)) {
     try {
-      if (parser.detect(rawParseResult)) {
+      if (parser.detect(parseResult)) {
         matchedParser = parser
         break
       }
@@ -30,8 +31,8 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
       console.error(`Error detecting with ${parser.id}:`, errMsg)
       return {
         ...file,
-        rawParseResult,
-        parsedContentRows,
+        parseResult,
+        transactions,
         parserId,
         status: StatsFileStatus.ERROR,
         error: `Parse "${parser.id}" failed during detection phase`,
@@ -41,15 +42,15 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
 
   if (matchedParser) {
     try {
-      parserId = matchedParser.id
-      parsedContentRows = matchedParser.parse(rawParseResult, locale, dateFormat)
+      parserId = matchedParser.id as StatsFile['parserId']
+      transactions = matchedParser.parse(parseResult, locale, dateFormat)
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err)
       console.error(`Parsing failed with ${matchedParser.id}:`, errMsg)
       return {
         ...file,
-        rawParseResult,
-        parsedContentRows,
+        parseResult,
+        transactions,
         parserId,
         status: StatsFileStatus.ERROR,
         error: `Parse "${matchedParser.id}" failed`,
@@ -59,8 +60,8 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
 
   const dataToSync: StatsFile = {
     ...file,
-    rawParseResult,
-    parsedContentRows,
+    parseResult,
+    transactions,
     parserId,
   }
 
@@ -71,7 +72,7 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
     console.error(`Validation failed for parser "${parserId}":`, errors)
     return {
       ...file,
-      rawParseResult,
+      parseResult,
       parserId,
       status: StatsFileStatus.ERROR,
       error: `Parse "${parserId}" failed during validation`,
@@ -82,21 +83,4 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
     ...dataToSync,
     status: StatsFileStatus.PARSED,
   }
-}
-
-export const parseRaw = async (file: File): Promise<PPRawParseResult> => {
-  return new Promise((resolve, reject) => {
-    parse(file, {
-      header: false,
-      skipEmptyLines: 'greedy',
-      encoding: 'utf-8',
-      worker: true,
-      complete: (results) => {
-        resolve(results as PPRawParseResult)
-      },
-      error: (err) => {
-        reject(err)
-      },
-    })
-  })
 }

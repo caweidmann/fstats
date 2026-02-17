@@ -33,11 +33,11 @@ export const ensureUserExists = async (): Promise<User> => {
     const newUser = getUserDefaults()
     user = await addUser({
       ...newUser,
-      locale: localStorage.getItem(MISC.LS_I18N_LOCALE_KEY)
-        ? (localStorage.getItem(MISC.LS_I18N_LOCALE_KEY) as UserLocale)
+      locale: window.localStorage.getItem(MISC.LS_I18N_LOCALE_KEY)
+        ? (window.localStorage.getItem(MISC.LS_I18N_LOCALE_KEY) as UserLocale)
         : newUser.locale,
-      colorMode: localStorage.getItem(MISC.LS_MUI_COLOR_MODE_KEY)
-        ? (localStorage.getItem(MISC.LS_MUI_COLOR_MODE_KEY) as ColorMode)
+      colorMode: window.localStorage.getItem(MISC.LS_MUI_COLOR_MODE_KEY)
+        ? (window.localStorage.getItem(MISC.LS_MUI_COLOR_MODE_KEY) as ColorMode)
         : newUser.colorMode,
     })
   }

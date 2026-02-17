@@ -1,23 +1,28 @@
 import { z } from 'zod'
 
-import { zParserId, zStatsFileStatus } from '@/types-enums'
+import { zStatsFileStatus } from '@/types-enums'
+import { zParserId } from '@/parsers'
 
 import { zDateTimeString, zIdString, zNonEmptyString } from '../global'
 import type { _KeysCheck } from '../key-check'
 import { _zKeysCheck } from '../key-check'
 import { zPPRawParseResult } from '../lib/papaparse'
 import { zRDZFileWithPath } from '../lib/react-dropzone'
-import { zParsedContentRow, zParsedContentRowAtRest } from './parsed-content-row'
+import { zTransaction, zTransactionAtRest } from './transaction'
 
 export const zStatsFile = z.object({
   created: z.union([z.literal(''), zDateTimeString]),
   modified: z.union([z.literal(''), zDateTimeString]),
   id: z.union([z.literal(''), zIdString]),
+  /**
+   * This is a hash of all transactions, not the actual parse result.
+   */
+  hash: z.union([z.literal(''), zNonEmptyString]),
   file: zRDZFileWithPath,
   status: zStatsFileStatus,
   parserId: zParserId.nullable(),
-  parsedContentRows: z.array(zParsedContentRow),
-  rawParseResult: zPPRawParseResult.nullable(),
+  parseResult: zPPRawParseResult.nullable(),
+  transactions: z.array(zTransaction),
   error: z.string().optional(),
 })
 
@@ -33,11 +38,9 @@ export const zSyncableStatsFile = z.object({
 export type SyncableStatsFile = z.infer<typeof zSyncableStatsFile>
 
 export const zStatsFileAtRest = z.object({
-  ...zStatsFile.shape,
-  created: zDateTimeString,
-  modified: zDateTimeString,
-  id: zNonEmptyString,
-  parsedContentRows: z.array(zParsedContentRowAtRest),
+  ...zSyncableStatsFile.shape,
+  hash: zNonEmptyString,
+  transactions: z.array(zTransactionAtRest),
 })
 
 export type StatsFileAtRest = z.infer<typeof zStatsFileAtRest>

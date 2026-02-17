@@ -14,8 +14,10 @@ export const sxHideScrollbar = {
   },
 } as const
 
-const PULLER_WRAPPER_HEIGHT = 24
+const PULLER_OFFSET_TOP = 8
+const PULLER_HEIGHT = 4
 const PULLER_WIDTH = 30
+const PULLER_WRAPPER_HEIGHT = PULLER_OFFSET_TOP + PULLER_HEIGHT
 
 export const PullerWrapper = styled('div')(({ theme }) => {
   return {
@@ -25,11 +27,11 @@ export const PullerWrapper = styled('div')(({ theme }) => {
 
 export const Puller = styled('div')(({ theme }) => ({
   width: PULLER_WIDTH,
-  height: 4,
+  height: PULLER_HEIGHT,
   backgroundColor: grey[400],
   borderRadius: 2,
   position: 'relative',
-  top: 8,
+  top: PULLER_OFFSET_TOP,
   left: `calc(50% - ${PULLER_WIDTH / 2}px)`,
   [theme.getColorSchemeSelector(ColorMode.DARK)]: {
     backgroundColor: theme.vars.palette.secondary.dark,

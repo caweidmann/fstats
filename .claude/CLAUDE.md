@@ -24,22 +24,27 @@ pnpm start
 pnpm lint
 ```
 
-**Note**: There are currently no tests in this project (`pnpm test` will just echo a message).
+```bash
+# Testing (uses Vitest)
+pnpm test
+```
 
 ## Architecture
 
 ### Directory Structure
 
 - **`/app`** - Next.js App Router pages and layouts (Routes: `/`, `/data`, `/stats`, `/settings`)
-- **`/components`** - Reusable UI components and provider components (StorageProvider, QueryProvider, ThemeProvider, LanguageProvider, ChartProvider)
+- **`/components`** - Reusable UI components (BarChart, DateFormatDrawer, DateFormatSwitcher, FormFieldsControlled, LanguageDrawer, LanguageSwitcher, Layout, LineChart, PageWrapper, RadioButton, SwipeableDrawer, ThemeDrawer, ThemeSwitcher) and provider components (StorageProvider, QueryProvider, ThemeProvider, LanguageProvider, ChartProvider)
 - **`/m-stats-file`** - Stats file management module (api/, service/)
 - **`/m-user`** - User preferences management module (api/, service/)
-- **`/types`** - TypeScript type definitions (global.ts, utils.ts, services/, lib/)
-- **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, ParserId, DateFormat, WeekStartsOn, StatsFileStatus, Currency, SortOrder)
-- **`/utils`** - Domain-organized utilities (Date/, File/, FileParser/, Features/, LocalStorage/, Logger/, Misc/)
-- **`/parsers`** - Bank-specific CSV parsers (Capitec/, Comdirect/)
-- **`/lib`** - Third-party library configs (i18n.ts, localforage.ts, tanstack-query.ts, chartjs.ts, w-big.ts, w-lodash.ts)
-- **`/common`** - App-wide constants (misc.ts, routes.ts, config.ts)
+- **`/m-pages`** - Page-level components module (DataPage/, EmptyStatsPage/, HomePage/, SettingsPage/, StatsPage/)
+  - StatsPage has sub-components: BankSelector, DemoBanner, ProfitLossSummary, TransactionChart, TransactionInfo, TransactionsTable
+- **`/types`** - TypeScript type definitions (global.ts, utils.ts, key-check.ts, services/, lib/)
+- **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, DateFormat, WeekStartsOn, WeekStartsOnValue, StatsFileStatus, Currency, SortOrder)
+- **`/utils`** - Domain-organized utilities (Chart/, CsvParser/, Currency/, Date/, Encryption/, Features/, File/, FileParser/, LocalStorage/, Logger/, Misc/, Number/, Stats/)
+- **`/parsers`** - Bank-specific CSV parsers in flat files under `banks/` (capitec__savings, comdirect__giro, comdirect__visa, fnb__credit_card, ing__giro, ing__giro_wb, lloyds__current); registry (`index.ts`) is single source of truth for ParserId
+- **`/lib`** - Third-party library configs (i18n.ts, localforage.ts, tanstack-query.ts, chartjs.ts, w-big.ts)
+- **`/common`** - App-wide constants (misc.ts, routes.ts, config.ts, layout.ts)
 - **`/hooks`** - Custom React hooks (useIsDarkMode, useIsMobile, useUserPreferences, useFileHelper, useDarkModeMetaTagUpdater)
 - **`/styles`** - Global styles and MUI theme configuration
 - **`/_data`** - Sample CSV files for testing (excluded from build)
@@ -91,17 +96,19 @@ Component → Service Hook → API Layer → LocalForage → IndexedDB
 
 **Provider Hierarchy** (app/layout.tsx):
 ```tsx
-<QueryProvider>                {/* TanStack Query client */}
-  <StorageProvider>            {/* Initializes LocalForage */}
-    <ThemeProvider>            {/* MUI theme + color mode */}
-      <LanguageProvider>       {/* i18next */}
-        <ChartProvider>        {/* Chart.js config */}
-          <Layout>{children}</Layout>
-        </ChartProvider>
-      </LanguageProvider>
-    </ThemeProvider>
-  </StorageProvider>
-</QueryProvider>
+<AppRouterCacheProvider>       {/* MUI Emotion cache */}
+  <QueryProvider>                {/* TanStack Query client */}
+    <StorageProvider>            {/* Initializes LocalForage */}
+      <ThemeProvider>            {/* MUI theme + color mode */}
+        <LanguageProvider>       {/* i18next */}
+          <ChartProvider>        {/* Chart.js config */}
+            <Layout>{children}</Layout>
+          </ChartProvider>
+        </LanguageProvider>
+      </ThemeProvider>
+    </StorageProvider>
+  </QueryProvider>
+</AppRouterCacheProvider>
 ```
 
 **Data Transformation** (At Rest ↔ In Memory):
@@ -116,80 +123,77 @@ Enforced via Prettier plugin:
 2. `@/types` and `@/types-enums`
 3. `@/common`
 4. `@/components`
-5. `@/m-*` (feature modules)
-6. `@/hooks`
-7. `@/styles`
-8. `@/utils`
-9. `@/lib`
-10. `@/public`
-11. Relative imports (`./` or `../`)
+5. `@/context`
+6. `@/m-*` (feature modules)
+7. `@/hooks`
+8. `@/styles`
+9. `@/utils`
+10. `@/parsers`
+11. `@/lib`
+12. `@/public`
+13. Relative imports (`./` or `../`)
 
 ## Adding a New Bank Parser
 
-**Currently Implemented Parsers**: CAPITEC (Savings), COMDIRECT (Giro)
+**Currently Implemented Parsers**: CAPITEC (Savings), FNB (Credit Card), COMDIRECT (Giro, Visa), ING (Giro, Giro with Balance), LLOYDS (Current)
 
-To add a new bank parser:
+The `parsers/index.ts` registry is the single source of truth for parser IDs. `ParserId` type and `zParserId` are auto-derived from it. To add a new bank parser:
 
-1. **Add ParserId** to `types-enums/index.ts`:
+1. **Create parser config** `parsers/banks/new_bank__account_type.ts` using the `createParser` factory:
 ```typescript
-export const ParserId = {
-  CAPITEC: 'capitec__savings',
-  COMDIRECT_GIRO: 'comdirect__giro',
-  NEW_BANK: 'new_bank__account_type', // New
-} as const
-```
+import { Currency } from '@/types-enums'
+import { createParser } from '@/utils/CsvParser'
 
-2. **Create parser** `parsers/NewBank/account-type.ts`:
-```typescript
-import type { ParsedContentRow, Parser } from '@/types'
-import { ParserId } from '@/types-enums'
-import { isEqual } from '@/utils/Misc'
-import { Big } from '@/lib/w-big'
-import { toDisplayDate } from '../../Date'
-
-export const NewBankAccountType: Parser = {
-  id: ParserId.NEW_BANK,
+export default createParser({
   bankName: 'New Bank',
+
   accountType: 'Account Type',
-  expectedHeaderRowIndex: 0,
-  expectedHeaders: ['Date', 'Description', 'Amount', 'Balance'],
 
-  detect: (input) => {
-    return isEqual(input.data[NewBankAccountType.expectedHeaderRowIndex], NewBankAccountType.expectedHeaders)
+  currency: Currency.EUR,
+
+  columns: {
+    date: 'Date',
+    description: 'Description',
+    amount: 'Amount',
+    balance: 'Balance',
+  } as const,
+
+  dateFormat: 'dd/MM/yyyy',
+
+  // String shorthand for simple column lookups
+  getters: {
+    date: 'date',
+    description: 'description',
+    value: 'amount',
   },
 
-  parse: (input, locale) => {
-    const rowsToParse = input.data
-      .slice(NewBankAccountType.expectedHeaderRowIndex + 1)
-      .filter((row) => row.length === NewBankAccountType.expectedHeaders.length)
-
-    return rowsToParse.map((row) => {
-      const [date, description, amount] = row
-      return {
-        date: toDisplayDate(date, locale, { formatFrom: 'dd/MM/yyyy', formatTo: 'dd/MM/yyyy' }),
-        description,
-        value: Big(amount || 0),
-      }
-    })
-  },
-}
+  // Use functions for complex logic:
+  // getters: {
+  //   ...
+  //   value: (row) => parseGermanNumber(row.get('amount')),
+  // },
+})
 ```
 
-3. **Export** from `parsers/NewBank/index.ts`:
+`getters` is the canonical parser API name. It groups how each normalized transaction field is extracted from a CSV row:
+
+- `date` → date source column/function
+- `description` → description source column/function
+- `value` → amount source column/function
+
+This naming keeps parser definitions compact while staying explicit for contributors.
+
+2. **Register** in `parsers/index.ts` — the key is the parser ID:
 ```typescript
-export { NewBankAccountType } from './account-type'
+import new_bank__account_type from './banks/new_bank__account_type'
+
+const registry = buildRegistry({
+  // ...existing parsers
+  new_bank__account_type,
+})
 ```
 
-4. **Register** in `parsers/index.ts`:
-```typescript
-import { NewBankAccountType } from './NewBank'
-
-export const AVAILABLE_PARSERS = {
-  [ParserId.CAPITEC]: CapitecSavings,
-  [ParserId.COMDIRECT_GIRO]: ComdirectGiro,
-  [ParserId.NEW_BANK]: NewBankAccountType, // Register
-} satisfies Record<ParserId, Parser>
-```
+The `ParserId` type and const are auto-derived from the registry keys. Import from `@/types` (re-exported) or `@/parsers`. Use as a type (`ParserId`) or value (`ParserId.capitec__savings`).
 
 ## Working with TanStack Query
 
@@ -252,13 +256,15 @@ export const userKey = {
 - **UI**: MUI v7 with Emotion
 - **Data Fetching**: @tanstack/react-query v5
 - **CSV Parsing**: PapaParse
-- **Charts**: Chart.js with react-chartjs-2
-- **Forms**: react-hook-form with zod
+- **Charts**: Chart.js with react-chartjs-2, chartjs-plugin-annotation
+- **Validation**: zod v4 (uses `z.iso.datetime()`, `z.iso.date()` syntax)
+- **Forms**: react-hook-form
 - **File Upload**: react-dropzone
 - **Number Precision**: big.js | **Date**: date-fns v4
 - **i18n**: next-i18next, i18next, react-i18next
 - **Storage**: localforage (IndexedDB)
-- **Utilities**: lodash, usehooks-ts
+- **Utilities**: lodash (imported directly, no wrapper), usehooks-ts
+- **Testing**: Vitest
 - **PWA**: @serwist/next
 
 ## Code Organization Patterns
@@ -273,8 +279,9 @@ export const userKey = {
 DirectoryName/
 ├── index.ts(x)        # Public API: exports only
 ├── utils.ts           # Implementation
-├── actions.ts(x)      # Component-specific logic (COMMON)
+├── actions.ts         # Component-specific logic (COMMON)
 ├── styled.ts          # MUI styles (COMMON)
+├── demo-data.ts       # Demo/sample data (when applicable)
 ├── components/        # Sub-components when needed
 └── [domain].ts        # Optional domain-specific files
 ```
@@ -487,8 +494,9 @@ const { mutate: addFile } = useMutateAddFile() // Auto-invalidates cache
 ### Common Imports
 ```typescript
 // Types
-import type { StatsFile, ParsedContentRow } from '@/types'
-import { ParserId, StatsFileStatus } from '@/types-enums'
+import type { StatsFile, Transaction } from '@/types'
+import { ParserId } from '@/types'
+import { StatsFileStatus } from '@/types-enums'
 
 // Service hooks - Stats Files
 import { useFiles, useMutateAddFile } from '@/m-stats-file/service'
@@ -501,6 +509,8 @@ import { useFileHelper, useIsDarkMode, useUserPreferences } from '@/hooks'
 
 // Utils
 import { formatDate, toDisplayDate } from '@/utils/Date'
+import { getStats, getProfitLossColors } from '@/utils/Stats'
+import { getGradient } from '@/utils/Chart'
 import { AVAILABLE_PARSERS } from '@/parsers'
 import { Big } from '@/lib/w-big'
 
@@ -518,7 +528,7 @@ import { MISC, ROUTES, CONFIG } from '@/common'
 6. **Styling?** → Add to component's `styled.ts`
 7. **Type definition?** → Add to `/types/` or `/types-enums/`
 8. **Constant?** → Add to `/common/`
-9. **Bank parser?** → Add to `/parsers/BankName/`
+9. **Bank parser?** → Add to `/parsers/banks/`
 10. **Provider?** → Add to `/components/{Name}Provider/`
 11. **User preference?** → Use `m-user` module hooks
 

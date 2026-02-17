@@ -1,7 +1,7 @@
-import type { StatsFile, StatsFileAtRest } from '@/types'
+import type { StatsFile, StatsFileAtRest, Transaction } from '@/types'
 import { zSyncableStatsFile } from '@/types'
 import { Currency } from '@/types-enums'
-import { Big } from '@/lib/w-big'
+import { SHA256 } from '@/utils/Encryption'
 
 export const syncStatsFile = (dataToSync: StatsFile): StatsFileAtRest => {
   const res = zSyncableStatsFile.safeParse(dataToSync)
@@ -11,23 +11,22 @@ export const syncStatsFile = (dataToSync: StatsFile): StatsFileAtRest => {
     throw new Error(`Cannot sync StatsFile: ${errors}`)
   }
 
-  return {
-    ...res.data,
-    parsedContentRows: res.data.parsedContentRows.map((row) => ({
-      ...row,
-      value: row.value.toString(),
-    })),
-  }
+  return res.data
 }
 
 export const parseStatsFile = (dataToParse: StatsFileAtRest): StatsFile => {
   const res: StatsFile = {
     ...dataToParse,
-    parsedContentRows: dataToParse.parsedContentRows.map((row) => ({
+    transactions: dataToParse.transactions.map((row) => ({
       ...row,
-      value: Big(row.value),
       currency: row.currency as Currency,
     })),
   }
   return res
+}
+
+export const getTransactionsHash = async (rows: Transaction[]): Promise<string> => {
+  const rowString = rows.map((row) => Object.values(row).join('|')).join('__')
+  const hash = await SHA256.encrypt(rowString)
+  return hash
 }
