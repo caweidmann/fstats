@@ -18,14 +18,3 @@ export const MISC = {
   SS_SESSION_KEY: 'fstats__session',
   USER_KEY: 'current_user',
 } as const
-
-export const LAYOUT = {
-  CONTAINER_MAX_WIDTH: 'lg',
-  NAV_Z_INDEX: 20,
-  NAV_HEIGHT: 50,
-  NAV_HEIGHT_MOBILE: 60,
-  NAV_BORDER: 1,
-  FOOTER_HEIGHT: 50,
-  FOOTER_HEIGHT_MOBILE: 60,
-  FOOTER_BORDER: 1,
-} as const
