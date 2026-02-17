@@ -11,6 +11,7 @@ import type { Size, StatsPageForm, Transaction } from '@/types'
 import { Currency } from '@/types-enums'
 import { BarChart } from '@/components'
 import { useUserPreferences } from '@/hooks'
+import { toDisplayDate } from '@/utils/Date'
 import { getParserCurrency } from '@/parsers'
 import { Big } from '@/lib/w-big'
 
@@ -32,7 +33,7 @@ const Component = ({ transactions }: TransactionChartProps) => {
           ? transactions[0].currency
           : Currency.USD // FIXME: This is just hacked, need to do better currency handling here
         : Currency.USD
-  const { locale } = useUserPreferences()
+  const { locale, dateFormat } = useUserPreferences()
   const sx = ui()
   const ref = useRef<HTMLDivElement>(null)
   const [{ width = 0 }, setSize] = useState<Size>({ width: undefined, height: undefined })
@@ -53,7 +54,7 @@ const Component = ({ transactions }: TransactionChartProps) => {
   }
 
   const chartData: ChartData = {
-    labels: transactions.map((row) => row.date),
+    labels: transactions.map((row) => toDisplayDate(row.date, locale, { formatTo: dateFormat })),
     datasets: [dataset],
   }
 

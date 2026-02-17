@@ -72,6 +72,9 @@ export const getChartOptions = ({
         grid: {
           display: false,
         },
+        ticks: {
+          maxTicksLimit: 12,
+        },
       },
       y: {
         beginAtZero: true,
