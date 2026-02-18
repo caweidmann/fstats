@@ -1,7 +1,20 @@
 import { isEqual, uniqWith } from 'lodash'
 
-import type { BankSelectOption, StatsFile } from '@/types'
+import type { BankSelectOption, StatsFile, StatsPageForm, Transaction } from '@/types'
+import { MISC } from '@/common'
 import { getParserCurrency, getParserName, ParserId } from '@/parsers'
+
+export const getCurrencyForSelection = (selectedId: StatsPageForm['selectedId'], transactions: Transaction[]) => {
+  if (!selectedId) {
+    return MISC.DEFAULT_CURRENCY
+  }
+
+  if (selectedId === 'all') {
+    return transactions.length ? transactions[0].currency : MISC.DEFAULT_CURRENCY
+  }
+
+  return getParserCurrency(selectedId)
+}
 
 export const getBankSelectOptions = (selectedFiles: StatsFile[]): BankSelectOption[] => {
   const banks = selectedFiles

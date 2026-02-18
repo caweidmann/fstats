@@ -14,11 +14,11 @@ export type Size = {
   height?: number
 }
 
-// TODO: Remove "unknown"
-export type BankSelectOption = SelectOptionWithType<ParserId | 'all' | 'unknown'>
+export type BankSelectOption = SelectOptionWithType<ParserId | 'all'>
 
 export type StatsPageForm = {
   selectedId: BankSelectOption['value'] | ''
+  currency: Currency
 }
 
 /**

@@ -6,11 +6,9 @@ import { useTheme } from '@mui/material/styles'
 import { useFormContext } from 'react-hook-form'
 
 import type { StatsPageForm, Transaction } from '@/types'
-import { Currency } from '@/types-enums'
 import { useIsDarkMode, useUserPreferences } from '@/hooks'
 import { toFixedLocale, toFixedLocaleCurrency } from '@/utils/Number'
 import { getProfitLossColors, getStats } from '@/utils/Stats'
-import { getParserCurrency } from '@/parsers'
 import { Big } from '@/lib/w-big'
 
 import { ui } from './styled'
@@ -25,15 +23,7 @@ const Component = ({ transactions }: ProfitLossSummaryProps) => {
   const theme = useTheme()
   const sx = ui(theme)
   const { watch } = useFormContext<StatsPageForm>()
-  const selectedId = watch('selectedId')
-  const currency =
-    selectedId && selectedId !== 'all' && selectedId !== 'unknown'
-      ? getParserCurrency(selectedId)
-      : selectedId && selectedId === 'all'
-        ? transactions.length
-          ? transactions[0].currency
-          : Currency.USD // FIXME: This is just hacked, need to do better currency handling here
-        : Currency.USD
+  const currency = watch('currency')
   const { totalIncome, totalExpense, profit, expenseRatio } = getStats(transactions)
   const totalIncomeDisplay = toFixedLocaleCurrency(totalIncome, currency, locale)
   const totalExpenseDisplay = toFixedLocaleCurrency(totalExpense, currency, locale)

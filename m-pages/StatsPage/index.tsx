@@ -3,13 +3,15 @@
 import { Grid } from '@mui/material'
 import { isEqual, uniqWith } from 'lodash'
 import { useSearchParams } from 'next/navigation'
+import { useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import type { StatsPageForm } from '@/types'
+import { MISC } from '@/common'
 import { PageWrapper } from '@/components'
 import { useFileHelper } from '@/hooks'
 
-import { getBankSelectOptions } from './actions'
+import { getBankSelectOptions, getCurrencyForSelection } from './actions'
 import {
   BankSelector,
   DemoBanner,
@@ -27,6 +29,7 @@ const Component = () => {
   const bankOptions = getBankSelectOptions(isDemoMode ? [] : selectedFiles)
   const values: StatsPageForm = {
     selectedId: bankOptions.length ? bankOptions[0].value : '',
+    currency: MISC.DEFAULT_CURRENCY,
   }
   const methods = useForm<StatsPageForm>({
     defaultValues: values,
@@ -34,11 +37,13 @@ const Component = () => {
   })
   const selectedId = methods.watch('selectedId')
   const filesForSelectedId =
-    selectedId && selectedId !== 'all' && selectedId !== 'unknown'
-      ? selectedFiles.filter((file) => file.parserId === selectedId)
-      : selectedFiles
+    selectedId && selectedId === 'all' ? selectedFiles : selectedFiles.filter((file) => file.parserId === selectedId)
   const allTransactions = isDemoMode ? DEMO_TRANSACTIONS : filesForSelectedId.flatMap((file) => file.transactions)
   const transactions = uniqWith(allTransactions, isEqual)
+
+  useEffect(() => {
+    methods.setValue('currency', getCurrencyForSelection(selectedId, transactions))
+  }, [selectedId])
 
   return (
     <FormProvider {...methods}>
