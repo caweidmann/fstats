@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles'
 
 import type { StatsFile } from '@/types'
 import { isError, isUnknown } from '@/m-stats-file/service'
-import { getParserName } from '@/parsers'
+import { getParserName } from '@/utils/Parser'
 
 import { ui } from './styled'
 

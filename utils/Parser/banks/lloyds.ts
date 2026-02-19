@@ -1,13 +1,15 @@
-import { Currency } from '@/types-enums'
-import { createParser } from '@/utils/CsvParser'
+import { Currency, ParserId } from '@/types-enums'
+import { createParser } from '@/utils/Parser'
 import { Big } from '@/lib/w-big'
 
-export default createParser({
-  bankName: 'Lloyds',
+const bankName = 'Lloyds'
+const currency = Currency.GBP
 
+export const lloyds__current = createParser({
+  id: ParserId.LLOYDS_CURRENT,
+  bankName,
   accountType: 'Current Account',
-
-  currency: Currency.GBP,
+  currency,
 
   headerRowIndex: 0,
 

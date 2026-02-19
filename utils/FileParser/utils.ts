@@ -13,21 +13,6 @@ export const parseFiles = async (
   return parsedFiles
 }
 
-const _returnError = (
-  file: StatsFile,
-  parseResult: RawParseResult,
-  parserId: StatsFile['parserId'],
-  error: string | undefined,
-): StatsFile => {
-  return {
-    ...file,
-    parseResult,
-    parserId,
-    status: StatsFileStatus.ERROR,
-    error,
-  }
-}
-
 export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat: DateFormat): Promise<StatsFile> => {
   // 1. Parse the raw file (CSV, PDF, etc.)
   const parseResult = await rawParseFile(file.file)
@@ -74,5 +59,20 @@ export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat:
   return {
     ...result,
     status: StatsFileStatus.PARSED,
+  }
+}
+
+const _returnError = (
+  file: StatsFile,
+  parseResult: RawParseResult,
+  parserId: StatsFile['parserId'],
+  error: string | undefined,
+): StatsFile => {
+  return {
+    ...file,
+    parseResult,
+    parserId,
+    status: StatsFileStatus.ERROR,
+    error,
   }
 }

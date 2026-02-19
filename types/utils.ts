@@ -1,7 +1,6 @@
 import type { Locale } from 'date-fns'
 
 import { Currency } from '@/types-enums'
-import { ParserId } from '@/parsers'
 
 import type { NumberString, SelectOptionWithType } from './global'
 
@@ -14,7 +13,7 @@ export type Size = {
   height?: number
 }
 
-export type BankSelectOption = SelectOptionWithType<ParserId | 'all'>
+export type BankSelectOption = SelectOptionWithType<string>
 
 export type StatsPageForm = {
   selectedId: BankSelectOption['value'] | ''
