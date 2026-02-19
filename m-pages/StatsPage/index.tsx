@@ -11,7 +11,7 @@ import { MISC } from '@/common'
 import { PageWrapper } from '@/components'
 import { useFileHelper } from '@/hooks'
 
-import { getBankSelectOptions, getCurrencyForSelection } from './actions'
+import { getBankKey, getBankSelectOptions, getCurrencyForSelection } from './actions'
 import {
   BankSelector,
   CategoryBreakdown,
@@ -38,7 +38,9 @@ const Component = () => {
   })
   const selectedId = methods.watch('selectedId')
   const filesForSelectedId =
-    selectedId && selectedId === 'all' ? selectedFiles : selectedFiles.filter((file) => file.parserId === selectedId)
+    selectedId && selectedId === 'all'
+      ? selectedFiles
+      : selectedFiles.filter((file) => file.parserId && getBankKey(file.parserId) === selectedId)
   const allTransactions = isDemoMode ? DEMO_TRANSACTIONS : filesForSelectedId.flatMap((file) => file.transactions)
   const transactions = uniqWith(allTransactions, isEqual)
 
