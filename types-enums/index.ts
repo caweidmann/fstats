@@ -163,13 +163,17 @@ export type SortOrder = z.infer<typeof zSortOrder>
 
 // -------------------------------------------------------
 
+/**
+ * The ID is of the format `{bankName}__{accountType}__{parserVariant}`, where parser variant
+ * is only applicable if there are multiple CSV formats for an account type.
+ */
 export const ParserId = {
   CAPITEC_SAVINGS: 'capitec__savings',
   COMDIRECT_GIRO: 'comdirect__giro',
   COMDIRECT_VISA: 'comdirect__visa',
   FNB_CREDIT_CARD: 'fnb__credit_card',
   ING_GIRO: 'ing__giro',
-  ING_GIRO_WB: 'ing__giro_wb',
+  ING_GIRO__WB: 'ing__giro__with_balance',
   LLOYDS_CURRENT: 'lloyds__current',
 } as const
 
@@ -179,7 +183,7 @@ export const zParserId = z.enum([
   ParserId.COMDIRECT_VISA,
   ParserId.FNB_CREDIT_CARD,
   ParserId.ING_GIRO,
-  ParserId.ING_GIRO_WB,
+  ParserId.ING_GIRO__WB,
   ParserId.LLOYDS_CURRENT,
 ] as const)
 

@@ -8,7 +8,7 @@ import {
   comdirect__visa,
   fnb__credit_card,
   ing__giro,
-  ing__giro_wb,
+  ing__giro__wb,
   lloyds__current,
 } from './banks'
 
@@ -21,7 +21,7 @@ export const AVAILABLE_PARSERS: Record<ParserId, Parser> = {
   [comdirect__giro.id]: comdirect__giro,
   [comdirect__visa.id]: comdirect__visa,
   [ing__giro.id]: ing__giro,
-  [ing__giro_wb.id]: ing__giro_wb,
+  [ing__giro__wb.id]: ing__giro__wb,
 
   // UK Banks
   [lloyds__current.id]: lloyds__current,

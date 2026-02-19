@@ -2,14 +2,14 @@ import { Currency, ParserId } from '@/types-enums'
 import { createParser } from '@/utils/CsvParser'
 import { parseGermanNumber } from '@/utils/Number'
 
+const bankName = 'ING'
+const currency = Currency.EUR
+
 export const ing__giro = createParser({
   id: ParserId.ING_GIRO,
-
-  bankName: 'ING',
-
+  bankName,
   accountType: 'Giro',
-
-  currency: Currency.EUR,
+  currency,
 
   headerRowIndex: 8,
 
@@ -34,14 +34,11 @@ export const ing__giro = createParser({
   },
 })
 
-export const ing__giro_wb = createParser({
-  id: ParserId.ING_GIRO_WB,
-
-  bankName: 'ING',
-
-  accountType: 'Giro', // with account balance
-
-  currency: Currency.EUR,
+export const ing__giro__wb = createParser({
+  id: ParserId.ING_GIRO__WB, // with account balance
+  bankName,
+  accountType: 'Giro',
+  currency,
 
   headerRowIndex: 9,
 
