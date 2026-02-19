@@ -28,13 +28,6 @@ export const parsePdf = async (file: RDZFileWithPath): Promise<string> => {
   })
 }
 
-const _getCatchError = (fileType: string, err: unknown): RawParseResult => ({
-  type: fileType,
-  result: null,
-  success: false,
-  error: `Parsing "${fileType}" failed: ${err instanceof Error ? err.message : String(err)}`,
-})
-
 export const rawParseFile = async (file: RDZFileWithPath): Promise<RawParseResult> => {
   switch (file.type) {
     case 'text/csv': {
@@ -42,7 +35,12 @@ export const rawParseFile = async (file: RDZFileWithPath): Promise<RawParseResul
         const result = await parseCsv(file)
         return { type: file.type, result, success: true }
       } catch (err) {
-        return _getCatchError(file.type, err)
+        return {
+          type: file.type,
+          result: null,
+          success: false,
+          error: `Parsing "${file.type}" failed: ${err instanceof Error ? err.message : String(err)}`,
+        }
       }
     }
 
@@ -51,7 +49,12 @@ export const rawParseFile = async (file: RDZFileWithPath): Promise<RawParseResul
         const result = await parsePdf(file)
         return { type: file.type, result, success: true }
       } catch (err) {
-        return _getCatchError(file.type, err)
+        return {
+          type: file.type,
+          result: null,
+          success: false,
+          error: `Parsing "${file.type}" failed: ${err instanceof Error ? err.message : String(err)}`,
+        }
       }
     }
 
