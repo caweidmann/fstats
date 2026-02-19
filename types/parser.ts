@@ -1,7 +1,7 @@
 import { Currency, DateFormat, UserLocale } from '@/types-enums'
+import { ParserId } from '@/parsers'
 
-import type { IdString } from './global'
-import type { PPRawParseResult } from './lib/papaparse'
+import { ParsedDataResult } from './services/stats-file'
 import type { Transaction } from './services/transaction'
 
 export type ColDef = Record<string, string>
@@ -35,10 +35,10 @@ export type ParserConfig = {
   headerRowIndex: number
   columns: ColDef
   dateFormat: string
-  detect: (input: PPRawParseResult) => boolean
-  parse: (input: PPRawParseResult, locale: UserLocale, dateFormat: DateFormat) => Transaction[]
+  detect: (input: ParsedDataResult) => boolean
+  parse: (input: ParsedDataResult, locale: UserLocale, dateFormat: DateFormat) => Transaction[]
 }
 
 export type Parser = ParserConfig & {
-  id: IdString
+  id: ParserId
 }

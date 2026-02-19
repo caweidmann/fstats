@@ -1,6 +1,6 @@
 import { formatISO, isValid, parse } from 'date-fns'
 
-import type { ColDef, CreateParserParams, Parser, ParserConfig, PPRowData, RowAccessor, Transaction } from '@/types'
+import type { ColDef, CreateParserParams, Parser, ParserConfig, RowAccessor, RowData, Transaction } from '@/types'
 import { Big } from '@/lib/w-big'
 
 import { getCsvSortOrder, getUniqueTimestamps, isArrayEqual, resolveGetter } from './helper'
@@ -17,7 +17,7 @@ export const createParser = <T extends ColDef>({
   const keys = Object.keys(columns) as (keyof T)[]
   const headers = Object.values(columns)
 
-  const wrapRow = (row: PPRowData): RowAccessor<T> => ({
+  const wrapRow = (row: RowData): RowAccessor<T> => ({
     get: (key) => row[keys.indexOf(key)].trim(),
   })
 
