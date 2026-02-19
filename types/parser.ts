@@ -1,5 +1,4 @@
-import { Currency, DateFormat, UserLocale } from '@/types-enums'
-import { ParserId } from '@/parsers'
+import { Currency, DateFormat, ParserId, UserLocale } from '@/types-enums'
 
 import { ParsedDataResult } from './services/stats-file'
 import type { Transaction } from './services/transaction'
@@ -19,6 +18,7 @@ export type ParserGetters<T extends ColDef> = {
 }
 
 export type CreateParserParams<T extends ColDef> = {
+  id: ParserId
   bankName: string
   accountType: string
   currency: Currency
@@ -28,7 +28,8 @@ export type CreateParserParams<T extends ColDef> = {
   getters: ParserGetters<T>
 }
 
-export type ParserConfig = {
+export type Parser = {
+  id: ParserId
   bankName: string
   accountType: string
   currency: Currency
@@ -37,8 +38,4 @@ export type ParserConfig = {
   dateFormat: string
   detect: (input: ParsedDataResult) => boolean
   parse: (input: ParsedDataResult, locale: UserLocale, dateFormat: DateFormat) => Transaction[]
-}
-
-export type Parser = ParserConfig & {
-  id: ParserId
 }

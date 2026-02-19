@@ -1,7 +1,9 @@
-import { Currency } from '@/types-enums'
+import { Currency, ParserId } from '@/types-enums'
 import { createParser } from '@/utils/CsvParser'
 
 export default createParser({
+  id: ParserId.CAPITEC_SAVINGS,
+
   bankName: 'Capitec',
 
   accountType: 'Savings',

@@ -1,7 +1,6 @@
 import type { Locale } from 'date-fns'
 
-import { Currency } from '@/types-enums'
-import { ParserId } from '@/parsers'
+import { Currency, ParserId } from '@/types-enums'
 
 import type { NumberString, SelectOptionWithType } from './global'
 

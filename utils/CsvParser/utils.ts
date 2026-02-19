@@ -1,11 +1,12 @@
 import { formatISO, isValid, parse } from 'date-fns'
 
-import type { ColDef, CreateParserParams, Parser, ParserConfig, RowAccessor, RowData, Transaction } from '@/types'
+import type { ColDef, CreateParserParams, Parser, RowAccessor, RowData, Transaction } from '@/types'
 import { Big } from '@/lib/w-big'
 
 import { getCsvSortOrder, getUniqueTimestamps, isArrayEqual, resolveGetter } from './helper'
 
 export const createParser = <T extends ColDef>({
+  id,
   bankName,
   accountType,
   currency,
@@ -13,7 +14,7 @@ export const createParser = <T extends ColDef>({
   columns,
   dateFormat,
   getters,
-}: CreateParserParams<T>): ParserConfig => {
+}: CreateParserParams<T>): Parser => {
   const keys = Object.keys(columns) as (keyof T)[]
   const headers = Object.values(columns)
 
@@ -26,6 +27,7 @@ export const createParser = <T extends ColDef>({
   const getValue = resolveGetter(getters.value)
 
   return {
+    id,
     bankName,
     accountType,
     currency,
@@ -82,14 +84,4 @@ export const createParser = <T extends ColDef>({
       })
     },
   }
-}
-
-export const buildRegistry = <T extends Record<string, ParserConfig>>(parserConfigs: T): { [K in keyof T]: Parser } => {
-  const registry = {} as { [K in keyof T]: Parser }
-
-  Object.entries(parserConfigs).forEach(([id, config]) => {
-    registry[id as keyof T] = { ...config, id } as Parser
-  })
-
-  return registry
 }

@@ -1,8 +1,10 @@
-import { Currency } from '@/types-enums'
+import { Currency, ParserId } from '@/types-enums'
 import { createParser } from '@/utils/CsvParser'
 import { parseGermanNumber } from '@/utils/Number'
 
 export default createParser({
+  id: ParserId.ING_GIRO,
+
   bankName: 'ING',
 
   accountType: 'Giro',

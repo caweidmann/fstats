@@ -1,7 +1,9 @@
-import { Currency } from '@/types-enums'
+import { Currency, ParserId } from '@/types-enums'
 import { createParser } from '@/utils/CsvParser'
 
 export default createParser({
+  id: ParserId.FNB_CREDIT_CARD,
+
   bankName: 'FNB',
 
   accountType: 'Credit Card',

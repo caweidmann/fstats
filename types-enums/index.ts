@@ -162,3 +162,25 @@ export const zSortOrder = z.enum([SortOrder.ASC, SortOrder.DESC] as const)
 export type SortOrder = z.infer<typeof zSortOrder>
 
 // -------------------------------------------------------
+
+export const ParserId = {
+  CAPITEC_SAVINGS: 'capitec__savings',
+  COMDIRECT_GIRO: 'comdirect__giro',
+  COMDIRECT_VISA: 'comdirect__visa',
+  FNB_CREDIT_CARD: 'fnb__credit_card',
+  ING_GIRO: 'ing__giro',
+  ING_GIRO_WB: 'ing__giro_wb',
+  LLOYDS_CURRENT: 'lloyds__current',
+} as const
+
+export const zParserId = z.enum([
+  ParserId.CAPITEC_SAVINGS,
+  ParserId.COMDIRECT_GIRO,
+  ParserId.COMDIRECT_VISA,
+  ParserId.FNB_CREDIT_CARD,
+  ParserId.ING_GIRO,
+  ParserId.ING_GIRO_WB,
+  ParserId.LLOYDS_CURRENT,
+] as const)
+
+export type ParserId = z.infer<typeof zParserId>

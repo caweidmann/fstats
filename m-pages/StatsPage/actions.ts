@@ -1,8 +1,9 @@
 import { isEqual, uniqWith } from 'lodash'
 
 import type { BankSelectOption, StatsFile, StatsPageForm, Transaction } from '@/types'
+import { ParserId } from '@/types-enums'
 import { MISC } from '@/common'
-import { getParserCurrency, getParserName, ParserId } from '@/parsers'
+import { getParserCurrency, getParserName } from '@/parsers'
 
 export const getCurrencyForSelection = (selectedId: StatsPageForm['selectedId'], transactions: Transaction[]) => {
   if (!selectedId) {
