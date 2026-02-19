@@ -18,39 +18,37 @@ const _returnError = (
   parseResult: RawParseResult,
   parserId: StatsFile['parserId'],
   error: string | undefined,
-): StatsFile => ({
-  ...file,
-  parseResult,
-  parserId,
-  status: StatsFileStatus.ERROR,
-  error,
-})
+): StatsFile => {
+  return {
+    ...file,
+    parseResult,
+    parserId,
+    status: StatsFileStatus.ERROR,
+    error,
+  }
+}
 
 export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat: DateFormat): Promise<StatsFile> => {
   // 1. Parse the raw file (CSV, PDF, etc.)
   const parseResult = await rawParseFile(file.file)
-
   if (!parseResult.success) {
     return _returnError(file, parseResult, null, parseResult.error)
   }
 
   // 2. Transform the raw parse result to a unified format
   const parsedData = getTransformedRawData(parseResult)
-
   if (!parsedData.success) {
     return _returnError(file, parseResult, null, parsedData.error)
   }
 
   // 3. Find a matching parser
   const matchedParser = getMatchingParser(parsedData)
-
   if (!matchedParser) {
     return _returnError(file, parseResult, null, 'No matching parser found!')
   }
 
   // 4. Transform data to clean transactions
   const transactions = parseData(parsedData, matchedParser, locale, dateFormat)
-
   if (!transactions) {
     return _returnError(file, parseResult, matchedParser.id, `Parsing "${matchedParser.id}" failed!`)
   }
