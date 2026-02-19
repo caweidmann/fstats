@@ -1,7 +1,7 @@
 import { Currency, ParserId } from '@/types-enums'
 import { createParser } from '@/utils/CsvParser'
 
-export default createParser({
+export const fnb__credit_card = createParser({
   id: ParserId.FNB_CREDIT_CARD,
 
   bankName: 'FNB',

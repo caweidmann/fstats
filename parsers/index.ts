@@ -2,27 +2,29 @@ import type { Parser } from '@/types'
 import { ParserId } from '@/types-enums'
 import { MISC } from '@/common'
 
-import { capitec } from './banks/capitec__savings'
-import comdirect__giro from './banks/comdirect__giro'
-import comdirect__visa from './banks/comdirect__visa'
-import fnb__credit_card from './banks/fnb__credit_card'
-import ing__giro from './banks/ing__giro'
-import ing__giro_wb from './banks/ing__giro_wb'
-import lloyds__current from './banks/lloyds__current'
+import {
+  capitec__savings,
+  comdirect__giro,
+  comdirect__visa,
+  fnb__credit_card,
+  ing__giro,
+  ing__giro_wb,
+  lloyds__current,
+} from './banks'
 
 export const AVAILABLE_PARSERS: Record<ParserId, Parser> = {
   // South African Banks
-  [capitec.id]: capitec,
-  fnb__credit_card,
+  [capitec__savings.id]: capitec__savings,
+  [fnb__credit_card.id]: fnb__credit_card,
 
   // German Banks
-  comdirect__giro,
-  comdirect__visa,
-  ing__giro,
-  ing__giro_wb,
+  [comdirect__giro.id]: comdirect__giro,
+  [comdirect__visa.id]: comdirect__visa,
+  [ing__giro.id]: ing__giro,
+  [ing__giro_wb.id]: ing__giro_wb,
 
   // UK Banks
-  lloyds__current,
+  [lloyds__current.id]: lloyds__current,
 }
 
 export const getParserCurrency = (parserId: ParserId) => {
