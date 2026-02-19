@@ -14,6 +14,7 @@ import { useFileHelper } from '@/hooks'
 import { getBankSelectOptions, getCurrencyForSelection } from './actions'
 import {
   BankSelector,
+  CategoryBreakdown,
   DemoBanner,
   ProfitLossSummary,
   TransactionChart,
@@ -81,6 +82,10 @@ const Component = () => {
 
           <Grid size={12}>
             <TransactionChart transactions={transactions} />
+          </Grid>
+
+          <Grid size={12}>
+            <CategoryBreakdown transactions={transactions} />
           </Grid>
 
           <Grid size={12}>
