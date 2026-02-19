@@ -1,5 +1,5 @@
 import { Currency, ParserId } from '@/types-enums'
-import { createParser } from '@/utils/CsvParser'
+import { createParser } from '@/utils/Parser'
 import { Big } from '@/lib/w-big'
 
 const bankName = 'Lloyds'

@@ -1,6 +1,6 @@
 import { Currency, ParserId } from '@/types-enums'
-import { createParser } from '@/utils/CsvParser'
 import { parseGermanNumber } from '@/utils/Number'
+import { createParser } from '@/utils/Parser'
 
 const bankName = 'Comdirect'
 const currency = Currency.EUR

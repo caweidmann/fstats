@@ -2,7 +2,7 @@ import { parse } from 'papaparse'
 
 import type { ParsedDataResult, Parser, PPRawParseResult, RawParseResult, RDZFileWithPath, Transaction } from '@/types'
 import { DateFormat, UserLocale } from '@/types-enums'
-import { AVAILABLE_PARSERS } from '@/parsers'
+import { AVAILABLE_PARSERS } from '@/utils/Parser'
 
 export const parseCsv = async (file: RDZFileWithPath): Promise<PPRawParseResult> => {
   return new Promise((resolve, reject) => {

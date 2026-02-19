@@ -1,5 +1,5 @@
 import { Currency, ParserId } from '@/types-enums'
-import { createParser } from '@/utils/CsvParser'
+import { createParser } from '@/utils/Parser'
 
 const bankName = 'Capitec'
 const currency = Currency.ZAR
