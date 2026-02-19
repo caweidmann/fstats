@@ -88,7 +88,7 @@ export const buildRegistry = <T extends Record<string, ParserConfig>>(parserConf
   const registry = {} as { [K in keyof T]: Parser }
 
   Object.entries(parserConfigs).forEach(([id, config]) => {
-    registry[id as keyof T] = { ...config, id }
+    registry[id as keyof T] = { ...config, id } as Parser
   })
 
   return registry
