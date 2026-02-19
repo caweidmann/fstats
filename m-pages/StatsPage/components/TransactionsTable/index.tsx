@@ -24,12 +24,10 @@ import { useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import type { StatsPageForm, Transaction } from '@/types'
-import { Currency } from '@/types-enums'
 import { useIsMobile, useUserPreferences } from '@/hooks'
 import { getCurrencySymbol, getMaxDecimalsForCurrency } from '@/utils/Currency'
 import { toDisplayDate } from '@/utils/Date'
 import { toFixedLocale } from '@/utils/Number'
-import { getParserCurrency } from '@/parsers'
 import { Big } from '@/lib/w-big'
 
 import { getCategoryColor } from './actions'
@@ -41,15 +39,7 @@ type TransactionsTableProps = {
 
 const Component = ({ transactions }: TransactionsTableProps) => {
   const { watch } = useFormContext<StatsPageForm>()
-  const selectedId = watch('selectedId')
-  const currency =
-    selectedId && selectedId !== 'all' && selectedId !== 'unknown'
-      ? getParserCurrency(selectedId)
-      : selectedId && selectedId === 'all'
-        ? transactions.length
-          ? transactions[0].currency
-          : Currency.USD // FIXME: This is just hacked, need to do better currency handling here
-        : Currency.USD
+  const currency = watch('currency')
   const { locale, dateFormat } = useUserPreferences()
   const theme = useTheme()
   const isMobile = useIsMobile()
