@@ -2,7 +2,7 @@ import { parse } from 'papaparse'
 
 import type { PPRawParseResult } from '@/types'
 
-export const parseRaw = async (file: File): Promise<PPRawParseResult> => {
+export const parseCsv = async (file: File): Promise<PPRawParseResult> => {
   return new Promise((resolve, reject) => {
     parse(file, {
       header: false,

@@ -3,7 +3,7 @@ import type { Parser, StatsFile, Transaction } from '@/types'
 import { DateFormat, StatsFileStatus, UserLocale } from '@/types-enums'
 import { AVAILABLE_PARSERS } from '@/parsers'
 
-import { parseRaw } from './helper'
+import { parseCsv } from './helper'
 
 export const parseFiles = async (
   files: StatsFile[],
@@ -15,7 +15,7 @@ export const parseFiles = async (
 }
 
 export const parseFile = async (file: StatsFile, locale: UserLocale, dateFormat: DateFormat): Promise<StatsFile> => {
-  const parseResult = await parseRaw(file.file)
+  const parseResult = await parseCsv(file.file)
   let parserId: StatsFile['parserId'] = null
   let transactions: Transaction[] = []
   let matchedParser: Parser | null = null
