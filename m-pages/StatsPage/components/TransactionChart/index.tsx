@@ -8,11 +8,9 @@ import { useFormContext } from 'react-hook-form'
 import { useDebounceCallback, useResizeObserver } from 'usehooks-ts'
 
 import type { Size, StatsPageForm, Transaction } from '@/types'
-import { Currency } from '@/types-enums'
 import { BarChart } from '@/components'
 import { useUserPreferences } from '@/hooks'
 import { toDisplayDate } from '@/utils/Date'
-import { getParserCurrency } from '@/parsers'
 import { Big } from '@/lib/w-big'
 
 import { getBackgroundColour, getBarThickness, getBorderRadius, getChartOptions } from './actions'
@@ -24,15 +22,7 @@ type TransactionChartProps = {
 
 const Component = ({ transactions }: TransactionChartProps) => {
   const { watch } = useFormContext<StatsPageForm>()
-  const selectedId = watch('selectedId')
-  const currency =
-    selectedId && selectedId !== 'all' && selectedId !== 'unknown'
-      ? getParserCurrency(selectedId)
-      : selectedId && selectedId === 'all'
-        ? transactions.length
-          ? transactions[0].currency
-          : Currency.USD // FIXME: This is just hacked, need to do better currency handling here
-        : Currency.USD
+  const currency = watch('currency')
   const { locale, dateFormat } = useUserPreferences()
   const sx = ui()
   const ref = useRef<HTMLDivElement>(null)

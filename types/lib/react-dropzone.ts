@@ -1,7 +1,7 @@
 /**
  * Prefix all types with "RDZ" = react-dropzone
  */
-import type { FileWithPath } from 'react-dropzone'
+import type { FileRejection, FileWithPath } from 'react-dropzone'
 import { z } from 'zod'
 
 export const zRDZFileWithPath = z.custom<FileWithPath>((val) => {
@@ -9,3 +9,7 @@ export const zRDZFileWithPath = z.custom<FileWithPath>((val) => {
 })
 
 export type RDZFileWithPath = z.infer<typeof zRDZFileWithPath>
+
+export const zRDZFileRejection = z.custom<FileRejection>()
+
+export type RDZFileRejection = z.infer<typeof zRDZFileRejection>

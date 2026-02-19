@@ -1,6 +1,6 @@
 import { formatISO, isValid, parse } from 'date-fns'
 
-import type { ColDef, CreateParserParams, Parser, ParserConfig, PPRowData, RowAccessor, Transaction } from '@/types'
+import type { ColDef, CreateParserParams, Parser, ParserConfig, RowAccessor, RowData, Transaction } from '@/types'
 import { Big } from '@/lib/w-big'
 
 import { getCsvSortOrder, getUniqueTimestamps, isArrayEqual, resolveGetter } from './helper'
@@ -17,7 +17,7 @@ export const createParser = <T extends ColDef>({
   const keys = Object.keys(columns) as (keyof T)[]
   const headers = Object.values(columns)
 
-  const wrapRow = (row: PPRowData): RowAccessor<T> => ({
+  const wrapRow = (row: RowData): RowAccessor<T> => ({
     get: (key) => row[keys.indexOf(key)].trim(),
   })
 
@@ -88,7 +88,7 @@ export const buildRegistry = <T extends Record<string, ParserConfig>>(parserConf
   const registry = {} as { [K in keyof T]: Parser }
 
   Object.entries(parserConfigs).forEach(([id, config]) => {
-    registry[id as keyof T] = { ...config, id }
+    registry[id as keyof T] = { ...config, id } as Parser
   })
 
   return registry

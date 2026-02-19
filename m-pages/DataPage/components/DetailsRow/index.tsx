@@ -91,8 +91,7 @@ const Component = ({ file }: DetailsRowProps) => {
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          {file.status === StatsFileStatus.PARSING ? <CircularProgress size={14} /> : null}
-          {file.status === StatsFileStatus.PARSED || isErrorFile ? <BankChip file={file} /> : null}
+          {file.status === StatsFileStatus.PARSING ? <CircularProgress size={14} /> : <BankChip file={file} />}
 
           <Tooltip title="Remove file">
             <IconButton

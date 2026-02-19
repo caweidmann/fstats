@@ -45,7 +45,7 @@ export const getParserName = (value: ParserId | null): { short: string; long: st
   if (!value) {
     return {
       short: 'Unsupported',
-      long: 'Unsupported format',
+      long: 'Unsupported bank format',
       alt: 'Unsupported format',
     }
   }

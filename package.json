@@ -16,7 +16,7 @@
     "bundle-analyzer": "npx next experimental-analyze",
     "update-packages": "npx npm-check-updates -u"
   },
-  "packageManager": "pnpm@10.29.3",
+  "packageManager": "pnpm@10.30.0",
   "dependencies": {
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
@@ -71,7 +71,7 @@
     "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.0",
-    "vercel": "^50.18.0",
+    "vercel": "^50.18.2",
     "vitest": "^4.0.18"
   }
 }

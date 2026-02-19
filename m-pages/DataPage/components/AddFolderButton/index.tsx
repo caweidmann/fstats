@@ -8,7 +8,7 @@ const Component = () => {
     try {
       if (!('showDirectoryPicker' in window)) {
         alert(
-          'Folder selection is not supported in your browser. Please use a modern browser that supports the local File API like Chrome or Edge.',
+          'Folder selection is not supported in your browser. Please use a browser that supports the local File API (e.g. Chrome or Edge).',
         )
         return
       }
