@@ -1,11 +1,12 @@
 import { formatISO, isValid, parse } from 'date-fns'
 
 import type { ColDef, CreateParserParams, Parser, RowAccessor, RowData, Transaction } from '@/types'
+import type { ParserId } from '@/types-enums'
 import { Big } from '@/lib/w-big'
 
 import { getCsvSortOrder, getUniqueTimestamps, isArrayEqual, resolveGetter } from './helper'
 
-export const createParser = <T extends ColDef>({
+export const createParser = <T extends ColDef, Id extends ParserId>({
   id,
   bankName,
   accountType,
@@ -14,7 +15,7 @@ export const createParser = <T extends ColDef>({
   columns,
   dateFormat,
   getters,
-}: CreateParserParams<T>): Parser => {
+}: CreateParserParams<T, Id>): Parser<Id> => {
   const keys = Object.keys(columns) as (keyof T)[]
   const headers = Object.values(columns)
 

@@ -2,7 +2,7 @@ import type { Parser } from '@/types'
 import { ParserId } from '@/types-enums'
 import { MISC } from '@/common'
 
-import capitec__savings from './banks/capitec__savings'
+import { capitec } from './banks/capitec__savings'
 import comdirect__giro from './banks/comdirect__giro'
 import comdirect__visa from './banks/comdirect__visa'
 import fnb__credit_card from './banks/fnb__credit_card'
@@ -12,7 +12,7 @@ import lloyds__current from './banks/lloyds__current'
 
 export const AVAILABLE_PARSERS: Record<ParserId, Parser> = {
   // South African Banks
-  capitec__savings,
+  [capitec.id]: capitec,
   fnb__credit_card,
 
   // German Banks

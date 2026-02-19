@@ -17,8 +17,8 @@ export type ParserGetters<T extends ColDef> = {
   value: RowValueGetter<T>
 }
 
-export type CreateParserParams<T extends ColDef> = {
-  id: ParserId
+export type CreateParserParams<T extends ColDef, Id extends ParserId = ParserId> = {
+  id: Id
   bankName: string
   accountType: string
   currency: Currency
@@ -28,8 +28,8 @@ export type CreateParserParams<T extends ColDef> = {
   getters: ParserGetters<T>
 }
 
-export type Parser = {
-  id: ParserId
+export type Parser<Id extends ParserId = ParserId> = {
+  id: Id
   bankName: string
   accountType: string
   currency: Currency
