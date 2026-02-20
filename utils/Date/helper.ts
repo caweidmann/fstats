@@ -1,36 +1,48 @@
-import { format, isValid, parse, parseISO } from 'date-fns'
+import { SortOrder } from '@/types-enums'
 
-import { UserLocale } from '@/types-enums'
+export const attachUniqueSecondsToDates = ({
+  dates,
+  sortOrder,
+  getGroupKey,
+  getBaseTimestamp,
+}: {
+  dates: Date[]
+  sortOrder: SortOrder
+  getGroupKey: (date: Date) => number
+  getBaseTimestamp: (date: Date) => number
+}): Date[] => {
+  const totalByGroup = new Map<number, number>()
+  const seenByGroup = new Map<number, number>()
 
-import { getDateFnsLocale } from '.'
+  dates.forEach((date) => {
+    const groupKey = getGroupKey(date)
+    totalByGroup.set(groupKey, (totalByGroup.get(groupKey) ?? 0) + 1)
+  })
 
-/**
- * Converts a date string or date object to "dd/MM/yyyy" or `options.formatTo` format
- *
- * @param date - Date string or date object to convert
- * @param options - Optional options
- * @param options_formatFrom - The format to convert from when supplying a date string - defaults to "yyyy-MM-dd"
- * @param options_formatTo - The format to return - defaults to ISO date format
- *
- * @returns Date string in `displayDate` format or `formatTo` format.
- */
-export const toDisplayDate = (
-  date: Date | string,
-  locale: UserLocale,
-  options: {
-    formatTo: string
-    formatFrom?: string
-  },
-): string => {
-  if (!date) {
-    throw new Error('Must be Date or string')
+  return dates.map((date) => {
+    const groupKey = getGroupKey(date)
+    const seen = seenByGroup.get(groupKey) ?? 0
+    const total = totalByGroup.get(groupKey) ?? 1
+    const secondOffset = sortOrder === 'asc' ? seen : total - seen - 1
+
+    seenByGroup.set(groupKey, seen + 1)
+
+    return new Date(getBaseTimestamp(date) + secondOffset * 1000)
+  })
+}
+
+export const getDateFormatPrecision = (
+  dateFormat: string,
+): {
+  hasTime: boolean
+  hasSeconds: boolean
+} => {
+  const hasHours = /[HhKk]/.test(dateFormat)
+  const hasMinutes = /m/.test(dateFormat)
+  const hasSeconds = /s/.test(dateFormat)
+
+  return {
+    hasTime: hasHours || hasMinutes || hasSeconds,
+    hasSeconds,
   }
-  const dateObject =
-    date instanceof Date ? date : options?.formatFrom ? parse(date, options.formatFrom, new Date()) : parseISO(date)
-
-  if (isValid(dateObject)) {
-    return format(dateObject, options.formatTo, { locale: getDateFnsLocale(locale) })
-  }
-
-  throw new Error('Invalid date')
 }
