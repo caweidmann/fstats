@@ -42,10 +42,8 @@ export const getTransactionsByCategory = (
       return
     }
 
-    console.log('transaction.category', transaction.category)
     const parentCode = transaction.category.split('_')[0]
     const parentCat = categories[parentCode]
-    console.log('parentCat', parentCat)
     const subCat = parentCat.subcategories[transaction.category]
 
     parentCat.transactions.push(transaction)

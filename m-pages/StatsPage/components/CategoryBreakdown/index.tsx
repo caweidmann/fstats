@@ -62,7 +62,7 @@ const Component = ({ transactions, currency }: CategoryBreakdownProps) => {
       <Divider sx={{ mt: 0.5, mb: 1.5 }} />
 
       {categories.map((category) => {
-        return <BreakdownRow key={category.code} category={category} currency={currency} />
+        return <BreakdownRow key={category.code} category={category} currency={currency} transactions={transactions} />
       })}
     </Card>
   )
