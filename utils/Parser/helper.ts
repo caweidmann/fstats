@@ -3,7 +3,7 @@ import { formatISO, isValid, parse } from 'date-fns'
 import type { ColDef, CreateParserParams, Parser, RowAccessor, RowData, RowValueGetter, Transaction } from '@/types'
 import { ParserId, SortOrder } from '@/types-enums'
 import { getUniqueTimestamps } from '@/utils/Date'
-import { Big } from '@/lib/w-big'
+import { getCategory } from '@/utils/TransactionParser'
 
 export const createParser = <T extends ColDef, Id extends ParserId>({
   id,
@@ -77,7 +77,7 @@ export const createParser = <T extends ColDef, Id extends ParserId>({
           description: row.description,
           value: row.value,
           currency,
-          category: Big(row.value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
+          category: getCategory(row),
         }
 
         return data
