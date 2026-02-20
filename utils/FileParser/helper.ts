@@ -117,7 +117,6 @@ export const getMatchingParser = (parsedData: ParsedDataResult): Parser | null =
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err)
       console.error(`Error detecting with ${parser.id}:`, errMsg)
-      return null
     }
   }
 

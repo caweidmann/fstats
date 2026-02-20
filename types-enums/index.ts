@@ -173,7 +173,7 @@ export const ParserId = {
   COMDIRECT_VISA: 'comdirect__visa',
   FNB_CREDIT_CARD: 'fnb__credit_card',
   ING_GIRO: 'ing__giro',
-  ING_GIRO__WB: 'ing__giro__with_balance',
+  ING_GIRO__WB: 'ing__giro__wb', // with balance
   LLOYDS_CURRENT: 'lloyds__current',
 } as const
 
