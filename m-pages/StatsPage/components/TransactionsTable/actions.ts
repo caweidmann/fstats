@@ -1,4 +1,6 @@
-export const getCategoryColor = (category: string) => {
+import { SubcategoryCode } from '@/types'
+
+export const getCategoryColor = (category: SubcategoryCode) => {
   switch (true) {
     case category === 'Income':
       return 'success'

@@ -1,16 +1,15 @@
-import { ParentCategoryCode } from '@/types'
+import type { Category, CategoryCode, Subcategory } from '@/types'
 
 import { ALL_CATEGORIES } from '../Category/utils'
 
-export const getCategories = () => {
-  return ALL_CATEGORIES
+export const getCategories = (): Category[] => {
+  return Object.values(ALL_CATEGORIES)
 }
 
-export const getSubcategories = (parentCategoryCode: ParentCategoryCode) => {
-  const parentCategory = ALL_CATEGORIES.find((category) => category.code === parentCategoryCode)
-  return parentCategory ? parentCategory.subcategories : []
+export const getSubcategoriesFor = (categoryCode: CategoryCode): Subcategory[] => {
+  return Object.values(ALL_CATEGORIES[categoryCode].subcategories)
 }
 
-export const getAllSubcategories = () => {
-  return ALL_CATEGORIES.flatMap((category) => category.subcategories)
+export const getSubcategories = (): Subcategory[] => {
+  return getCategories().flatMap((category) => Object.values(category.subcategories))
 }

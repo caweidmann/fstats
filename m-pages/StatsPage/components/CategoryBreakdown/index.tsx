@@ -7,11 +7,9 @@ import { useState } from 'react'
 
 import type { Transaction } from '@/types'
 import { Currency } from '@/types-enums'
-import { getCategories } from '@/utils/Category'
 import { getCurrencySymbol } from '@/utils/Currency'
-import { Big } from '@/lib/w-big'
 
-import { COL_SPACING, COL1, COL2, COL3 } from './actions'
+import { COL_SPACING, COL1, COL2, COL3, getTransactionsByCategory } from './actions'
 import { BreakdownRow } from './components'
 import { ui } from './styled'
 
@@ -24,7 +22,9 @@ const Component = ({ transactions, currency }: CategoryBreakdownProps) => {
   const theme = useTheme()
   const sx = ui(theme)
   const [sortingPref, setSortingPref] = useState<'asc' | 'desc' | 'totalAsc' | 'totalDesc'>('asc')
-  const categories = getCategories()
+  const categories = Object.values(getTransactionsByCategory(transactions)).filter(
+    (category) => category.code !== 'INC',
+  )
 
   return (
     <Card sx={{ height: '100%' }}>
@@ -62,7 +62,7 @@ const Component = ({ transactions, currency }: CategoryBreakdownProps) => {
       <Divider sx={{ mt: 0.5, mb: 1.5 }} />
 
       {categories.map((category) => {
-        return <BreakdownRow key={category.code} category={category} total={Big(0)} />
+        return <BreakdownRow key={category.code} category={category} currency={currency} />
       })}
     </Card>
   )

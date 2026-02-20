@@ -3,7 +3,7 @@ import { formatISO, parseISO } from 'date-fns'
 import type { ColDef, CreateParserParams, Parser, RowAccessor, RowData, Transaction } from '@/types'
 import { ParserId, SortOrder } from '@/types-enums'
 import { getUniqueTimestamps, toDate } from '@/utils/Date'
-import { getCategory } from '@/utils/TransactionParser'
+import { getSubcategoryCode } from '@/utils/TransactionParser'
 
 export const createParser = <T extends ColDef, Id extends ParserId>({
   id,
@@ -65,7 +65,7 @@ export const createParser = <T extends ColDef, Id extends ParserId>({
       return parsedRows.map((row, index) => ({
         ...row,
         date: formatISO(uniqueTimestamps[index]),
-        category: getCategory(row),
+        category: getSubcategoryCode(row),
       }))
     },
   }
