@@ -1,6 +1,6 @@
 import { Currency, ParserId } from '@/types-enums'
 import { parseGermanNumber } from '@/utils/Number'
-import { createParser } from '@/utils/Parser'
+import { buildExtra, createParser } from '@/utils/Parser'
 
 const bankName = 'Comdirect'
 const currency = Currency.EUR
@@ -25,10 +25,19 @@ export const comdirect__giro = createParser({
   dateFormat: 'dd.MM.yyyy',
 
   getters: {
-    date: 'wertstellung',
-    description: 'buchungstext',
+    date: (row) => {
+      return row.get('wertstellung')
+    },
+    description: (row) => {
+      return row.get('buchungstext')
+    },
     value: (row) => {
       return parseGermanNumber(row.get('umsatzInEur'))
+    },
+    extra: (row) => {
+      return buildExtra({
+        transactionType: row.get('vorgang'),
+      })
     },
   },
 })
@@ -53,10 +62,20 @@ export const comdirect__visa = createParser({
   dateFormat: 'dd.MM.yyyy',
 
   getters: {
-    date: 'umsatztag',
-    description: 'buchungstext',
+    date: (row) => {
+      return row.get('umsatztag')
+    },
+    description: (row) => {
+      return row.get('buchungstext')
+    },
     value: (row) => {
       return parseGermanNumber(row.get('umsatzInEur'))
+    },
+    extra: (row) => {
+      return buildExtra({
+        transactionType: row.get('vorgang'),
+        reference: row.get('referenz'),
+      })
     },
   },
 })

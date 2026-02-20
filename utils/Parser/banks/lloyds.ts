@@ -1,5 +1,5 @@
 import { Currency, ParserId } from '@/types-enums'
-import { createParser } from '@/utils/Parser'
+import { buildExtra, createParser } from '@/utils/Parser'
 import { Big } from '@/lib/w-big'
 
 const bankName = 'Lloyds'
@@ -27,13 +27,23 @@ export const lloyds__current = createParser({
   dateFormat: 'dd/MM/yyyy',
 
   getters: {
-    date: 'transactionDate',
-    description: 'transactionDescription',
+    date: (row) => {
+      return row.get('transactionDate')
+    },
+    description: (row) => {
+      return row.get('transactionDescription')
+    },
     value: (row) => {
       const valIn = row.get('creditAmount')
       const valOut = row.get('debitAmount')
 
       return valIn ? valIn : valOut ? Big(valOut).times(-1).toString() : '0'
+    },
+    extra: (row) => {
+      return buildExtra({
+        balance: row.get('balance') || '0',
+        transactionType: row.get('transactionType'),
+      })
     },
   },
 })

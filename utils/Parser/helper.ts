@@ -1,8 +1,8 @@
-import { formatISO, isValid, parse } from 'date-fns'
+import { formatISO, parseISO } from 'date-fns'
 
-import type { ColDef, CreateParserParams, Parser, RowAccessor, RowData, RowValueGetter, Transaction } from '@/types'
+import type { ColDef, CreateParserParams, Parser, RowAccessor, RowData, Transaction } from '@/types'
 import { ParserId, SortOrder } from '@/types-enums'
-import { getUniqueTimestamps } from '@/utils/Date'
+import { getUniqueTimestamps, toDate } from '@/utils/Date'
 import { getCategory } from '@/utils/TransactionParser'
 
 export const createParser = <T extends ColDef, Id extends ParserId>({
@@ -21,10 +21,6 @@ export const createParser = <T extends ColDef, Id extends ParserId>({
   const wrapRow = (row: RowData): RowAccessor<T> => ({
     get: (key) => row[keys.indexOf(key)].trim(),
   })
-
-  const getDate = resolveGetter(getters.date)
-  const getDescription = resolveGetter(getters.description)
-  const getValue = resolveGetter(getters.value)
 
   return {
     id,
@@ -51,46 +47,29 @@ export const createParser = <T extends ColDef, Id extends ParserId>({
     parse: (input) => {
       const rowsToParse = input.data.slice(headerRowIndex + 1).filter((row) => row.length === headers.length)
 
-      const parsedRows = rowsToParse.map((rawRow) => {
+      const parsedRows: Transaction[] = rowsToParse.map((rawRow) => {
         const row = wrapRow(rawRow)
-        const value = getValue(row) || '0'
-        const parsedDate = parse(getDate(row), dateFormat, new Date())
-
-        if (!isValid(parsedDate)) {
-          throw new Error('Invalid date')
-        }
-
         return {
-          parsedDate,
-          description: getDescription(row),
-          value,
-        }
-      })
-
-      const dates = parsedRows.map((row) => row.parsedDate)
-      const sortOrder = getCsvSortOrder(dates)
-      const uniqueTimestamps = getUniqueTimestamps({ dates, dateFormat, sortOrder })
-
-      return parsedRows.map((row, index) => {
-        const data: Transaction = {
-          date: formatISO(uniqueTimestamps[index]),
-          description: row.description,
-          value: row.value,
-          currency,
+          date: formatISO(toDate(getters.date(row), { formatFrom: dateFormat })),
+          description: getters.description(row),
+          value: getters.value(row) || '0',
           category: getCategory(row),
+          currency,
+          extra: getters.extra ? getters.extra(row) : null,
         }
-
-        return data
       })
+
+      const dates = parsedRows.map((row) => parseISO(row.date))
+      const uniqueTimestamps = getUniqueTimestamps({ dates, dateFormat, sortOrder: getCsvSortOrder(dates) })
+
+      return parsedRows.map((row, index) => ({ ...row, date: formatISO(uniqueTimestamps[index]) }))
     },
   }
 }
 
-export const resolveGetter = <T extends ColDef>(getter: RowValueGetter<T>): ((row: RowAccessor<T>) => string) => {
-  if (typeof getter === 'function') {
-    return getter
-  }
-  return (row) => row.get(getter)
+// Strips empty fields from object
+export const buildExtra = (fields: Record<string, string>): Transaction['extra'] => {
+  return Object.fromEntries(Object.entries(fields).filter(([, value]) => value)) as Transaction['extra']
 }
 
 export const isArrayEqual = (array1: string[], array2: string[]) => {

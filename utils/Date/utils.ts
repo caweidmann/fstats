@@ -14,8 +14,8 @@ import { attachUniqueSecondsToDates, getDateFormatPrecision } from './helper'
  *
  * @param date - Date string or date object to convert
  * @param options - Optional options
- * @param options_formatFrom - The format to convert from when supplying a date string - defaults to "yyyy-MM-dd"
- * @param options_formatTo - The format to return - defaults to ISO date format
+ * @param options_formatFrom - The format to convert from when supplying a date string - defaults to ISO date format
+ * @param options_formatTo - The format to return
  *
  * @returns Date string in `displayDate` format or `formatTo` format.
  */
@@ -35,6 +35,32 @@ export const toDisplayDate = (
 
   if (isValid(dateObject)) {
     return format(dateObject, options.formatTo, { locale: getDateFnsLocale(locale) })
+  }
+
+  throw new Error('Invalid date')
+}
+
+/**
+ * Converts a date string to a JS Date object
+ *
+ * @param date - Date string or date object to convert
+ * @param options - Optional options
+ * @param options_formatFrom - The format to convert from when supplying a date string - defaults to ISO date format
+ *
+ * @returns Date string in `displayDate` format or `formatTo` format.
+ */
+export const toDate = (date: string, options?: { formatFrom?: string }): Date => {
+  let dateObject
+
+  try {
+    dateObject = options?.formatFrom ? parse(date, options.formatFrom, new Date()) : parseISO(date)
+  } catch (err) {
+    console.error('Invalid date:', err)
+    throw new Error('Invalid date')
+  }
+
+  if (isValid(dateObject)) {
+    return dateObject
   }
 
   throw new Error('Invalid date')
