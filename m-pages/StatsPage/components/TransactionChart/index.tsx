@@ -1,6 +1,6 @@
 'use client'
 
-import { Card } from '@mui/material'
+import { Box, Card, Typography } from '@mui/material'
 import type { ChartData, ChartDataset } from 'chart.js'
 import { useRef, useState } from 'react'
 import type { RefObject } from 'react'
@@ -50,9 +50,15 @@ const Component = ({ transactions, currency }: TransactionChartProps) => {
   const chartOptions = getChartOptions({ currency, locale })
 
   return (
-    <Card sx={sx.chartCard} ref={ref}>
-      {/* @ts-expect-error Type '"line"' is not assignable to type '"bar"'. */}
-      <BarChart type="bar" data={chartData} options={chartOptions} />
+    <Card>
+      <Typography variant="h6" color="secondary">
+        Cashflow
+      </Typography>
+
+      <Box sx={sx.chartCard} ref={ref}>
+        {/* @ts-expect-error Type '"line"' is not assignable to type '"bar"'. */}
+        <BarChart type="bar" data={chartData} options={chartOptions} />
+      </Box>
     </Card>
   )
 }

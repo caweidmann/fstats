@@ -1,6 +1,6 @@
 import type { PrimaryCategory } from '@/types'
 
-export const CATEGORIES: PrimaryCategory[] = [
+export const ALL_CATEGORIES: PrimaryCategory[] = [
   {
     code: 'INC',
     label: 'Income',

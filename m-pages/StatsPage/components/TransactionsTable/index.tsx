@@ -97,6 +97,10 @@ const Component = ({ transactions, currency }: TransactionsTableProps) => {
 
   return (
     <Card sx={{ borderRadius: 2, p: 3 }}>
+      <Typography variant="h6" color="secondary" sx={{ mb: 3 }}>
+        Transactions
+      </Typography>
+
       <Box sx={sx.searchContainer}>
         <TextField
           fullWidth
