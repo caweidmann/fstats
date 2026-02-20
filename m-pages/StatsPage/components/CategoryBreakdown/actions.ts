@@ -8,6 +8,8 @@ import type {
 import { getCategories } from '@/utils/Category'
 import { Big } from '@/lib/w-big'
 
+export type SortingPref = 'asc' | 'desc' | 'totalAsc' | 'totalDesc'
+
 export const COL_SPACING = { xs: 1, sm: 2 }
 export const COL1 = [4.5, 3]
 export const COL2 = [4, 3]
@@ -54,4 +56,24 @@ export const getTransactionsByCategory = (
   })
 
   return categories
+}
+
+export const getSortedCategories = (transactions: Transaction[], sortingPref: SortingPref) => {
+  return Object.values(getTransactionsByCategory(transactions))
+    .filter((category) => category.code !== 'INC')
+    .sort((a, b) => {
+      if (sortingPref === 'asc') {
+        return a.label.localeCompare(b.label)
+      }
+      if (sortingPref === 'desc') {
+        return b.label.localeCompare(a.label)
+      }
+      if (sortingPref === 'totalAsc') {
+        return Big(a.total).minus(b.total).toNumber()
+      }
+      if (sortingPref === 'totalDesc') {
+        return Big(b.total).minus(a.total).toNumber()
+      }
+      return 0
+    })
 }

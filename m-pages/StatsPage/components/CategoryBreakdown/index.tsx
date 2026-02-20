@@ -1,7 +1,7 @@
 'use client'
 
-import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
-import { Box, Card, Divider, Grid, Typography } from '@mui/material'
+import { ArrowDownward, ArrowUpward, ExpandLess, ExpandMore } from '@mui/icons-material'
+import { Box, Button, Card, Divider, Grid, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
@@ -9,7 +9,7 @@ import type { Transaction } from '@/types'
 import { Currency } from '@/types-enums'
 import { getCurrencySymbol } from '@/utils/Currency'
 
-import { COL_SPACING, COL1, COL2, COL3, getTransactionsByCategory } from './actions'
+import { COL_SPACING, COL1, COL2, COL3, getSortedCategories, SortingPref } from './actions'
 import { BreakdownRow } from './components'
 import { ui } from './styled'
 
@@ -21,9 +21,10 @@ type CategoryBreakdownProps = {
 const Component = ({ transactions, currency }: CategoryBreakdownProps) => {
   const theme = useTheme()
   const sx = ui(theme)
-  const [sortingPref, setSortingPref] = useState<'asc' | 'desc' | 'totalAsc' | 'totalDesc'>('asc')
-  const categories = Object.values(getTransactionsByCategory(transactions)).filter(
-    (category) => category.code !== 'INC',
+  const [sortingPref, setSortingPref] = useState<SortingPref>('totalAsc')
+  const [showMore, setShowMore] = useState(false)
+  const categories = getSortedCategories(transactions, sortingPref).filter((category) =>
+    showMore ? true : category.transactions.length,
   )
 
   return (
@@ -64,6 +65,21 @@ const Component = ({ transactions, currency }: CategoryBreakdownProps) => {
       {categories.map((category) => {
         return <BreakdownRow key={category.code} category={category} currency={currency} transactions={transactions} />
       })}
+
+      <Button
+        variant="outlined"
+        size="small"
+        color="secondary"
+        sx={{ mt: 2 }}
+        onClick={() => setShowMore((prev) => !prev)}
+      >
+        {showMore ? 'Show less' : 'Show more'}{' '}
+        {showMore ? (
+          <ExpandLess color="secondary" fontSize="small" />
+        ) : (
+          <ExpandMore color="secondary" fontSize="small" />
+        )}
+      </Button>
     </Card>
   )
 }

@@ -5,8 +5,8 @@ import {
   CheckBoxOutlined,
   DeleteOutlined,
   ErrorOutlined,
-  ExpandLessOutlined,
-  ExpandMoreOutlined,
+  ExpandLess,
+  ExpandMore,
   IndeterminateCheckBoxOutlined,
 } from '@mui/icons-material'
 import { Box, Button, Chip, CircularProgress, Stack, Typography } from '@mui/material'
@@ -104,9 +104,9 @@ const Component = () => {
               />
             ) : null}
             {expanded ? (
-              <ExpandLessOutlined sx={{ color: 'text.secondary' }} />
+              <ExpandLess sx={{ color: 'text.secondary' }} />
             ) : (
-              <ExpandMoreOutlined sx={{ color: 'text.secondary' }} />
+              <ExpandMore sx={{ color: 'text.secondary' }} />
             )}
           </Stack>
         </Stack>
