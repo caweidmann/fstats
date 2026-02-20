@@ -12,7 +12,7 @@ describe('createParser()', () => {
 })
 
 describe('AVAILABLE_PARSERS', () => {
-  it('should should expose all parsers where parser ID matches the registry key', () => {
+  it('should expose all parsers where parser ID matches the registry key', () => {
     Object.entries(AVAILABLE_PARSERS).forEach(([key, parser]) => {
       expect(parser.id).toBe(key)
     })
