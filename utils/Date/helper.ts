@@ -2,7 +2,7 @@ import { format, isValid, parse, parseISO } from 'date-fns'
 
 import { UserLocale } from '@/types-enums'
 
-import { getDateFnsLocale } from '../Date'
+import { getDateFnsLocale } from '.'
 
 /**
  * Converts a date string or date object to "dd/MM/yyyy" or `options.formatTo` format
