@@ -38,11 +38,11 @@ pnpm test
 - **`/m-stats-file`** - Stats file management module (api/, service/)
 - **`/m-user`** - User preferences management module (api/, service/)
 - **`/m-pages`** - Page-level components module (DataPage/, EmptyStatsPage/, HomePage/, SettingsPage/, StatsPage/)
-  - StatsPage has sub-components: BankSelector, DemoBanner, ProfitLossSummary, TransactionChart, TransactionInfo, TransactionsTable
+  - StatsPage has sub-components: BankSelector, CategoryBreakdown, DemoBanner, ProfitLossSummary, TransactionChart, TransactionInfo, TransactionsTable
 - **`/types`** - TypeScript type definitions (global.ts, utils.ts, key-check.ts, services/, lib/)
 - **`/types-enums`** - Enum-like constants (ColorMode, UserLocale, DateFormat, WeekStartsOn, WeekStartsOnValue, StatsFileStatus, Currency, SortOrder)
-- **`/utils`** - Domain-organized utilities (Chart/, CsvParser/, Currency/, Date/, Encryption/, Features/, File/, FileParser/, LocalStorage/, Logger/, Misc/, Number/, Stats/)
-- **`/parsers`** - Bank-specific CSV parsers in flat files under `banks/` (capitec__savings, comdirect__giro, comdirect__visa, fnb__credit_card, ing__giro, ing__giro_wb, lloyds__current); registry (`index.ts`) is single source of truth for ParserId
+- **`/utils`** - Domain-organized utilities (Chart/, Currency/, Date/, Encryption/, Features/, File/, FileParser/, Logger/, Misc/, Number/, Parser/, Stats/)
+  - **Parser/** contains bank-specific CSV parsers grouped by bank under `banks/` (capitec, comdirect, fnb, ing, lloyds); `utils.ts` is the parser registry (`AVAILABLE_PARSERS`), `helper.ts` has `createParser` factory
 - **`/lib`** - Third-party library configs (i18n.ts, localforage.ts, tanstack-query.ts, chartjs.ts, w-big.ts)
 - **`/common`** - App-wide constants (misc.ts, routes.ts, config.ts, layout.ts)
 - **`/hooks`** - Custom React hooks (useIsDarkMode, useIsMobile, useUserPreferences, useFileHelper, useDarkModeMetaTagUpdater)
@@ -128,28 +128,40 @@ Enforced via Prettier plugin:
 7. `@/hooks`
 8. `@/styles`
 9. `@/utils`
-10. `@/parsers`
-11. `@/lib`
-12. `@/public`
-13. Relative imports (`./` or `../`)
+10. `@/lib`
+11. `@/public`
+12. Relative imports (`./` or `../`)
 
 ## Adding a New Bank Parser
 
 **Currently Implemented Parsers**: CAPITEC (Savings), FNB (Credit Card), COMDIRECT (Giro, Visa), ING (Giro, Giro with Balance), LLOYDS (Current)
 
-The `parsers/index.ts` registry is the single source of truth for parser IDs. `ParserId` type and `zParserId` are auto-derived from it. To add a new bank parser:
+Parsers live in `/utils/Parser/`. `ParserId` is defined in `/types-enums/index.ts`. To add a new bank parser:
 
-1. **Create parser config** `parsers/banks/new_bank__account_type.ts` using the `createParser` factory:
+1. **Add a `ParserId` entry** in `types-enums/index.ts`:
 ```typescript
-import { Currency } from '@/types-enums'
-import { createParser } from '@/utils/CsvParser'
+export const ParserId = {
+  // ...existing
+  NEW_BANK_ACCOUNT: 'new_bank__account',
+} as const
+```
+Also add it to the `zParserId` enum array.
 
-export default createParser({
-  bankName: 'New Bank',
+2. **Create parser config** in `utils/Parser/banks/`. If the bank already exists, add to its file; otherwise create `utils/Parser/banks/new_bank.ts`:
+```typescript
+import { Currency, ParserId } from '@/types-enums'
+import { createParser } from '@/utils/Parser'
 
+const bankName = 'New Bank'
+const currency = Currency.EUR
+
+export const new_bank__account = createParser({
+  id: ParserId.NEW_BANK_ACCOUNT,
+  bankName,
   accountType: 'Account Type',
+  currency,
 
-  currency: Currency.EUR,
+  headerRowIndex: 0,
 
   columns: {
     date: 'Date',
@@ -183,17 +195,22 @@ export default createParser({
 
 This naming keeps parser definitions compact while staying explicit for contributors.
 
-2. **Register** in `parsers/index.ts` — the key is the parser ID:
+3. **Export** from `utils/Parser/banks/index.ts`:
 ```typescript
-import new_bank__account_type from './banks/new_bank__account_type'
-
-const registry = buildRegistry({
-  // ...existing parsers
-  new_bank__account_type,
-})
+export * from './new_bank'
 ```
 
-The `ParserId` type and const are auto-derived from the registry keys. Import from `@/types` (re-exported) or `@/parsers`. Use as a type (`ParserId`) or value (`ParserId.capitec__savings`).
+4. **Register** in `utils/Parser/utils.ts` — add to the `AVAILABLE_PARSERS` record:
+```typescript
+import { new_bank__account } from './banks'
+
+export const AVAILABLE_PARSERS: Record<ParserId, Parser> = {
+  // ...existing parsers
+  [new_bank__account.id]: new_bank__account,
+}
+```
+
+Import `ParserId` from `@/types-enums` or `@/types` (re-exported). Use as a type (`ParserId`) or value (`ParserId.NEW_BANK_ACCOUNT`).
 
 ## Working with TanStack Query
 
@@ -511,7 +528,7 @@ import { useFileHelper, useIsDarkMode, useUserPreferences } from '@/hooks'
 import { formatDate, toDisplayDate } from '@/utils/Date'
 import { getStats, getProfitLossColors } from '@/utils/Stats'
 import { getGradient } from '@/utils/Chart'
-import { AVAILABLE_PARSERS } from '@/parsers'
+import { AVAILABLE_PARSERS } from '@/utils/Parser'
 import { Big } from '@/lib/w-big'
 
 // Constants
@@ -528,7 +545,7 @@ import { MISC, ROUTES, CONFIG } from '@/common'
 6. **Styling?** → Add to component's `styled.ts`
 7. **Type definition?** → Add to `/types/` or `/types-enums/`
 8. **Constant?** → Add to `/common/`
-9. **Bank parser?** → Add to `/parsers/banks/`
+9. **Bank parser?** → Add to `/utils/Parser/banks/`
 10. **Provider?** → Add to `/components/{Name}Provider/`
 11. **User preference?** → Use `m-user` module hooks
 
