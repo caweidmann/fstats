@@ -53,7 +53,7 @@ export const createParser = <T extends ColDef, Id extends ParserId>({
           date: formatISO(toDate(getters.date(row), { formatFrom: dateFormat })),
           description: getters.description(row),
           value: getters.value(row) || '0',
-          category: getCategory(row),
+          category: null,
           currency,
           extra: getters.extra ? getters.extra(row) : null,
         }
@@ -62,7 +62,11 @@ export const createParser = <T extends ColDef, Id extends ParserId>({
       const dates = parsedRows.map((row) => parseISO(row.date))
       const uniqueTimestamps = getUniqueTimestamps({ dates, dateFormat, sortOrder: getCsvSortOrder(dates) })
 
-      return parsedRows.map((row, index) => ({ ...row, date: formatISO(uniqueTimestamps[index]) }))
+      return parsedRows.map((row, index) => ({
+        ...row,
+        date: formatISO(uniqueTimestamps[index]),
+        category: getCategory(row),
+      }))
     },
   }
 }

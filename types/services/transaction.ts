@@ -6,12 +6,33 @@ import { zDateTimeString, zNumberString } from '../global'
 import type { _KeysCheck } from '../key-check'
 import { _zKeysCheck } from '../key-check'
 
+export const zParentCategoryCode = z.string().regex(/^[A-Z]{2,3}$/)
+export const zCategoryCode = z.string().regex(/^[A-Z]{2,3}-\d{2}$/)
+
+export type ParentCategoryCode = z.infer<typeof zParentCategoryCode>
+export type CategoryCode = z.infer<typeof zCategoryCode>
+
+export const zCategory = z.object({
+  code: zCategoryCode,
+  label: z.string(),
+})
+
+export type Category = z.infer<typeof zCategory>
+
+export const zPrimaryCategory = z.object({
+  code: zParentCategoryCode,
+  label: z.string(),
+  subcategories: z.array(zCategory),
+})
+
+export type PrimaryCategory = z.infer<typeof zPrimaryCategory>
+
 export const zTransaction = z.object({
   date: zDateTimeString,
   description: z.string(),
   value: zNumberString,
   currency: zCurrency,
-  category: z.string(), // FIXME: type to porper cats
+  category: zCategoryCode.nullable(),
   extra: z
     .object({
       parentCategory: z.string().optional(), // Capitec (parentCategory)
