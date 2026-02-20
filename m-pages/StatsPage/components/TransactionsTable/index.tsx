@@ -21,9 +21,9 @@ import { green } from '@mui/material/colors'
 import { useTheme } from '@mui/material/styles'
 import stringify from 'fast-json-stable-stringify'
 import { useMemo, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
 
-import type { StatsPageForm, Transaction } from '@/types'
+import type { Transaction } from '@/types'
+import { Currency } from '@/types-enums'
 import { useIsMobile, useUserPreferences } from '@/hooks'
 import { getCurrencySymbol, getMaxDecimalsForCurrency } from '@/utils/Currency'
 import { toDisplayDate } from '@/utils/Date'
@@ -35,11 +35,10 @@ import { ui } from './styled'
 
 type TransactionsTableProps = {
   transactions: Transaction[]
+  currency: Currency
 }
 
-const Component = ({ transactions }: TransactionsTableProps) => {
-  const { watch } = useFormContext<StatsPageForm>()
-  const currency = watch('currency')
+const Component = ({ transactions, currency }: TransactionsTableProps) => {
   const { locale, dateFormat } = useUserPreferences()
   const theme = useTheme()
   const isMobile = useIsMobile()

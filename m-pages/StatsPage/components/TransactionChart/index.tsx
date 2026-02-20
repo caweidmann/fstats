@@ -4,10 +4,10 @@ import { Card } from '@mui/material'
 import type { ChartData, ChartDataset } from 'chart.js'
 import { useRef, useState } from 'react'
 import type { RefObject } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { useDebounceCallback, useResizeObserver } from 'usehooks-ts'
 
-import type { Size, StatsPageForm, Transaction } from '@/types'
+import type { Size, Transaction } from '@/types'
+import { Currency } from '@/types-enums'
 import { BarChart } from '@/components'
 import { useUserPreferences } from '@/hooks'
 import { toDisplayDate } from '@/utils/Date'
@@ -18,11 +18,10 @@ import { ui } from './styled'
 
 type TransactionChartProps = {
   transactions: Transaction[]
+  currency: Currency
 }
 
-const Component = ({ transactions }: TransactionChartProps) => {
-  const { watch } = useFormContext<StatsPageForm>()
-  const currency = watch('currency')
+const Component = ({ transactions, currency }: TransactionChartProps) => {
   const { locale, dateFormat } = useUserPreferences()
   const sx = ui()
   const ref = useRef<HTMLDivElement>(null)

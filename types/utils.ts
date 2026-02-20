@@ -17,7 +17,6 @@ export type BankSelectOption = SelectOptionWithType<string>
 
 export type StatsPageForm = {
   selectedId: BankSelectOption['value'] | ''
-  currency: Currency
 }
 
 /**

@@ -3,15 +3,17 @@
 import { Box, Card, LinearProgress, Typography } from '@mui/material'
 
 import type { Transaction } from '@/types'
+import { Currency } from '@/types-enums'
 
 import { getCategoryBreakdownData } from './actions'
 import { ui } from './styled'
 
-type ComponentProps = {
+type CategoryBreakdownProps = {
   transactions: Transaction[]
+  currency: Currency
 }
 
-const Component = ({ transactions }: ComponentProps) => {
+const Component = ({ transactions, currency }: CategoryBreakdownProps) => {
   const sx = ui()
   const categoryData = getCategoryBreakdownData(transactions)
   const hasData = categoryData.length > 0

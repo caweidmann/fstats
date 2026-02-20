@@ -3,9 +3,9 @@
 import { AccountBalance, TrendingDown, TrendingUp } from '@mui/icons-material'
 import { Box, Grid, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { useFormContext } from 'react-hook-form'
 
-import type { StatsPageForm, Transaction } from '@/types'
+import type { Transaction } from '@/types'
+import { Currency } from '@/types-enums'
 import { useIsDarkMode, useUserPreferences } from '@/hooks'
 import { toFixedLocale, toFixedLocaleCurrency } from '@/utils/Number'
 import { getProfitLossColors, getStats } from '@/utils/Stats'
@@ -15,15 +15,14 @@ import { ui } from './styled'
 
 type ProfitLossSummaryProps = {
   transactions: Transaction[]
+  currency: Currency
 }
 
-const Component = ({ transactions }: ProfitLossSummaryProps) => {
+const Component = ({ transactions, currency }: ProfitLossSummaryProps) => {
   const { locale } = useUserPreferences()
   const isDarkMode = useIsDarkMode()
   const theme = useTheme()
   const sx = ui(theme)
-  const { watch } = useFormContext<StatsPageForm>()
-  const currency = watch('currency')
   const { totalIncome, totalExpense, profit, expenseRatio } = getStats(transactions)
   const totalIncomeDisplay = toFixedLocaleCurrency(totalIncome, currency, locale)
   const totalExpenseDisplay = toFixedLocaleCurrency(totalExpense, currency, locale)

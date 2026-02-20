@@ -3,7 +3,7 @@
 import { Grid } from '@mui/material'
 import { isEqual, uniqWith } from 'lodash'
 import { useSearchParams } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import type { StatsPageForm } from '@/types'
@@ -30,7 +30,6 @@ const Component = () => {
   const bankOptions = getBankSelectOptions(isDemoMode ? [] : selectedFiles)
   const values: StatsPageForm = {
     selectedId: bankOptions.length ? bankOptions[0].value : '',
-    currency: MISC.DEFAULT_CURRENCY,
   }
   const methods = useForm<StatsPageForm>({
     defaultValues: values,
@@ -43,10 +42,7 @@ const Component = () => {
       : selectedFiles.filter((file) => file.parserId && getBankKey(file.parserId) === selectedId)
   const allTransactions = isDemoMode ? DEMO_TRANSACTIONS : filesForSelectedId.flatMap((file) => file.transactions)
   const transactions = uniqWith(allTransactions, isEqual)
-
-  useEffect(() => {
-    methods.setValue('currency', getCurrencyForSelection(selectedId, transactions))
-  }, [selectedId])
+  const currency = getCurrencyForSelection(selectedId, transactions)
 
   return (
     <FormProvider {...methods}>
@@ -79,19 +75,19 @@ const Component = () => {
           {/* <Grid size={2}>Combine datasets</Grid> */}
 
           <Grid size={12}>
-            <ProfitLossSummary transactions={transactions} />
+            <ProfitLossSummary transactions={transactions} currency={currency} />
           </Grid>
 
           <Grid size={12}>
-            <TransactionChart transactions={transactions} />
+            <TransactionChart transactions={transactions} currency={currency} />
           </Grid>
 
           <Grid size={12}>
-            <CategoryBreakdown transactions={transactions} />
+            <CategoryBreakdown transactions={transactions} currency={currency} />
           </Grid>
 
           <Grid size={12}>
-            <TransactionsTable transactions={transactions} />
+            <TransactionsTable transactions={transactions} currency={currency} />
           </Grid>
         </Grid>
       </PageWrapper>
