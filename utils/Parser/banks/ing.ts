@@ -27,7 +27,7 @@ export const ing__giro = createParser({
 
   getters: {
     date: 'wertstellungsdatum',
-    description: 'verwendungszweck',
+    description: 'auftraggeberEmpfaenger',
     value: (row) => {
       return parseGermanNumber(row.get('betrag'))
     },
@@ -35,7 +35,7 @@ export const ing__giro = createParser({
 })
 
 export const ing__giro__wb = createParser({
-  id: ParserId.ING_GIRO__WB, // with account balance
+  id: ParserId.ING_GIRO__WB,
   bankName,
   accountType: 'Giro',
   currency,
@@ -58,7 +58,7 @@ export const ing__giro__wb = createParser({
 
   getters: {
     date: 'wertstellungsdatum',
-    description: 'verwendungszweck',
+    description: 'auftraggeberEmpfaenger',
     value: (row) => {
       return parseGermanNumber(row.get('betrag'))
     },
