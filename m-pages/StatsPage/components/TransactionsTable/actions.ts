@@ -1,5 +1,5 @@
 import type { CategoryCode, GradientColorsLightDark, SubcategoryCode } from '@/types'
-import { ALL_CATEGORIES, CATEGORY_COLORS } from '@/common'
+import { ALL_CATEGORIES, PARENT_CATEGORY_COLORS } from '@/common'
 
 export const getSubcategoryLabel = (code: SubcategoryCode | null): string => {
   if (!code) {
@@ -24,5 +24,5 @@ export const getCategoryColor = (code: SubcategoryCode | null): GradientColorsLi
 
   const parentCode = code.split('_')[0] as CategoryCode
 
-  return CATEGORY_COLORS[parentCode]
+  return PARENT_CATEGORY_COLORS[parentCode]
 }

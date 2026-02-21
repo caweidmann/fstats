@@ -1,9 +1,9 @@
 import { Grid, LinearProgress, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import type { CategoryWithTransactions, NumberString } from '@/types'
+import type { CategoryWithTransactions, NumberString, ParentCategoryWithTransactions } from '@/types'
 import { Currency } from '@/types-enums'
-import { CATEGORY_COLORS } from '@/common'
+import { CATEGORY_COLORS, PARENT_CATEGORY_COLORS } from '@/common'
 import { useUserPreferences } from '@/hooks'
 import { getMaxDecimalsForCurrency } from '@/utils/Currency'
 import { toFixedLocale } from '@/utils/Number'
@@ -13,7 +13,7 @@ import { COL_SPACING, COL1, COL2, COL3, COL4 } from '../../actions'
 import { ui } from './styled'
 
 type BreakdownRowProps = {
-  category: CategoryWithTransactions
+  category: ParentCategoryWithTransactions | CategoryWithTransactions
   parentCategoryTotal: NumberString
   currency: Currency
 }
@@ -26,7 +26,9 @@ const Component = ({ category, parentCategoryTotal, currency }: BreakdownRowProp
   const percentage = total.div(total.eq(0) ? 1 : parentCategoryTotal).times(100)
   const totalDisplay = toFixedLocale(total.toString(), getMaxDecimalsForCurrency(currency), locale)
   const percentageDisplay = toFixedLocale(percentage.toString(), 1, locale)
-  const color = CATEGORY_COLORS[category.code]
+  const color = category.hasOwnProperty('subcategories')
+    ? PARENT_CATEGORY_COLORS[category.code]
+    : CATEGORY_COLORS[category.code]
 
   return (
     <Grid container spacing={COL_SPACING} sx={{ mt: 1 }}>

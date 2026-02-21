@@ -1,6 +1,6 @@
-import type { Category, CategoryCode } from '@/types'
+import type { ParentCategory, ParentCategoryCode } from '@/types'
 
-export const INCOME_CATEGORIES: Record<CategoryCode, Category> = {
+export const INCOME_CATEGORIES: Record<ParentCategoryCode, ParentCategory> = {
   INC: {
     code: 'INC',
     label: 'Income',
@@ -21,7 +21,7 @@ export const INCOME_CATEGORIES: Record<CategoryCode, Category> = {
   },
 }
 
-export const EXPENSE_CATEGORIES: Record<CategoryCode, Category> = {
+export const EXPENSE_CATEGORIES: Record<ParentCategoryCode, ParentCategory> = {
   HOU: {
     code: 'HOU',
     label: 'Housing & Utilities',
@@ -259,7 +259,7 @@ export const EXPENSE_CATEGORIES: Record<CategoryCode, Category> = {
   },
 }
 
-export const ALL_CATEGORIES: Record<CategoryCode, Category> = {
+export const ALL_CATEGORIES: Record<ParentCategoryCode, ParentCategory> = {
   ...INCOME_CATEGORIES,
   ...EXPENSE_CATEGORIES,
 }

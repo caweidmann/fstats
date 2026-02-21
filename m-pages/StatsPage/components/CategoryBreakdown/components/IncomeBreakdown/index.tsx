@@ -5,32 +5,34 @@ import { Box, Button, Divider, Grid } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
-import type { Transaction } from '@/types'
+import type { NumberString, ParentCategoryWithTransactions } from '@/types'
 import { Currency } from '@/types-enums'
-import { INCOME_CATEGORIES } from '@/common'
 import { getCurrencySymbol } from '@/utils/Currency'
-import { getStats } from '@/utils/Stats'
 
 import { COL_SPACING, COL1, COL2, COL3, getSortedCategoriesWithTransactions, SortingPref } from '../../actions'
 import { ui } from '../../styled'
 import BreakdownRow from '../BreakdownRow'
 
 type IncomeBreakdownProps = {
-  transactions: Transaction[]
+  transactionsGrouped: ParentCategoryWithTransactions[]
+  total: NumberString
   currency: Currency
 }
 
 const MAX_CATEGORIES_TO_SHOW = 3
 
-const Component = ({ transactions, currency }: IncomeBreakdownProps) => {
+const Component = ({ transactionsGrouped, total, currency }: IncomeBreakdownProps) => {
   const theme = useTheme()
   const sx = ui(theme)
   const [sortingPref, setSortingPref] = useState<SortingPref>('totalAsc')
   const [showMore, setShowMore] = useState(false)
-  const { totalIncome } = getStats(transactions)
-  const categories = getSortedCategoriesWithTransactions(transactions, Object.keys(INCOME_CATEGORIES), sortingPref)
-  const categoriesWithTransactions = categories.filter((category) => category.transactions.length)
-  const categoriesToShow = showMore ? categories : categoriesWithTransactions.slice(0, MAX_CATEGORIES_TO_SHOW)
+  const categoriesWithTransactions = transactionsGrouped.filter((category) => category.transactions.length)
+  const categoriesToShow = showMore ? transactionsGrouped : categoriesWithTransactions.slice(0, MAX_CATEGORIES_TO_SHOW)
+  const sortedCategories = getSortedCategoriesWithTransactions(
+    categoriesToShow,
+    transactionsGrouped.map((category) => category.code),
+    sortingPref,
+  )
 
   return (
     <>
@@ -63,10 +65,8 @@ const Component = ({ transactions, currency }: IncomeBreakdownProps) => {
 
       <Divider sx={{ mt: 0.5, mb: 1.5 }} />
 
-      {categoriesToShow.map((category) => {
-        return (
-          <BreakdownRow key={category.code} category={category} parentCategoryTotal={totalIncome} currency={currency} />
-        )
+      {sortedCategories.map((category) => {
+        return <BreakdownRow key={category.code} category={category} parentCategoryTotal={total} currency={currency} />
       })}
 
       <Button
