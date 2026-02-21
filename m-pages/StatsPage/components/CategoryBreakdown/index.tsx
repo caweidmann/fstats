@@ -14,14 +14,10 @@ type CategoryBreakdownProps = {
 }
 
 const Component = ({ transactions, currency }: CategoryBreakdownProps) => {
-  const transactionsGrouped = Object.values(getTransactionsGroupedByCategory(transactions))
   const { totalIncome, totalExpense } = getStats(transactions)
-  const incomeTransactionsGrouped = transactionsGrouped.filter((parentCategory) =>
-    Object.keys(INCOME_CATEGORIES).includes(parentCategory.code),
-  )
-  const expenseTransactionsGrouped = transactionsGrouped.filter((parentCategory) =>
-    Object.keys(EXPENSE_CATEGORIES).includes(parentCategory.code),
-  )
+  const groupedTransactions = Object.values(getTransactionsGroupedByCategory(transactions))
+  const income = groupedTransactions.filter((cat) => Object.keys(INCOME_CATEGORIES).includes(cat.code))
+  const expenses = groupedTransactions.filter((cat) => Object.keys(EXPENSE_CATEGORIES).includes(cat.code))
 
   return (
     <Card sx={{ height: '100%' }}>
@@ -30,20 +26,10 @@ const Component = ({ transactions, currency }: CategoryBreakdownProps) => {
       </Typography>
 
       <Box sx={{ mb: 4 }}>
-        <IncomeBreakdown
-          transactionsGrouped={incomeTransactionsGrouped}
-          total={totalIncome}
-          transactions={transactions}
-          currency={currency}
-        />
+        <IncomeBreakdown transactionsGrouped={income} total={totalIncome} currency={currency} />
       </Box>
 
-      <ExpensesBreakdown
-        transactionsGrouped={expenseTransactionsGrouped}
-        total={totalExpense}
-        transactions={transactions}
-        currency={currency}
-      />
+      <ExpensesBreakdown transactionsGrouped={expenses} total={totalExpense} currency={currency} />
     </Card>
   )
 }
