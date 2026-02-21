@@ -2,7 +2,7 @@ import type { CategoryCode, Transaction } from '@/types'
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '@/common'
 import { Big } from '@/lib/w-big'
 
-export const getSubcategoryCode = (row: Transaction): CategoryCode => {
+export const getCategoryCode = (row: Transaction): CategoryCode => {
   const incomeCats: CategoryCode[] = Object.keys(INCOME_CATEGORIES).flatMap((catCode) =>
     Object.keys(INCOME_CATEGORIES[catCode].subcategories),
   )
