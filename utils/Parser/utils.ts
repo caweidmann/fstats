@@ -1,5 +1,5 @@
 import type { Parser } from '@/types'
-import { ParserId } from '@/types-enums'
+import { BankAccountId, ParserId } from '@/types-enums'
 import { MISC } from '@/common'
 
 import {
@@ -31,7 +31,22 @@ export const getParserCurrency = (parserId: ParserId) => {
   return AVAILABLE_PARSERS[parserId].currency
 }
 
-export const getParserName = (value: ParserId | null): { short: string; long: string; alt: string } => {
+/**
+ * The BankId uses the bank name and account type, because e.g. there
+ * can be multiple parser for a single account type.
+ */
+export const getBankAccountId = (parserId: ParserId): BankAccountId => {
+  const parser = AVAILABLE_PARSERS[parserId]
+  return parser.bankAccountId
+}
+
+type BankAccountName = {
+  short: string
+  long: string
+  alt: string
+}
+
+export const getBankAccountName = (value: ParserId | null): BankAccountName => {
   if (!value) {
     return {
       short: 'Unsupported',

@@ -1,58 +1,35 @@
-'use client'
-
-import { Box, Card, LinearProgress, Typography } from '@mui/material'
+import { Box, Card, Typography } from '@mui/material'
 
 import type { Transaction } from '@/types'
+import { Currency } from '@/types-enums'
+import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '@/common'
+import { getStats } from '@/utils/Stats'
 
-import { getCategoryBreakdownData } from './actions'
-import { ui } from './styled'
+import { getTransactionsGroupedByCategory } from './actions'
+import { ExpensesBreakdown, IncomeBreakdown } from './components'
 
-type ComponentProps = {
+type CategoryBreakdownProps = {
   transactions: Transaction[]
+  currency: Currency
 }
 
-const Component = ({ transactions }: ComponentProps) => {
-  const sx = ui()
-  const categoryData = getCategoryBreakdownData(transactions)
-  const hasData = categoryData.length > 0
+const Component = ({ transactions, currency }: CategoryBreakdownProps) => {
+  const { totalIncome, totalExpense } = getStats(transactions)
+  const groupedTransactions = Object.values(getTransactionsGroupedByCategory(transactions))
+  const income = groupedTransactions.filter((cat) => Object.keys(INCOME_CATEGORIES).includes(cat.code))
+  const expenses = groupedTransactions.filter((cat) => Object.keys(EXPENSE_CATEGORIES).includes(cat.code))
 
   return (
-    <Card sx={sx.card}>
-      <Typography variant="h6" sx={sx.title}>
-        Expense Breakdown by Category
+    <Card sx={{ height: '100%' }}>
+      <Typography variant="h6" color="secondary" sx={{ mb: 2 }}>
+        Breakdown by category
       </Typography>
 
-      {hasData ? (
-        <Box sx={sx.contentContainer}>
-          {categoryData.map((category) => (
-            <Box key={category.name} sx={sx.categoryRow}>
-              <Box sx={sx.categoryHeader}>
-                <Box sx={sx.categoryInfo}>
-                  <Box sx={sx.colorIndicator(category.color)} />
-                  <Typography variant="body2" sx={sx.categoryName}>
-                    {category.name}
-                  </Typography>
-                </Box>
-                <Box sx={sx.amountInfo}>
-                  <Typography variant="body2" sx={sx.amount}>
-                    €{category.amount.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                  </Typography>
-                  <Typography variant="caption" sx={sx.percentage}>
-                    {category.percentage.toFixed(1)}%
-                  </Typography>
-                </Box>
-              </Box>
-              <LinearProgress variant="determinate" value={category.percentage} sx={sx.progressBar(category.color)} />
-            </Box>
-          ))}
-        </Box>
-      ) : (
-        <Box sx={sx.emptyState}>
-          <Typography variant="body2" color="text.secondary">
-            No data available
-          </Typography>
-        </Box>
-      )}
+      <Box sx={{ mb: 4 }}>
+        <IncomeBreakdown transactionsGrouped={income} total={totalIncome} currency={currency} />
+      </Box>
+
+      <ExpensesBreakdown transactionsGrouped={expenses} total={totalExpense} currency={currency} />
     </Card>
   )
 }

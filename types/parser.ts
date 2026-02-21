@@ -1,3 +1,4 @@
+import type { BankAccountId } from '@/types-enums'
 import { Currency, DateFormat, ParserId, UserLocale } from '@/types-enums'
 
 import { ParsedDataResult } from './services/stats-file'
@@ -9,16 +10,20 @@ export type RowAccessor<T extends ColDef> = {
   get: (key: keyof T) => string
 }
 
-export type RowValueGetter<T extends ColDef> = keyof T | ((row: RowAccessor<T>) => string)
+export type Getter<T extends ColDef> = (row: RowAccessor<T>) => string
+
+export type ExtraGetter<T extends ColDef> = (row: RowAccessor<T>) => Transaction['extra']
 
 export type ParserGetters<T extends ColDef> = {
-  date: RowValueGetter<T>
-  description: RowValueGetter<T>
-  value: RowValueGetter<T>
+  date: Getter<T>
+  description: Getter<T>
+  value: Getter<T>
+  extra?: ExtraGetter<T>
 }
 
 export type CreateParserParams<T extends ColDef, Id extends ParserId = ParserId> = {
   id: Id
+  bankAccountId: BankAccountId
   bankName: string
   accountType: string
   currency: Currency
@@ -30,6 +35,7 @@ export type CreateParserParams<T extends ColDef, Id extends ParserId = ParserId>
 
 export type Parser<Id extends ParserId = ParserId> = {
   id: Id
+  bankAccountId: BankAccountId
   bankName: string
   accountType: string
   currency: Currency

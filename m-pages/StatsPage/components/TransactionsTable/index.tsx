@@ -21,25 +21,24 @@ import { green } from '@mui/material/colors'
 import { useTheme } from '@mui/material/styles'
 import stringify from 'fast-json-stable-stringify'
 import { useMemo, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
 
-import type { StatsPageForm, Transaction } from '@/types'
+import type { Transaction } from '@/types'
+import { Currency } from '@/types-enums'
 import { useIsMobile, useUserPreferences } from '@/hooks'
 import { getCurrencySymbol, getMaxDecimalsForCurrency } from '@/utils/Currency'
 import { toDisplayDate } from '@/utils/Date'
 import { toFixedLocale } from '@/utils/Number'
 import { Big } from '@/lib/w-big'
 
-import { getCategoryColor } from './actions'
+import { getCategoryColor, getSubcategoryLabel } from './actions'
 import { ui } from './styled'
 
 type TransactionsTableProps = {
   transactions: Transaction[]
+  currency: Currency
 }
 
-const Component = ({ transactions }: TransactionsTableProps) => {
-  const { watch } = useFormContext<StatsPageForm>()
-  const currency = watch('currency')
+const Component = ({ transactions, currency }: TransactionsTableProps) => {
   const { locale, dateFormat } = useUserPreferences()
   const theme = useTheme()
   const isMobile = useIsMobile()
@@ -84,10 +83,12 @@ const Component = ({ transactions }: TransactionsTableProps) => {
     let filtered = transactions
 
     if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
       filtered = filtered.filter((row) => {
+        const categoryLabel = getSubcategoryLabel(row.category)
         return (
-          row.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          row.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          row.description.toLowerCase().includes(query) ||
+          categoryLabel.toLowerCase().includes(query) ||
           row.date.includes(searchQuery)
         )
       })
@@ -98,6 +99,10 @@ const Component = ({ transactions }: TransactionsTableProps) => {
 
   return (
     <Card sx={{ borderRadius: 2, p: 3 }}>
+      <Typography variant="h6" color="secondary" sx={{ mb: 3 }}>
+        Transactions
+      </Typography>
+
       <Box sx={sx.searchContainer}>
         <TextField
           fullWidth
@@ -166,23 +171,23 @@ const Component = ({ transactions }: TransactionsTableProps) => {
                         {highlightText(row.description, searchQuery)}
                       </Typography>
                     </Box>
-                    {isMobile ? (
+                    {isMobile && row.category ? (
                       <Chip
-                        label={row.category}
+                        label={getSubcategoryLabel(row.category)}
                         size="small"
-                        color={getCategoryColor(row.category)}
-                        sx={{ ...sx.categoryChip, mt: 0.5 }}
+                        sx={{ ...sx.categoryChip(getCategoryColor(row.category)), mt: 0.5 }}
                       />
                     ) : null}
                   </TableCell>
                   {!isMobile ? (
                     <TableCell sx={sx.compactCell}>
-                      <Chip
-                        label={highlightText(row.category, searchQuery)}
-                        size="small"
-                        color={getCategoryColor(row.category)}
-                        sx={sx.categoryChip}
-                      />
+                      {row.category ? (
+                        <Chip
+                          label={highlightText(getSubcategoryLabel(row.category), searchQuery)}
+                          size="small"
+                          sx={sx.categoryChip(getCategoryColor(row.category))}
+                        />
+                      ) : null}
                     </TableCell>
                   ) : null}
                   <TableCell align="right" sx={sx.compactCell}>

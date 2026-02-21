@@ -1,43 +1,89 @@
-import type { Transaction } from '@/types'
+import type {
+  CategoryCode,
+  CategoryWithTransactions,
+  ParentCategoryCode,
+  ParentCategoryWithTransactions,
+  Transaction,
+} from '@/types'
+import { ALL_CATEGORIES } from '@/common'
 import { Big } from '@/lib/w-big'
 
-type CategoryBreakdown = {
-  name: string
-  amount: number
-  percentage: number
-  color: string
-}
+export type SortingPref = 'asc' | 'desc' | 'totalAsc' | 'totalDesc'
 
-export const getCategoryBreakdownData = (transactions: Transaction[]): CategoryBreakdown[] => {
-  const categoryTotals = new Map<string, number>()
+export const COL_SPACING = { xs: 1, sm: 2 }
+export const COL1 = [4.5, 3]
+export const COL2 = [3.2, 3]
+export const COL3 = [2.3, 1]
+export const COL4 = [2, 5]
 
-  transactions.forEach((transaction) => {
-    const amount = Big(transaction.value).toNumber()
+export const getTransactionsGroupedByCategory = (transactions: Transaction[]): ParentCategoryWithTransactions[] => {
+  const categories: Record<ParentCategoryCode, ParentCategoryWithTransactions> = {}
 
-    const current = categoryTotals.get(transaction.category) || 0
-    categoryTotals.set(transaction.category, current + Math.abs(amount))
+  Object.values(ALL_CATEGORIES).forEach((category) => {
+    const icategories: Record<CategoryCode, CategoryWithTransactions> = {}
+    Object.values(category.subcategories).forEach((icategory) => {
+      icategories[icategory.code] = {
+        ...icategory,
+        transactions: [],
+        total: '0',
+      }
+    })
+
+    categories[category.code] = {
+      ...category,
+      subcategories: icategories,
+      transactions: [],
+      total: '0',
+    }
   })
 
-  const totalExpenses = Array.from(categoryTotals.values()).reduce((acc, val) => acc + val, 0)
-  const sortedCategories = Array.from(categoryTotals.entries()).sort((a, b) => b[1] - a[1])
+  transactions.forEach((transaction) => {
+    if (!transaction.category) {
+      return
+    }
 
-  const colors = [
-    '#FF6384', // Red/Pink
-    '#36A2EB', // Blue
-    '#FFCE56', // Yellow
-    '#4BC0C0', // Teal
-    '#9966FF', // Purple
-    '#FF9F40', // Orange
-    '#66BB6A', // Green
-    '#FFA726', // Light Orange
-    '#EC407A', // Pink
-    '#AB47BC', // Light Purple
-  ]
+    const parentCode = transaction.category.split('_')[0]
+    const parentCategory = categories[parentCode]
+    const category = parentCategory.subcategories[transaction.category]
 
-  return sortedCategories.map(([name, amount], index) => ({
-    name,
-    amount,
-    percentage: (amount / totalExpenses) * 100,
-    color: colors[index % colors.length],
-  }))
+    parentCategory.transactions.push(transaction)
+    parentCategory.total = Big(parentCategory.total).plus(transaction.value).toString()
+
+    category.transactions.push(transaction)
+    category.total = Big(category.total).plus(transaction.value).toString()
+  })
+
+  return Object.values(categories)
+}
+
+export const sortTransactions = (
+  transactions: ParentCategoryWithTransactions[] | CategoryWithTransactions[],
+  sortingPref: SortingPref,
+) => {
+  return transactions.sort((a, b) => {
+    if (sortingPref === 'asc') {
+      return a.label.localeCompare(b.label)
+    }
+    if (sortingPref === 'desc') {
+      return b.label.localeCompare(a.label)
+    }
+    if (sortingPref === 'totalAsc') {
+      return Big(a.total).minus(b.total).toNumber()
+    }
+    if (sortingPref === 'totalDesc') {
+      return Big(b.total).minus(a.total).toNumber()
+    }
+    return 0
+  })
+}
+
+export const getSortedCategoriesWithTransactions = (
+  transactions: ParentCategoryWithTransactions[] | CategoryWithTransactions[],
+  categoriesToInclude: CategoryCode[],
+  sortingPref: SortingPref,
+): CategoryWithTransactions[] => {
+  return sortTransactions(
+    transactions.filter((category) => categoriesToInclude.includes(category.code)),
+    sortingPref,
+  )
 }

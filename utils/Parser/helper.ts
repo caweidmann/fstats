@@ -1,11 +1,13 @@
-import { formatISO, isValid, parse, startOfDay } from 'date-fns'
+import { formatISO, parseISO } from 'date-fns'
 
-import type { ColDef, CreateParserParams, Parser, RowAccessor, RowData, RowValueGetter, Transaction } from '@/types'
+import type { ColDef, CreateParserParams, Parser, RowAccessor, RowData, Transaction } from '@/types'
 import { ParserId, SortOrder } from '@/types-enums'
-import { Big } from '@/lib/w-big'
+import { getUniqueTimestamps, toDate } from '@/utils/Date'
+import { getSubcategoryCode } from '@/utils/TransactionParser'
 
 export const createParser = <T extends ColDef, Id extends ParserId>({
   id,
+  bankAccountId,
   bankName,
   accountType,
   currency,
@@ -21,12 +23,9 @@ export const createParser = <T extends ColDef, Id extends ParserId>({
     get: (key) => row[keys.indexOf(key)].trim(),
   })
 
-  const getDate = resolveGetter(getters.date)
-  const getDescription = resolveGetter(getters.description)
-  const getValue = resolveGetter(getters.value)
-
   return {
     id,
+    bankAccountId,
     bankName,
     accountType,
     currency,
@@ -50,46 +49,33 @@ export const createParser = <T extends ColDef, Id extends ParserId>({
     parse: (input) => {
       const rowsToParse = input.data.slice(headerRowIndex + 1).filter((row) => row.length === headers.length)
 
-      const parsedRows = rowsToParse.map((rawRow) => {
+      const parsedRows: Transaction[] = rowsToParse.map((rawRow) => {
         const row = wrapRow(rawRow)
-        const value = getValue(row) || '0'
-        const parsedDate = parse(getDate(row), dateFormat, new Date())
-
-        if (!isValid(parsedDate)) {
-          throw new Error('Invalid date')
-        }
-
         return {
-          parsedDate,
-          description: getDescription(row),
-          value,
-        }
-      })
-
-      const dates = parsedRows.map((row) => row.parsedDate)
-      const sortOrder = getCsvSortOrder(dates)
-      const uniqueTimestamps = getUniqueTimestamps({ dates, dateFormat, sortOrder })
-
-      return parsedRows.map((row, index) => {
-        const data: Transaction = {
-          date: formatISO(uniqueTimestamps[index]),
-          description: row.description,
-          value: row.value,
+          date: formatISO(toDate(getters.date(row), { formatFrom: dateFormat })),
+          description: getters.description(row),
+          value: getters.value(row) || '0',
+          category: null,
           currency,
-          category: Big(row.value).gte(0) ? 'Income' : 'Expense', // FIXME: Add cats parser
+          extra: getters.extra ? getters.extra(row) : null,
         }
-
-        return data
       })
+
+      const dates = parsedRows.map((row) => parseISO(row.date))
+      const uniqueTimestamps = getUniqueTimestamps({ dates, dateFormat, sortOrder: getCsvSortOrder(dates) })
+
+      return parsedRows.map((row, index) => ({
+        ...row,
+        date: formatISO(uniqueTimestamps[index]),
+        category: getSubcategoryCode(row),
+      }))
     },
   }
 }
 
-export const resolveGetter = <T extends ColDef>(getter: RowValueGetter<T>): ((row: RowAccessor<T>) => string) => {
-  if (typeof getter === 'function') {
-    return getter
-  }
-  return (row) => row.get(getter)
+// Strips empty fields from object
+export const buildExtra = (fields: Record<string, string>): Transaction['extra'] => {
+  return Object.fromEntries(Object.entries(fields).filter(([, value]) => value)) as Transaction['extra']
 }
 
 export const isArrayEqual = (array1: string[], array2: string[]) => {
@@ -115,83 +101,4 @@ export const getCsvSortOrder = (dates: Date[]): SortOrder => {
   }
 
   return desc > asc ? SortOrder.DESC : SortOrder.ASC
-}
-
-const withSecondOffsets = ({
-  dates,
-  sortOrder,
-  getGroupKey,
-  getBaseTimestamp,
-}: {
-  dates: Date[]
-  sortOrder: SortOrder
-  getGroupKey: (date: Date) => number
-  getBaseTimestamp: (date: Date) => number
-}): Date[] => {
-  const totalByGroup = new Map<number, number>()
-  const seenByGroup = new Map<number, number>()
-
-  dates.forEach((date) => {
-    const groupKey = getGroupKey(date)
-    totalByGroup.set(groupKey, (totalByGroup.get(groupKey) ?? 0) + 1)
-  })
-
-  return dates.map((date) => {
-    const groupKey = getGroupKey(date)
-    const seen = seenByGroup.get(groupKey) ?? 0
-    const total = totalByGroup.get(groupKey) ?? 1
-    const secondOffset = sortOrder === 'asc' ? seen : total - seen - 1
-
-    seenByGroup.set(groupKey, seen + 1)
-
-    return new Date(getBaseTimestamp(date) + secondOffset * 1000)
-  })
-}
-
-export const getDateFormatPrecision = (
-  dateFormat: string,
-): {
-  hasTime: boolean
-  hasSeconds: boolean
-} => {
-  const hasHours = /[HhKk]/.test(dateFormat)
-  const hasMinutes = /m/.test(dateFormat)
-  const hasSeconds = /s/.test(dateFormat)
-
-  return {
-    hasTime: hasHours || hasMinutes || hasSeconds,
-    hasSeconds,
-  }
-}
-
-export const getUniqueTimestamps = ({
-  dates,
-  dateFormat,
-  sortOrder,
-}: {
-  dates: Date[]
-  dateFormat: string
-  sortOrder: SortOrder
-}): Date[] => {
-  const { hasTime, hasSeconds } = getDateFormatPrecision(dateFormat)
-
-  if (hasTime && hasSeconds) {
-    return dates
-  }
-
-  if (!hasTime) {
-    return withSecondOffsets({
-      dates,
-      sortOrder,
-      getGroupKey: (date) => startOfDay(date).getTime(),
-      getBaseTimestamp: (date) => startOfDay(date).getTime(),
-    })
-  }
-
-  return withSecondOffsets({
-    dates,
-    sortOrder,
-    getGroupKey: (date) => date.getTime(),
-    getBaseTimestamp: (date) => date.getTime(),
-  })
 }

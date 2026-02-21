@@ -1,11 +1,12 @@
-import { Currency, ParserId } from '@/types-enums'
-import { createParser } from '@/utils/Parser'
+import { BankAccountId, Currency, ParserId } from '@/types-enums'
+import { buildExtra, createParser } from '@/utils/Parser'
 
 const bankName = 'Capitec'
 const currency = Currency.ZAR
 
 export const capitec__savings = createParser({
   id: ParserId.CAPITEC_SAVINGS,
+  bankAccountId: BankAccountId.CAPITEC_SAVINGS,
   bankName,
   accountType: 'Savings',
   currency,
@@ -30,14 +31,25 @@ export const capitec__savings = createParser({
   dateFormat: 'yyyy-MM-dd HH:mm',
 
   getters: {
-    date: 'transactionDate',
-    description: 'description',
+    date: (row) => {
+      return row.get('transactionDate')
+    },
+    description: (row) => {
+      return row.get('description')
+    },
     value: (row) => {
       const valIn = row.get('moneyIn')
       const valOut = row.get('moneyOut')
       const valFee = row.get('fee')
 
       return valIn || valOut || valFee || '0'
+    },
+    extra: (row) => {
+      return buildExtra({
+        parentCategory: row.get('parentCategory'),
+        category: row.get('category'),
+        balance: row.get('balance') || '0',
+      })
     },
   },
 })

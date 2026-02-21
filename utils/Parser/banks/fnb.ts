@@ -1,11 +1,12 @@
-import { Currency, ParserId } from '@/types-enums'
-import { createParser } from '@/utils/Parser'
+import { BankAccountId, Currency, ParserId } from '@/types-enums'
+import { buildExtra, createParser } from '@/utils/Parser'
 
 const bankName = 'FNB'
 const currency = Currency.ZAR
 
 export const fnb__credit_card = createParser({
   id: ParserId.FNB_CREDIT_CARD,
+  bankAccountId: BankAccountId.FNB_CREDIT_CARD,
   bankName,
   accountType: 'Credit Card',
   currency,
@@ -22,8 +23,19 @@ export const fnb__credit_card = createParser({
   dateFormat: 'yyyy/MM/dd',
 
   getters: {
-    date: 'date',
-    description: 'description',
-    value: 'amount',
+    date: (row) => {
+      return row.get('date')
+    },
+    description: (row) => {
+      return row.get('description')
+    },
+    value: (row) => {
+      return row.get('amount')
+    },
+    extra: (row) => {
+      return buildExtra({
+        balance: row.get('balance') || '0',
+      })
+    },
   },
 })

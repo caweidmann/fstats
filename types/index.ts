@@ -1,3 +1,4 @@
+export * from './compound-types'
 export * from './global'
 export * from './lib/papaparse'
 export * from './lib/react-dropzone'
