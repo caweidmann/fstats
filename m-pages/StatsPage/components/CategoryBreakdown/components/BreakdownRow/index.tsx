@@ -30,7 +30,9 @@ const Component = ({ category, parentCategoryTotal, currency }: BreakdownRowProp
   const percentageDisplay = toFixedLocale(percentage.toString(), 1, locale)
   const color = PARENT_CATEGORY_COLORS[category.code]
   const [expanded, setExpanded] = useState(false)
-  const subcategories = Object.values(category.subcategories).sort((a, b) => (Big(a.total).gte(b.total) ? 1 : -1))
+  const subcategories = Object.values(category.subcategories)
+    .sort((a, b) => a.label.localeCompare(b.label))
+    .sort((a, b) => (Big(a.total).gte(b.total) ? 1 : -1))
 
   return (
     <ButtonBase sx={sx.button(expanded)} onClick={() => setExpanded(!expanded)}>

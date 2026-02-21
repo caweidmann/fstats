@@ -3,6 +3,7 @@
 import { ArrowDownward, ArrowUpward, ExpandLess, ExpandMore } from '@mui/icons-material'
 import { Box, Button, Divider, Grid } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
+import Big from 'big.js'
 import { useState } from 'react'
 
 import type { NumberString, ParentCategoryWithTransactions } from '@/types'
@@ -27,7 +28,9 @@ const Component = ({ transactionsGrouped, total, currency }: IncomeBreakdownProp
   const [sortingPref, setSortingPref] = useState<SortingPref>('totalDesc')
   const [showMore, setShowMore] = useState(false)
   // Because we only have one income parent group we show subcategories directly
-  const categories = transactionsGrouped.flatMap((parent) => Object.values(parent.subcategories))
+  const categories = transactionsGrouped
+    .flatMap((parent) => Object.values(parent.subcategories))
+    .sort((a, b) => a.label.localeCompare(b.label))
   const sortedCategories = getSortedCategoriesWithTransactions(categories, sortingPref)
   const categoriesWithTransactions = sortedCategories.filter((category) => category.transactions.length)
   const categoriesToShow = showMore ? sortedCategories : categoriesWithTransactions.slice(0, MAX_CATEGORIES_TO_SHOW)
