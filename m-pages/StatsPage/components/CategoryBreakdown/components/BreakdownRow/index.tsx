@@ -1,13 +1,12 @@
 import { Grid, LinearProgress, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-import type { CategoryWithTransactions, Transaction } from '@/types'
+import type { CategoryWithTransactions, NumberString } from '@/types'
 import { Currency } from '@/types-enums'
 import { CATEGORY_COLORS } from '@/common'
 import { useUserPreferences } from '@/hooks'
 import { getMaxDecimalsForCurrency } from '@/utils/Currency'
 import { toFixedLocale } from '@/utils/Number'
-import { getStats } from '@/utils/Stats'
 import { Big } from '@/lib/w-big'
 
 import { COL_SPACING, COL1, COL2, COL3, COL4 } from '../../actions'
@@ -15,17 +14,16 @@ import { ui } from './styled'
 
 type BreakdownRowProps = {
   category: CategoryWithTransactions
+  parentCategoryTotal: NumberString
   currency: Currency
-  transactions: Transaction[]
 }
 
-const Component = ({ category, currency, transactions }: BreakdownRowProps) => {
+const Component = ({ category, parentCategoryTotal, currency }: BreakdownRowProps) => {
   const theme = useTheme()
   const sx = ui(theme)
   const { locale } = useUserPreferences()
-  const { totalExpense } = getStats(transactions)
   const total = Big(category.total).abs()
-  const percentage = total.div(total.eq(0) ? 1 : totalExpense).times(100)
+  const percentage = total.div(total.eq(0) ? 1 : parentCategoryTotal).times(100)
   const totalDisplay = toFixedLocale(total.toString(), getMaxDecimalsForCurrency(currency), locale)
   const percentageDisplay = toFixedLocale(percentage.toString(), 1, locale)
   const color = CATEGORY_COLORS[category.code]

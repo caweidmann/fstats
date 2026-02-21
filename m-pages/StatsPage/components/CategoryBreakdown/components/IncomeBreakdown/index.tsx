@@ -7,9 +7,11 @@ import { useState } from 'react'
 
 import type { Transaction } from '@/types'
 import { Currency } from '@/types-enums'
+import { INCOME_CATEGORIES } from '@/common'
 import { getCurrencySymbol } from '@/utils/Currency'
+import { getStats } from '@/utils/Stats'
 
-import { COL_SPACING, COL1, COL2, COL3, getSortedCategories, SortingPref } from '../../actions'
+import { COL_SPACING, COL1, COL2, COL3, getSortedCategoriesWithTransactions, SortingPref } from '../../actions'
 import { ui } from '../../styled'
 import BreakdownRow from '../BreakdownRow'
 
@@ -23,9 +25,12 @@ const Component = ({ transactions, currency }: IncomeBreakdownProps) => {
   const sx = ui(theme)
   const [sortingPref, setSortingPref] = useState<SortingPref>('totalAsc')
   const [showMore, setShowMore] = useState(false)
-  const categories = getSortedCategories(transactions, sortingPref).filter((category) =>
-    showMore ? true : category.transactions.length,
-  )
+  const categories = getSortedCategoriesWithTransactions(
+    transactions,
+    Object.keys(INCOME_CATEGORIES),
+    sortingPref,
+  ).filter((category) => (showMore ? true : category.transactions.length))
+  const { totalIncome } = getStats(transactions)
 
   return (
     <>
@@ -59,7 +64,9 @@ const Component = ({ transactions, currency }: IncomeBreakdownProps) => {
       <Divider sx={{ mt: 0.5, mb: 1.5 }} />
 
       {categories.map((category) => {
-        return <BreakdownRow key={category.code} category={category} currency={currency} transactions={transactions} />
+        return (
+          <BreakdownRow key={category.code} category={category} parentCategoryTotal={totalIncome} currency={currency} />
+        )
       })}
 
       <Button

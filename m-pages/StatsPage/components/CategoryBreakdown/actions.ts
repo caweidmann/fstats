@@ -58,9 +58,13 @@ export const getTransactionsByCategory = (
   return categories
 }
 
-export const getSortedCategories = (transactions: Transaction[], sortingPref: SortingPref) => {
+export const getSortedCategoriesWithTransactions = (
+  transactions: Transaction[],
+  categoriesToInclude: CategoryCode[],
+  sortingPref: SortingPref,
+): CategoryWithTransactions[] => {
   return Object.values(getTransactionsByCategory(transactions))
-    .filter((category) => category.code !== 'INC')
+    .filter((category) => categoriesToInclude.includes(category.code))
     .sort((a, b) => {
       if (sortingPref === 'asc') {
         return a.label.localeCompare(b.label)
