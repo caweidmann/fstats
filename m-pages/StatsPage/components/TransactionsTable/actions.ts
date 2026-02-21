@@ -1,7 +1,7 @@
-import type { CategoryCode, GradientColorsLightDark, SubcategoryCode } from '@/types'
+import type { CategoryCode, GradientColorsLightDark } from '@/types'
 import { ALL_CATEGORIES, PARENT_CATEGORY_COLORS } from '@/common'
 
-export const getSubcategoryLabel = (code: SubcategoryCode | null): string => {
+export const getSubcategoryLabel = (code: CategoryCode | null): string => {
   if (!code) {
     return 'Uncategorised'
   }
@@ -17,7 +17,7 @@ export const getSubcategoryLabel = (code: SubcategoryCode | null): string => {
   return subcategory?.label ?? code
 }
 
-export const getCategoryColor = (code: SubcategoryCode | null): GradientColorsLightDark | undefined => {
+export const getCategoryColor = (code: CategoryCode | null): GradientColorsLightDark | undefined => {
   if (!code) {
     return
   }
