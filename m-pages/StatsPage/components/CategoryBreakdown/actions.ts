@@ -20,10 +20,10 @@ export const getTransactionsGroupedByCategory = (transactions: Transaction[]): P
   const categories: Record<ParentCategoryCode, ParentCategoryWithTransactions> = {}
 
   Object.values(ALL_CATEGORIES).forEach((category) => {
-    const icategories: Record<CategoryCode, CategoryWithTransactions> = {}
-    Object.values(category.subcategories).forEach((icategory) => {
-      icategories[icategory.code] = {
-        ...icategory,
+    const subcategories: Record<CategoryCode, CategoryWithTransactions> = {}
+    Object.values(category.subcategories).forEach((subcategory) => {
+      subcategories[subcategory.code] = {
+        ...subcategory,
         transactions: [],
         total: '0',
       }
@@ -31,7 +31,7 @@ export const getTransactionsGroupedByCategory = (transactions: Transaction[]): P
 
     categories[category.code] = {
       ...category,
-      subcategories: icategories,
+      subcategories,
       transactions: [],
       total: '0',
     }
@@ -56,10 +56,7 @@ export const getTransactionsGroupedByCategory = (transactions: Transaction[]): P
   return Object.values(categories)
 }
 
-export const sortTransactions = (
-  transactions: ParentCategoryWithTransactions[] | CategoryWithTransactions[],
-  sortingPref: SortingPref,
-) => {
+export const sortTransactions = (transactions: ParentCategoryWithTransactions[], sortingPref: SortingPref) => {
   return transactions.sort((a, b) => {
     if (sortingPref === 'asc') {
       return a.label.localeCompare(b.label)
@@ -78,10 +75,10 @@ export const sortTransactions = (
 }
 
 export const getSortedCategoriesWithTransactions = (
-  transactions: ParentCategoryWithTransactions[] | CategoryWithTransactions[],
+  transactions: ParentCategoryWithTransactions[],
   categoriesToInclude: CategoryCode[],
   sortingPref: SortingPref,
-): CategoryWithTransactions[] => {
+): ParentCategoryWithTransactions[] => {
   return sortTransactions(
     transactions.filter((category) => categoriesToInclude.includes(category.code)),
     sortingPref,

@@ -6,28 +6,15 @@ import { ColorMode } from '@/types-enums'
 
 export const ui = (theme: Theme) => {
   return {
-    button: (expanded: boolean) => ({
-      py: 0.5,
-      px: 1,
-      mt: 1,
-      borderRadius: expanded ? 2 : 1.5,
-      width: '100%',
-      display: 'block',
-      textAlign: 'initial',
-      '&:hover': {
-        backgroundColor: theme.vars.palette.action.hover,
-      },
-    }),
-
     text: (disabled: boolean) => ({
       mb: 0,
-      fontSize: 15,
+      fontSize: 13,
       opacity: disabled ? 1 : 0.5,
     }),
 
     progress: (disabled: boolean, color: GradientColorsLightDark) => ({
       opacity: disabled ? 1 : 0.3,
-      height: 10,
+      height: 6,
       borderRadius: 100,
       [`&.${linearProgressClasses.colorPrimary}`]: {
         background: theme.vars.palette.grey[200],

@@ -69,13 +69,7 @@ const Component = ({ transactionsGrouped, total, currency }: IncomeBreakdownProp
         return <BreakdownRow key={category.code} category={category} parentCategoryTotal={total} currency={currency} />
       })}
 
-      <Button
-        variant="outlined"
-        size="small"
-        color="secondary"
-        sx={{ mt: 2 }}
-        onClick={() => setShowMore((prev) => !prev)}
-      >
+      <Button variant="outlined" size="small" color="secondary" sx={{ mt: 2 }} onClick={() => setShowMore(!showMore)}>
         {showMore ? 'Show less' : 'Show more'}{' '}
         {showMore ? (
           <ExpandLess color="secondary" fontSize="small" />
