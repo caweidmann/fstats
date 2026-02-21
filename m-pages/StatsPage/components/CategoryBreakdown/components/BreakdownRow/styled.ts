@@ -1,8 +1,8 @@
 import { linearProgressClasses } from '@mui/material/LinearProgress'
 import type { Theme } from '@mui/material/styles'
 
+import { GradientColorsLightDark } from '@/types'
 import { ColorMode } from '@/types-enums'
-import type { CategoryColorConfig } from '@/utils/Category'
 
 export const ui = (theme: Theme) => {
   return {
@@ -12,7 +12,7 @@ export const ui = (theme: Theme) => {
       opacity: disabled ? 1 : 0.5,
     }),
 
-    progress: (disabled: boolean, color: CategoryColorConfig) => ({
+    progress: (disabled: boolean, color: GradientColorsLightDark) => ({
       opacity: disabled ? 1 : 0.3,
       position: 'relative',
       top: '8px',
@@ -26,9 +26,9 @@ export const ui = (theme: Theme) => {
       },
       [`& .${linearProgressClasses.bar}`]: {
         borderRadius: 100,
-        background: `linear-gradient(90deg, ${color.light[0]} 0%, ${color.light[1]} 100%)`,
+        background: `linear-gradient(90deg, ${color.light.start} 0%, ${color.light.end} 100%)`,
         [theme.getColorSchemeSelector(ColorMode.DARK)]: {
-          background: `linear-gradient(90deg, ${color.dark[0]} 0%, ${color.dark[1]} 100%)`,
+          background: `linear-gradient(90deg, ${color.dark.start} 0%, ${color.dark.end} 100%)`,
         },
       },
     }),

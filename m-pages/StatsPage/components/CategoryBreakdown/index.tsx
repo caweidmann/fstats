@@ -37,7 +37,7 @@ const Component = ({ transactions, currency }: CategoryBreakdownProps) => {
         <Grid size={{ xs: COL1[0], sm: COL1[1] }}>
           <Box sx={sx.tableHeader} onClick={() => setSortingPref(sortingPref === 'asc' ? 'desc' : 'asc')}>
             <Box sx={sx.tableHeaderContent}>
-              Category
+              Expenses
               {sortingPref === 'asc' ? <ArrowUpward sx={{ fontSize: 13 }} /> : null}
               {sortingPref === 'desc' ? <ArrowDownward sx={{ fontSize: 13 }} /> : null}
             </Box>
