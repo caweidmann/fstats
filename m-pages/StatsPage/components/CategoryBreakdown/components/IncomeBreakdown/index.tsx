@@ -11,7 +11,7 @@ import { getCurrencySymbol } from '@/utils/Currency'
 
 import { COL_SPACING, COL1, COL2, COL3, getSortedCategoriesWithTransactions, SortingPref } from '../../actions'
 import { ui } from '../../styled'
-import BreakdownRow from '../BreakdownRow'
+import ChildBreakdownRow from '../ChildBreakdownRow'
 
 type IncomeBreakdownProps = {
   transactionsGrouped: ParentCategoryWithTransactions[]
@@ -24,15 +24,13 @@ const MAX_CATEGORIES_TO_SHOW = 3
 const Component = ({ transactionsGrouped, total, currency }: IncomeBreakdownProps) => {
   const theme = useTheme()
   const sx = ui(theme)
-  const [sortingPref, setSortingPref] = useState<SortingPref>('totalAsc')
+  const [sortingPref, setSortingPref] = useState<SortingPref>('totalDesc')
   const [showMore, setShowMore] = useState(false)
-  const categoriesWithTransactions = transactionsGrouped.filter((category) => category.transactions.length)
-  const categoriesToShow = showMore ? transactionsGrouped : categoriesWithTransactions.slice(0, MAX_CATEGORIES_TO_SHOW)
-  const sortedCategories = getSortedCategoriesWithTransactions(
-    categoriesToShow,
-    transactionsGrouped.map((category) => category.code),
-    sortingPref,
-  )
+  // Because we only have one income parent group we show subcategories directly
+  const categories = transactionsGrouped.flatMap((parent) => Object.values(parent.subcategories))
+  const sortedCategories = getSortedCategoriesWithTransactions(categories, sortingPref)
+  const categoriesWithTransactions = sortedCategories.filter((category) => category.transactions.length)
+  const categoriesToShow = showMore ? sortedCategories : categoriesWithTransactions.slice(0, MAX_CATEGORIES_TO_SHOW)
 
   return (
     <>
@@ -65,8 +63,10 @@ const Component = ({ transactionsGrouped, total, currency }: IncomeBreakdownProp
 
       <Divider sx={{ mt: 0.5, mb: 1.5 }} />
 
-      {sortedCategories.map((category) => {
-        return <BreakdownRow key={category.code} category={category} parentCategoryTotal={total} currency={currency} />
+      {categoriesToShow.map((category) => {
+        return (
+          <ChildBreakdownRow key={category.code} category={category} parentCategoryTotal={total} currency={currency} />
+        )
       })}
 
       <Button variant="outlined" size="small" color="secondary" sx={{ mt: 2 }} onClick={() => setShowMore(!showMore)}>
