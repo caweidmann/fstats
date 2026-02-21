@@ -1,34 +1,59 @@
-import { isEqual, uniqWith } from 'lodash'
+import { uniqBy } from 'lodash'
 
-import type { BankSelectOption, StatsFile } from '@/types'
-import { getParserCurrency, getParserName, ParserId } from '@/parsers'
+import type { BankSelectOption, SelectOptionBankAccountId, StatsFile, Transaction } from '@/types'
+import { DEMO_TRANSACTIONS, MISC } from '@/common'
+import { AVAILABLE_PARSERS, getBankAccountId, getBankAccountName } from '@/utils/Parser'
+
+export const getAllTransactions = (isDemoMode: boolean, selectedId: SelectOptionBankAccountId, files: StatsFile[]) => {
+  if (isDemoMode) {
+    return DEMO_TRANSACTIONS
+  }
+
+  const filesForSelectedId =
+    selectedId === 'all'
+      ? files
+      : files.filter((file) => file.parserId && getBankAccountId(file.parserId) === selectedId)
+
+  return filesForSelectedId.flatMap((file) => file.transactions)
+}
+
+export const getCurrencyForSelection = (selectedId: SelectOptionBankAccountId, transactions: Transaction[]) => {
+  if (!selectedId || selectedId === 'all') {
+    return transactions.length ? transactions[0].currency : MISC.DEFAULT_CURRENCY
+  }
+
+  const parser = Object.values(AVAILABLE_PARSERS).find((parser) => parser.bankAccountId === selectedId)
+
+  return parser?.currency ?? MISC.DEFAULT_CURRENCY
+}
 
 export const getBankSelectOptions = (selectedFiles: StatsFile[]): BankSelectOption[] => {
-  const banks = selectedFiles
-    .filter((file) => file.parserId !== null)
-    .map((file) => ({
-      parserId: file.parserId,
-      currency: file.parserId ? getParserCurrency(file.parserId) : null,
-    }))
-  const uniqueBanks = uniqWith(banks, isEqual)
-  const bankIds = uniqueBanks.map((bank) => bank.parserId) as ParserId[]
-  const options: BankSelectOption[] = [
-    ...bankIds.map((id) => ({
-      label: getParserName(id).alt,
-      value: id,
-    })),
-  ]
+  const banks = selectedFiles.map((file) => {
+    const parser = AVAILABLE_PARSERS[file.parserId!]
+    return {
+      bankAccountId: parser.bankAccountId,
+      label: getBankAccountName(file.parserId).alt,
+      currency: parser.currency,
+    }
+  })
+
+  const uniqueBanks = uniqBy(banks, 'bankAccountId')
+
+  const options: BankSelectOption[] = uniqueBanks.map((bank) => ({
+    value: bank.bankAccountId,
+    label: bank.label,
+  }))
 
   options.sort((a, b) => a.value.localeCompare(b.value))
 
   // Only add "All / Combined" when uniqueBanks have exactly the same currency
   // TODO: Once we have currency conversion logic "All" should always be available
   if (uniqueBanks.length > 1) {
-    const allSameCurrency = uniqueBanks.every((bank) => bank.currency === uniqueBanks[0].currency)
-    if (allSameCurrency) {
+    const sameCurrency = uniqueBanks.every((bank) => bank.currency === uniqueBanks[0].currency)
+    if (sameCurrency) {
       options.unshift({
-        label: 'All accounts',
         value: 'all',
+        label: 'All accounts',
       })
     }
   }

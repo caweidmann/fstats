@@ -1,4 +1,7 @@
+export * from './categories'
+export * from './category_colors'
 export * from './config'
+export * from './demo_transactions'
 export * from './layout'
 export * from './misc'
 export * from './routes'

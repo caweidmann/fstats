@@ -110,4 +110,9 @@ export type GradientColors = {
   end: string
 }
 
+export type GradientColorsLightDark = {
+  light: GradientColors
+  dark: GradientColors
+}
+
 // -------------------------------------------------------

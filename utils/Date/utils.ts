@@ -1,4 +1,4 @@
-import { isAfter, isBefore, isSameDay, parse, parseISO } from 'date-fns'
+import { format, isAfter, isBefore, isSameDay, isValid, parse, parseISO, startOfDay } from 'date-fns'
 import { de, enGB } from 'date-fns/locale'
 
 import type { DateFnsLocale, DateRange, DateTimeString, SelectOptionWithType, SystemDateString } from '@/types'
@@ -7,7 +7,64 @@ import { MISC } from '@/common'
 import { i18n } from '@/lib/i18n'
 
 import { logger } from '../Logger'
-import { toDisplayDate } from './formatters'
+import { attachUniqueSecondsToDates, getDateFormatPrecision } from './helper'
+
+/**
+ * Converts a date string or date object to "dd/MM/yyyy" or `options.formatTo` format
+ *
+ * @param date - Date string or date object to convert
+ * @param options - Optional options
+ * @param options_formatFrom - The format to convert from when supplying a date string - defaults to ISO date format
+ * @param options_formatTo - The format to return
+ *
+ * @returns Date string in `displayDate` format or `formatTo` format.
+ */
+export const toDisplayDate = (
+  date: Date | string,
+  locale: UserLocale,
+  options: {
+    formatTo: string
+    formatFrom?: string
+  },
+): string => {
+  if (!date) {
+    throw new Error('Must be Date or string')
+  }
+  const dateObject =
+    date instanceof Date ? date : options?.formatFrom ? parse(date, options.formatFrom, new Date()) : parseISO(date)
+
+  if (isValid(dateObject)) {
+    return format(dateObject, options.formatTo, { locale: getDateFnsLocale(locale) })
+  }
+
+  throw new Error('Invalid date')
+}
+
+/**
+ * Converts a date string to a JS Date object
+ *
+ * @param date - Date string or date object to convert
+ * @param options - Optional options
+ * @param options_formatFrom - The format to convert from when supplying a date string - defaults to ISO date format
+ *
+ * @returns Date string in `displayDate` format or `formatTo` format.
+ */
+export const toDate = (date: string, options?: { formatFrom?: string }): Date => {
+  let dateObject
+
+  try {
+    dateObject = options?.formatFrom ? parse(date, options.formatFrom, new Date()) : parseISO(date)
+  } catch (err) {
+    console.error('Invalid date:', err)
+    throw new Error('Invalid date')
+  }
+
+  if (isValid(dateObject)) {
+    return dateObject
+  }
+
+  throw new Error('Invalid date')
+}
 
 export const getWeekStartsOnValue = (weekStartsOn: WeekStartsOn): WeekStartsOnValue => {
   switch (weekStartsOn) {
@@ -90,4 +147,39 @@ export const getDateFnsLocale = (locale: UserLocale): DateFnsLocale => {
     default:
       throw new Error(`Unsupported locale: ${locale}`)
   }
+}
+
+/**
+ * This method will take an array of dates and ensure that none of them have exactly the same timestamp.
+ */
+export const getUniqueTimestamps = ({
+  dates,
+  dateFormat,
+  sortOrder,
+}: {
+  dates: Date[]
+  dateFormat: string
+  sortOrder: SortOrder
+}): Date[] => {
+  const { hasTime, hasSeconds } = getDateFormatPrecision(dateFormat)
+
+  if (hasTime && hasSeconds) {
+    return dates
+  }
+
+  if (!hasTime) {
+    return attachUniqueSecondsToDates({
+      dates,
+      sortOrder,
+      getGroupKey: (date) => startOfDay(date).getTime(),
+      getBaseTimestamp: (date) => startOfDay(date).getTime(),
+    })
+  }
+
+  return attachUniqueSecondsToDates({
+    dates,
+    sortOrder,
+    getGroupKey: (date) => date.getTime(),
+    getBaseTimestamp: (date) => date.getTime(),
+  })
 }

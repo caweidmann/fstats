@@ -92,8 +92,9 @@ const defaultTheme = {
       styleOverrides: {
         root: ({ theme }: { theme: Theme }) =>
           theme.unstable_sx({
-            p: 2,
+            p: 3,
             border: `1px solid ${theme.vars.palette.divider}`,
+            borderRadius: 2,
           }),
       },
     },

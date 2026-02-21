@@ -5,9 +5,8 @@ import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import type { FileRejection, FileWithPath } from 'react-dropzone'
 
-import type { StatsFile } from '@/types'
+import type { RDZFileRejection, RDZFileWithPath, StatsFile } from '@/types'
 import { StatsFileStatus } from '@/types-enums'
 import { MISC } from '@/common'
 import {
@@ -33,7 +32,7 @@ const Component = () => {
   const { locale, dateFormat } = useUserPreferences()
 
   const onDrop = useCallback(
-    async (acceptedFiles: FileWithPath[], fileRejections: FileRejection[]) => {
+    async (acceptedFiles: RDZFileWithPath[], fileRejections: RDZFileRejection[]) => {
       const newFiles: StatsFile[] = []
 
       acceptedFiles.forEach((file) => {
@@ -67,6 +66,7 @@ const Component = () => {
     onDrop,
     accept: {
       'text/csv': ['.csv'],
+      // 'application/pdf': ['.pdf'], // TODO: Support in future, perhaps use https://github.com/mehmet-kozan/pdf-parse
     },
     maxSize: MISC.MAX_UPLOAD_FILE_SIZE,
     multiple: true,

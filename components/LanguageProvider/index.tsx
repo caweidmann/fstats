@@ -17,6 +17,7 @@ const Component = ({ children }: LanguageProviderProps) => {
       initTranslations()
       setIsInitialized(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (!isInitialized) {

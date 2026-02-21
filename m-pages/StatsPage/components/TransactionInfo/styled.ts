@@ -6,15 +6,4 @@ export const ui = () => ({
     height: '100%',
     flexWrap: 'wrap',
   },
-
-  label: {
-    color: 'text.secondary',
-    fontSize: 15,
-    mb: 0,
-  },
-
-  duplicates: {
-    color: 'info.main',
-    fontSize: 15,
-  },
 })

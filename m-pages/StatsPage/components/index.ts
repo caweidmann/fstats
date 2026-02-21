@@ -1,4 +1,5 @@
 export { default as BankSelector } from './BankSelector'
+export { default as CategoryBreakdown } from './CategoryBreakdown'
 export { default as DemoBanner } from './DemoBanner'
 export { default as ProfitLossSummary } from './ProfitLossSummary'
 export { default as TransactionChart } from './TransactionChart'

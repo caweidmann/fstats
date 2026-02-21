@@ -6,12 +6,42 @@ import { zDateTimeString, zNumberString } from '../global'
 import type { _KeysCheck } from '../key-check'
 import { _zKeysCheck } from '../key-check'
 
+export const zParentCategoryCode = z.string().regex(/^[A-Z]{3}$/)
+export const zCategoryCode = z.string().regex(/^[A-Z]{3}_\d{2}$/)
+
+export type ParentCategoryCode = z.infer<typeof zParentCategoryCode>
+export type CategoryCode = z.infer<typeof zCategoryCode>
+
+export const zCategory = z.object({
+  code: zCategoryCode,
+  label: z.string(),
+})
+
+export type Category = z.infer<typeof zCategory>
+
+export const zParentCategory = z.object({
+  code: zParentCategoryCode,
+  label: z.string(),
+  subcategories: z.record(zCategoryCode, zCategory),
+})
+
+export type ParentCategory = z.infer<typeof zParentCategory>
+
 export const zTransaction = z.object({
   date: zDateTimeString,
   description: z.string(),
   value: zNumberString,
   currency: zCurrency,
-  category: z.string(), // FIXME: type to porper cats
+  category: zCategoryCode.nullable(),
+  extra: z
+    .object({
+      parentCategory: z.string().optional(), // Capitec (parentCategory)
+      category: z.string().optional(), // Capitec (category)
+      balance: zNumberString.optional(), // Capitec (balance), FNB (balance), ING (saldo), Lloyds (balance)
+      reference: z.string().optional(), // Comdirect Visa (referenz), ING (verwendungszweck)
+      transactionType: z.string().optional(), // Comdirect Giro & Visa (vorgang), ING (buchungstext)
+    })
+    .nullable(),
 })
 
 export type Transaction = z.infer<typeof zTransaction>

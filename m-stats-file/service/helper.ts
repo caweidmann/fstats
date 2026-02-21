@@ -6,7 +6,7 @@ export const getStatsFileDefaults = (file: RDZFileWithPath): StatsFile => ({
   created: '',
   modified: '',
   id: '',
-  hash: '',
+  // hash: '',
   file,
   status: StatsFileStatus.PARSING,
   parserId: null,
@@ -15,9 +15,9 @@ export const getStatsFileDefaults = (file: RDZFileWithPath): StatsFile => ({
 })
 
 export const isError = (file: StatsFile) => {
-  return file.status === StatsFileStatus.ERROR
+  return file.status === StatsFileStatus.ERROR && (!file.parseResult || (file.parseResult && !file.parseResult.success))
 }
 
 export const isUnknown = (file: StatsFile) => {
-  return file.status !== StatsFileStatus.ERROR && !file.parserId
+  return !!(file.status === StatsFileStatus.ERROR && file.parseResult && file.parseResult.success && !file.parserId)
 }
