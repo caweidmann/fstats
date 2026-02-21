@@ -1,5 +1,5 @@
 import type { CategoryCode, GradientColorsLightDark, SubcategoryCode } from '@/types'
-import { ALL_CATEGORIES, CATEGORY_COLORS } from '@/utils/Category'
+import { ALL_CATEGORIES, CATEGORY_COLORS } from '@/common'
 
 export const getSubcategoryLabel = (code: SubcategoryCode | null): string => {
   if (!code) {

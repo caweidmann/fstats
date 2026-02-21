@@ -5,7 +5,7 @@ import type {
   SubcategoryWithTransactions,
   Transaction,
 } from '@/types'
-import { getCategories } from '@/utils/Category'
+import { ALL_CATEGORIES } from '@/common'
 import { Big } from '@/lib/w-big'
 
 export type SortingPref = 'asc' | 'desc' | 'totalAsc' | 'totalDesc'
@@ -21,7 +21,7 @@ export const getTransactionsByCategory = (
 ): Record<CategoryCode, CategoryWithTransactions> => {
   const categories: Record<CategoryCode, CategoryWithTransactions> = {}
 
-  getCategories().forEach((category) => {
+  Object.values(ALL_CATEGORIES).forEach((category) => {
     const subcategories: Record<SubcategoryCode, SubcategoryWithTransactions> = {}
     Object.values(category.subcategories).forEach((subcategory) => {
       subcategories[subcategory.code] = {
