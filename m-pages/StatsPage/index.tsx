@@ -8,6 +8,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import type { StatsPageForm } from '@/types'
 import { PageWrapper } from '@/components'
 import { useFileHelper } from '@/hooks'
+import { isFeatureEnabled } from '@/utils/Features'
 
 import { getAllTransactions, getBankSelectOptions, getCurrencyForSelection } from './actions'
 import {
@@ -21,6 +22,7 @@ import {
 } from './components'
 
 const Component = () => {
+  const isWip = isFeatureEnabled('wip')
   const { selectedFiles } = useFileHelper()
   const searchParams = useSearchParams()
   const isDemoMode = searchParams.get('demo') === 'true'
@@ -75,9 +77,11 @@ const Component = () => {
             <TransactionChart transactions={transactions} currency={currency} />
           </Grid>
 
-          <Grid size={12}>
-            <CategoryBreakdown transactions={transactions} currency={currency} />
-          </Grid>
+          {isDemoMode || (!isDemoMode && isWip) ? (
+            <Grid size={12}>
+              <CategoryBreakdown transactions={transactions} currency={currency} />
+            </Grid>
+          ) : null}
 
           <Grid size={12}>
             <TransactionsTable transactions={transactions} currency={currency} />
