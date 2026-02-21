@@ -16,7 +16,7 @@ import { useState } from 'react'
 import { StatsFileStatus } from '@/types-enums'
 import { useMutateRemoveAllFiles, useMutateRemoveFiles } from '@/m-stats-file/service'
 import { useFileHelper, useIsDarkMode, useIsMobile } from '@/hooks'
-import { getParserName } from '@/utils/Parser'
+import { getBankAccountName } from '@/utils/Parser'
 
 import DetailsRow from '../DetailsRow'
 import { ui } from './styled'
@@ -35,9 +35,7 @@ const Component = () => {
     new Set(selectedFiles.filter((file) => file.status === StatsFileStatus.PARSED).map((file) => file.parserId)),
   )
   const typesFound = Array.from(
-    new Set(
-      parserIds.map((parserId) => getParserName(parserId).short).sort((a: string, b: string) => a.localeCompare(b)),
-    ),
+    new Set(parserIds.map((parserId) => getBankAccountName(parserId).short).sort((a, b) => a.localeCompare(b))),
   ).join(', ')
   const isParsing = files.some((file) => file.status === StatsFileStatus.PARSING)
 

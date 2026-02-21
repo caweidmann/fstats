@@ -1,4 +1,4 @@
-import { Currency, ParserId } from '@/types-enums'
+import { BankAccountId, Currency, ParserId } from '@/types-enums'
 import { parseGermanNumber } from '@/utils/Number'
 import { buildExtra, createParser } from '@/utils/Parser'
 
@@ -7,6 +7,7 @@ const currency = Currency.EUR
 
 export const comdirect__giro = createParser({
   id: ParserId.COMDIRECT_GIRO,
+  bankAccountId: BankAccountId.COMDIRECT_GIRO,
   bankName,
   accountType: 'Giro',
   currency,
@@ -44,6 +45,7 @@ export const comdirect__giro = createParser({
 
 export const comdirect__visa = createParser({
   id: ParserId.COMDIRECT_VISA,
+  bankAccountId: BankAccountId.COMDIRECT_VISA,
   bankName,
   accountType: 'Visa',
   currency,

@@ -1,6 +1,6 @@
 import type { Locale } from 'date-fns'
 
-import { Currency } from '@/types-enums'
+import { BankAccountId, Currency } from '@/types-enums'
 
 import type { NumberString, SelectOptionWithType } from './global'
 
@@ -13,10 +13,12 @@ export type Size = {
   height?: number
 }
 
-export type BankSelectOption = SelectOptionWithType<string>
+export type SelectOptionBankAccountId = BankAccountId | 'all' | ''
+
+export type BankSelectOption = SelectOptionWithType<SelectOptionBankAccountId>
 
 export type StatsPageForm = {
-  selectedId: BankSelectOption['value'] | ''
+  selectedId: BankSelectOption['value']
 }
 
 /**

@@ -6,7 +6,7 @@ import { useTheme } from '@mui/material/styles'
 
 import type { StatsFile } from '@/types'
 import { isError, isUnknown } from '@/m-stats-file/service'
-import { getParserName } from '@/utils/Parser'
+import { getBankAccountName } from '@/utils/Parser'
 
 import { ui } from './styled'
 
@@ -37,7 +37,7 @@ const Component = ({ file }: BankChipProps) => {
       {isUnknownFile ? <HelpOutlineOutlined color="warning" sx={{ fontSize: 14 }} /> : null}
 
       <Typography variant="caption" sx={{ ...sx.label, color: isUnknownFile ? 'warning.main' : 'text.secondary' }}>
-        {getParserName(file.parserId).long}
+        {getBankAccountName(file.parserId).long}
       </Typography>
     </Box>
   )

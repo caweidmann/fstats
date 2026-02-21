@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material/styles'
 import type { CategoryWithTransactions, Transaction } from '@/types'
 import { Currency } from '@/types-enums'
 import { useUserPreferences } from '@/hooks'
+import { CATEGORY_COLORS } from '@/utils/Category'
 import { getMaxDecimalsForCurrency } from '@/utils/Currency'
 import { toFixedLocale } from '@/utils/Number'
 import { getStats } from '@/utils/Stats'
@@ -27,6 +28,7 @@ const Component = ({ category, currency, transactions }: BreakdownRowProps) => {
   const percentage = total.div(total.eq(0) ? 1 : totalExpense).times(100)
   const totalDisplay = toFixedLocale(total.toString(), getMaxDecimalsForCurrency(currency), locale)
   const percentageDisplay = toFixedLocale(percentage.toString(), 1, locale)
+  const color = CATEGORY_COLORS[category.code]
 
   return (
     <Grid container spacing={COL_SPACING} sx={{ mt: 1 }}>
@@ -46,7 +48,7 @@ const Component = ({ category, currency, transactions }: BreakdownRowProps) => {
         </Typography>
       </Grid>
       <Grid size={{ xs: COL4[0], sm: COL4[1] }}>
-        <LinearProgress variant="determinate" value={percentage.toNumber()} sx={sx.progress(total.gt(0))} />
+        <LinearProgress variant="determinate" value={percentage.toNumber()} sx={sx.progress(total.gt(0), color)} />
       </Grid>
     </Grid>
   )

@@ -1,3 +1,22 @@
+import {
+  amber,
+  blue,
+  blueGrey,
+  brown,
+  cyan,
+  deepPurple,
+  green,
+  grey,
+  indigo,
+  lightBlue,
+  lightGreen,
+  orange,
+  pink,
+  purple,
+  red,
+  teal,
+} from '@mui/material/colors'
+
 import type { Category, CategoryCode } from '@/types'
 
 export const ALL_CATEGORIES: Record<CategoryCode, Category> = {
@@ -14,7 +33,7 @@ export const ALL_CATEGORIES: Record<CategoryCode, Category> = {
       INC_07: { code: 'INC_07', label: 'Pension & Retirement' },
       INC_08: { code: 'INC_08', label: 'Tax Refund' },
       INC_09: { code: 'INC_09', label: 'Gifts & Informal Transfers' },
-      INC_10: { code: 'INC_10', label: 'Business Revenue' },
+      INC_10: { code: 'INC_10', label: 'Business Revenue' }, // Revenue
       INC_11: { code: 'INC_11', label: 'Side Income & Resale' },
       INC_12: { code: 'INC_12', label: 'Other Income' },
     },
@@ -23,7 +42,7 @@ export const ALL_CATEGORIES: Record<CategoryCode, Category> = {
     code: 'HOU',
     label: 'Housing & Utilities',
     subcategories: {
-      HOU_01: { code: 'HOU_01', label: 'Rent' },
+      HOU_01: { code: 'HOU_01', label: 'Rent' }, // Office & Rent
       HOU_02: { code: 'HOU_02', label: 'Mortgage' },
       HOU_03: { code: 'HOU_03', label: 'Property Rates & Municipal Fees' },
       HOU_04: { code: 'HOU_04', label: 'Electricity' },
@@ -181,6 +200,7 @@ export const ALL_CATEGORIES: Record<CategoryCode, Category> = {
       COM_03: { code: 'COM_03', label: 'Cloud Storage & Hosting' },
       COM_04: { code: 'COM_04', label: 'Postal & Courier' },
       COM_05: { code: 'COM_05', label: 'Memberships & Clubs' },
+      COM_06: { code: 'COM_06', label: 'Marketing & Advertising' },
     },
   },
   FIN: {
@@ -252,5 +272,77 @@ export const ALL_CATEGORIES: Record<CategoryCode, Category> = {
       TFR_04: { code: 'TFR_04', label: 'Refund & Chargeback' },
       TFR_05: { code: 'TFR_05', label: 'Uncategorised' },
     },
+  },
+}
+
+export type CategoryColorConfig = {
+  light: [string, string]
+  dark: [string, string]
+}
+
+export const CATEGORY_COLORS: Record<CategoryCode, CategoryColorConfig> = {
+  INC: {
+    light: [green[700], green[300]],
+    dark: [green[900], green[400]],
+  },
+  HOU: {
+    light: [blue[700], blue[300]],
+    dark: [blue[900], blue[400]],
+  },
+  GRO: {
+    light: [lightGreen[700], lightGreen[300]],
+    dark: [lightGreen[900], lightGreen[400]],
+  },
+  EAT: {
+    light: [orange[700], orange[300]],
+    dark: [orange[900], orange[400]],
+  },
+  TRN: {
+    light: [indigo[700], indigo[300]],
+    dark: [indigo[900], indigo[400]],
+  },
+  TRV: {
+    light: [cyan[700], cyan[300]],
+    dark: [cyan[900], cyan[400]],
+  },
+  SHP: {
+    light: [pink[700], pink[300]],
+    dark: [pink[900], pink[400]],
+  },
+  HLT: {
+    light: [red[700], red[300]],
+    dark: [red[900], red[400]],
+  },
+  EDU: {
+    light: [deepPurple[700], deepPurple[300]],
+    dark: [deepPurple[900], deepPurple[400]],
+  },
+  ENT: {
+    light: [purple[700], purple[300]],
+    dark: [purple[900], purple[400]],
+  },
+  COM: {
+    light: [lightBlue[700], lightBlue[300]],
+    dark: [lightBlue[900], lightBlue[400]],
+  },
+  FIN: {
+    light: [blueGrey[700], blueGrey[300]],
+    dark: [blueGrey[900], blueGrey[400]],
+  },
+  FAM: {
+    light: [amber[700], amber[300]],
+    dark: [amber[900], amber[400]],
+  },
+  GOV: {
+    light: [brown[700], brown[300]],
+    dark: [brown[900], brown[400]],
+  },
+  SOC: {
+    light: [teal[700], teal[300]],
+    dark: [teal[900], teal[400]],
+  },
+  TFR: {
+    light: [grey[700], grey[300]],
+    dark: [grey[800], grey[400]],
   },
 }

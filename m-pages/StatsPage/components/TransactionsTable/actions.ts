@@ -1,14 +1,17 @@
-import { SubcategoryCode } from '@/types'
+import type { CategoryCode, SubcategoryCode } from '@/types'
+import { ALL_CATEGORIES, CATEGORY_COLORS, type CategoryColorConfig } from '@/utils/Category'
 
-export const getCategoryColor = (category: SubcategoryCode) => {
-  switch (true) {
-    case category === 'Income':
-      return 'success'
-    case category.includes('Travel'):
-      return 'info'
-    case category.includes('Office'):
-      return 'warning'
-    default:
-      return 'default'
-  }
+export const getSubcategoryLabel = (code: SubcategoryCode | null): string => {
+  if (!code) return 'Uncategorised'
+  const parentCode = code.split('_')[0] as CategoryCode
+  const category = ALL_CATEGORIES[parentCode]
+  if (!category) return code
+  const subcategory = category.subcategories[code]
+  return subcategory?.label ?? code
+}
+
+export const getCategoryColor = (code: SubcategoryCode | null): CategoryColorConfig | undefined => {
+  if (!code) return undefined
+  const parentCode = code.split('_')[0] as CategoryCode
+  return CATEGORY_COLORS[parentCode]
 }

@@ -164,17 +164,45 @@ export type SortOrder = z.infer<typeof zSortOrder>
 // -------------------------------------------------------
 
 /**
- * The ID is of the format `{bankName}__{accountType}__{parserVariant}`, where parser variant
- * is only applicable if there are multiple CSV formats for an account type.
+ * The ID uniquely identifies a bank + account type combination, in the format
+ * `${snakeCase(bankName)}__${snakeCase(accountType)}`.
+ *
+ * Multiple parsers can share the same BankAccountId (e.g. different CSV formats for the same account).
  */
-export const ParserId = {
+export const BankAccountId = {
   CAPITEC_SAVINGS: 'capitec__savings',
   COMDIRECT_GIRO: 'comdirect__giro',
   COMDIRECT_VISA: 'comdirect__visa',
   FNB_CREDIT_CARD: 'fnb__credit_card',
   ING_GIRO: 'ing__giro',
-  ING_GIRO__WB: 'ing__giro__wb', // with account balance
   LLOYDS_CURRENT: 'lloyds__current',
+} as const
+
+export const zBankAccountId = z.enum([
+  BankAccountId.CAPITEC_SAVINGS,
+  BankAccountId.COMDIRECT_GIRO,
+  BankAccountId.COMDIRECT_VISA,
+  BankAccountId.FNB_CREDIT_CARD,
+  BankAccountId.ING_GIRO,
+  BankAccountId.LLOYDS_CURRENT,
+] as const)
+
+export type BankAccountId = z.infer<typeof zBankAccountId>
+
+// -------------------------------------------------------
+
+/**
+ * The ID is of the format `${snakeCase(bankName)}__${snakeCase(accountType)}__${snakeCase(parserVariant)}`,
+ * where parser variant is only applicable if there are multiple CSV formats for an account type.
+ */
+export const ParserId = {
+  CAPITEC_SAVINGS: BankAccountId.CAPITEC_SAVINGS,
+  COMDIRECT_GIRO: BankAccountId.COMDIRECT_GIRO,
+  COMDIRECT_VISA: BankAccountId.COMDIRECT_VISA,
+  FNB_CREDIT_CARD: BankAccountId.FNB_CREDIT_CARD,
+  ING_GIRO: BankAccountId.ING_GIRO,
+  ING_GIRO__WB: `${BankAccountId.ING_GIRO}__wb`, // with account balance
+  LLOYDS_CURRENT: BankAccountId.LLOYDS_CURRENT,
 } as const
 
 export const zParserId = z.enum([

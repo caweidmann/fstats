@@ -1,4 +1,4 @@
-import { Currency, ParserId } from '@/types-enums'
+import { BankAccountId, Currency, ParserId } from '@/types-enums'
 import { buildExtra, createParser } from '@/utils/Parser'
 
 const bankName = 'FNB'
@@ -6,6 +6,7 @@ const currency = Currency.ZAR
 
 export const fnb__credit_card = createParser({
   id: ParserId.FNB_CREDIT_CARD,
+  bankAccountId: BankAccountId.FNB_CREDIT_CARD,
   bankName,
   accountType: 'Credit Card',
   currency,

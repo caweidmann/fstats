@@ -7,6 +7,7 @@ import { getSubcategoryCode } from '@/utils/TransactionParser'
 
 export const createParser = <T extends ColDef, Id extends ParserId>({
   id,
+  bankAccountId,
   bankName,
   accountType,
   currency,
@@ -24,6 +25,7 @@ export const createParser = <T extends ColDef, Id extends ParserId>({
 
   return {
     id,
+    bankAccountId,
     bankName,
     accountType,
     currency,

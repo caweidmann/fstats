@@ -1,3 +1,4 @@
+import type { BankAccountId } from '@/types-enums'
 import { Currency, DateFormat, ParserId, UserLocale } from '@/types-enums'
 
 import { ParsedDataResult } from './services/stats-file'
@@ -22,6 +23,7 @@ export type ParserGetters<T extends ColDef> = {
 
 export type CreateParserParams<T extends ColDef, Id extends ParserId = ParserId> = {
   id: Id
+  bankAccountId: BankAccountId
   bankName: string
   accountType: string
   currency: Currency
@@ -33,6 +35,7 @@ export type CreateParserParams<T extends ColDef, Id extends ParserId = ParserId>
 
 export type Parser<Id extends ParserId = ParserId> = {
   id: Id
+  bankAccountId: BankAccountId
   bankName: string
   accountType: string
   currency: Currency

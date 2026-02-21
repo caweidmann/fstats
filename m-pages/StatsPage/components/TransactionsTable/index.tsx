@@ -30,7 +30,7 @@ import { toDisplayDate } from '@/utils/Date'
 import { toFixedLocale } from '@/utils/Number'
 import { Big } from '@/lib/w-big'
 
-import { getCategoryColor } from './actions'
+import { getCategoryColor, getSubcategoryLabel } from './actions'
 import { ui } from './styled'
 
 type TransactionsTableProps = {
@@ -83,10 +83,12 @@ const Component = ({ transactions, currency }: TransactionsTableProps) => {
     let filtered = transactions
 
     if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
       filtered = filtered.filter((row) => {
+        const categoryLabel = getSubcategoryLabel(row.category)
         return (
-          row.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          row.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          row.description.toLowerCase().includes(query) ||
+          categoryLabel.toLowerCase().includes(query) ||
           row.date.includes(searchQuery)
         )
       })
@@ -169,23 +171,23 @@ const Component = ({ transactions, currency }: TransactionsTableProps) => {
                         {highlightText(row.description, searchQuery)}
                       </Typography>
                     </Box>
-                    {isMobile ? (
+                    {isMobile && row.category ? (
                       <Chip
-                        label={row.category}
+                        label={getSubcategoryLabel(row.category)}
                         size="small"
-                        color={getCategoryColor(row.category)}
-                        sx={{ ...sx.categoryChip, mt: 0.5 }}
+                        sx={{ ...sx.categoryChip(getCategoryColor(row.category)), mt: 0.5 }}
                       />
                     ) : null}
                   </TableCell>
                   {!isMobile ? (
                     <TableCell sx={sx.compactCell}>
-                      <Chip
-                        label={highlightText(row.category, searchQuery)}
-                        size="small"
-                        color={getCategoryColor(row.category)}
-                        sx={sx.categoryChip}
-                      />
+                      {row.category ? (
+                        <Chip
+                          label={highlightText(getSubcategoryLabel(row.category), searchQuery)}
+                          size="small"
+                          sx={sx.categoryChip(getCategoryColor(row.category))}
+                        />
+                      ) : null}
                     </TableCell>
                   ) : null}
                   <TableCell align="right" sx={sx.compactCell}>

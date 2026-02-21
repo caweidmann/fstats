@@ -3,15 +3,13 @@
 import { Grid } from '@mui/material'
 import { isEqual, uniqWith } from 'lodash'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import type { StatsPageForm } from '@/types'
-import { MISC } from '@/common'
 import { PageWrapper } from '@/components'
 import { useFileHelper } from '@/hooks'
 
-import { getBankKey, getBankSelectOptions, getCurrencyForSelection } from './actions'
+import { getAllTransactions, getBankSelectOptions, getCurrencyForSelection } from './actions'
 import {
   BankSelector,
   CategoryBreakdown,
@@ -21,7 +19,6 @@ import {
   TransactionInfo,
   TransactionsTable,
 } from './components'
-import { DEMO_TRANSACTIONS } from './demo-data'
 
 const Component = () => {
   const { selectedFiles } = useFileHelper()
@@ -36,11 +33,7 @@ const Component = () => {
     values,
   })
   const selectedId = methods.watch('selectedId')
-  const filesForSelectedId =
-    selectedId && selectedId === 'all'
-      ? selectedFiles
-      : selectedFiles.filter((file) => file.parserId && getBankKey(file.parserId) === selectedId)
-  const allTransactions = isDemoMode ? DEMO_TRANSACTIONS : filesForSelectedId.flatMap((file) => file.transactions)
+  const allTransactions = getAllTransactions(isDemoMode, selectedId, selectedFiles)
   const transactions = uniqWith(allTransactions, isEqual)
   const currency = getCurrencyForSelection(selectedId, transactions)
 

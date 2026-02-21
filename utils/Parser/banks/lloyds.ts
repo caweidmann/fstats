@@ -1,4 +1,4 @@
-import { Currency, ParserId } from '@/types-enums'
+import { BankAccountId, Currency, ParserId } from '@/types-enums'
 import { buildExtra, createParser } from '@/utils/Parser'
 import { Big } from '@/lib/w-big'
 
@@ -7,6 +7,7 @@ const currency = Currency.GBP
 
 export const lloyds__current = createParser({
   id: ParserId.LLOYDS_CURRENT,
+  bankAccountId: BankAccountId.LLOYDS_CURRENT,
   bankName,
   accountType: 'Current Account',
   currency,
