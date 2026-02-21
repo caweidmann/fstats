@@ -20,10 +20,10 @@ export const getTransactionsGroupedByCategory = (transactions: Transaction[]): P
   const categories: Record<ParentCategoryCode, ParentCategoryWithTransactions> = {}
 
   Object.values(ALL_CATEGORIES).forEach((category) => {
-    const icategories: Record<CategoryCode, CategoryWithTransactions> = {}
-    Object.values(category.subcategories).forEach((icategory) => {
-      icategories[icategory.code] = {
-        ...icategory,
+    const subcategories: Record<CategoryCode, CategoryWithTransactions> = {}
+    Object.values(category.subcategories).forEach((subcategory) => {
+      subcategories[subcategory.code] = {
+        ...subcategory,
         transactions: [],
         total: '0',
       }
@@ -31,7 +31,7 @@ export const getTransactionsGroupedByCategory = (transactions: Transaction[]): P
 
     categories[category.code] = {
       ...category,
-      subcategories: icategories,
+      subcategories,
       transactions: [],
       total: '0',
     }
@@ -56,11 +56,11 @@ export const getTransactionsGroupedByCategory = (transactions: Transaction[]): P
   return Object.values(categories)
 }
 
-export const sortTransactions = (
-  transactions: ParentCategoryWithTransactions[] | CategoryWithTransactions[],
+const sortCategoriesByPref = <T extends ParentCategoryWithTransactions | CategoryWithTransactions>(
+  items: T[],
   sortingPref: SortingPref,
-) => {
-  return transactions.sort((a, b) => {
+): T[] => {
+  return items.sort((a, b) => {
     if (sortingPref === 'asc') {
       return a.label.localeCompare(b.label)
     }
@@ -68,22 +68,29 @@ export const sortTransactions = (
       return b.label.localeCompare(a.label)
     }
     if (sortingPref === 'totalAsc') {
-      return Big(a.total).minus(b.total).toNumber()
+      return Big(Big(a.total).abs()).minus(Big(b.total).abs()).toNumber()
     }
     if (sortingPref === 'totalDesc') {
-      return Big(b.total).minus(a.total).toNumber()
+      return Big(Big(b.total).abs()).minus(Big(a.total).abs()).toNumber()
     }
     return 0
   })
 }
 
-export const getSortedCategoriesWithTransactions = (
-  transactions: ParentCategoryWithTransactions[] | CategoryWithTransactions[],
+export const getSortedParentCategoriesWithTransactions = (
+  transactions: ParentCategoryWithTransactions[],
   categoriesToInclude: CategoryCode[],
   sortingPref: SortingPref,
-): CategoryWithTransactions[] => {
-  return sortTransactions(
+): ParentCategoryWithTransactions[] => {
+  return sortCategoriesByPref(
     transactions.filter((category) => categoriesToInclude.includes(category.code)),
     sortingPref,
   )
+}
+
+export const getSortedCategoriesWithTransactions = (
+  categories: CategoryWithTransactions[],
+  sortingPref: SortingPref,
+): CategoryWithTransactions[] => {
+  return sortCategoriesByPref(categories, sortingPref)
 }

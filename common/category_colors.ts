@@ -17,7 +17,7 @@ import {
   teal,
 } from '@mui/material/colors'
 
-import type { CategoryCode, GradientColorsLightDark, ParentCategoryCode } from '@/types'
+import type { GradientColorsLightDark, ParentCategoryCode } from '@/types'
 
 export const PARENT_CATEGORY_COLORS: Record<ParentCategoryCode, GradientColorsLightDark> = {
   INC: {
@@ -84,19 +84,4 @@ export const PARENT_CATEGORY_COLORS: Record<ParentCategoryCode, GradientColorsLi
     light: { start: grey[700], end: grey[300] },
     dark: { start: grey[800], end: grey[400] },
   },
-}
-
-export const CATEGORY_COLORS: Record<CategoryCode, GradientColorsLightDark> = {
-  INC_01: PARENT_CATEGORY_COLORS.INC,
-  INC_02: PARENT_CATEGORY_COLORS.INC,
-  INC_03: PARENT_CATEGORY_COLORS.INC,
-  INC_04: PARENT_CATEGORY_COLORS.INC,
-  INC_05: PARENT_CATEGORY_COLORS.INC,
-  INC_06: PARENT_CATEGORY_COLORS.INC,
-  INC_07: PARENT_CATEGORY_COLORS.INC,
-  INC_08: PARENT_CATEGORY_COLORS.INC,
-  INC_09: PARENT_CATEGORY_COLORS.INC,
-  INC_10: PARENT_CATEGORY_COLORS.INC,
-  INC_11: PARENT_CATEGORY_COLORS.INC,
-  INC_12: PARENT_CATEGORY_COLORS.INC,
 }

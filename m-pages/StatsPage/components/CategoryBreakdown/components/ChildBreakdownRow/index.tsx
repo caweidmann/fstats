@@ -1,8 +1,7 @@
 import { Box, ButtonBase, Grid, LinearProgress, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { useState } from 'react'
 
-import type { NumberString, ParentCategoryWithTransactions } from '@/types'
+import type { CategoryWithTransactions, NumberString } from '@/types'
 import { Currency } from '@/types-enums'
 import { PARENT_CATEGORY_COLORS } from '@/common'
 import { useUserPreferences } from '@/hooks'
@@ -11,16 +10,15 @@ import { toFixedLocale } from '@/utils/Number'
 import { Big } from '@/lib/w-big'
 
 import { COL_SPACING, COL1, COL2, COL3, COL4 } from '../../actions'
-import SubBreakdownRow from '../SubBreakdownRow'
 import { ui } from './styled'
 
-type BreakdownRowProps = {
-  category: ParentCategoryWithTransactions
+type ChildBreakdownRowProps = {
+  category: CategoryWithTransactions
   parentCategoryTotal: NumberString
   currency: Currency
 }
 
-const Component = ({ category, parentCategoryTotal, currency }: BreakdownRowProps) => {
+const Component = ({ category, parentCategoryTotal, currency }: ChildBreakdownRowProps) => {
   const theme = useTheme()
   const sx = ui(theme)
   const { locale } = useUserPreferences()
@@ -28,14 +26,10 @@ const Component = ({ category, parentCategoryTotal, currency }: BreakdownRowProp
   const percentage = total.div(total.eq(0) ? 1 : parentCategoryTotal).times(100)
   const totalDisplay = toFixedLocale(total.toString(), getMaxDecimalsForCurrency(currency), locale)
   const percentageDisplay = toFixedLocale(percentage.toString(), 1, locale)
-  const color = PARENT_CATEGORY_COLORS[category.code]
-  const [expanded, setExpanded] = useState(false)
-  const subcategories = Object.values(category.subcategories)
-    .sort((a, b) => a.label.localeCompare(b.label))
-    .sort((a, b) => (Big(a.total).gte(b.total) ? 1 : -1))
+  const color = PARENT_CATEGORY_COLORS[category.code.split('_')[0]]
 
   return (
-    <ButtonBase sx={sx.button(expanded)} onClick={() => setExpanded(!expanded)}>
+    <Box sx={sx.button}>
       <Grid container spacing={COL_SPACING}>
         <Grid size={{ xs: COL1[0], sm: COL1[1] }}>
           <Typography variant="body2" noWrap sx={sx.text(total.gt(0))}>
@@ -56,18 +50,7 @@ const Component = ({ category, parentCategoryTotal, currency }: BreakdownRowProp
           <LinearProgress variant="determinate" value={percentage.toNumber()} sx={sx.progress(total.gt(0), color)} />
         </Grid>
       </Grid>
-
-      {expanded
-        ? subcategories.map((subcategory) => (
-            <SubBreakdownRow
-              key={subcategory.code}
-              category={subcategory}
-              parentCategoryTotal={total.toString()}
-              currency={currency}
-            />
-          ))
-        : null}
-    </ButtonBase>
+    </Box>
   )
 }
 
