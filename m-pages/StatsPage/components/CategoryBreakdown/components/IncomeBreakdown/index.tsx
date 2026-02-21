@@ -20,17 +20,17 @@ type IncomeBreakdownProps = {
   currency: Currency
 }
 
+const MAX_CATEGORIES_TO_SHOW = 3
+
 const Component = ({ transactions, currency }: IncomeBreakdownProps) => {
   const theme = useTheme()
   const sx = ui(theme)
   const [sortingPref, setSortingPref] = useState<SortingPref>('totalAsc')
   const [showMore, setShowMore] = useState(false)
-  const categories = getSortedCategoriesWithTransactions(
-    transactions,
-    Object.keys(INCOME_CATEGORIES),
-    sortingPref,
-  ).filter((category) => (showMore ? true : category.transactions.length))
   const { totalIncome } = getStats(transactions)
+  const categories = getSortedCategoriesWithTransactions(transactions, Object.keys(INCOME_CATEGORIES), sortingPref)
+  const categoriesWithTransactions = categories.filter((category) => category.transactions.length)
+  const categoriesToShow = showMore ? categories : categoriesWithTransactions.slice(0, MAX_CATEGORIES_TO_SHOW)
 
   return (
     <>
@@ -63,7 +63,7 @@ const Component = ({ transactions, currency }: IncomeBreakdownProps) => {
 
       <Divider sx={{ mt: 0.5, mb: 1.5 }} />
 
-      {categories.map((category) => {
+      {categoriesToShow.map((category) => {
         return (
           <BreakdownRow key={category.code} category={category} parentCategoryTotal={totalIncome} currency={currency} />
         )

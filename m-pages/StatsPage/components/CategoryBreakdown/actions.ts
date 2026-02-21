@@ -12,9 +12,9 @@ export type SortingPref = 'asc' | 'desc' | 'totalAsc' | 'totalDesc'
 
 export const COL_SPACING = { xs: 1, sm: 2 }
 export const COL1 = [4.5, 3]
-export const COL2 = [4, 3]
-export const COL3 = [2, 1]
-export const COL4 = [1.5, 5]
+export const COL2 = [3.2, 3]
+export const COL3 = [2.3, 1]
+export const COL4 = [2, 5]
 
 export const getTransactionsByCategory = (
   transactions: Transaction[],
