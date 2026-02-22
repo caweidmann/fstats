@@ -197,6 +197,7 @@ export type BankAccountId = z.infer<typeof zBankAccountId>
  */
 export const ParserId = {
   CAPITEC_SAVINGS: BankAccountId.CAPITEC_SAVINGS,
+  CAPITEC_SAVINGS__ALT: `${BankAccountId.CAPITEC_SAVINGS}__alt`,
   COMDIRECT_GIRO: BankAccountId.COMDIRECT_GIRO,
   COMDIRECT_VISA: BankAccountId.COMDIRECT_VISA,
   FNB_CREDIT_CARD: BankAccountId.FNB_CREDIT_CARD,
@@ -207,6 +208,7 @@ export const ParserId = {
 
 export const zParserId = z.enum([
   ParserId.CAPITEC_SAVINGS,
+  ParserId.CAPITEC_SAVINGS__ALT,
   ParserId.COMDIRECT_GIRO,
   ParserId.COMDIRECT_VISA,
   ParserId.FNB_CREDIT_CARD,
