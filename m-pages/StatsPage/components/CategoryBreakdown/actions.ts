@@ -44,7 +44,15 @@ export const getTransactionsGroupedByCategory = (transactions: Transaction[]): P
 
     const parentCode = transaction.category.split('_')[0]
     const parentCategory = categories[parentCode]
+    if (!parentCategory) {
+      console.warn(`Unknown category code "${transaction.category}":`, transaction)
+      return
+    }
     const category = parentCategory.subcategories[transaction.category]
+    if (!category) {
+      console.warn(`Unknown category code "${transaction.category}":`, transaction)
+      return
+    }
 
     parentCategory.transactions.push(transaction)
     parentCategory.total = Big(parentCategory.total).plus(transaction.value).toString()
