@@ -50,6 +50,7 @@ export const ui = (theme: Theme, isDarkMode: boolean, isMobile: boolean) => {
       position: 'sticky',
       top: (isMobile ? LAYOUT.NAV_HEIGHT_MOBILE : LAYOUT.NAV_HEIGHT) + LAYOUT.NAV_BORDER,
       borderWidthBottom: LAYOUT.NAV_BORDER,
+      zIndex: LAYOUT.NAV_Z_INDEX + 1,
     },
   }
 }
