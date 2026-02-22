@@ -3,6 +3,7 @@ import type { Locale } from 'date-fns'
 import { BankAccountId, Currency } from '@/types-enums'
 
 import type { NumberString, SelectOptionWithType } from './global'
+import type { CategoryCode } from './services/transaction'
 
 export type DateFnsLocale = Locale
 
@@ -45,4 +46,9 @@ export type FixedLocaleCurrencyOptions = {
   isFractional?: boolean
   currencyFormat?: CurrencyFormat
   trimTrailingZeros?: boolean
+}
+
+export type KeywordRule = {
+  keywords: string[]
+  category: CategoryCode
 }

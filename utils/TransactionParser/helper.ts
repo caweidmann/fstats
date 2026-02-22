@@ -1,9 +1,10 @@
-import { CategoryCode } from '@/types'
+import type { KeywordRule } from '@/types'
 
-export type KeywordRule = {
-  keywords: string[]
-  category: CategoryCode
-}
+export const RAW_INCOME_KEYWORD_RULES: KeywordRule[] = [
+  { category: 'INC_13', keywords: ['Visa-Kartenabrechnung'] },
+
+  { category: 'FIN_05', keywords: ['Monthly Account Admin Fee'] },
+]
 
 export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
   { category: 'HOU_08', keywords: ['TELEKOM'] },
@@ -17,12 +18,6 @@ export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
   { category: 'FIN_05', keywords: ['Monthly Account Admin Fee'] },
 ]
 
-export const RAW_INCOME_KEYWORD_RULES: KeywordRule[] = [
-  { category: 'INC_13', keywords: ['Visa-Kartenabrechnung'] },
-
-  { category: 'FIN_05', keywords: ['Monthly Account Admin Fee'] },
-]
-
 const toLowercaseKeywordRules = (rules: KeywordRule[]): KeywordRule[] => {
   return rules.map((rule) => ({
     ...rule,
@@ -30,5 +25,5 @@ const toLowercaseKeywordRules = (rules: KeywordRule[]): KeywordRule[] => {
   }))
 }
 
-export const EXPENSE_KEYWORD_RULES = toLowercaseKeywordRules(RAW_EXPENSE_KEYWORD_RULES)
 export const INCOME_KEYWORD_RULES = toLowercaseKeywordRules(RAW_INCOME_KEYWORD_RULES)
+export const EXPENSE_KEYWORD_RULES = toLowercaseKeywordRules(RAW_EXPENSE_KEYWORD_RULES)
