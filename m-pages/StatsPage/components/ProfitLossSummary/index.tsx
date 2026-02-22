@@ -41,7 +41,7 @@ const Component = ({ transactions, currency }: ProfitLossSummaryProps) => {
       </Typography>
 
       <Grid container spacing={2}>
-        <Grid size={{ xs: 12, md: 3.5 }}>
+        <Grid size={{ xs: 12, md: 3.25 }}>
           <Box sx={sx.statCard('transparent')}>
             <Box sx={sx.statHeader}>
               <TrendingUp sx={{ color: incomeTextColor, fontSize: 20 }} />
@@ -58,7 +58,7 @@ const Component = ({ transactions, currency }: ProfitLossSummaryProps) => {
           </Box>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 3.5 }}>
+        <Grid size={{ xs: 12, md: 3.25 }}>
           <Box sx={sx.statCard('transparent')}>
             <Box sx={sx.statHeader}>
               <TrendingDown sx={{ color: expensesTextColor, fontSize: 20 }} />
@@ -75,39 +75,37 @@ const Component = ({ transactions, currency }: ProfitLossSummaryProps) => {
           </Box>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid size={{ xs: 12, md: 3.25 }}>
           <Box sx={sx.profitCard(profitBgColor)}>
-            <Box sx={sx.profitCardLeft}>
-              <Box sx={sx.statHeader}>
-                <AccountBalance sx={{ color: profitTextColor, fontSize: 20 }} />
-                <Typography variant="caption" sx={{ color: 'text.secondary', ml: 1 }}>
-                  Net Profit
-                </Typography>
-              </Box>
-              <Typography variant="h4" sx={{ color: profitTextColor, fontWeight: 600, mt: 1 }}>
-                {profitDisplay}
-              </Typography>
-              <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
-                Income - Expenses
+            <Box sx={sx.statHeader}>
+              <AccountBalance sx={{ color: profitTextColor, fontSize: 20 }} />
+              <Typography variant="caption" sx={{ color: 'text.secondary', ml: 1 }}>
+                Net Profit
               </Typography>
             </Box>
+            <Typography variant="h4" sx={{ color: profitTextColor, fontWeight: 600, mt: 1 }}>
+              {profitDisplay}
+            </Typography>
+            <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
+              Income - Expenses
+            </Typography>
+          </Box>
+        </Grid>
 
-            <Box sx={sx.profitCardDivider} />
-
-            <Box sx={sx.profitCardRight}>
-              <Box sx={sx.statHeader}>
-                <Percent sx={{ color: profitTextColor, fontSize: 20 }} />
-                <Typography variant="caption" sx={{ color: 'text.secondary', ml: 1 }}>
-                  Profit Margin
-                </Typography>
-              </Box>
-              <Typography variant="h4" sx={{ color: profitTextColor, fontWeight: 600, mt: 1 }}>
-                {profitMarginDisplay}%
-              </Typography>
-              <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
-                Profit as % of income
+        <Grid size={{ xs: 12, md: 2.25 }}>
+          <Box sx={sx.profitCard(profitBgColor)}>
+            <Box sx={sx.statHeader}>
+              <Percent sx={{ color: profitTextColor, fontSize: 20 }} />
+              <Typography variant="caption" sx={{ color: 'text.secondary', ml: 1 }}>
+                Profit Margin
               </Typography>
             </Box>
+            <Typography variant="h4" sx={{ color: profitTextColor, fontWeight: 600, mt: 1 }}>
+              {profitMarginDisplay}%
+            </Typography>
+            <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5 }}>
+              Profit as % of income
+            </Typography>
           </Box>
         </Grid>
       </Grid>
