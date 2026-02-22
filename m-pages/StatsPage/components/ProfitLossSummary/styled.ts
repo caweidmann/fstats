@@ -17,6 +17,7 @@ export const ui = (theme: Theme) => {
 
     profitCard: (bgColor: string) => ({
       display: 'flex',
+      flexDirection: { xs: 'column', md: 'row' },
       borderRadius: 2,
       backgroundColor: bgColor,
       height: '100%',
@@ -28,10 +29,11 @@ export const ui = (theme: Theme) => {
     },
 
     profitCardDivider: {
-      mx: 2,
-      width: '1px',
+      mx: { xs: 2, sm: 2 },
+      my: { xs: 1.5, sm: 0 },
+      width: { xs: 'calc(100% - 32px)', sm: '1px' },
       alignSelf: 'center',
-      height: '50%',
+      height: { xs: '1px', sm: '50%' },
       backgroundColor: theme.vars.palette.divider,
     },
 
