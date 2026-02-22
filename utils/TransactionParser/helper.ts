@@ -1,18 +1,11 @@
 import { CategoryCode } from '@/types'
 
-export type KeywordRuleDirection = 'income' | 'expense'
-
-export type KeywordCategoryRule = {
-  income?: CategoryCode
-  expense?: CategoryCode
-}
-
 export type KeywordRule = {
   keywords: string[]
-  category: CategoryCode | KeywordCategoryRule
+  category: CategoryCode
 }
 
-export const RAW_KEYWORD_RULES: KeywordRule[] = [
+export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
   { category: 'HOU_08', keywords: ['TELEKOM'] },
 
   { category: 'HOU_12', keywords: ['IKEA'] },
@@ -21,7 +14,15 @@ export const RAW_KEYWORD_RULES: KeywordRule[] = [
 
   { category: 'TFR_02', keywords: ['Summe Monatsabrechnung Visa-Karte'] },
 
-  { category: { expense: 'TFR_02', income: 'INC_13' }, keywords: ['Visa-Kartenabrechnung'] },
+  { category: 'TFR_02', keywords: ['Visa-Kartenabrechnung'] },
+
+  { category: 'FIN_05', keywords: ['Monthly Account Admin Fee'] },
+]
+
+export const RAW_INCOME_KEYWORD_RULES: KeywordRule[] = [
+  { category: 'INC_13', keywords: ['Visa-Kartenabrechnung'] },
+
+  { category: 'FIN_05', keywords: ['Monthly Account Admin Fee'] },
 ]
 
 const toLowercaseKeywordRules = (rules: KeywordRule[]): KeywordRule[] => {
@@ -31,4 +32,5 @@ const toLowercaseKeywordRules = (rules: KeywordRule[]): KeywordRule[] => {
   }))
 }
 
-export const KEYWORD_RULES = toLowercaseKeywordRules(RAW_KEYWORD_RULES)
+export const EXPENSE_KEYWORD_RULES = toLowercaseKeywordRules(RAW_EXPENSE_KEYWORD_RULES)
+export const INCOME_KEYWORD_RULES = toLowercaseKeywordRules(RAW_INCOME_KEYWORD_RULES)

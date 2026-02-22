@@ -2,14 +2,13 @@ import type { CategoryCode, Transaction } from '@/types'
 import { EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '@/common'
 import { Big } from '@/lib/w-big'
 
-import type { KeywordRuleDirection } from './helper'
-import { KEYWORD_RULES } from './helper'
+import { EXPENSE_KEYWORD_RULES, INCOME_KEYWORD_RULES } from './helper'
 
 const useRandomizer = false
 
 export const getCategoryCode = (row: Transaction): CategoryCode => {
   const isIncome = Big(row.value).gte(0)
-  const direction: KeywordRuleDirection = isIncome ? 'income' : 'expense'
+  const keywordRules = isIncome ? INCOME_KEYWORD_RULES : EXPENSE_KEYWORD_RULES
 
   if (useRandomizer) {
     const incomeCats: CategoryCode[] = Object.keys(INCOME_CATEGORIES).flatMap((catCode) =>
@@ -29,17 +28,11 @@ export const getCategoryCode = (row: Transaction): CategoryCode => {
   let matchedCategory: CategoryCode | null = null
   let matchedKeywordLength = -1
 
-  for (const rule of KEYWORD_RULES) {
-    const category = typeof rule.category === 'string' ? rule.category : (rule.category[direction] ?? null)
-
-    if (!category) {
-      continue
-    }
-
+  for (const rule of keywordRules) {
     for (const keyword of rule.keywords) {
       // Prefer the most specific (longest) matching keyword over shorter matches
       if (description.includes(keyword) && keyword.length > matchedKeywordLength) {
-        matchedCategory = category
+        matchedCategory = rule.category
         matchedKeywordLength = keyword.length
       }
     }
