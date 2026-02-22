@@ -14,8 +14,6 @@ export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
 
   { category: 'TFR_02', keywords: ['Summe Monatsabrechnung Visa-Karte'] },
 
-  { category: 'TFR_02', keywords: ['Visa-Kartenabrechnung'] },
-
   { category: 'FIN_05', keywords: ['Monthly Account Admin Fee'] },
 ]
 
