@@ -17,6 +17,7 @@ export const INCOME_CATEGORIES: Record<ParentCategoryCode, ParentCategory> = {
       INC_10: { code: 'INC_10', label: 'Business Revenue' }, // Revenue
       INC_11: { code: 'INC_11', label: 'Side Income & Resale' },
       INC_12: { code: 'INC_12', label: 'Other Income' },
+      INC_13: { code: 'INC_13', label: 'Internal Transfer' }, // Matches TFR_02
     },
   },
 }
