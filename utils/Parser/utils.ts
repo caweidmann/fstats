@@ -4,6 +4,7 @@ import { MISC } from '@/common'
 
 import {
   capitec__savings,
+  capitec__savings__alt,
   comdirect__giro,
   comdirect__visa,
   fnb__credit_card,
@@ -15,6 +16,7 @@ import {
 export const AVAILABLE_PARSERS: Record<ParserId, Parser> = {
   // South African Banks
   [capitec__savings.id]: capitec__savings,
+  [capitec__savings__alt.id]: capitec__savings__alt,
   [fnb__credit_card.id]: fnb__credit_card,
 
   // German Banks

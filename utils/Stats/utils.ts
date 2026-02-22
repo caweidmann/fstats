@@ -12,6 +12,7 @@ const _getStats = (
   totalExpense: NumberString
   profit: NumberString
   expenseRatio: NumberString
+  profitMargin: NumberString
 } => {
   const totalIncome = transactions.reduce((acc, transaction) => {
     const value = Big(transaction.value)
@@ -24,13 +25,14 @@ const _getStats = (
   }, Big(0))
 
   const profit = totalIncome.minus(totalExpense)
-
+  const profitMargin = totalIncome.gt(0) ? profit.div(totalIncome).times(100) : Big(0)
   const expenseRatio = totalIncome.gt(0) ? totalExpense.div(totalIncome).times(100) : Big(0)
 
   return {
     totalIncome: totalIncome.toString(),
     totalExpense: totalExpense.toString(),
     profit: profit.toString(),
+    profitMargin: profitMargin.toString(),
     expenseRatio: expenseRatio.toString(),
   }
 }
