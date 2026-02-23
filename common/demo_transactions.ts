@@ -59,6 +59,14 @@ export const DEMO_TRANSACTIONS: Transaction[] = [
     category: 'HOU_02',
   },
   {
+    date: '2026-01-15',
+    description: 'Interest Received - Savings Account',
+    value: '12.40',
+    currency: 'EUR',
+    extra: null,
+    category: 'PAS_03',
+  },
+  {
     date: '2026-01-18',
     description: 'Client Payment - Wooden Dining Table',
     value: '2800.00',
@@ -139,6 +147,14 @@ export const DEMO_TRANSACTIONS: Transaction[] = [
     currency: 'EUR',
     extra: null,
     category: 'FIN_03',
+  },
+  {
+    date: '2026-02-14',
+    description: 'Etsy Sale - Custom Cutting Board',
+    value: '85.00',
+    currency: 'EUR',
+    extra: null,
+    category: 'INC_04',
   },
   {
     date: '2026-02-15',
@@ -255,6 +271,14 @@ export const DEMO_TRANSACTIONS: Transaction[] = [
     category: 'TRN_01',
   },
   {
+    date: '2026-03-20',
+    description: 'Dividend Payment - ETF Portfolio',
+    value: '145.00',
+    currency: 'EUR',
+    extra: null,
+    category: 'PAS_02',
+  },
+  {
     date: '2026-03-24',
     description: 'Gym Membership',
     value: '-35.00',
@@ -321,6 +345,14 @@ export const DEMO_TRANSACTIONS: Transaction[] = [
     category: 'TRN_02',
   },
   {
+    date: '2026-04-12',
+    description: 'Etsy Sale - Wooden Phone Stand',
+    value: '42.00',
+    currency: 'EUR',
+    extra: null,
+    category: 'INC_04',
+  },
+  {
     date: '2026-04-15',
     description: 'Accounting & Bookkeeping',
     value: '-180.00',
@@ -335,6 +367,14 @@ export const DEMO_TRANSACTIONS: Transaction[] = [
     currency: 'EUR',
     extra: null,
     category: 'TRN_01',
+  },
+  {
+    date: '2026-04-20',
+    description: 'Interest Received - Savings Account',
+    value: '11.80',
+    currency: 'EUR',
+    extra: null,
+    category: 'PAS_03',
   },
   {
     date: '2026-04-25',
@@ -443,6 +483,14 @@ export const DEMO_TRANSACTIONS: Transaction[] = [
     category: 'BUS_04',
   },
   {
+    date: '2026-05-21',
+    description: 'Etsy Sale - Handmade Coasters Set',
+    value: '65.00',
+    currency: 'EUR',
+    extra: null,
+    category: 'INC_04',
+  },
+  {
     date: '2026-05-22',
     description: 'Winter Jacket - H&M',
     value: '-89.95',
@@ -533,12 +581,28 @@ export const DEMO_TRANSACTIONS: Transaction[] = [
     category: 'BUS_03',
   },
   {
+    date: '2026-06-14',
+    description: 'Etsy Sale - Custom Chopping Board',
+    value: '95.00',
+    currency: 'EUR',
+    extra: null,
+    category: 'INC_04',
+  },
+  {
     date: '2026-06-22',
     description: 'Vehicle Fuel',
     value: '-125.00',
     currency: 'EUR',
     extra: null,
     category: 'TRN_01',
+  },
+  {
+    date: '2026-06-25',
+    description: 'Dividend Payment - ETF Portfolio',
+    value: '152.00',
+    currency: 'EUR',
+    extra: null,
+    category: 'PAS_02',
   },
   {
     date: '2026-06-28',
