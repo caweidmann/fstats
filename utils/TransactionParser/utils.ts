@@ -42,9 +42,6 @@ export const getCategoryCode = (row: Transaction): CategoryCode => {
     return matchedCategory
   }
 
-  if (isIncome) {
-    return 'INC_01'
-  }
-
-  return 'TFO_05'
+  // Uncategorised
+  return isIncome ? 'TFI_02' : 'TFO_02'
 }
