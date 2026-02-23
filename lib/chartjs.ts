@@ -12,7 +12,7 @@ import {
 } from 'chart.js'
 import annotationPlugin from 'chartjs-plugin-annotation'
 
-import { roboto } from '@/styles/fonts'
+import { robotoMono } from '@/styles/fonts'
 
 export const initChartJS = () => {
   ChartJS.register(
@@ -27,5 +27,5 @@ export const initChartJS = () => {
     Filler,
     annotationPlugin,
   )
-  ChartJS.defaults.font.family = roboto.style.fontFamily
+  ChartJS.defaults.font.family = robotoMono.style.fontFamily
 }
