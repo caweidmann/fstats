@@ -3,22 +3,38 @@ import type { ParentCategory, ParentCategoryCode } from '@/types'
 export const INCOME_CATEGORIES: Record<ParentCategoryCode, ParentCategory> = {
   INC: {
     code: 'INC',
-    label: 'Income',
+    label: 'Earned Income',
     subcategories: {
       INC_01: { code: 'INC_01', label: 'Salary & Wages' },
-      INC_02: { code: 'INC_02', label: 'Freelance & Self-Employment' },
-      INC_03: { code: 'INC_03', label: 'Rental Income' },
-      INC_04: { code: 'INC_04', label: 'Investment Income' },
-      INC_05: { code: 'INC_05', label: 'Capital Gains' },
-      INC_06: { code: 'INC_06', label: 'Government Benefits' },
-      INC_07: { code: 'INC_07', label: 'Pension & Retirement' },
-      INC_08: { code: 'INC_08', label: 'Tax Refund' },
-      INC_09: { code: 'INC_09', label: 'Gifts & Informal Transfers' },
-      INC_10: { code: 'INC_10', label: 'Business Revenue' }, // Revenue
-      INC_11: { code: 'INC_11', label: 'Side Income & Resale' },
-      INC_12: { code: 'INC_12', label: 'Other Income' },
-      INC_13: { code: 'INC_13', label: 'Internal Transfer' }, // Matches TFR_02
-      FIN_06: { code: 'INC_14', label: 'Interest' },
+      INC_02: { code: 'INC_02', label: 'Freelance & Contract Work' }, // Freelance & Self-Employment
+      INC_03: { code: 'INC_03', label: 'Business Income' },
+      INC_04: { code: 'INC_04', label: 'Side Hustle & Gig Work' },
+      INC_05: { code: 'INC_05', label: 'Bonuses & Commission' },
+      INC_06: { code: 'INC_06', label: 'Miscellaneous' },
+    },
+  },
+  PAS: {
+    code: 'PAS',
+    label: 'Passive Income',
+    subcategories: {
+      PAS_01: { code: 'PAS_01', label: 'Rental Income' },
+      PAS_02: { code: 'PAS_02', label: 'Investment Income' },
+      PAS_03: { code: 'PAS_03', label: 'Interest' },
+      PAS_04: { code: 'PAS_04', label: 'Miscellaneous' },
+    },
+  },
+  OTH: {
+    code: 'OTH',
+    label: 'Other Income',
+    subcategories: {
+      OTH_01: { code: 'OTH_01', label: 'Government Benefits' },
+      OTH_02: { code: 'OTH_02', label: 'Pension & Retirement' },
+      OTH_03: { code: 'OTH_03', label: 'Capital Gains' },
+      OTH_04: { code: 'OTH_04', label: 'Tax Refund' },
+      OTH_05: { code: 'OTH_05', label: 'Gifts & Informal Transfers' },
+      OTH_06: { code: 'OTH_06', label: 'Internal Transfer' },
+      OTH_07: { code: 'OTH_07', label: 'Miscellaneous' },
+      OTH_08: { code: 'OTH_08', label: 'Uncategorised' },
     },
   },
 }

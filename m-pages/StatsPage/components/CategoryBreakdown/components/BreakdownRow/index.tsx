@@ -32,7 +32,7 @@ const Component = ({ category, parentCategoryTotal, currency }: BreakdownRowProp
   const [expanded, setExpanded] = useState(false)
   const subcategories = Object.values(category.subcategories)
     .sort((a, b) => a.label.localeCompare(b.label))
-    .sort((a, b) => (Big(a.total).gte(b.total) ? 1 : -1))
+    .sort((a, b) => (Big(b.total).abs().gte(Big(a.total).abs()) ? 1 : -1))
 
   return (
     <ButtonBase sx={sx.button(expanded)} onClick={() => setExpanded(!expanded)}>

@@ -3,18 +3,17 @@
 import { ArrowDownward, ArrowUpward, ExpandLess, ExpandMore } from '@mui/icons-material'
 import { Box, Button, Divider, Grid } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import Big from 'big.js'
 import { useState } from 'react'
 
 import type { NumberString, ParentCategoryWithTransactions } from '@/types'
 import { Currency } from '@/types-enums'
 import { getCurrencySymbol } from '@/utils/Currency'
 
-import { COL_SPACING, COL1, COL2, COL3, getSortedCategoriesWithTransactions, SortingPref } from '../../actions'
+import { COL_SPACING, COL1, COL2, COL3, getSortedParentCategoriesWithTransactions, SortingPref } from '../../actions'
 import { ui } from '../../styled'
-import ChildBreakdownRow from '../ChildBreakdownRow'
+import BreakdownRow from '../BreakdownRow'
 
-type IncomeBreakdownProps = {
+type ExpensesBreakdownProps = {
   transactionsGrouped: ParentCategoryWithTransactions[]
   total: NumberString
   currency: Currency
@@ -22,16 +21,16 @@ type IncomeBreakdownProps = {
 
 const MAX_CATEGORIES_TO_SHOW = 3
 
-const Component = ({ transactionsGrouped, total, currency }: IncomeBreakdownProps) => {
+const Component = ({ transactionsGrouped, total, currency }: ExpensesBreakdownProps) => {
   const theme = useTheme()
   const sx = ui(theme)
   const [sortingPref, setSortingPref] = useState<SortingPref>('totalDesc')
-  const [showMore, setShowMore] = useState(false)
-  // Because we only have one income parent group we show subcategories directly
-  const categories = transactionsGrouped
-    .flatMap((parent) => Object.values(parent.subcategories))
-    .sort((a, b) => a.label.localeCompare(b.label))
-  const sortedCategories = getSortedCategoriesWithTransactions(categories, sortingPref)
+  const [showMore, setShowMore] = useState(true)
+  const sortedCategories = getSortedParentCategoriesWithTransactions(
+    transactionsGrouped,
+    transactionsGrouped.map((category) => category.code),
+    sortingPref,
+  )
   const categoriesWithTransactions = sortedCategories.filter((category) => category.transactions.length)
   const categoriesToShow = showMore ? sortedCategories : categoriesWithTransactions.slice(0, MAX_CATEGORIES_TO_SHOW)
 
@@ -67,19 +66,17 @@ const Component = ({ transactionsGrouped, total, currency }: IncomeBreakdownProp
       <Divider sx={{ mt: 0.5, mb: 1.5 }} />
 
       {categoriesToShow.map((category) => {
-        return (
-          <ChildBreakdownRow key={category.code} category={category} parentCategoryTotal={total} currency={currency} />
-        )
+        return <BreakdownRow key={category.code} category={category} parentCategoryTotal={total} currency={currency} />
       })}
 
-      <Button variant="outlined" size="small" color="secondary" sx={{ mt: 2 }} onClick={() => setShowMore(!showMore)}>
+      {/* <Button variant="outlined" size="small" color="secondary" sx={{ mt: 2 }} onClick={() => setShowMore(!showMore)}>
         {showMore ? 'Show less' : 'Show more'}{' '}
         {showMore ? (
           <ExpandLess color="secondary" fontSize="small" />
         ) : (
           <ExpandMore color="secondary" fontSize="small" />
         )}
-      </Button>
+      </Button> */}
     </>
   )
 }

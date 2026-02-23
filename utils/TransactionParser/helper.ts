@@ -1,9 +1,8 @@
 import type { KeywordRule } from '@/types'
 
 export const RAW_INCOME_KEYWORD_RULES: KeywordRule[] = [
-  { category: 'INC_14', keywords: ['Interest Received'] },
-
-  { category: 'INC_13', keywords: ['Visa-Kartenabrechnung'] },
+  { category: 'OTH_04', keywords: ['Visa-Kartenabrechnung'] },
+  { category: 'PAS_03', keywords: ['Interest Received'] },
 ]
 
 export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [

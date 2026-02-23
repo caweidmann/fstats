@@ -25,7 +25,7 @@ const Component = ({ transactionsGrouped, total, currency }: ExpensesBreakdownPr
   const theme = useTheme()
   const sx = ui(theme)
   const [sortingPref, setSortingPref] = useState<SortingPref>('totalDesc')
-  const [showMore, setShowMore] = useState(false)
+  const [showMore, setShowMore] = useState(true)
   const sortedCategories = getSortedParentCategoriesWithTransactions(
     transactionsGrouped,
     transactionsGrouped.map((category) => category.code),
@@ -69,14 +69,14 @@ const Component = ({ transactionsGrouped, total, currency }: ExpensesBreakdownPr
         return <BreakdownRow key={category.code} category={category} parentCategoryTotal={total} currency={currency} />
       })}
 
-      <Button variant="outlined" size="small" color="secondary" sx={{ mt: 2 }} onClick={() => setShowMore(!showMore)}>
+      {/* <Button variant="outlined" size="small" color="secondary" sx={{ mt: 2 }} onClick={() => setShowMore(!showMore)}>
         {showMore ? 'Show less' : 'Show more'}{' '}
         {showMore ? (
           <ExpandLess color="secondary" fontSize="small" />
         ) : (
           <ExpandMore color="secondary" fontSize="small" />
         )}
-      </Button>
+      </Button> */}
     </>
   )
 }

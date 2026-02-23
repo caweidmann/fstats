@@ -43,7 +43,7 @@ export const getCategoryCode = (row: Transaction): CategoryCode => {
   }
 
   if (isIncome) {
-    return 'INC_10'
+    return 'INC_01'
   }
 
   return 'TFR_05'

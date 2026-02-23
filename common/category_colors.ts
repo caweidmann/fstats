@@ -24,6 +24,14 @@ export const PARENT_CATEGORY_COLORS: Record<ParentCategoryCode, GradientColorsLi
     light: { start: green[700], end: green[300] },
     dark: { start: green[900], end: green[400] },
   },
+  PAS: {
+    light: { start: green[700], end: green[300] },
+    dark: { start: green[900], end: green[400] },
+  },
+  OTH: {
+    light: { start: green[700], end: green[300] },
+    dark: { start: green[900], end: green[400] },
+  },
   HOU: {
     light: { start: blue[700], end: blue[300] },
     dark: { start: blue[900], end: blue[400] },
