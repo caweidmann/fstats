@@ -59,7 +59,8 @@ export const EXPENSE_CATEGORIES: Record<ParentCategoryCode, ParentCategory> = {
       HOU_04: { code: 'HOU_04', label: 'Home Insurance' },
       HOU_05: { code: 'HOU_05', label: 'Maintenance & Repairs' },
       HOU_06: { code: 'HOU_06', label: 'Levies' },
-      HOU_07: { code: 'HOU_07', label: 'Miscellaneous' },
+      HOU_07: { code: 'HOU_07', label: 'Furniture & Appliances' },
+      HOU_08: { code: 'HOU_08', label: 'Miscellaneous' },
     },
   },
 
@@ -137,10 +138,13 @@ export const EXPENSE_CATEGORIES: Record<ParentCategoryCode, ParentCategory> = {
     code: 'BUS',
     label: 'Business & Work',
     subcategories: {
-      BUS_01: { code: 'BUS_01', label: 'Work Expenses' },
-      BUS_02: { code: 'BUS_02', label: 'Professional Development' },
+      BUS_01: { code: 'BUS_01', label: 'Office Equipment & Supplies' },
+      BUS_02: { code: 'BUS_02', label: 'Workspace & Rent' },
       BUS_03: { code: 'BUS_03', label: 'Software & Tools' },
-      BUS_04: { code: 'BUS_04', label: 'Miscellaneous' },
+      BUS_04: { code: 'BUS_04', label: 'Marketing & Advertising' },
+      BUS_05: { code: 'BUS_05', label: 'Professional Services (Accountant, legal, etc.)' },
+      BUS_06: { code: 'BUS_06', label: 'Professional Development' },
+      BUS_07: { code: 'BUS_07', label: 'Miscellaneous' },
     },
   },
 
