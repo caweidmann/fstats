@@ -1,15 +1,14 @@
 'use client'
 
 import { Grid } from '@mui/material'
-import { isEqual, uniqWith } from 'lodash'
 import { useSearchParams } from 'next/navigation'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 
 import type { StatsPageForm } from '@/types'
 import { PageWrapper } from '@/components'
-import { useFileHelper } from '@/hooks'
+import { useFileHelper, useTransactionHelper } from '@/hooks'
 
-import { getAllTransactions, getBankSelectOptions, getCurrencyForSelection } from './actions'
+import { getBankSelectOptions, getCurrencyForSelection } from './actions'
 import {
   BankSelector,
   CategoryBreakdown,
@@ -33,8 +32,11 @@ const Component = () => {
     values,
   })
   const selectedId = useWatch({ control: methods.control, name: 'selectedId' })
-  const allTransactions = getAllTransactions(isDemoMode, selectedId, selectedFiles)
-  const transactions = uniqWith(allTransactions, isEqual)
+  const { transactions, duplicates } = useTransactionHelper({
+    isDemoMode,
+    selectedId,
+    files: selectedFiles,
+  })
   const currency = getCurrencyForSelection(selectedId, transactions)
 
   return (
@@ -55,10 +57,7 @@ const Component = () => {
 
           {!isDemoMode ? (
             <Grid size="grow">
-              <TransactionInfo
-                total={allTransactions.length}
-                duplicates={allTransactions.length - transactions.length}
-              />
+              <TransactionInfo total={transactions.length + duplicates.length} duplicates={duplicates.length} />
             </Grid>
           ) : null}
 

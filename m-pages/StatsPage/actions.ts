@@ -1,21 +1,8 @@
 import { uniqBy } from 'lodash'
 
 import type { BankSelectOption, SelectOptionBankAccountId, StatsFile, Transaction } from '@/types'
-import { DEMO_TRANSACTIONS, MISC } from '@/common'
-import { AVAILABLE_PARSERS, getBankAccountId, getBankAccountName } from '@/utils/Parser'
-
-export const getAllTransactions = (isDemoMode: boolean, selectedId: SelectOptionBankAccountId, files: StatsFile[]) => {
-  if (isDemoMode) {
-    return DEMO_TRANSACTIONS
-  }
-
-  const filesForSelectedId =
-    selectedId === 'all'
-      ? files
-      : files.filter((file) => file.parserId && getBankAccountId(file.parserId) === selectedId)
-
-  return filesForSelectedId.flatMap((file) => file.transactions)
-}
+import { MISC } from '@/common'
+import { AVAILABLE_PARSERS, getBankAccountName } from '@/utils/Parser'
 
 export const getCurrencyForSelection = (selectedId: SelectOptionBankAccountId, transactions: Transaction[]) => {
   if (!selectedId || selectedId === 'all') {
