@@ -22,11 +22,11 @@ export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
 
   // { category: 'FAM', keywords: [] },
 
-  { category: 'FIN_05', keywords: ['Monthly Account Admin Fee'] },
+  { category: 'FIN_05', keywords: ['Monthly Account Admin Fee', 'International Processing Card Purchase Fee'] },
 
   { category: 'BUS_03', keywords: ['CALUDE.AI', 'GITHUB'] },
 
-  { category: 'TFO_02', keywords: ['Summe Monatsabrechnung Visa-Karte'] },
+  { category: 'TFO_01', keywords: ['Summe Monatsabrechnung Visa-Karte', 'Internet Banking Transfer'] },
 ]
 
 const toLowercaseKeywordRules = (rules: KeywordRule[]): KeywordRule[] => {
