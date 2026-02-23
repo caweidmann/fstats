@@ -1,7 +1,7 @@
-import { Currency, DateFormat, UserLocale } from '@/types-enums'
+import type { BankAccountId } from '@/types-enums'
+import { Currency, DateFormat, ParserId, UserLocale } from '@/types-enums'
 
-import type { IdString } from './global'
-import type { PPRawParseResult } from './lib/papaparse'
+import { ParsedDataResult } from './services/stats-file'
 import type { Transaction } from './services/transaction'
 
 export type ColDef = Record<string, string>
@@ -10,15 +10,20 @@ export type RowAccessor<T extends ColDef> = {
   get: (key: keyof T) => string
 }
 
-export type RowValueGetter<T extends ColDef> = keyof T | ((row: RowAccessor<T>) => string)
+export type Getter<T extends ColDef> = (row: RowAccessor<T>) => string
+
+export type ExtraGetter<T extends ColDef> = (row: RowAccessor<T>) => Transaction['extra']
 
 export type ParserGetters<T extends ColDef> = {
-  date: RowValueGetter<T>
-  description: RowValueGetter<T>
-  value: RowValueGetter<T>
+  date: Getter<T>
+  description: Getter<T>
+  value: Getter<T>
+  extra?: ExtraGetter<T>
 }
 
-export type CreateParserParams<T extends ColDef> = {
+export type CreateParserParams<T extends ColDef, Id extends ParserId = ParserId> = {
+  id: Id
+  bankAccountId: BankAccountId
   bankName: string
   accountType: string
   currency: Currency
@@ -28,17 +33,15 @@ export type CreateParserParams<T extends ColDef> = {
   getters: ParserGetters<T>
 }
 
-export type ParserConfig = {
+export type Parser<Id extends ParserId = ParserId> = {
+  id: Id
+  bankAccountId: BankAccountId
   bankName: string
   accountType: string
   currency: Currency
   headerRowIndex: number
   columns: ColDef
   dateFormat: string
-  detect: (input: PPRawParseResult) => boolean
-  parse: (input: PPRawParseResult, locale: UserLocale, dateFormat: DateFormat) => Transaction[]
-}
-
-export type Parser = ParserConfig & {
-  id: IdString
+  detect: (input: ParsedDataResult) => boolean
+  parse: (input: ParsedDataResult, locale: UserLocale, dateFormat: DateFormat) => Transaction[]
 }

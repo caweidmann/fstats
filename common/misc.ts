@@ -1,4 +1,4 @@
-import { ColorMode, DateFormat, UserLocale } from '@/types-enums'
+import { ColorMode, Currency, DateFormat, UserLocale } from '@/types-enums'
 
 export const MISC = {
   CENTER_DOT: '·',
@@ -10,6 +10,7 @@ export const MISC = {
   SYSTEM_DATE_FORMAT: DateFormat.YMD_DASH,
   DEFAULT_DATE_FORMAT: DateFormat.DMY_SLASH,
   DEFAULT_LOCALE: UserLocale.EN,
+  DEFAULT_CURRENCY: Currency.EUR,
   DEFAULT_COLOR_MODE: ColorMode.SYSTEM,
   DEFAULT_PERSIST_DATA: false,
   LS_I18N_LOCALE_KEY: 'fstats__i18nextLng',

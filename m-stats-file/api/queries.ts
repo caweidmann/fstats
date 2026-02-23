@@ -64,7 +64,7 @@ export const updateFile = async (id: string, updates: Partial<StatsFile>): Promi
 
   updatedFile = {
     ...updatedFile,
-    hash: await getTransactionsHash(updatedFile.transactions),
+    // hash: await getTransactionsHash(updatedFile.transactions),
   }
 
   await db.filesStore.setItem<StatsFileAtRest>(id, syncStatsFile(updatedFile))

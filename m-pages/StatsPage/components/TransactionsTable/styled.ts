@@ -1,6 +1,8 @@
-import { deepOrange, yellow } from '@mui/material/colors'
+import { deepOrange, grey, yellow } from '@mui/material/colors'
+import { alpha } from '@mui/material/styles'
 import type { Theme } from '@mui/material/styles'
 
+import { GradientColorsLightDark } from '@/types'
 import { ColorMode } from '@/types-enums'
 
 export const ui = (theme: Theme, isMobile: boolean) => {
@@ -41,12 +43,29 @@ export const ui = (theme: Theme, isMobile: boolean) => {
       alignItems: isMobile ? 'flex-start' : 'center',
     },
 
-    categoryChip: {
+    categoryChip: (color?: GradientColorsLightDark) => ({
       borderRadius: 1.5,
       fontWeight: 500,
       fontSize: isMobile ? '0.6rem' : '0.7rem',
       height: isMobile ? 18 : 22,
-    },
+      ...(color
+        ? {
+            backgroundColor: alpha(color.light.end, 0.18),
+            color: color.light.start,
+            [theme.getColorSchemeSelector(ColorMode.DARK)]: {
+              backgroundColor: alpha(color.dark.end, 0.18),
+              color: color.dark.end,
+            },
+          }
+        : {
+            backgroundColor: alpha(grey[500], 0.18),
+            color: grey[700],
+            [theme.getColorSchemeSelector(ColorMode.DARK)]: {
+              backgroundColor: alpha(grey[500], 0.18),
+              color: grey[400],
+            },
+          }),
+    }),
 
     highlight: {
       backgroundColor: yellow.A200,

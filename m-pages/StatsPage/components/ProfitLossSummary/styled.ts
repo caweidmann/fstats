@@ -14,5 +14,12 @@ export const ui = (theme: Theme) => {
       display: 'flex',
       alignItems: 'center',
     },
+
+    profitCard: (bgColor: string) => ({
+      p: 2,
+      borderRadius: 2,
+      backgroundColor: bgColor,
+      height: '100%',
+    }),
   }
 }

@@ -1,0 +1,77 @@
+import type { Parser } from '@/types'
+import { BankAccountId, ParserId } from '@/types-enums'
+import { MISC } from '@/common'
+
+import {
+  capitec__savings,
+  capitec__savings__alt,
+  comdirect__giro,
+  comdirect__visa,
+  fnb__credit_card,
+  ing__giro,
+  ing__giro__wb,
+  lloyds__current,
+} from './banks'
+
+export const AVAILABLE_PARSERS: Record<ParserId, Parser> = {
+  // South African Banks
+  [capitec__savings.id]: capitec__savings,
+  [capitec__savings__alt.id]: capitec__savings__alt,
+  [fnb__credit_card.id]: fnb__credit_card,
+
+  // German Banks
+  [comdirect__giro.id]: comdirect__giro,
+  [comdirect__visa.id]: comdirect__visa,
+  [ing__giro.id]: ing__giro,
+  [ing__giro__wb.id]: ing__giro__wb,
+
+  // UK Banks
+  [lloyds__current.id]: lloyds__current,
+}
+
+export const getParserCurrency = (parserId: ParserId) => {
+  return AVAILABLE_PARSERS[parserId].currency
+}
+
+/**
+ * The BankId uses the bank name and account type, because e.g. there
+ * can be multiple parser for a single account type.
+ */
+export const getBankAccountId = (parserId: ParserId): BankAccountId => {
+  const parser = AVAILABLE_PARSERS[parserId]
+  return parser.bankAccountId
+}
+
+type BankAccountName = {
+  short: string
+  long: string
+  alt: string
+}
+
+export const getBankAccountName = (value: ParserId | null): BankAccountName => {
+  if (!value) {
+    return {
+      short: 'Unsupported',
+      long: 'Unsupported bank format',
+      alt: 'Unsupported format',
+    }
+  }
+
+  const parser = AVAILABLE_PARSERS[value]
+
+  if (parser) {
+    return {
+      short: parser.bankName,
+      long: `${parser.bankName} ${MISC.CENTER_DOT} ${parser.accountType}`,
+      alt: `${parser.bankName} / ${parser.accountType}`,
+    }
+  }
+
+  console.warn(`Invalid parser ID: ${value}`)
+
+  return {
+    short: 'Invalid',
+    long: 'Invalid parser',
+    alt: 'Invalid parser',
+  }
+}

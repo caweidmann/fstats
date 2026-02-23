@@ -1,9 +1,9 @@
 import type { Locale } from 'date-fns'
 
-import { Currency } from '@/types-enums'
-import { ParserId } from '@/parsers'
+import { BankAccountId, Currency } from '@/types-enums'
 
 import type { NumberString, SelectOptionWithType } from './global'
+import type { CategoryCode } from './services/transaction'
 
 export type DateFnsLocale = Locale
 
@@ -14,11 +14,12 @@ export type Size = {
   height?: number
 }
 
-// TODO: Remove "unknown"
-export type BankSelectOption = SelectOptionWithType<ParserId | 'all' | 'unknown'>
+export type SelectOptionBankAccountId = BankAccountId | 'all' | ''
+
+export type BankSelectOption = SelectOptionWithType<SelectOptionBankAccountId>
 
 export type StatsPageForm = {
-  selectedId: BankSelectOption['value'] | ''
+  selectedId: BankSelectOption['value']
 }
 
 /**
@@ -45,4 +46,9 @@ export type FixedLocaleCurrencyOptions = {
   isFractional?: boolean
   currencyFormat?: CurrencyFormat
   trimTrailingZeros?: boolean
+}
+
+export type KeywordRule = {
+  keywords: string[]
+  category: CategoryCode
 }

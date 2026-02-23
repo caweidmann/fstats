@@ -1,9 +1,11 @@
 const react = require('eslint-plugin-react')
 const tseslint = require('typescript-eslint')
+const reactHooks = require('eslint-plugin-react-hooks')
 
 module.exports = [
   react.configs.flat.recommended,
   ...tseslint.configs.recommended,
+  reactHooks.configs.flat.recommended,
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     // Override or add rules here
@@ -24,6 +26,7 @@ module.exports = [
       'react/require-default-props': 'off',
       'react/no-array-index-key': 'warn',
       'react/no-danger': 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
       'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
       'prefer-destructuring': [
         'warn',

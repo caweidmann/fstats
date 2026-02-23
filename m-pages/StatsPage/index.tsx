@@ -9,16 +9,16 @@ import type { StatsPageForm } from '@/types'
 import { PageWrapper } from '@/components'
 import { useFileHelper } from '@/hooks'
 
-import { getBankSelectOptions } from './actions'
+import { getAllTransactions, getBankSelectOptions, getCurrencyForSelection } from './actions'
 import {
   BankSelector,
+  CategoryBreakdown,
   DemoBanner,
   ProfitLossSummary,
   TransactionChart,
   TransactionInfo,
   TransactionsTable,
 } from './components'
-import { DEMO_TRANSACTIONS } from './demo-data'
 
 const Component = () => {
   const { selectedFiles } = useFileHelper()
@@ -33,12 +33,9 @@ const Component = () => {
     values,
   })
   const selectedId = methods.watch('selectedId')
-  const filesForSelectedId =
-    selectedId && selectedId !== 'all' && selectedId !== 'unknown'
-      ? selectedFiles.filter((file) => file.parserId === selectedId)
-      : selectedFiles
-  const allTransactions = isDemoMode ? DEMO_TRANSACTIONS : filesForSelectedId.flatMap((file) => file.transactions)
+  const allTransactions = getAllTransactions(isDemoMode, selectedId, selectedFiles)
   const transactions = uniqWith(allTransactions, isEqual)
+  const currency = getCurrencyForSelection(selectedId, transactions)
 
   return (
     <FormProvider {...methods}>
@@ -71,15 +68,19 @@ const Component = () => {
           {/* <Grid size={2}>Combine datasets</Grid> */}
 
           <Grid size={12}>
-            <ProfitLossSummary transactions={transactions} />
+            <ProfitLossSummary transactions={transactions} currency={currency} />
           </Grid>
 
           <Grid size={12}>
-            <TransactionChart transactions={transactions} />
+            <TransactionChart transactions={transactions} currency={currency} />
           </Grid>
 
           <Grid size={12}>
-            <TransactionsTable transactions={transactions} />
+            <CategoryBreakdown transactions={transactions} currency={currency} />
+          </Grid>
+
+          <Grid size={12}>
+            <TransactionsTable transactions={transactions} currency={currency} />
           </Grid>
         </Grid>
       </PageWrapper>

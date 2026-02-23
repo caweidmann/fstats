@@ -16,7 +16,7 @@ export const getBarThickness = ({ transactions, chartWidth }: { transactions: Tr
 }
 
 export const getBackgroundColour = (context: ScriptableContext<'bar'>) => {
-  const value = context.parsed.y ?? 0
+  const value = context.parsed?.y ?? 0
   const isPositive = value >= 0
 
   return getGradient({
@@ -30,7 +30,7 @@ export const getBackgroundColour = (context: ScriptableContext<'bar'>) => {
 }
 
 export const getBorderRadius = (context: ScriptableContext<'bar'>) => {
-  const value = context.parsed.y ?? 0
+  const value = context.parsed?.y ?? 0
   const isPositive = value >= 0
 
   return isPositive

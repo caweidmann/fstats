@@ -1,5 +1,7 @@
 import { Box, Typography } from '@mui/material'
 
+import { MISC } from '@/common'
+
 import { ui } from './styled'
 
 type TransactionInfoProps = {
@@ -12,15 +14,15 @@ const Component = ({ total, duplicates }: TransactionInfoProps) => {
 
   return (
     <Box sx={sx.container}>
-      <Typography sx={sx.label}>
+      <Typography sx={{ fontSize: 15, color: 'text.secondary' }}>
         {total - duplicates} Transaction{total - duplicates !== 1 ? 's' : ''}
       </Typography>
       {duplicates > 0 ? (
         <>
-          <Typography sx={{ color: 'text.secondary', fontSize: 15 }}>
-            {` `}/{` `}
-          </Typography>
-          <Typography sx={sx.duplicates}>
+          <Typography sx={{ color: 'text.secondary', fontSize: 15 }}>{` ${MISC.CENTER_DOT} `}</Typography>
+          <Typography sx={{ fontSize: 15, color: 'info.light' }}>{total} detected</Typography>
+          <Typography sx={{ color: 'text.secondary', fontSize: 15 }}>{` ${MISC.CENTER_DOT} `}</Typography>
+          <Typography sx={{ fontSize: 15, color: 'warning.light' }}>
             {duplicates} duplicate{duplicates !== 1 ? 's' : ''} removed
           </Typography>
         </>
