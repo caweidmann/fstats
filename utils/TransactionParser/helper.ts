@@ -1,21 +1,32 @@
 import type { KeywordRule } from '@/types'
 
 export const RAW_INCOME_KEYWORD_RULES: KeywordRule[] = [
-  { category: 'INC_14', keywords: ['Interest Received'] },
+  // { category: 'INC', keywords: [] },
 
-  { category: 'INC_13', keywords: ['Visa-Kartenabrechnung'] },
+  { category: 'PAS_03', keywords: ['Interest Received'] },
+
+  // { category: 'OTH', keywords: [] },
+
+  { category: 'TFI_01', keywords: ['Visa-Kartenabrechnung'] },
 ]
 
 export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
-  { category: 'HOU_08', keywords: ['TELEKOM'] },
+  { category: 'HOU_03', keywords: ['TELEKOM'] },
+  { category: 'HOU_07', keywords: ['IKEA'] },
 
-  { category: 'HOU_12', keywords: ['IKEA'] },
+  // { category: 'TRN', keywords: [] },
 
-  { category: 'COM_02', keywords: ['CALUDE.AI', 'GITHUB'] },
+  // { category: 'GRO', keywords: [] },
 
-  { category: 'TFR_02', keywords: ['Summe Monatsabrechnung Visa-Karte'] },
+  // { category: 'HLT', keywords: [] },
 
-  { category: 'FIN_05', keywords: ['Monthly Account Admin Fee'] },
+  // { category: 'FAM', keywords: [] },
+
+  { category: 'FIN_05', keywords: ['Monthly Account Admin Fee', 'International Processing Card Purchase Fee'] },
+
+  { category: 'BUS_03', keywords: ['CALUDE.AI', 'GITHUB'] },
+
+  { category: 'TFO_01', keywords: ['Summe Monatsabrechnung Visa-Karte', 'Internet Banking Transfer'] },
 ]
 
 const toLowercaseKeywordRules = (rules: KeywordRule[]): KeywordRule[] => {

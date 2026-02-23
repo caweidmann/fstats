@@ -1,7 +1,7 @@
 'use client'
 
-import { ArrowDownward, ArrowUpward, ExpandLess, ExpandMore } from '@mui/icons-material'
-import { Box, Button, Divider, Grid } from '@mui/material'
+import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
+import { Box, Divider, Grid } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
@@ -17,22 +17,20 @@ type ExpensesBreakdownProps = {
   transactionsGrouped: ParentCategoryWithTransactions[]
   total: NumberString
   currency: Currency
+  showAll?: boolean
 }
 
-const MAX_CATEGORIES_TO_SHOW = 3
-
-const Component = ({ transactionsGrouped, total, currency }: ExpensesBreakdownProps) => {
+const Component = ({ transactionsGrouped, total, currency, showAll = false }: ExpensesBreakdownProps) => {
   const theme = useTheme()
   const sx = ui(theme)
   const [sortingPref, setSortingPref] = useState<SortingPref>('totalDesc')
-  const [showMore, setShowMore] = useState(false)
   const sortedCategories = getSortedParentCategoriesWithTransactions(
     transactionsGrouped,
     transactionsGrouped.map((category) => category.code),
     sortingPref,
   )
   const categoriesWithTransactions = sortedCategories.filter((category) => category.transactions.length)
-  const categoriesToShow = showMore ? sortedCategories : categoriesWithTransactions.slice(0, MAX_CATEGORIES_TO_SHOW)
+  const categoriesToShow = showAll ? sortedCategories : categoriesWithTransactions
 
   return (
     <>
@@ -68,15 +66,6 @@ const Component = ({ transactionsGrouped, total, currency }: ExpensesBreakdownPr
       {categoriesToShow.map((category) => {
         return <BreakdownRow key={category.code} category={category} parentCategoryTotal={total} currency={currency} />
       })}
-
-      <Button variant="outlined" size="small" color="secondary" sx={{ mt: 2 }} onClick={() => setShowMore(!showMore)}>
-        {showMore ? 'Show less' : 'Show more'}{' '}
-        {showMore ? (
-          <ExpandLess color="secondary" fontSize="small" />
-        ) : (
-          <ExpandMore color="secondary" fontSize="small" />
-        )}
-      </Button>
     </>
   )
 }

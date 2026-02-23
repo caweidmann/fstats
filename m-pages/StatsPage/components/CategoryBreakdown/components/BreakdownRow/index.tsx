@@ -1,4 +1,4 @@
-import { Box, ButtonBase, Grid, LinearProgress, Typography } from '@mui/material'
+import { ButtonBase, Grid, LinearProgress, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
@@ -10,7 +10,7 @@ import { getMaxDecimalsForCurrency } from '@/utils/Currency'
 import { toFixedLocale } from '@/utils/Number'
 import { Big } from '@/lib/w-big'
 
-import { COL_SPACING, COL1, COL2, COL3, COL4 } from '../../actions'
+import { COL_SPACING, COL1, COL2, COL3, COL4, sortByName, sortByTotal } from '../../actions'
 import SubBreakdownRow from '../SubBreakdownRow'
 import { ui } from './styled'
 
@@ -31,8 +31,8 @@ const Component = ({ category, parentCategoryTotal, currency }: BreakdownRowProp
   const color = PARENT_CATEGORY_COLORS[category.code]
   const [expanded, setExpanded] = useState(false)
   const subcategories = Object.values(category.subcategories)
-    .sort((a, b) => a.label.localeCompare(b.label))
-    .sort((a, b) => (Big(a.total).gte(b.total) ? 1 : -1))
+    .sort((a, b) => sortByName(a.label, b.label, 'asc'))
+    .sort((a, b) => sortByTotal(a.total, b.total, 'desc'))
 
   return (
     <ButtonBase sx={sx.button(expanded)} onClick={() => setExpanded(!expanded)}>

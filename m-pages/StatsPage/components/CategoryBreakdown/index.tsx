@@ -1,4 +1,5 @@
-import { Box, Card, Typography } from '@mui/material'
+import { Box, Card, FormControlLabel, Switch, Typography } from '@mui/material'
+import { useState } from 'react'
 
 import type { Transaction } from '@/types'
 import { Currency } from '@/types-enums'
@@ -18,18 +19,27 @@ const Component = ({ transactions, currency }: CategoryBreakdownProps) => {
   const groupedTransactions = Object.values(getTransactionsGroupedByCategory(transactions))
   const income = groupedTransactions.filter((cat) => Object.keys(INCOME_CATEGORIES).includes(cat.code))
   const expenses = groupedTransactions.filter((cat) => Object.keys(EXPENSE_CATEGORIES).includes(cat.code))
+  const [showAll, setShowAll] = useState(false)
 
   return (
     <Card sx={{ height: '100%' }}>
-      <Typography variant="h6" color="secondary" sx={{ mb: 2 }}>
-        Breakdown by category
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+        <Typography variant="h6" color="secondary">
+          Breakdown by category
+        </Typography>
 
-      <Box sx={{ mb: 4 }}>
-        <IncomeBreakdown transactionsGrouped={income} total={totalIncome} currency={currency} />
+        <FormControlLabel
+          control={<Switch color="primary" value={showAll} onChange={() => setShowAll(!showAll)} />}
+          label="Show all categories"
+          sx={{ color: showAll ? 'text.primary' : 'text.secondary' }}
+        />
       </Box>
 
-      <ExpensesBreakdown transactionsGrouped={expenses} total={totalExpense} currency={currency} />
+      <Box sx={{ mb: 4 }}>
+        <IncomeBreakdown transactionsGrouped={income} total={totalIncome} currency={currency} showAll={showAll} />
+      </Box>
+
+      <ExpensesBreakdown transactionsGrouped={expenses} total={totalExpense} currency={currency} showAll={showAll} />
     </Card>
   )
 }
