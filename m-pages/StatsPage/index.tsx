@@ -3,7 +3,7 @@
 import { Grid } from '@mui/material'
 import { isEqual, uniqWith } from 'lodash'
 import { useSearchParams } from 'next/navigation'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, useForm, useWatch } from 'react-hook-form'
 
 import type { StatsPageForm } from '@/types'
 import { PageWrapper } from '@/components'
@@ -32,7 +32,7 @@ const Component = () => {
     defaultValues: values,
     values,
   })
-  const selectedId = methods.watch('selectedId')
+  const selectedId = useWatch({ control: methods.control, name: 'selectedId' })
   const allTransactions = getAllTransactions(isDemoMode, selectedId, selectedFiles)
   const transactions = uniqWith(allTransactions, isEqual)
   const currency = getCurrencyForSelection(selectedId, transactions)
