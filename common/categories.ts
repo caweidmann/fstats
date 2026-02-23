@@ -163,8 +163,10 @@ export const ALL_CATEGORIES: Record<ParentCategoryCode, ParentCategory> = {
   ...EXPENSE_CATEGORIES,
 }
 
-const duplicateKeys = Object.keys(INCOME_CATEGORIES).filter((key) => Object.keys(EXPENSE_CATEGORIES).includes(key))
+if (process.env.NODE_ENV === 'development') {
+  const duplicateKeys = Object.keys(INCOME_CATEGORIES).filter((key) => Object.keys(EXPENSE_CATEGORIES).includes(key))
 
-if (duplicateKeys.length) {
-  throw new Error(`Duplicate category keys detected, please fix! Duplicate keys: "${duplicateKeys.join(', ')}"`)
+  if (duplicateKeys.length) {
+    throw new Error(`Duplicate category keys detected, please fix! Duplicate keys: "${duplicateKeys.join(', ')}"`)
+  }
 }
