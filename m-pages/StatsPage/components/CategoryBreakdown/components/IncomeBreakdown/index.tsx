@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowDownward, ArrowUpward } from '@mui/icons-material'
-import { Box, Divider, Grid } from '@mui/material'
+import { Box, Divider, Grid, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 
@@ -63,9 +63,17 @@ const Component = ({ transactionsGrouped, total, currency, showAll = false }: Ex
 
       <Divider sx={{ mt: 0.5, mb: 1.5 }} />
 
-      {categoriesToShow.map((category) => {
-        return <BreakdownRow key={category.code} category={category} parentCategoryTotal={total} currency={currency} />
-      })}
+      {categoriesToShow.length ? (
+        categoriesToShow.map((category) => {
+          return (
+            <BreakdownRow key={category.code} category={category} parentCategoryTotal={total} currency={currency} />
+          )
+        })
+      ) : (
+        <Typography variant="body2" noWrap sx={{ fontSize: 15, mb: 0, color: 'text.secondary', ml: 1 }}>
+          No income for the selected period
+        </Typography>
+      )}
     </>
   )
 }
