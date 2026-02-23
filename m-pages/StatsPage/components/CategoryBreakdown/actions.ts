@@ -1,6 +1,7 @@
 import type {
   CategoryCode,
   CategoryWithTransactions,
+  NumberString,
   ParentCategoryCode,
   ParentCategoryWithTransactions,
   Transaction,
@@ -64,22 +65,32 @@ export const getTransactionsGroupedByCategory = (transactions: Transaction[]): P
   return Object.values(categories)
 }
 
+export const sortByName = (a: string, b: string, dir: 'asc' | 'desc') => {
+  return dir === 'asc' ? a.localeCompare(b) : b.localeCompare(a)
+}
+
+export const sortByTotal = (a: NumberString, b: NumberString, dir: 'asc' | 'desc') => {
+  return dir === 'asc'
+    ? Big(Big(a).abs()).minus(Big(b).abs()).toNumber()
+    : Big(Big(b).abs()).minus(Big(a).abs()).toNumber()
+}
+
 const sortCategoriesByPref = <T extends ParentCategoryWithTransactions | CategoryWithTransactions>(
   items: T[],
   sortingPref: SortingPref,
 ): T[] => {
   return items.sort((a, b) => {
     if (sortingPref === 'asc') {
-      return a.label.localeCompare(b.label)
+      return sortByName(a.label, b.label, 'asc')
     }
     if (sortingPref === 'desc') {
-      return b.label.localeCompare(a.label)
+      return sortByName(a.label, b.label, 'desc')
     }
     if (sortingPref === 'totalAsc') {
-      return Big(Big(a.total).abs()).minus(Big(b.total).abs()).toNumber()
+      return sortByTotal(a.total, b.total, 'asc')
     }
     if (sortingPref === 'totalDesc') {
-      return Big(Big(b.total).abs()).minus(Big(a.total).abs()).toNumber()
+      return sortByTotal(a.total, b.total, 'desc')
     }
     return 0
   })
@@ -90,15 +101,11 @@ export const getSortedParentCategoriesWithTransactions = (
   categoriesToInclude: CategoryCode[],
   sortingPref: SortingPref,
 ): ParentCategoryWithTransactions[] => {
+  // Always sort alphabetically first to ensure consistent sorting when totals are the same
+  const sorted = transactions.sort((a, b) => a.label.localeCompare(b.label))
+
   return sortCategoriesByPref(
-    transactions.filter((category) => categoriesToInclude.includes(category.code)),
+    sorted.filter((category) => categoriesToInclude.includes(category.code)),
     sortingPref,
   )
-}
-
-export const getSortedCategoriesWithTransactions = (
-  categories: CategoryWithTransactions[],
-  sortingPref: SortingPref,
-): CategoryWithTransactions[] => {
-  return sortCategoriesByPref(categories, sortingPref)
 }
