@@ -1,8 +1,8 @@
 import type { KeywordRule } from '@/types'
 
 export const RAW_INCOME_KEYWORD_RULES: KeywordRule[] = [
-  { category: 'OTH_06', keywords: ['Visa-Kartenabrechnung'] },
   { category: 'PAS_03', keywords: ['Interest Received'] },
+  { category: 'TFI_01', keywords: ['Visa-Kartenabrechnung'] },
 ]
 
 export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
@@ -12,7 +12,7 @@ export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
 
   { category: 'COM_02', keywords: ['CALUDE.AI', 'GITHUB'] },
 
-  { category: 'TFR_02', keywords: ['Summe Monatsabrechnung Visa-Karte'] },
+  { category: 'TFO_02', keywords: ['Summe Monatsabrechnung Visa-Karte'] },
 
   { category: 'FIN_05', keywords: ['Monthly Account Admin Fee'] },
 ]

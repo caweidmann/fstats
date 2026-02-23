@@ -31,10 +31,16 @@ export const INCOME_CATEGORIES: Record<ParentCategoryCode, ParentCategory> = {
       OTH_02: { code: 'OTH_02', label: 'Pension & Retirement' },
       OTH_03: { code: 'OTH_03', label: 'Capital Gains' },
       OTH_04: { code: 'OTH_04', label: 'Tax Refund' },
-      OTH_05: { code: 'OTH_05', label: 'Gifts & Informal Transfers' },
-      OTH_06: { code: 'OTH_06', label: 'Internal Transfer' },
-      OTH_07: { code: 'OTH_07', label: 'Miscellaneous' },
-      OTH_08: { code: 'OTH_08', label: 'Uncategorised' },
+      OTH_05: { code: 'OTH_05', label: 'Gifts' },
+      OTH_06: { code: 'OTH_06', label: 'Miscellaneous' },
+    },
+  },
+  TFI: {
+    code: 'TFI',
+    label: 'Transfers & Uncategorised',
+    subcategories: {
+      TFI_01: { code: 'TFI_01', label: 'Internal Transfer' },
+      TFI_02: { code: 'TFI_02', label: 'Uncategorised' },
     },
   },
 }
@@ -264,15 +270,15 @@ export const EXPENSE_CATEGORIES: Record<ParentCategoryCode, ParentCategory> = {
       SOC_06: { code: 'SOC_06', label: 'Informal Support & Remittance' },
     },
   },
-  TFR: {
-    code: 'TFR',
+  TFO: {
+    code: 'TFO',
     label: 'Transfers & Uncategorised',
     subcategories: {
-      TFR_01: { code: 'TFR_01', label: 'Cash Withdrawal' },
-      TFR_02: { code: 'TFR_02', label: 'Internal Transfer' },
-      TFR_03: { code: 'TFR_03', label: 'P2P Transfer' },
-      TFR_04: { code: 'TFR_04', label: 'Refund & Chargeback' },
-      TFR_05: { code: 'TFR_05', label: 'Uncategorised' },
+      TFO_01: { code: 'TFO_01', label: 'Cash Withdrawal' },
+      TFO_02: { code: 'TFO_02', label: 'Internal Transfer' },
+      TFO_03: { code: 'TFO_03', label: 'P2P Transfer' },
+      TFO_04: { code: 'TFO_04', label: 'Refund & Chargeback' },
+      TFO_05: { code: 'TFO_05', label: 'Uncategorised' },
     },
   },
 }

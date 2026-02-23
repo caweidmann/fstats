@@ -46,5 +46,5 @@ export const getCategoryCode = (row: Transaction): CategoryCode => {
     return 'INC_01'
   }
 
-  return 'TFR_05'
+  return 'TFO_05'
 }

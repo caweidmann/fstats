@@ -20,6 +20,7 @@ import {
 import type { GradientColorsLightDark, ParentCategoryCode } from '@/types'
 
 export const PARENT_CATEGORY_COLORS: Record<ParentCategoryCode, GradientColorsLightDark> = {
+  // Income categories
   INC: {
     light: { start: green[700], end: green[300] },
     dark: { start: green[900], end: green[400] },
@@ -32,6 +33,11 @@ export const PARENT_CATEGORY_COLORS: Record<ParentCategoryCode, GradientColorsLi
     light: { start: green[700], end: green[300] },
     dark: { start: green[900], end: green[400] },
   },
+  TFI: {
+    light: { start: green[700], end: green[300] },
+    dark: { start: green[900], end: green[400] },
+  },
+  // Expense categories
   HOU: {
     light: { start: blue[700], end: blue[300] },
     dark: { start: blue[900], end: blue[400] },
@@ -88,7 +94,7 @@ export const PARENT_CATEGORY_COLORS: Record<ParentCategoryCode, GradientColorsLi
     light: { start: teal[700], end: teal[300] },
     dark: { start: teal[900], end: teal[400] },
   },
-  TFR: {
+  TFO: {
     light: { start: grey[700], end: grey[300] },
     dark: { start: grey[800], end: grey[400] },
   },
