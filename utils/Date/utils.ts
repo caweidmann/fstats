@@ -30,14 +30,15 @@ export const toDisplayDate = (
   if (!date) {
     throw new Error('Must be Date or string')
   }
+
   const dateObject =
     date instanceof Date ? date : options?.formatFrom ? parse(date, options.formatFrom, new Date()) : parseISO(date)
 
-  if (isValid(dateObject)) {
-    return format(dateObject, options.formatTo, { locale: getDateFnsLocale(locale) })
+  if (!isValid(dateObject)) {
+    throw new Error('Invalid date')
   }
 
-  throw new Error('Invalid date')
+  return format(dateObject, options.formatTo, { locale: getDateFnsLocale(locale) })
 }
 
 /**
@@ -59,11 +60,11 @@ export const toDate = (date: string, options?: { formatFrom?: string }): Date =>
     throw new Error('Invalid date')
   }
 
-  if (isValid(dateObject)) {
-    return dateObject
+  if (!isValid(dateObject)) {
+    throw new Error('Invalid date')
   }
 
-  throw new Error('Invalid date')
+  return dateObject
 }
 
 export const getWeekStartsOnValue = (weekStartsOn: WeekStartsOn): WeekStartsOnValue => {
