@@ -85,12 +85,12 @@ const Component = () => {
             </Card>
           </Grid>
 
-          {/* <Grid size={12}>
-            <TransactionChart transactions={transactions} currency={currency} />
-          </Grid> */}
-
           <Grid size={12}>
             <CategoryBreakdown transactions={transactions} currency={currency} />
+          </Grid>
+
+          <Grid size={12}>
+            <TransactionChart transactions={transactions} currency={currency} />
           </Grid>
 
           <Grid size={12}>
