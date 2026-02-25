@@ -46,7 +46,6 @@ const Component = () => {
     dateFormat,
   })
   const currency = getCurrencyForSelection(selectedId, transactions)
-  console.log('transactionRangeItems', transactionRangeItems)
 
   return (
     <FormProvider {...methods}>

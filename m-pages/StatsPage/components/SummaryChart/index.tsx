@@ -58,9 +58,11 @@ const Component = ({ transactionRangeItems }: SummaryChartProps) => {
 
   return (
     <Box>
-      <Typography sx={{ color: 'text.secondary', fontSize: 13 }}>
-        {transactionRangeItems[0].label} - {transactionRangeItems[transactionRangeItems.length - 1].label}
-      </Typography>
+      {transactionRangeItems.length ? (
+        <Typography sx={{ color: 'text.secondary', fontSize: 13 }}>
+          {transactionRangeItems[0].label} - {transactionRangeItems[transactionRangeItems.length - 1].label}
+        </Typography>
+      ) : null}
       <Box sx={sx.chartCard}>
         <LineChart type="line" options={chartOptions} data={chartData} />
       </Box>
