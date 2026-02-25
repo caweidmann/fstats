@@ -1,6 +1,6 @@
 'use client'
 
-import { Grid } from '@mui/material'
+import { Card, Grid, Typography } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 
@@ -14,6 +14,7 @@ import {
   CategoryBreakdown,
   DemoBanner,
   ProfitLossSummary,
+  SummaryChart,
   TransactionChart,
   TransactionInfo,
   TransactionsTable,
@@ -75,12 +76,18 @@ const Component = () => {
           {/* <Grid size={2}>Combine datasets</Grid> */}
 
           <Grid size={12}>
-            <ProfitLossSummary transactions={transactions} currency={currency} />
+            <Card>
+              <Typography variant="h6" color="secondary">
+                At a glance
+              </Typography>
+              <SummaryChart transactionRangeItems={transactionRangeItems} />
+              <ProfitLossSummary transactions={transactions} currency={currency} />
+            </Card>
           </Grid>
 
-          <Grid size={12}>
+          {/* <Grid size={12}>
             <TransactionChart transactions={transactions} currency={currency} />
-          </Grid>
+          </Grid> */}
 
           <Grid size={12}>
             <CategoryBreakdown transactions={transactions} currency={currency} />

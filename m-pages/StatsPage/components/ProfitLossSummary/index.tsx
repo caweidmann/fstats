@@ -35,11 +35,7 @@ const Component = ({ transactions, currency }: ProfitLossSummaryProps) => {
   )
 
   return (
-    <Card>
-      <Typography variant="h6" color="secondary" sx={{ mb: 2 }}>
-        Summary
-      </Typography>
-
+    <Box sx={{ mt: 3 }}>
       <Grid container spacing={2}>
         <Grid size={{ xs: 12, md: 3.25 }}>
           <Box sx={sx.statCard('transparent')}>
@@ -109,7 +105,7 @@ const Component = ({ transactions, currency }: ProfitLossSummaryProps) => {
           </Box>
         </Grid>
       </Grid>
-    </Card>
+    </Box>
   )
 }
 
