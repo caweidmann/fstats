@@ -2,8 +2,8 @@ import type { Locale } from 'date-fns'
 
 import { BankAccountId, Currency } from '@/types-enums'
 
-import type { NumberString, SelectOptionWithType } from './global'
-import type { CategoryCode } from './services/transaction'
+import type { DateRange, NumberString, SelectOptionWithType } from './global'
+import type { CategoryCode, Transaction } from './services/transaction'
 
 export type DateFnsLocale = Locale
 
@@ -18,8 +18,18 @@ export type SelectOptionBankAccountId = BankAccountId | 'all' | ''
 
 export type BankSelectOption = SelectOptionWithType<SelectOptionBankAccountId>
 
+export type GroupDataByOption = 'day' | 'week' | 'month' | 'year' // TODO: Add 'quarter'
+
 export type StatsPageForm = {
   selectedId: BankSelectOption['value']
+  groupDataBy: GroupDataByOption
+  includeEmptyRangeItems: boolean
+}
+
+export type TransactionRangeItem = {
+  range: DateRange
+  label: string
+  transactions: Transaction[]
 }
 
 /**

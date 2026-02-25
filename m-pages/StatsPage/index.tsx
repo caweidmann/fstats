@@ -6,7 +6,7 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form'
 
 import type { StatsPageForm } from '@/types'
 import { PageWrapper } from '@/components'
-import { useFileHelper, useTransactionHelper } from '@/hooks'
+import { useFileHelper, useTransactionHelper, useUserPreferences } from '@/hooks'
 
 import { getBankSelectOptions, getCurrencyForSelection } from './actions'
 import {
@@ -20,24 +20,32 @@ import {
 } from './components'
 
 const Component = () => {
+  const { locale, dateFormat } = useUserPreferences()
   const { selectedFiles } = useFileHelper()
   const searchParams = useSearchParams()
   const isDemoMode = searchParams.get('demo') === 'true'
   const bankOptions = getBankSelectOptions(isDemoMode ? [] : selectedFiles)
   const values: StatsPageForm = {
     selectedId: bankOptions.length ? bankOptions[0].value : '',
+    groupDataBy: 'day',
+    includeEmptyRangeItems: true,
   }
   const methods = useForm<StatsPageForm>({
     defaultValues: values,
     values,
   })
   const selectedId = useWatch({ control: methods.control, name: 'selectedId' })
-  const { transactions, duplicates } = useTransactionHelper({
+  const groupDataBy = useWatch({ control: methods.control, name: 'groupDataBy' })
+  const { transactions, duplicates, transactionRangeItems } = useTransactionHelper({
     isDemoMode,
     selectedId,
+    groupDataBy,
     files: selectedFiles,
+    locale,
+    dateFormat,
   })
   const currency = getCurrencyForSelection(selectedId, transactions)
+  console.log('transactionRangeItems', transactionRangeItems)
 
   return (
     <FormProvider {...methods}>
