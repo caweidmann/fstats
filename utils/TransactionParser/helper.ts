@@ -23,13 +23,50 @@ export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
     keywords: ['TELEKOM'],
   },
   {
+    category: 'HOU_05',
+    keywords: ['HERKULES', 'HORNBACH', 'OBI', 'BAUHAUS', 'TOOM', 'GARDENA'],
+  },
+  {
     category: 'HOU_07',
-    keywords: ['IKEA'],
+    keywords: ['IKEA', 'JYSK'],
   },
 
   {
+    category: 'GRO_01',
+    keywords: [
+      'REWE',
+      'EDEKA',
+      'ALDI',
+      'LIDL',
+      'PENNY',
+      'NETTO',
+      'Kaufland',
+      'NORMA',
+      'SPAR',
+      'SOUTHERN CO-OP',
+      'TESCO',
+    ],
+  },
+  {
+    category: 'GRO_01',
+    keywords: ['BAECKER', 'BACKEREI'],
+  },
+
+  {
+    category: 'TRN_01',
+    keywords: ['SHELL', 'TOTAL'],
+  },
+  {
     category: 'TRN_04',
-    keywords: ['Parkgarage'],
+    keywords: ['Parkgarage', 'PAYBYPHONE'],
+  },
+  {
+    category: 'TRN_06',
+    keywords: ['WIGHTLINK'],
+  },
+  {
+    category: 'TRN_07',
+    keywords: ['2THELOO'],
   },
 
   {
@@ -40,10 +77,14 @@ export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
     category: 'FAM_06',
     keywords: ['STEAM PURCHASE', 'STEAMGAMES.COM'],
   },
-
   {
     category: 'FAM_09',
-    keywords: ['AMZN Mktp', 'AMAZON PRIM'],
+    keywords: ['AMZN Mktp', 'AMAZON PRIM', 'TEDI'],
+  },
+
+  {
+    category: 'HLT_02',
+    keywords: ['ROSSMANN', 'DM DROGERIE', 'Müller', 'APOTHEKE', 'PHARMACY'],
   },
 
   {
