@@ -1,8 +1,8 @@
-import { blue, blueGrey, green, red } from '@mui/material/colors'
+import { blueGrey, green, red } from '@mui/material/colors'
 import { alpha } from '@mui/material/styles'
 import type { ChartOptions } from 'chart.js'
 
-import { TransactionRangeItem } from '@/types'
+import type { TransactionRangeItem } from '@/types'
 import { Big } from '@/lib/w-big'
 
 export const getChartColors = (isDarkMode: boolean) => {
@@ -93,6 +93,8 @@ export const accumulateValues = (
       }
     }, 0)
 
-    return [...acc, Big(accTotal).add(itemTotal).toNumber()]
+    acc.push(Big(accTotal).add(itemTotal).toNumber())
+
+    return acc
   }, [] as number[])
 }
