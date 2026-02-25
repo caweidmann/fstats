@@ -30,7 +30,7 @@ export const zDateRange = z.object({
   /** Start date of the interval */
   start: z.date(),
   /** End date of the interval */
-  end: z.date().nullable(), // null allows dates in the future
+  end: z.date(),
 })
 
 /**

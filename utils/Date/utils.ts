@@ -1,4 +1,21 @@
-import { format, isAfter, isBefore, isSameDay, isValid, parse, parseISO, startOfDay } from 'date-fns'
+import {
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  endOfYear,
+  format,
+  getDay,
+  isAfter,
+  isBefore,
+  isSameDay,
+  isValid,
+  parse,
+  parseISO,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+  startOfYear,
+} from 'date-fns'
 import { de, enGB } from 'date-fns/locale'
 
 import type { DateFnsLocale, DateRange, DateTimeString, SelectOptionWithType, SystemDateString } from '@/types'
@@ -30,14 +47,15 @@ export const toDisplayDate = (
   if (!date) {
     throw new Error('Must be Date or string')
   }
+
   const dateObject =
     date instanceof Date ? date : options?.formatFrom ? parse(date, options.formatFrom, new Date()) : parseISO(date)
 
-  if (isValid(dateObject)) {
-    return format(dateObject, options.formatTo, { locale: getDateFnsLocale(locale) })
+  if (!isValid(dateObject)) {
+    throw new Error('Invalid date')
   }
 
-  throw new Error('Invalid date')
+  return format(dateObject, options.formatTo, { locale: getDateFnsLocale(locale) })
 }
 
 /**
@@ -59,11 +77,11 @@ export const toDate = (date: string, options?: { formatFrom?: string }): Date =>
     throw new Error('Invalid date')
   }
 
-  if (isValid(dateObject)) {
-    return dateObject
+  if (!isValid(dateObject)) {
+    throw new Error('Invalid date')
   }
 
-  throw new Error('Invalid date')
+  return dateObject
 }
 
 export const getWeekStartsOnValue = (weekStartsOn: WeekStartsOn): WeekStartsOnValue => {
@@ -129,8 +147,7 @@ export const sortByDateIso = (dateA: DateTimeString, dateB: DateTimeString, orde
   return orderBy === 'asc' ? timeA - timeB : timeB - timeA
 }
 
-// null means into the future
-export const isInRange = (date: Date, { start, end = null }: DateRange): boolean => {
+export const isInRange = (date: Date, { start, end }: DateRange): boolean => {
   if (end) {
     return isSameDay(date, start) || isSameDay(date, end) || (isAfter(date, start) && isBefore(date, end))
   }
@@ -183,3 +200,34 @@ export const getUniqueTimestamps = ({
     getBaseTimestamp: (date) => date.getTime(),
   })
 }
+
+// 0 = Sunday, 1 = Monday, etc.
+export type WeekdayNumber = 0 | 1 | 2 | 3 | 4 | 5 | 6
+
+// FIXME: Ensure error handling for invalid date ranges, e.g. picking start date after end date and vice versa
+export const getDaysInRange = ({ start, end }: DateRange): Date[] => {
+  const interval = { start, end }
+  return eachDayOfInterval(interval)
+}
+
+// export const getStartEndOfYear = (date: Date, locale: UserLocale): DateRange => {
+//   return {
+//     start: isValid(date) ? toSystemDate(startOfYear(date), locale) : '',
+//     end: isValid(date) ? toSystemDate(endOfYear(date), locale) : '',
+//   }
+// }
+
+// export const getStartEndOfMonth = (date: Date): DateRange => {
+//   return {
+//     start: isValid(date) ? toSystemDate(startOfMonth(date)) : '',
+//     end: isValid(date) ? toSystemDate(endOfMonth(date)) : '',
+//   }
+// }
+
+// export const getStartEndOfWeek = (date: Date): DateRange => {
+//   const { weekStartsOn } = getUserPreferences()
+//   return {
+//     start: isValid(date) ? toSystemDate(startOfWeek(date, { weekStartsOn })) : '',
+//     end: isValid(date) ? toSystemDate(endOfWeek(date, { weekStartsOn })) : '',
+//   }
+// }
