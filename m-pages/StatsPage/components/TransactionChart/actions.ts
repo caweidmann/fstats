@@ -48,6 +48,10 @@ export const getChartOptions = ({
   return {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: {
+      intersect: false,
+      mode: 'index',
+    },
     plugins: {
       legend: {
         display: false,

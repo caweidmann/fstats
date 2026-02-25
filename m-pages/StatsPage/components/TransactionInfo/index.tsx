@@ -20,9 +20,7 @@ const Component = ({ total, duplicates }: TransactionInfoProps) => {
       {duplicates > 0 ? (
         <>
           <Typography sx={{ color: 'text.secondary', fontSize: 15 }}>{` ${MISC.CENTER_DOT} `}</Typography>
-          <Typography sx={{ fontSize: 15, color: 'info.light' }}>{total} detected</Typography>
-          <Typography sx={{ color: 'text.secondary', fontSize: 15 }}>{` ${MISC.CENTER_DOT} `}</Typography>
-          <Typography sx={{ fontSize: 15, color: 'warning.light' }}>
+          <Typography sx={{ fontSize: 15, color: 'info.light' }}>
             {duplicates} duplicate{duplicates !== 1 ? 's' : ''} removed
           </Typography>
         </>
