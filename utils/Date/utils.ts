@@ -147,8 +147,7 @@ export const sortByDateIso = (dateA: DateTimeString, dateB: DateTimeString, orde
   return orderBy === 'asc' ? timeA - timeB : timeB - timeA
 }
 
-// null means into the future
-export const isInRange = (date: Date, { start, end = null }: DateRange): boolean => {
+export const isInRange = (date: Date, { start, end }: DateRange): boolean => {
   if (end) {
     return isSameDay(date, start) || isSameDay(date, end) || (isAfter(date, start) && isBefore(date, end))
   }
