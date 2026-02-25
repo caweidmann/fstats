@@ -69,7 +69,7 @@ export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
   {
     category: 'BUS_03',
     keywords: [
-      'CALUDE.AI',
+      'CLAUDE.AI',
       'GITHUB',
       'Google CLOUD',
       'GOOGLE*CLOUD',
