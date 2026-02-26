@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
 import type { ScriptableContext } from 'chart.js'
 
 import type { TransactionRangeItem } from '@/types'
@@ -15,8 +16,9 @@ type SummaryChartProps = {
 
 const Component = ({ transactionRangeItems }: SummaryChartProps) => {
   const isDarkMode = useIsDarkMode()
+  const theme = useTheme()
   const sx = ui()
-  const chartOptions = getChartOptions()
+  const chartOptions = getChartOptions(theme)
   const chartColors = getChartColors(isDarkMode)
   const labels = transactionRangeItems.map(({ label }) => label)
   const income = accumulateValues(transactionRangeItems, 'income')
@@ -47,11 +49,11 @@ const Component = ({ transactionRangeItems }: SummaryChartProps) => {
         borderWidth: 1,
       },
       // {
-      //   label: 'Both',
+      //   label: 'Combined',
       //   data: both,
       //   borderColor: (context: ScriptableContext<'line'>) => getGradient({ context, colors: chartColors.both }),
       //   lineTension: 0.1,
-      //   borderWidth: 2,
+      //   borderWidth: 1,
       // },
     ],
   }
