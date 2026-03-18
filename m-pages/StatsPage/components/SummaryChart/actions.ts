@@ -1,5 +1,6 @@
-import { blueGrey, green, red } from '@mui/material/colors'
+import { blue, green, red } from '@mui/material/colors'
 import { alpha } from '@mui/material/styles'
+import type { Theme } from '@mui/material/styles'
 import type { ChartOptions } from 'chart.js'
 
 import type { TransactionRangeItem } from '@/types'
@@ -16,65 +17,68 @@ export const getChartColors = (isDarkMode: boolean) => {
       end: red[700],
     },
     both: {
-      start: isDarkMode ? alpha(blueGrey[50], 0.1) : blueGrey[50],
-      end: blueGrey[700],
+      start: isDarkMode ? alpha(blue[50], 0.1) : blue[50],
+      end: blue[700],
     },
   }
 }
 
-const chartOptions: ChartOptions<'line'> = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: 'bottom',
-      align: 'start',
-      onClick: () => {},
-      labels: {
-        boxHeight: 6,
-        boxWidth: 6,
-        useBorderRadius: true,
-        borderRadius: 1,
+export const getChartOptions = (theme: Theme): ChartOptions<'line'> => {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    // interaction: {
+    //   intersect: false,
+    //   mode: 'index',
+    // },
+    plugins: {
+      legend: {
+        position: 'bottom',
+        align: 'start',
+        onClick: () => {},
+        labels: {
+          boxHeight: 6,
+          boxWidth: 6,
+          useBorderRadius: true,
+          borderRadius: 1,
+        },
+      },
+      tooltip: {
+        enabled: false,
       },
     },
-    tooltip: {
-      enabled: false,
-    },
-  },
-  elements: {
-    point: {
-      radius: 0,
-    },
-  },
-  scales: {
-    x: {
-      border: {
-        display: false,
-      },
-      grid: {
-        display: false,
-      },
-      ticks: {
-        display: false,
+    elements: {
+      point: {
+        radius: 0,
       },
     },
-    y: {
-      border: {
-        display: false,
+    scales: {
+      x: {
+        border: {
+          display: false,
+        },
+        grid: {
+          display: false,
+        },
+        ticks: {
+          display: false,
+        },
       },
-      grid: {
-        display: false,
-      },
-      ticks: {
-        display: false,
-        // maxTicksLimit: 3,
+      y: {
+        border: {
+          display: false,
+        },
+        grid: {
+          display: false,
+          color: (ctx) => (ctx.tick.value === 0 ? theme.palette.divider : 'transparent'),
+        },
+        ticks: {
+          display: false,
+          // maxTicksLimit: 3,
+        },
       },
     },
-  },
-}
-
-export const getChartOptions = () => {
-  return chartOptions
+  }
 }
 
 export const accumulateValues = (

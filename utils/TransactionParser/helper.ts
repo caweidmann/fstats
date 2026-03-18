@@ -45,6 +45,7 @@ export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
       'SPAR',
       'SOUTHERN CO-OP',
       'TESCO',
+      'Checkers',
     ],
   },
   {
@@ -104,6 +105,7 @@ export const RAW_EXPENSE_KEYWORD_RULES: KeywordRule[] = [
       '#INT PYMT FEE',
       '#CREDIT CARD ACCOUNT FEE',
       '#CREDIT FACILITY SERVICE FEE',
+      'Payment Fee',
     ],
   },
 
