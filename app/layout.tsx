@@ -8,7 +8,9 @@ import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
 import { CONFIG } from '@/common'
-import { ChartProvider, LanguageProvider, Layout, QueryProvider, StorageProvider, ThemeProvider } from '@/components'
+import { ChartProvider, Layout, QueryProvider, StorageProvider, ThemeProvider } from '@/components'
+
+import '@/lib/i18n'
 
 const SEO_TITLE = `fstats - Analyse bank statements privately`
 const SEO_DESCRIPTION = `Add CSV statements and get instant insights. All processing happens entirely on your device — no uploads, no accounts, no tracking.`
@@ -52,11 +54,9 @@ const Component = ({ children }: LayoutProps) => {
             <StorageProvider>
               <ThemeProvider>
                 <InitColorSchemeScript attribute="class" />
-                <LanguageProvider>
-                  <ChartProvider>
-                    <Layout>{children}</Layout>
-                  </ChartProvider>
-                </LanguageProvider>
+                <ChartProvider>
+                  <Layout>{children}</Layout>
+                </ChartProvider>
               </ThemeProvider>
             </StorageProvider>
           </QueryProvider>
