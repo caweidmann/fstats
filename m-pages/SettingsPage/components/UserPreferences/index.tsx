@@ -28,13 +28,6 @@ const Component = () => {
         </Box>
       ) : null}
 
-      {/* <Box sx={{ mt: 3 }}>
-        <Typography component="div" sx={{ fontSize: 14, mb: 1 }}>
-          Currency
-        </Typography>
-        <LanguageSwitcher showLabel />
-      </Box> */}
-
       <Box sx={{ mt: 3 }}>
         <Typography component="div" sx={{ fontSize: 14, mb: 1 }}>
           Date Format
