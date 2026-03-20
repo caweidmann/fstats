@@ -9,3 +9,4 @@
 - [ ] Chart: Switch between bar an accumulative line chart
 - [ ] Chart: Switch between all transactions and grouped transactions
 - [ ] Add categorisation engine
+- [ ] Remove SW cleanup logic
