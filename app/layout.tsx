@@ -26,12 +26,6 @@ export const metadata: Metadata = {
     ],
     type: 'website',
   },
-  applicationName: 'fstats',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'fstats',
-  },
 }
 
 export const viewport: Viewport = {

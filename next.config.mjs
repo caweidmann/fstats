@@ -1,5 +1,3 @@
-import { withSerwist } from '@serwist/turbopack'
-
 const nextConfig = {
   reactStrictMode: false,
   compiler: {
@@ -15,4 +13,4 @@ const nextConfig = {
   },
 }
 
-export default withSerwist(nextConfig)
+export default nextConfig
