@@ -1,16 +1,10 @@
 import './globals.css'
 
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
-import { CONFIG } from '@/common'
-import { ChartProvider, Layout, QueryProvider, StorageProvider, ThemeProvider } from '@/components'
-
-import '@/lib/i18n'
+import { RootLayout } from '@/components'
 
 const SEO_TITLE = `fstats - Analyse bank statements privately`
 const SEO_DESCRIPTION = `Add CSV statements and get instant insights. All processing happens entirely on your device — no uploads, no accounts, no tracking.`
@@ -34,6 +28,10 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
+}
+
 type LayoutProps = {
   children: ReactNode
 }
@@ -46,21 +44,8 @@ const Component = ({ children }: LayoutProps) => {
         <meta name="theme-color" content="#2a2e36" media="(prefers-color-scheme: dark)" />
       </head>
       <body>
-        {process.env.NODE_ENV === 'production' && CONFIG.ENABLE_SPEED_INSIGHTS ? <SpeedInsights /> : null}
-        {process.env.NODE_ENV === 'production' && CONFIG.ENABLE_ANALYTICS ? <Analytics /> : null}
-
-        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          <QueryProvider>
-            <StorageProvider>
-              <ThemeProvider>
-                <InitColorSchemeScript attribute="class" />
-                <ChartProvider>
-                  <Layout>{children}</Layout>
-                </ChartProvider>
-              </ThemeProvider>
-            </StorageProvider>
-          </QueryProvider>
-        </AppRouterCacheProvider>
+        <InitColorSchemeScript attribute="class" />
+        <RootLayout>{children}</RootLayout>
       </body>
     </html>
   )
