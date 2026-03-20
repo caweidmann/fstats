@@ -2,12 +2,9 @@ import './globals.css'
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
-import { CONFIG } from '@/common'
 import { ChartProvider, Layout, QueryProvider, StorageProvider, ThemeProvider } from '@/components'
 
 import '@/lib/i18n'
@@ -46,9 +43,6 @@ const Component = ({ children }: LayoutProps) => {
         <meta name="theme-color" content="#2a2e36" media="(prefers-color-scheme: dark)" />
       </head>
       <body>
-        {process.env.NODE_ENV === 'production' && CONFIG.ENABLE_SPEED_INSIGHTS ? <SpeedInsights /> : null}
-        {process.env.NODE_ENV === 'production' && CONFIG.ENABLE_ANALYTICS ? <Analytics /> : null}
-
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <QueryProvider>
             <StorageProvider>
