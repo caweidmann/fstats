@@ -1,16 +1,10 @@
-'use client'
-
 import './globals.css'
 
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
-import { SerwistProvider } from '@serwist/turbopack/react'
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
-import { ChartProvider, Layout, QueryProvider, StorageProvider, ThemeProvider } from '@/components'
-
-import '@/lib/i18n'
+import { RootLayout } from '@/components'
 
 const SEO_TITLE = `fstats - Analyse bank statements privately`
 const SEO_DESCRIPTION = `Add CSV statements and get instant insights. All processing happens entirely on your device — no uploads, no accounts, no tracking.`
@@ -56,20 +50,8 @@ const Component = ({ children }: LayoutProps) => {
         <meta name="theme-color" content="#2a2e36" media="(prefers-color-scheme: dark)" />
       </head>
       <body>
-        <SerwistProvider swUrl="/serwist/sw.js">
-          <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-            <QueryProvider>
-              <StorageProvider>
-                <ThemeProvider>
-                  <InitColorSchemeScript attribute="class" />
-                  <ChartProvider>
-                    <Layout>{children}</Layout>
-                  </ChartProvider>
-                </ThemeProvider>
-              </StorageProvider>
-            </QueryProvider>
-          </AppRouterCacheProvider>
-        </SerwistProvider>
+        <InitColorSchemeScript attribute="class" />
+        <RootLayout>{children}</RootLayout>
       </body>
     </html>
   )
