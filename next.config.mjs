@@ -1,12 +1,5 @@
-const withSerwist = require('@serwist/next').default({
-  swSrc: 'app/sw.ts',
-  swDest: 'public/sw.js',
-  cacheOnNavigation: true,
-  reloadOnOnline: false,
-  disable: process.env.NODE_ENV === 'development',
-})
+import { withSerwist } from '@serwist/turbopack'
 
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
   compiler: {
@@ -22,4 +15,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withSerwist(nextConfig)
+export default withSerwist(nextConfig)
