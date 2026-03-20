@@ -1,8 +1,11 @@
+'use client'
+
 import './globals.css'
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
-import type { Metadata } from 'next'
+import { SerwistProvider } from '@serwist/turbopack/react'
+import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 
 import { ChartProvider, Layout, QueryProvider, StorageProvider, ThemeProvider } from '@/components'
@@ -29,6 +32,16 @@ export const metadata: Metadata = {
     ],
     type: 'website',
   },
+  applicationName: 'fstats',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'fstats',
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
 }
 
 type LayoutProps = {
@@ -43,18 +56,20 @@ const Component = ({ children }: LayoutProps) => {
         <meta name="theme-color" content="#2a2e36" media="(prefers-color-scheme: dark)" />
       </head>
       <body>
-        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-          <QueryProvider>
-            <StorageProvider>
-              <ThemeProvider>
-                <InitColorSchemeScript attribute="class" />
-                <ChartProvider>
-                  <Layout>{children}</Layout>
-                </ChartProvider>
-              </ThemeProvider>
-            </StorageProvider>
-          </QueryProvider>
-        </AppRouterCacheProvider>
+        <SerwistProvider swUrl="/serwist/sw.js">
+          <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+            <QueryProvider>
+              <StorageProvider>
+                <ThemeProvider>
+                  <InitColorSchemeScript attribute="class" />
+                  <ChartProvider>
+                    <Layout>{children}</Layout>
+                  </ChartProvider>
+                </ThemeProvider>
+              </StorageProvider>
+            </QueryProvider>
+          </AppRouterCacheProvider>
+        </SerwistProvider>
       </body>
     </html>
   )
