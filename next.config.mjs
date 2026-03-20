@@ -15,4 +15,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withSerwist(nextConfig)
+export default withSerwist(nextConfig)
