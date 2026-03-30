@@ -4,7 +4,11 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import { useEffect } from 'react'
 import type { ReactNode } from 'react'
 
-import { ChartProvider, Layout, QueryProvider, StorageProvider, ThemeProvider } from '@/components'
+import ChartProvider from '../ChartProvider'
+import Layout from '../Layout'
+import QueryProvider from '../QueryProvider'
+import StorageProvider from '../StorageProvider'
+import ThemeProvider from '../ThemeProvider'
 
 import '@/lib/i18n'
 
