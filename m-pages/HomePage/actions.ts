@@ -1,4 +1,4 @@
-import { CloudOff, LockOutlined, PersonOffOutlined } from '@mui/icons-material'
+import { LockOutlined, PersonOffOutlined, Public } from '@mui/icons-material'
 
 export const CARD_ITEMS = [
   {
@@ -7,9 +7,9 @@ export const CARD_ITEMS = [
     description: 'All parsing and storage happens in your browser. Your data never touches a server.',
   },
   {
-    Icon: CloudOff,
-    title: 'Works offline',
-    description: 'Once loaded, the app works with no internet connection at all.',
+    Icon: Public,
+    title: 'Runs in your browser',
+    description: 'Use it like a normal website while your data still stays on your device.',
   },
   {
     Icon: PersonOffOutlined,

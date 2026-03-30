@@ -68,7 +68,11 @@ const Component = () => {
         color="error"
         variant="outlined"
         startIcon={<DeleteOutlined />}
-        onClick={() => removeAllFiles()}
+        onClick={() => {
+          if (confirm('Are you sure?')) {
+            removeAllFiles()
+          }
+        }}
         disabled={!hasFiles}
         loading={isRemovingFiles}
       >
