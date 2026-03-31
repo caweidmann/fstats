@@ -15,6 +15,7 @@ type SummaryChartProps = {
 }
 
 const Component = ({ transactionRangeItems }: SummaryChartProps) => {
+  console.log('transactionRangeItems', transactionRangeItems)
   const isDarkMode = useIsDarkMode()
   const theme = useTheme()
   const sx = ui()
@@ -34,27 +35,31 @@ const Component = ({ transactionRangeItems }: SummaryChartProps) => {
   const chartData = {
     labels,
     datasets: [
-      {
-        label: 'Income',
-        data: income,
-        borderColor: (context: ScriptableContext<'line'>) => getGradient({ context, colors: chartColors.income }),
-        lineTension: 0.1,
-        borderWidth: 1,
-      },
-      {
-        label: 'Expenses',
-        data: expenses,
-        borderColor: (context: ScriptableContext<'line'>) => getGradient({ context, colors: chartColors.expenses }),
-        lineTension: 0.1,
-        borderWidth: 1,
-      },
       // {
-      //   label: 'Combined',
-      //   data: both,
-      //   borderColor: (context: ScriptableContext<'line'>) => getGradient({ context, colors: chartColors.both }),
+      //   label: 'Income',
+      //   data: income,
+      //   borderColor: (context: ScriptableContext<'line'>) => getGradient({ context, colors: chartColors.income }),
       //   lineTension: 0.1,
       //   borderWidth: 1,
       // },
+      // {
+      //   label: 'Expenses',
+      //   data: expenses,
+      //   borderColor: (context: ScriptableContext<'line'>) => getGradient({ context, colors: chartColors.expenses }),
+      //   lineTension: 0.1,
+      //   borderWidth: 1,
+      // },
+      {
+        label: 'Balance',
+        data: both,
+        borderColor: (context: ScriptableContext<'line'>) => getGradient({ context, colors: chartColors.both }),
+        // backgroundColor: (context: ScriptableContext<'line'>) => {
+        //   return getGradient({ context, colors: chartColors.both })
+        // },
+        // fill: true,
+        lineTension: 0.1,
+        borderWidth: 2,
+      },
     ],
   }
 

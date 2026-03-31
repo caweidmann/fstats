@@ -1,4 +1,4 @@
-import { blue, green, red } from '@mui/material/colors'
+import { blue, green, grey, red } from '@mui/material/colors'
 import { alpha } from '@mui/material/styles'
 import type { Theme } from '@mui/material/styles'
 import type { ChartOptions } from 'chart.js'
@@ -17,8 +17,8 @@ export const getChartColors = (isDarkMode: boolean) => {
       end: red[700],
     },
     both: {
-      start: isDarkMode ? alpha(blue[50], 0.1) : blue[50],
-      end: blue[700],
+      start: isDarkMode ? alpha(grey[500], 0.1) : grey[500],
+      end: isDarkMode ? grey[200] : grey[900],
     },
   }
 }
@@ -27,10 +27,10 @@ export const getChartOptions = (theme: Theme): ChartOptions<'line'> => {
   return {
     responsive: true,
     maintainAspectRatio: false,
-    // interaction: {
-    //   intersect: false,
-    //   mode: 'index',
-    // },
+    interaction: {
+      intersect: false,
+      mode: 'index',
+    },
     plugins: {
       legend: {
         position: 'bottom',
@@ -44,7 +44,7 @@ export const getChartOptions = (theme: Theme): ChartOptions<'line'> => {
         },
       },
       tooltip: {
-        enabled: false,
+        enabled: true,
       },
     },
     elements: {
@@ -58,10 +58,11 @@ export const getChartOptions = (theme: Theme): ChartOptions<'line'> => {
           display: false,
         },
         grid: {
-          display: false,
+          display: true,
         },
         ticks: {
-          display: false,
+          display: true,
+          maxTicksLimit: 12,
         },
       },
       y: {
@@ -69,11 +70,11 @@ export const getChartOptions = (theme: Theme): ChartOptions<'line'> => {
           display: false,
         },
         grid: {
-          display: false,
+          display: true,
           color: (ctx) => (ctx.tick.value === 0 ? theme.palette.divider : 'transparent'),
         },
         ticks: {
-          display: false,
+          display: true,
           // maxTicksLimit: 3,
         },
       },
