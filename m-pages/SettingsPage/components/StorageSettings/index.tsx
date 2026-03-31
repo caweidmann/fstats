@@ -69,7 +69,7 @@ const Component = () => {
         variant="outlined"
         startIcon={<DeleteOutlined />}
         onClick={() => {
-          if (confirm('Are you sure?')) {
+          if (confirm('Are you sure you want to clear all data?')) {
             removeAllFiles()
           }
         }}
