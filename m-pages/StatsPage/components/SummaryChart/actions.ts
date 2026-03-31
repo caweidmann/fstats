@@ -71,11 +71,16 @@ export const getChartOptions = (theme: Theme): ChartOptions<'line'> => {
         },
         grid: {
           display: true,
-          color: (ctx) => (ctx.tick.value === 0 ? theme.palette.divider : 'transparent'),
+          color: (ctx) => {
+            return ctx.tick.value === 0 ? theme.palette.divider : 'transparent'
+          },
         },
         ticks: {
           display: true,
           // maxTicksLimit: 3,
+        },
+        afterBuildTicks: (scale) => {
+          scale.ticks.push({ value: 0 })
         },
       },
     },
