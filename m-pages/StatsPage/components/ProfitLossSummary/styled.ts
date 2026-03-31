@@ -13,7 +13,19 @@ export const ui = (theme: Theme) => {
     statHeader: {
       display: 'flex',
       alignItems: 'center',
+      gap: 1,
     },
+
+    caption: (color: string) => ({
+      color,
+      fontWeight: 500,
+    }),
+
+    amount: (color: string) => ({
+      color,
+      fontWeight: 600,
+      mt: 1,
+    }),
 
     profitCard: (bgColor: string) => ({
       p: 2,
