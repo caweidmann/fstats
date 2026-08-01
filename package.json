@@ -43,7 +43,7 @@
     "react": "19.2.7",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "19.2.7",
-    "react-dropzone": "^15.0.0",
+    "react-dropzone": "^19.1.1",
     "react-hook-form": "^7.81.0",
     "react-i18next": "^17.0.8",
     "usehooks-ts": "^3.1.1",
